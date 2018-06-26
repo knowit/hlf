@@ -1,0 +1,12 @@
+{
+    "builders": [
+        {
+            "type": "googlecompute",
+            "account_file": "creds.json", 
+            "source_image_family": "cos-stable",
+            "ssh_username": "godlyd",
+            "project_id": "godlyd-207607",
+            "zone": "europe-west3-a"
+        }
+    ]
+}
