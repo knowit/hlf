@@ -17,3 +17,9 @@ app/yarn-debug.log*
 app/yarn-error.log*
 
 app/credentials.js
+
+app/app.json
+
+cloud/.terraform
+cloud/credentials.json
+cloud/creds.json

@@ -3,30 +3,38 @@ import { View, StyleSheet} from 'react-native';
 import DefaultText from './DefaultText';
 import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
+import colors from '../settings/colors';
 
-const IconText =  ({ name, alignment}) => {
-    const IconComponent = iconLibraries["materialIcons"];
+
+const IconText =  ({ text, iconSettings, reversedOrder, size, iconColor}) => {
+    const {iconLibrary, iconName} = iconSettings;
+    const IconComponent = iconLibraries[iconLibrary];
+    const iconTextSize = size ? size: 20
+
+    const textMarginWidth = 7;
+    const textMargin = !reversedOrder ? {marginLeft: textMarginWidth} : {marginRight: textMarginWidth};
 
     return (
-        <View style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: `${alignment ? alignment : "flex-start"}`}}>
-            <IconComponent name="hearing" size={20} color="white"/>
-            <DefaultText style={{fontSize:18}}>{name}</DefaultText>
+        <View style={{flexDirection: !reversedOrder ? "row" : "row-reverse", alignItems: "center"}}>
+            <IconComponent name={iconName} color={iconColor ? iconColor : colors.primaryTextColor} size={iconTextSize}/>
+            <DefaultText style={[textMargin, {fontSize: iconTextSize}]}>{text}</DefaultText>
         </View>
     )
 }
 
+
 const iconLibraries = {
     materialIcons: MaterialIcons,
+    materialCommunityIcons: MaterialCommunityIcons
 }
 
-/*IconText.propTypes= {
+IconText.propTypes= {
     text: PropTypes.string.isRequired,
-    textStyles: PropTypes.object,
-    iconLibrary: PropTypes.string.isRequired,
-    iconName: PropTypes.string.isRequired,
-    iconStyles: PropTypes.object,
-    reversedOrder: PropTypes.bool
-}*/
+    iconSettings: PropTypes.object.isRequired,
+    reversedOrder: PropTypes.bool,
+    size: PropTypes.number,
+    iconColor: PropTypes.string
+}
 
 export default IconText;
 

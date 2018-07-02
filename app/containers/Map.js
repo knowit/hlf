@@ -4,7 +4,7 @@ import { MapView, } from 'expo';
 import SearchBar from '../components/SearchBar';
 import { createDrawerNavigator } from 'react-navigation';
 import Profile from './Profile';
-import PlaceMapOverlay from '../components/PlaceMapOverlay';
+import VenueMapOverlay from '../components/VenueMapOverlay';
 
 class Map extends Component {
 
@@ -33,7 +33,7 @@ class Map extends Component {
                 </MapView>}
                 <View style={styles.overlays}>
                     <SearchBar onMenuPress={this.props.navigation.openDrawer} onVenueSelect={this.props.onVenueSelect} />
-                    {this.props.selectedVenue ? <PlaceMapOverlay selectedVenue={this.props.selectedVenue} showDetails={this.props.showDetails} /> : null}
+                    {this.props.selectedVenue ? <VenueMapOverlay selectedVenue={this.props.selectedVenue} showDetails={this.props.showDetails} /> : null}
                 </View>
             </View>
         )

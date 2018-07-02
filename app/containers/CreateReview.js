@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import HorizontalRuler from '../components/HorizontalRuler';
-import PropertyTitle from '../components/IconText';
+import IconText from '../components/IconText';
 import DefaultText from '../components/DefaultText';
 import { Entypo } from '@expo/vector-icons';
+import properties from '../settings/propertyConfig';
+import colors from '../settings/colors';
+
+
 
 export default class CreateReview extends Component {
     constructor(props) {
@@ -11,59 +15,57 @@ export default class CreateReview extends Component {
     }
     render() {
 
-        const propertyInput = [
-            { name: "Lydforhold", description: "Kan du føre samtale i rommet?" },
-            { name: "Lydutjevning", description: "Finnes det mikrofon og høytalere?" },
-            { name: "Teleslynge", description: "Er det teleslynge om virker?" },
-            { name: "Informasjon", description: "Er det informasjon på stedet om lydutstyr?" },
-        ]
         return (
-            <View>
-                {propertyInput.map(property => this.renderPropertyInput(property))}
+            <View style={styles.container}> 
+                {Object.keys(properties).map(property => this.renderPropertyInput(property))}
                 <Button onPress={() => console.log("ok")} title="Publiser" />
                 <Button onPress={() => console.log("ok")} title="Tøm felter" />
             </View>
 
         )
+
     }
 
-    renderPropertyInput({ name, description }) {
+    renderPropertyInput(property) {
+        const propertyInfo = properties[property];
         return (
-            <View key={name}>
-                <HorizontalRuler />
+            <View key={property} style={styles.property}>
+                <HorizontalRuler horizontalMargin={screenPadding * -1} />
                 <View style={styles.propertyList}>
-                    <PropertyTitle name={name} alignment="center" />
-                    <DefaultText style={styles.centeredText}>{description}</DefaultText>
+                    <IconText text={property} iconSettings={propertyInfo} />
+                    <DefaultText style={styles.centeredText}>{propertyInfo.description}</DefaultText>
                     <View style={styles.iconRow}>
-                        <Entypo name="thumbs-up" size={20} color="rgb(193, 224, 248)" />
-                        <Entypo name="info-with-circle" size={20} color="#A4A4A4" />
-                        <Entypo name="thumbs-down" size={20} color="rgb(255, 150, 158)" />
+                        <Entypo name="thumbs-up" size={20} color={colors.positiveColor} />
+                        <Entypo name="info-with-circle" size={20} color={colors.secondaryTextColor} />
+                        <Entypo name="thumbs-down" size={20} color={colors.negativeColor} />
                     </View>
                     <TextInput
                         numberOfLines={4}
                         multiline={true}
                         style={styles.textArea}
-                        selectionColor="white" u
-                        nderlineColorAndroid="rgba(0,0,0,0)"
+                        selectionColor={colors.primaryTextColor} 
+                        underlineColorAndroid={colors.transparentColor}
                         placeholder="Skriv en kommentar..."
-                        placeholderTextColor="#A4A4A4" />
+                        placeholderTextColor={colors.secondaryTextColor} />
                 </View>
             </View>
         )
     }
 }
-
+const screenPadding = 20;
 const styles = StyleSheet.create({
+    container: {
+        padding: screenPadding
+    },  
     propertyList: {
-        paddingHorizontal: 15,
-        paddingVertical: 20,
         alignItems: "center",
+        paddingVertical: screenPadding
     },
     textArea: {
-        backgroundColor: "#192841",
+        backgroundColor: colors.secondaryBackgroundColor,
         borderWidth: 1,
-        borderColor: "#A4A4A4",
-        color: "white",
+        borderColor: colors.secondaryTextColor,
+        color: colors.primaryTextColor,
         textAlignVertical: "top",
         padding: 10,
         width: "100%",
@@ -73,7 +75,8 @@ const styles = StyleSheet.create({
     },
     iconRow: {
         flexDirection: "row",
-        width: "75%",
+        width: "10%",
         justifyContent: "space-between",
+        paddingVertical: screenPadding
     }
 })

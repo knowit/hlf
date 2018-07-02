@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = "${file("creds.json")}"
+  credentials = "${file("credentials.json")}"
   project     = "godlyd-207607"
   region      = "europe-west3"
 }
@@ -39,13 +39,14 @@ resource "google_compute_firewall" "firewall" {
 
   allow {
     protocol = "tcp"
-    ports    = ["80", "22", "433"]
+    ports    = ["80", "22", "433", "4000"]
   }
 }
 
 resource "google_sql_database_instance" "master" {
-  name             = "main-instance-db1"
+  name             = "main-instance-db2"
   database_version = "POSTGRES_9_6"
+  region           = "europe-west3"
 
   settings {
     tier = "db-f1-micro"
