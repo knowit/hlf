@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { TextInput, StyleSheet, View, Text, TouchableHighlight, FlatList, Image } from 'react-native';
+import { TextInput, StyleSheet, View, Text, TouchableHighlight} from 'react-native';
 import _ from 'lodash';
 import axios from 'axios';
+import colors from '../settings/colors';
+import {API_KEY} from '../credentials';
 
 export default class SearchBar extends Component {
     constructor(props) {
@@ -37,10 +39,10 @@ export default class SearchBar extends Component {
                     value={this.state.searchPrompt}
                     style={styles.searchInput}
                     placeholder="Søk..."
-                    placeholderTextColor="#A4A4A4"
+                    placeholderTextColor={colors.secondaryTextColor}
                     onChangeText={this.onInputChange}
-                    selectionColor="white"
-                    underlineColorAndroid="rgba(0,0,0,0)"
+                    selectionColor={colors.primaryTextColor}
+                    underlineColorAndroid={colors.transparentColor}
                 />
             </View>
         )
@@ -63,8 +65,7 @@ export default class SearchBar extends Component {
     }
 
     handleSeach() {
-        const key = "AIzaSyA6nH3k6uaWeKf9Y9E_S_tiRhusv1mVXNw";
-        const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${this.state.searchPrompt}&key=${key}&region=no`;
+        const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${this.state.searchPrompt}&key=${API_KEY}&region=no`;
         const request = axios.get(url)
             .then(({ data }) => this.setState({
                 results: data.predictions.map(item => {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
     },
     row: {
-        backgroundColor: "#31415A",
+        backgroundColor: colors.primaryBackgroundColor,
         height: 40,
         borderRadius: 3,
         marginBottom: 2,
@@ -100,20 +101,20 @@ const styles = StyleSheet.create({
     },
 
     icon: {
-        color: "#A4A4A4",
+        color: colors.secondaryTextColor,
         fontSize: 24,
         borderRightWidth: 1,
-        borderRightColor: "#A4A4A4",
+        borderRightColor: colors.secondaryTextColor,
         paddingHorizontal: 7
     },
     searchInput: {
         marginLeft: 10,
         flex: 1,
-        color: "white",
+        color: colors.primaryTextColor,
         fontSize: 18
     },
     resultText: {
-        color: "white",
+        color: colors.primaryTextColor,
         fontSize: 18,
         alignItems: "center",
     }

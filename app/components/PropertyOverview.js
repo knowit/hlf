@@ -1,43 +1,42 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Entypo} from '@expo/vector-icons';
-import PropertyTitle from './IconText';
-import DefaultText from './DefaultText';
+import { View, StyleSheet } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
+import IconText from './IconText';
+import Properties from '../settings/propertyConfig';
+import colors from '../settings/colors';
 
-const sampleData = [
-    { name: "Lydforhold", value: 70 },
-    { name: "Lydutjevning", value: 40 },
-    { name: "Teleslynge", value: 89 },
-    { name: "Informasjon", value: 20 },]
+export default ({ venueProperties }) => {
 
-export default ({venueProperties}) => {
-    const properties = venueProperties ? venueProperties : sampleData;  
+
     return (
         <View style={styles.container}>
-            {properties.map(property => renderProperty(property.name, property.value))}
+            {Object.keys(Properties).map(name => renderProperty(name, Math.random() * 100))}
         </View>
     )
 }
 
 
 const renderProperty = (name, value) => {
-    
+    const isPositive = value >= 50
     return (
         <View key={name} style={styles.property}>
-            <PropertyTitle name={name}/>
-            <Entypo name="thumbs-up" size={20} color={`rgba(193, 224, 248, ${value >= 50 ? 1: 0})`} />
+            <IconText text={name} iconSettings={Properties[name]} />
+
+            <View style={{flex:1}}></View> 
+            
+            <Entypo name="thumbs-up" size={20} color={colors.positiveColor} style={{opacity: isPositive ? 1 : 0}}/>
             {valueBar(value)}
-            <Entypo name="thumbs-down" size={20} color={`rgba(255, 150, 158, ${value < 50 ? 1 : 0})`}/>
+            <Entypo name="thumbs-down" size={20} color={colors.negativeColor} style={{opacity: !isPositive ? 1 : 0}} />
         </View>
     )
 }
 
 const valueBar = value => {
-    
+
     return (
         <View style={styles.barWrap}>
             <View style={styles.barContainer}>
-                <View style={[{width: `${value}%`}, styles.progress]}></View>
+                <View style={[{ width: `${value}%` }, styles.progress]}></View>
             </View>
         </View>
     )
@@ -46,7 +45,7 @@ const valueBar = value => {
 
 const styles = StyleSheet.create({
 
-    property:{
+    property: {
         flexDirection: "row",
         justifyContent: "flex-end",
         alignItems: "center",
@@ -54,19 +53,19 @@ const styles = StyleSheet.create({
     },
 
     barWrap: {
-        width: 170,
-        height: "100%", 
+        width: 150,
+        height: "100%",
         marginHorizontal: 10
     },
     barContainer: {
         position: "absolute",
-        width: "100%", 
+        width: "100%",
         height: "100%",
-        backgroundColor: "#FF969E",
-        borderRadius:7
+        backgroundColor: colors.negativeColor,
+        borderRadius: 7
     },
     progress: {
-        backgroundColor: "#C1E0F8",
+        backgroundColor: colors.positiveColor,
         height: "100%",
         position: "relative",
         borderRadius: 7

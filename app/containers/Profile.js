@@ -3,39 +3,36 @@ import { StyleSheet, View, Text, Image, TouchableHighlight } from 'react-native'
 import HorizontalRuler from '../components/HorizontalRuler';
 import DefaultText from '../components/DefaultText';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import IconText from '../components/IconText';
+import SecondaryText from '../components/SecondaryText';
+import HeaderText from '../components/HeaderText';
 
 const demo = ["Operahuset i Oslo", "Vitus Apotek Storgata", "Deichmanske Bibliotek"];
-
+const horizontalPadding = 20;
 export default class extends Component {
 
     render() {
 
         return (
-            <           View style={styles.container}>
-                <View style={[styles.profileComponent, styles.imgRow]}>
+            <View style={styles.container}>
+                <View style={styles.imgRow}>
                     <Image style={styles.profileImage} source={require("../img/profileimg.jpeg")} />
-                    <DefaultText>Rediger <MaterialCommunityIcons name="pencil" color="white" size={15} /></DefaultText>
+                    <IconText text="Rediger" iconSettings={{ iconLibrary: "materialCommunityIcons", iconName: "pencil" }} size={14} reversedOrder={true} />
                 </View>
 
-                <View style={styles.profileComponent}>
-                    <DefaultText style={styles.header}>Navn Navnesen</DefaultText>
-                    <Text style={styles.email}>navn@navnesen.com</Text>
-                </View>
-                <HorizontalRuler />
+                <HeaderText>Navn navnesen</HeaderText>
+                <SecondaryText>epost@epost.com</SecondaryText>
 
-                <View style={[styles.profileComponent, styles.reviews]}>
-                    <View style={styles.reviewHeader}>
-                        <MaterialIcons name="rate-review" size={25} color="white" />
-                        <DefaultText style={styles.reviewHeaderText}> Dine vurderinger</DefaultText>
-                    </View>
+                <HorizontalRuler horizontalMargin={horizontalPadding * -1} />
+
+                <View style={styles.reviews}>
+                    <IconText text="Dine vurderinger" iconSettings={{ iconLibrary: "materialIcons", iconName: "rate-review" }} size={25} />
+
                     {demo.map((item, index) => <DefaultText key={index} style={styles.review}>{item}</DefaultText>)}
                 </View>
-                <HorizontalRuler />
-                <TouchableHighlight>
-                    <View style={[styles.signoutWrap, styles.profileComponent]}>
-                        <MaterialCommunityIcons name="logout" size={25} color="white" />
-                        <DefaultText style={styles.signoutText}>Logg ut</DefaultText>
-                    </View>
+                <HorizontalRuler horizontalMargin={horizontalPadding * -1} />
+                <TouchableHighlight style={{paddingVertical: 20}} onPress={() => console.log("logout")}> 
+                    <IconText text="Logg ut" iconSettings={{ iconLibrary: "materialCommunityIcons", iconName: "logout" }} />
                 </TouchableHighlight>
             </View>
         )
@@ -49,6 +46,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#31415A",
         paddingTop: 30,
+        paddingHorizontal: horizontalPadding
     },
     imgRow: {
         flexDirection: "row",
@@ -62,36 +60,10 @@ const styles = StyleSheet.create({
     },
     reviews: {
         flex: 1,
-        display: "flex",
-    },
-    profileComponent: {
-        paddingHorizontal: 20
     },
     header: {
         marginTop: 20,
         fontSize: 23
-    },
-    email: {
-        fontSize: 14,
-        color: "#D4D4D4",
-        marginBottom: 20
-    },
-    reviewHeader: {
-        marginTop: 20,
-        flexDirection: "row",
-        alignItems: "center"
-    },
-    reviewHeaderText: {
-        fontSize: 20,
-        marginLeft: 5
-    },
-    signoutWrap: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingVertical: 20
-    },
-    signoutText: {
-        fontSize: 18
     },
     review: {
         fontSize: 16,

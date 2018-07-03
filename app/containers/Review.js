@@ -17,7 +17,7 @@ export default class Review extends Component {
 
         return (
             <View style={styles.container}>
-                <HorizontalRuler />
+                <HorizontalRuler  />
                 <View style={styles.header}>
                     <Image style={styles.image} source={require("../img/profileimg.jpeg")} />
                     <View style={styles.nameWrap}>
@@ -64,6 +64,8 @@ export default class Review extends Component {
     toggleComments() {
         this.setState({ showComments: !this.state.showComments })
     }
+
+
 }
 
 
