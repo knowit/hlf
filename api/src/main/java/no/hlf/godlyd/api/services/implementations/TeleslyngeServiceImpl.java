@@ -4,6 +4,8 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.repository.TeleslyngeRepo;
 import no.hlf.godlyd.api.services.TeleslyngeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,4 +44,5 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
     public TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge) {
         return teleslyngeRepo.save(teleslynge);
     }
+
 }

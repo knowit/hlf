@@ -2,6 +2,7 @@ package no.hlf.godlyd.api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -33,11 +34,16 @@ public class Adresse implements Serializable {
     @NotNull
     private String postnummer;
 
-    @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "adresse")
     private Set<Sted> steder;
 
+    public Adresse(String gatenavn, String gatenummer, @NotBlank @NotNull String by, @NotBlank @NotNull String postnummer) {
+        this.gatenavn = gatenavn;
+        this.gatenummer = gatenummer;
+        this.by = by;
+        this.postnummer = postnummer;
+    }
 
     // Getters and setters
     public Integer getId() {
@@ -45,28 +51,20 @@ public class Adresse implements Serializable {
     }
 
     public void setId(Integer id) { this.id = id; }
-
+    /* MERK: Dersom disse er her kan man ikke POSTE til adresser
     public Set<Sted> getSteder() { return steder; }
 
     public void setSteder(Set<Sted> steder) { this.steder = steder; }
-
-    public void setAdresseId(Integer id) { this.id = id; }
-
-    public String getGatenavn() {
-        return gatenavn;
-    }
+    */
+    public String getGatenavn() { return gatenavn; }
 
     public void setGatenavn(String gatenavn) { this.gatenavn = gatenavn; }
 
-    public String getGatenummer() {
-        return gatenummer;
-    }
+    public String getGatenummer() { return gatenummer; }
 
     public void setGatenummer(String gatenummer) { this.gatenummer = gatenummer; }
 
-    public String getBy() {
-        return by;
-    }
+    public String getBy() { return by; }
 
     public void setBy(String by) { this.by = by; }
 

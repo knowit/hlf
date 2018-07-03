@@ -16,8 +16,8 @@ public interface TagService {
 
     List<Tag> getAllTagsFromGruppe(Gruppe gruppe);
 
-    //Tag createTag(Tag tag);
+    Tag createTag(Tag tag);
 
-    //ResponseEntity<?> deleteTag(Integer id);
+    ResponseEntity<?> deleteTag(Integer id);
 
 }

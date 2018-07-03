@@ -10,14 +10,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
-// This is the REST API
+// This is the REST API for Adresse
 @RestController
 @RequestMapping("/adresser") //declares that the url for all the apis in this controller will start with /godlyd/api.
 public class AdresseController {
 
     @Autowired
     AdresseService adresseService;
+
+    public AdresseController(AdresseService adresseService){
+        this.adresseService = adresseService;
+    }
 
     // Hent alle adresser
     @GetMapping()
@@ -33,7 +36,7 @@ public class AdresseController {
 
     // Opprette en ny adresse
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping()
+    @PostMapping(produces = {"application/json"})
     public Adresse createAdresse(@RequestBody Adresse adresse){
         return adresseService.createAdresse(adresse);
     }

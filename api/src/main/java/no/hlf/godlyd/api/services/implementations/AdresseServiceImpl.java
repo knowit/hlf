@@ -34,14 +34,6 @@ public class AdresseServiceImpl implements AdresseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Adresse", "id", id));
     }
 
-    /*
-    public Adresse getAdresseByNavn(String navn){
-        if (!adresseRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Adresse", "navn", navn); }
-        return adresseRepo.findByNavnIgnoreCase(navn);
-
-    }
-    */
-
     public ResponseEntity<?> deleteAdresse(Integer id){
         Adresse adresse = adresseRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Adresse", "id", id));

@@ -2,6 +2,7 @@ package no.hlf.godlyd.api.services;
 
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface TeleslyngeService {
     // getVurderingerBySted ?
 
     TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge);
+
 }

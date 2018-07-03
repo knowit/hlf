@@ -1,13 +1,17 @@
 package no.hlf.godlyd.api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "brukere")
-public class Bruker {
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+public class Bruker implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +26,6 @@ public class Bruker {
     @Column(unique = true)
     private String epost;
 
-    @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "registrator")
     private Set<Vurdering> vurderinger;

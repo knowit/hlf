@@ -3,7 +3,7 @@ package no.hlf.godlyd.api.controller;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.repository.BrukerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +15,7 @@ public class BrukerController {
 
     @Autowired
     private BrukerRepo brukerRepo;
+    /*
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -23,7 +24,6 @@ public class BrukerController {
         bruker.setPassord(bCryptPasswordEncoder.encode(bruker.getPassord()));
         brukerRepo.save(bruker);
     }
-
-
+    */
 
 }

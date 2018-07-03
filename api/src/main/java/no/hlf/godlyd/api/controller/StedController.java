@@ -9,6 +9,7 @@ import no.hlf.godlyd.api.services.StedService;
 
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -24,7 +25,6 @@ public class StedController {
 
     @Autowired
     StedService stedService;
-
     @Autowired
     VurderingService vurderingService;
 
@@ -74,20 +74,17 @@ public class StedController {
         return map;
     }
 
-
-    /*
     // Opprette et nytt sted
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Sted createSted(@Valid @RequestBody Sted Sted){
-        return stedService.createSted(Sted);
+    public Sted createSted(@Valid @RequestBody Sted sted){
+        return stedService.createSted(sted);
     }
 
     // Slett et sted
-    @DeleteMapping("/steder/{id}")
+    @DeleteMapping("/id={id}")
     public ResponseEntity<?> deleteSted(@PathVariable(value = "id") Integer id){
         return stedService.deleteSted(id);
     }
-    */
 
 }

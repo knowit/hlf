@@ -29,7 +29,6 @@ public class Sted implements Serializable{
 
     private String nettside;
 
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "adresse")
     private Adresse adresse;
@@ -41,12 +40,18 @@ public class Sted implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private Set<Tag> tags;
 
-    @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "sted")
     private Set<Vurdering> vurderinger;
 
-    // STATISTIKK OVER VURDERINGER (ANTALL VURDERINGER, POSITIVE, NEGATIVE) FOR HVER VURDERINGSTYPE
+    public Sted(String placesId, String navn, String telefon, String nettside, Adresse adresse, Set<Tag> tags){
+        this.placesId = placesId;
+        this.navn = navn;
+        this.telefon = telefon;
+        this.nettside = nettside;
+        this.adresse = adresse;
+        this.tags = tags;
+    }
 
     // Getters og setters
     public Integer getId() { return id; }
