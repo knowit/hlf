@@ -31,6 +31,11 @@ public class Tag implements Serializable {
     private Set<Sted> steder;
     */
 
+    public Tag(String navn, Gruppe gruppe){
+        this.navn = navn;
+        this.gruppe = gruppe;
+    }
+
     @Override
     public String toString() {
         return getNavn();

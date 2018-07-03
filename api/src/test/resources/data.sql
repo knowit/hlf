@@ -30,11 +30,11 @@ INSERT INTO sted_tag(sted_id, tag_id) values
         (1,2), (1,3), (1,4), (1,5), (4,1), (5,4), (5,5);
 
 
-INSERT INTO brukere(fornavn, etternavn, epost) values
-        ('Ola','Normann','ola@gmail.com'),
-        ('Kari','Normann','kari@gmail.com'),
-        ('Per','Hansen','per@gmail.com'),
-        ('Trude','Hansen','trude@gmail.com');
+INSERT INTO brukere(fornavn, etternavn, epost, brukernavn, passord) values
+        ('Ola','Normann','ola@gmail.com', 'user1', 'passord'),
+        ('Kari','Normann','kari@gmail.com', 'user2', 'passord'),
+        ('Per','Hansen','per@gmail.com', 'user3', 'passord'),
+        ('Trude','Hansen','trude@gmail.com', 'user4', 'passord');
 
 
 INSERT INTO vurderinger(dato, kommentar, registrator, sted) values
@@ -43,7 +43,7 @@ INSERT INTO vurderinger(dato, kommentar, registrator, sted) values
         ('2018-06-14','Dårlig lydforhold', (select id from brukere where epost = 'per@gmail.com'),
             (select id from steder where places_id = 'ChIJj1eI-X1uQUYRVfZxd5zqWLc'));
 
-INSERT INTO teleslynge_vurdering(id, rangering, modell, type) values
+INSERT INTO teleslynge_vurdering(id, rangering, modell, type_slynge) values
         (1, true, NULL, 'mobil');
 
 INSERT INTO lydforhold_vurdering(id, rangering) values

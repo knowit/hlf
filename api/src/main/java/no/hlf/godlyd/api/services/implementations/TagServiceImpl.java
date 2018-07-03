@@ -5,6 +5,7 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Tag;
 import no.hlf.godlyd.api.repository.TagRepo;
 import no.hlf.godlyd.api.services.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,10 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private final TagRepo tagRepo;
+    @Autowired
+    private TagRepo tagRepo;
 
-    public TagServiceImpl(TagRepo tagRepo) {
-        this.tagRepo = tagRepo;
-    }
+    //public TagServiceImpl(TagRepo tagRepo) {this.tagRepo = tagRepo;}
 
     // Methods:
     public List<Tag> getAllTags(){
@@ -32,7 +32,7 @@ public class TagServiceImpl implements TagService {
     }
 
     public Tag getTagByNavn(String navn) {
-        if (!tagRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Tag", "navn", navn); }
+        //if (!tagRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Tag", "navn", navn); }
         return tagRepo.findByNavnIgnoreCase(navn);
     }
 
@@ -40,11 +40,9 @@ public class TagServiceImpl implements TagService {
         return tagRepo.findByGruppe(gruppe);
     }
 
-    /*
-    public Tag createTag(Tag tag){
+    public Tag createTag(Tag tag) {
         return tagRepo.save(tag);
     }
-
 
     public ResponseEntity<?> deleteTag(Integer id){
         Tag tag = tagRepo.findById(id)
@@ -53,7 +51,4 @@ public class TagServiceImpl implements TagService {
         tagRepo.delete(tag);
         return ResponseEntity.ok().build();
     }
-
-    */
-
 }

@@ -25,37 +25,33 @@ public class TagController {
     }
 
     // Hent en enkelt tag fra id
-    @GetMapping("/id={id}")
+    @GetMapping("/id/{id}")
     public Tag getTagFromId(@PathVariable(value = "id") Integer id){
         return tagService.getTagFromId(id);
     }
 
     // Hent en enkelt tag fra navn
-    @GetMapping("/navn={navn}")
+    @GetMapping("/navn/{navn}")
     public Tag getTagFromNavn(@PathVariable(value = "navn") String navn){
         return tagService.getTagByNavn(navn);
     }
 
     // Liste med alle tags i en gruppe
-    @GetMapping("/gruppe={gruppe}")
+    @GetMapping("/gruppe/{gruppe}")
     public List<Tag> getAllTagsFromGruppe(@PathVariable(value = "gruppe") Gruppe gruppe){
         return tagService.getAllTagsFromGruppe(gruppe);
     }
 
-
-    /*
     // Opprette en ny Tag
-    @PostMapping("")
-    public Tag createTag(@Valid @RequestBody Tag tag){
+    @PostMapping()
+    public Tag createTag(@RequestBody Tag tag){
         return tagService.createTag(tag);
     }
 
     // Slett en tag
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<?> deleteTag(@PathVariable(value = "id") Integer id){
         return tagService.deleteTag(id);
     }
-
-    */
 
 }

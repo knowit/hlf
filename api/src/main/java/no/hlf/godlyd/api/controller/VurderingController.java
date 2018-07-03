@@ -5,6 +5,7 @@ import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,7 +34,6 @@ public class VurderingController {
         return vurderingService.getVurderingerByBruker(bruker);
     }
 
-
     // Opprette en ny vurdering
     @PostMapping(produces = {"application/json"})
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,15 +41,11 @@ public class VurderingController {
         return vurderingService.createVurdering(vurdering);
     }
 
-    /*
     // Slett en vurdering
     @DeleteMapping()
-    public ResponseEntity<?> deleteSted(@PathVariable(value = "id") Integer id){
-        return stedService.deleteSted(id);
+    public ResponseEntity<?> deleteVurdering(@PathVariable(value = "id") Integer id){
+        return vurderingService.deleteVurdering(id);
     }
-    */
-
-
 
 
 }

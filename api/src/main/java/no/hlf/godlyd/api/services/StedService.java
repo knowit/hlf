@@ -20,8 +20,8 @@ public interface StedService {
 
     List<Sted> getStederByNavn(String navn);
 
-    //Sted createSted(Sted sted);
-    //ResponseEntity<?> deleteSted(Integer id);
+    Sted createSted(Sted sted);
+    ResponseEntity<?> deleteSted(Integer id);
 
 
 }

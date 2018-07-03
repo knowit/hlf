@@ -6,6 +6,7 @@ import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.Tag;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.services.StedService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,10 @@ import java.util.List;
 @Service
 public class StedServiceImpl implements StedService {
 
+    @Autowired
     private StedRepo stedRepo;
 
-    public StedServiceImpl(StedRepo stedRepo) {
-        this.stedRepo = stedRepo;
-    }
+    //public StedServiceImpl(StedRepo stedRepo) {this.stedRepo = stedRepo;}
 
     // Methods:
     @Override
@@ -39,7 +39,7 @@ public class StedServiceImpl implements StedService {
 
     @Override
     public List<Sted> getStederByNavn(String navn) {
-        if (!stedRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Sted", "navn", navn); }
+        //if (!stedRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Sted", "navn", navn); }
         return stedRepo.findByNavnIgnoreCase(navn);
     }
 
@@ -53,7 +53,6 @@ public class StedServiceImpl implements StedService {
         return stedRepo.findByAdresse(adresse);
     }
 
-    /*
     @Override
     public Sted createSted(Sted sted) {
         return stedRepo.save(sted);
@@ -67,5 +66,4 @@ public class StedServiceImpl implements StedService {
         stedRepo.delete(sted);
         return ResponseEntity.ok().build();
     }
-    */
 }

@@ -4,6 +4,7 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.VurderingService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -48,6 +49,14 @@ public class VurderingServiceImpl implements VurderingService {
         return vurderingRepo.save(vurdering);
     }
 
+    @Override
+    public ResponseEntity<?> deleteVurdering(Integer id) {
+        Vurdering vurdering = vurderingRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vurdering", "id", id));
+
+        vurderingRepo.delete(vurdering);
+        return ResponseEntity.ok().build();
+    }
 
     // Sorterer vurderinger inn i: teleslynge-, lydforhold-, lydutjevning- og informasjonsvurderinger.
     @Override

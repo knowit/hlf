@@ -20,4 +20,5 @@ public interface StedRepo extends CrudRepository<Sted, Integer> {
     List<Sted> findByTags(Tag tag);
 
     List<Sted> findByAdresse(Adresse adresse);
+
 }

@@ -1,6 +1,6 @@
 package no.hlf.godlyd.api.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,18 +12,23 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "vurderinger")
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Vurdering {
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "typeVurdering")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = TeleslyngeVurdering.class, name = "teleslynge"),
+        @JsonSubTypes.Type(value = LydforholdVurdering.class, name = "lydforhold")})
+public abstract class Vurdering implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonManagedReference
+    //private String typeVurdering; // typen vurdering (teleslynge, lydforhold osv.)
+
     @ManyToOne
     @JoinColumn(name = "sted")
     private Sted sted;
 
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "registrator")
     private Bruker registrator;
@@ -35,7 +40,15 @@ public abstract class Vurdering {
 
     private String kommentar;
 
-    public abstract boolean isRangering();
+    protected Vurdering(Sted sted, Bruker registrator, String kommentar) {
+        this.sted = sted;
+        this.registrator = registrator;
+        this.kommentar = kommentar;
+    }
+
+    protected  Vurdering(){}
+
+    public abstract boolean getRangering();
 
     //Getters and setters
     public Integer getId() { return id; }
@@ -46,6 +59,11 @@ public abstract class Vurdering {
 
     public void setSted(Sted sted) { this.sted = sted; }
 
+    /*
+    public String getTypeVurdering() { return typeVurdering; }
+
+    public void setTypeVurdering(String type) { this.typeVurdering = type; }
+    */
     public Bruker getRegistrator() { return registrator; }
 
     public void setRegistrator(Bruker registrator) { this.registrator = registrator; }
