@@ -44,6 +44,8 @@ public class Sted implements Serializable{
     @JoinColumn(name = "sted")
     private Set<Vurdering> vurderinger;
 
+    public Sted(){}
+
     public Sted(String placesId, String navn, String telefon, String nettside, Adresse adresse, Set<Tag> tags){
         this.placesId = placesId;
         this.navn = navn;

@@ -33,25 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StedRepoTest {
 
     @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
     private StedRepo stedRepo;
 
-    /*
-    @BeforeEach
-    public void setUp(){
-        Adresse adresse = new Adresse("Henrik Ibsens gate", "36", "Oslo", "0255");
-        Set<Tag> tags = Stream.of(new Tag("cafe", Gruppe.GRUPPE1)).collect(Collectors.toSet());
-        sted = new Sted("ChIJmeCJ639uQUYRc3OrOTekBZq", "Pascal Konditori-Brasseri",
-                "+47 22 55 00 20", "http://pascal.no/", adresse, tags);
-
-        entityManager.persist(adresse); entityManager.flush();
-        entityManager.persist(tags); entityManager.flush();
-    }
-    */
-
-    /*
+    /* USED FOR TESTING:
     STED:
      id |           navn            |     nettside      |          places_id          |     telefon     | adresse
     ----+---------------------------+-----------------------------------------------------------+-------------------
@@ -70,20 +54,24 @@ public class StedRepoTest {
     // TEST CASES
     @Test
     public void testStedFindByNavn(){
-        //Sted found1 = entityManager.find(Sted.class, 1);
-        //assertNotNull(found1);
-
         List<Sted> found = stedRepo.findByNavnIgnoreCase("Pascal Konditori-Brasseri");
         assertEquals(1,found.size());
-        //assertEquals("Pascal Konditori-Brasseri", found.get(0).getNavn());
-        //assertEquals(1, (int) found.get(0).getId());
+        assertEquals("Pascal Konditori-Brasseri", found.get(0).getNavn());
+        assertEquals(1, (int) found.get(0).getId());
     }
 
-/*    @Test
+    @Test
     public void testStedFindByPlacesId(){
         Sted found = stedRepo.findByPlacesId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         assertNotNull(found);
         assertEquals("Pascal Konditori-Brasseri", found.getNavn());
         assertEquals(1, (int) found.getId());
-    }*/
+    }
+
+    @Test
+    public void testStedFindByTags(){
+        List<Sted> found = stedRepo.findByTags(new Tag(2, "bakery", Gruppe.GRUPPE1));
+        assertEquals(1,found.size());
+        assertEquals("Pascal Konditori-Brasseri",found.get(0).getNavn());
+    }
 }

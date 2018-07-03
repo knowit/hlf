@@ -48,6 +48,8 @@ public class StedController {
         return stedService.getStederByNavn(navn);
     }
 
+    // Get alle tags for et sted?
+
     @GetMapping("/tagId={tags}")
     public List<Sted> getStederByTag(@PathVariable(value = "tags") Tag tag){
         return stedService.getStederByTag(tag);
