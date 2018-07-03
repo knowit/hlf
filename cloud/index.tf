@@ -14,9 +14,10 @@ resource "google_compute_network" "godlyd_vpc" {
 }
 
 resource "google_compute_instance" "server" {
-  name         = "server"
-  machine_type = "n1-standard-1"
-  zone         = "europe-west3-a"
+  name                      = "server"
+  machine_type              = "n1-standard-1"
+  zone                      = "europe-west3-a"
+  allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
@@ -30,6 +31,15 @@ resource "google_compute_instance" "server" {
     access_config {
       // Ephemeral IP
     }
+  }
+
+  metadata {
+    gce-container-declaration = "spec:\n  containers:\n  - image: eu.gcr.io/godlyd-207607/julyrepo\n    name: july\n    securityContext:\n      privileged: false\n    stdin: false\n    tty: false\n    volumeMounts: []\n  restartPolicy: Always\n  volumes: []\n"
+  }
+
+  service_account {
+    email  = "cloud-adm@godlyd-207607.iam.gserviceaccount.com"
+    scopes = ["userinfo-email", "compute-rw", "storage-rw", "logging-write", "monitoring-write"]
   }
 }
 
