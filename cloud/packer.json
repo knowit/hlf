@@ -3,7 +3,7 @@
         {
             "type": "googlecompute",
             "account_file": "credentials.json", 
-            "source_image_family": "cos-stable",
+            "source_image_family": "debian-9",
             "ssh_username": "godlyd",
             "project_id": "godlyd-207607",
             "zone": "europe-west3-a"

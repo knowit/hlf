@@ -23,3 +23,6 @@ app/app.json
 cloud/.terraform
 cloud/credentials.json
 cloud/creds.json
+cloud/.terraform
+cloud/terraform.tfstate
+cloud/terraform.tfstate.backup
