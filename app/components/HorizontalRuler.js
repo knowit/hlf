@@ -1,10 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
-import colors from '../settings/colors';
+import colors from '../settings/defaultStyles';
 
 
-export default ({ horizontalMargin }) => {
+export default ({ horizontalMargin, verticalMargin }) => {
     return (
-        <View style={{ borderBottomColor: colors.secondaryTextColor, borderBottomWidth: 1 , marginHorizontal: horizontalMargin}} />
+        <View style={{ borderBottomColor: colors.secondaryTextColor, borderBottomWidth: 1 , marginHorizontal: horizontalMargin, marginVertical: verticalMargin}} />
     )
 }

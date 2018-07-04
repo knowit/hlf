@@ -5,7 +5,7 @@ import IconText from '../components/IconText';
 import DefaultText from '../components/DefaultText';
 import { Entypo } from '@expo/vector-icons';
 import properties from '../settings/propertyConfig';
-import colors from '../settings/colors';
+import colors from '../settings/defaultStyles';
 
 
 

@@ -10,7 +10,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { selectedVenue: undefined, showDetails: false }
+    this.state = { isAuthed: false, selectedVenue: undefined, showDetails: false }
     this.onVenueSelect = this.onVenueSelect.bind(this);
     this.showDetails = this.showDetails.bind(this);
     this.hideDetails = this.hideDetails.bind(this);

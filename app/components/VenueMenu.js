@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 import { NEW_REVIEW_SELECTED, REVIEWS_SELECTED } from '../containers/VenueDetails'
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
 import IconText from './IconText';
-import colors from '../settings/colors';
+import colors from '../settings/defaultStyles';
 
 
 export default ({ onScreenChange, currentScreen }) => {

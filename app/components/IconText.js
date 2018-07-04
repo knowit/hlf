@@ -3,7 +3,7 @@ import { View, StyleSheet} from 'react-native';
 import DefaultText from './DefaultText';
 import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
-import colors from '../settings/colors';
+import colors from '../settings/defaultStyles';
 
 
 const IconText =  ({ text, iconSettings, reversedOrder, size, iconColor}) => {

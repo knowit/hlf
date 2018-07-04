@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { TextInput, StyleSheet, View, Text, TouchableHighlight} from 'react-native';
+import { TextInput, StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 import _ from 'lodash';
 import axios from 'axios';
-import colors from '../settings/colors';
-import {API_KEY} from '../credentials';
+import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
+import { API_KEY }  from '../credentials';
+
 
 export default class SearchBar extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export default class SearchBar extends Component {
         this.state = { searchPrompt: "", results: [] }
 
         this.onInputChange = this.onInputChange.bind(this);
-        this.handleSeach = _.debounce(this.handleSeach, 1000);
+        this.handleSeach = _.debounce(this.handleSearch, 1000);
 
 
     }
@@ -32,7 +33,7 @@ export default class SearchBar extends Component {
     renderMenuBar() {
         return (
             <View style={styles.row}>
-                <TouchableHighlight style={styles.iconWrap} onPress={this.props.onMenuPress}>
+                <TouchableHighlight onPress={this.props.onMenuPress}>
                     <Text style={styles.icon}>☰</Text>
                 </TouchableHighlight>
                 <TextInput
@@ -61,10 +62,12 @@ export default class SearchBar extends Component {
 
     onInputChange(prompt) {
         this.setState({ searchPrompt: prompt })
-        this.handleSeach();
+
+        this.handleSearch();
     }
 
-    handleSeach() {
+    handleSearch() {
+
         const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${this.state.searchPrompt}&key=${API_KEY}&region=no`;
         const request = axios.get(url)
             .then(({ data }) => this.setState({
@@ -83,10 +86,7 @@ export default class SearchBar extends Component {
 const styles = StyleSheet.create({
     wrap: {
         width: "100%",
-        height: "auto",
-        display: "flex",
-        padding: 20,
-        flexDirection: "column",
+        padding: COMPONENT_SPACING,
     },
     row: {
         backgroundColor: colors.primaryBackgroundColor,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 7
     },
     searchInput: {
-        marginLeft: 10,
+        marginHorizontal: COMPONENT_SPACING / 2,
         flex: 1,
         color: colors.primaryTextColor,
         fontSize: 18

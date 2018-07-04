@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import IconText from './IconText';
 import Properties from '../settings/propertyConfig';
-import colors from '../settings/colors';
+import colors from '../settings/defaultStyles';
 
 export default ({ venueProperties }) => {
 
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
 
     property: {
         flexDirection: "row",
-        justifyContent: "flex-end",
         alignItems: "center",
         paddingVertical: 7
     },

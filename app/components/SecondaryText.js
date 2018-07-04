@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import colors from '../settings/colors';
+import colors from '../settings/defaultStyles';
 
 export default ({ style, children }) => {
     return (

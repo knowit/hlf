@@ -1,35 +1,60 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { MapView, } from 'expo';
+import { View, StyleSheet, Platform } from 'react-native';
+import { MapView, Location, Permissions, Constants } from 'expo';
 import SearchBar from '../components/SearchBar';
 import { createDrawerNavigator } from 'react-navigation';
 import Profile from './Profile';
 import VenueMapOverlay from '../components/VenueMapOverlay';
 
 class Map extends Component {
-
     constructor(props) {
         super(props);
+        this.state = {
+            selectedRegion: {
+                latitude: 59.916634,
+                longitude: 10.756853,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            }, bottomMap: 10
+        }
+    }
+
+    componentWillMount() {
+        if (Platform.OS === 'android' && !Constants.isDevice) {
+            console.log("aw no");
+        }
+        else {
+            this.getCurrentLocation();
+        }
+
+    }
+
+    getCurrentLocation = async () => {
+        let permissionStatus = await Permissions.askAsync(Permissions.LOCATION);
+        if (permissionStatus !== "granted") {
+            console.log("mangler tillatelse");
+        }
+        else {
+            const location = await Location.getCurrentPositionAsync();
+            this.setState({ selectedRegion: location })
+        }
     }
 
     render() {
 
         return (
+
             <View style={styles.overallViewContainer}>
                 {<MapView
-                    style={styles.map}
+                    style={[{bottom:this.state.bottomMap},styles.map]}
                     zoomEnabled={true}
                     scrollEnabled={true}
                     showsUserLocation={true}
                     showsMyLocationButton={true}
                     showsCompass={true}
+                    initialRegion={this.state.selectedRegion}
                 >
-                    <MapView.Marker
-                        coordinate={{
-                            latitude: 37.7749,
-                            longitude: -122.4194,
-                        }}
-                    />
+
                 </MapView>}
                 <View style={styles.overlays}>
                     <SearchBar onMenuPress={this.props.navigation.openDrawer} onVenueSelect={this.props.onVenueSelect} />
@@ -64,16 +89,12 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0,
-        display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between'
     },
     overlays: {
-        width: "100%",
-        height: "100%",
+        flex: 1,
         position: "relative",
-        display: "flex",
         alignItems: "center",
         justifyContent: "space-between"
 
