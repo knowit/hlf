@@ -13,13 +13,8 @@ import java.util.List;
 @Service
 public class TeleslyngeServiceImpl implements TeleslyngeService {
 
+    @Autowired
     private TeleslyngeRepo teleslyngeRepo;
-    //private VurderingRepo vurderingRepo;
-
-    public TeleslyngeServiceImpl(TeleslyngeRepo teleslyngeRepo){
-        this.teleslyngeRepo = teleslyngeRepo;
-        //this.vurderingRepo = vurderingRepo;
-    }
 
     // Methods:
     @Override

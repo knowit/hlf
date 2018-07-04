@@ -21,6 +21,7 @@ public class Sted implements Serializable{
 
     @NotBlank
     @NotNull
+    @Column(unique = true)
     private String placesId; // Google Placed id
 
     private String navn;

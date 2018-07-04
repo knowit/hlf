@@ -4,6 +4,7 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Adresse;
 import no.hlf.godlyd.api.repository.AdresseRepo;
 import no.hlf.godlyd.api.services.AdresseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,8 @@ import java.util.List;
 @Service
 public class AdresseServiceImpl implements AdresseService {
 
-    private final AdresseRepo adresseRepo;
-
-    public AdresseServiceImpl(AdresseRepo adresseRepo) {
-        this.adresseRepo = adresseRepo;
-    }
+    @Autowired
+    private AdresseRepo adresseRepo;
 
     // Methods:
     public List<Adresse> getAllAdresser(){

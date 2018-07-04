@@ -4,6 +4,7 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.VurderingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,8 @@ import java.util.stream.Collectors;
 @Service
 public class VurderingServiceImpl implements VurderingService {
 
+    @Autowired
     private VurderingRepo vurderingRepo;
-
-    public VurderingServiceImpl(VurderingRepo vurderingRepo){
-        this.vurderingRepo = vurderingRepo;
-    }
 
     // Methods:
     @Override

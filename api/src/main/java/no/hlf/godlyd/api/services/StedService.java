@@ -1,8 +1,6 @@
 package no.hlf.godlyd.api.services;
 
-import no.hlf.godlyd.api.model.Adresse;
 import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.Tag;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

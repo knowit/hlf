@@ -18,8 +18,6 @@ public class StedServiceImpl implements StedService {
     @Autowired
     private StedRepo stedRepo;
 
-    //public StedServiceImpl(StedRepo stedRepo) {this.stedRepo = stedRepo;}
-
     // Methods:
     @Override
     public List<Sted> getAllSteder() {
