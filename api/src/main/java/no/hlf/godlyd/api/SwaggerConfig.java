@@ -29,8 +29,8 @@ public class SwaggerConfig {
     // Describe your apis
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Swagger Sample APIs")
-                .description("This page lists all the rest apis for Swagger Sample App.")
+                .title("GodLyd APIs")
+                .description("This page lists all the rest apis for GodLyd Application.")
                 .version("1.0-SNAPSHOT")
                 .build();
     }
