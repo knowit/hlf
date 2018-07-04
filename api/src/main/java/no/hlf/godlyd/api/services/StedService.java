@@ -12,15 +12,16 @@ public interface StedService {
 
     Sted getStedFromId(Integer id);
 
-    List<Sted> getStederByTag(Tag tag);
+    List<Sted> getStederByTag(Integer tagid);
 
-    List<Sted> getStederByAdresse(Adresse adresse);
+    List<Sted> getStederByAdresse(Integer adresseid);
 
     Sted getStedFromPlacesId(String placesId);
 
     List<Sted> getStederByNavn(String navn);
 
     Sted createSted(Sted sted);
+
     ResponseEntity<?> deleteSted(Integer id);
 
 

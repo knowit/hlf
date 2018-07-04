@@ -50,25 +50,24 @@ public class StedController {
 
     // Get alle tags for et sted?
 
-    @GetMapping("/tagId={tags}")
-    public List<Sted> getStederByTag(@PathVariable(value = "tags") Tag tag){
-        return stedService.getStederByTag(tag);
+    @GetMapping("/tagId={tag}")
+    public List<Sted> getStederByTag(@PathVariable(value = "tag") Integer tagid){
+        return stedService.getStederByTag(tagid);
     }
 
     @GetMapping("/adresseId={adresse}")
-    public List<Sted> getStederByAdresse(@PathVariable(value = "adresse") Adresse adresse){
-        return stedService.getStederByAdresse(adresse);
+    public List<Sted> getStederByAdresse(@PathVariable(value = "adresse") Integer adresseid){
+        return stedService.getStederByAdresse(adresseid);
     }
 
     @GetMapping("/id={id}/totalvurdering")
     public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "id") Integer id){
-        Sted sted = stedService.getStedFromId(id);
-        List<Vurdering> vurderinger = vurderingService.getVurderingerBySted(sted);
+        List<Vurdering> vurderinger = vurderingService.getVurderingerBySted(id);
         Map<String, List<Vurdering>> sorterteVurderinger = vurderingService.sorterVurderinger(vurderinger);
 
         Map<String, Object> map = new HashMap<>();
 
-        map.put("Sted", sted);
+        map.put("Sted", stedService.getStedFromId(id));
         map.put("Totalt antall vurderinger", vurderinger.size());
         map.put("Teleslyngevurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Teleslyngevurderinger")));
         map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
@@ -79,7 +78,7 @@ public class StedController {
     // Opprette et nytt sted
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Sted createSted(@Valid @RequestBody Sted sted){
+    public Sted createSted(@RequestBody Sted sted){
         return stedService.createSted(sted);
     }
 

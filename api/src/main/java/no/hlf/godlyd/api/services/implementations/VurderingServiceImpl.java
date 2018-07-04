@@ -29,8 +29,8 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerBySted(Sted sted){
-        return vurderingRepo.findBySted(sted);
+    public List<Vurdering> getVurderingerBySted(Integer stedid){
+        return vurderingRepo.findBySted(stedid);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(Bruker bruker) {
-        return vurderingRepo.findByRegistrator(bruker);
+    public List<Vurdering> getVurderingerByBruker(Integer brukerid) {
+        return vurderingRepo.findByRegistrator(brukerid);
     }
 
     @Override
