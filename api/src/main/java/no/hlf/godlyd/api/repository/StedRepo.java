@@ -3,6 +3,7 @@ package no.hlf.godlyd.api.repository;
 import no.hlf.godlyd.api.model.Adresse;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.Tag;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +18,10 @@ public interface StedRepo extends CrudRepository<Sted, Integer> {
 
     Sted findByPlacesId(String placesId);
 
-    List<Sted> findByTags(Tag tag);
+    @Query(value = "SELECT s FROM Sted s INNER JOIN s.tags t where t.id = ?1")
+    List<Sted> findByTag(Integer tagid);
 
-    List<Sted> findByAdresse(Adresse adresse);
+    @Query(value = "SELECT s FROM Sted s WHERE s.adresse.id = ?1")
+    List<Sted> findByAdresse(Integer adresseid);
 
 }

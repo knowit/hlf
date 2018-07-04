@@ -31,6 +31,14 @@ public class Tag implements Serializable {
     private Set<Sted> steder;
     */
 
+    public Tag(){}
+
+    public Tag(Integer id, String navn, Gruppe gruppe){
+        this.id = id;
+        this.navn = navn;
+        this.gruppe = gruppe;
+    }
+
     public Tag(String navn, Gruppe gruppe){
         this.navn = navn;
         this.gruppe = gruppe;

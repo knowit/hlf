@@ -30,8 +30,8 @@ public class VurderingController {
     }
 
     @GetMapping("/brukerId={registrator}")
-    public List<Vurdering> getVurderingerByBruker(@PathVariable(value = "registrator") Bruker bruker){
-        return vurderingService.getVurderingerByBruker(bruker);
+    public List<Vurdering> getVurderingerByBruker(@PathVariable(value = "registrator") Integer brukerid){
+        return vurderingService.getVurderingerByBruker(brukerid);
     }
 
     // Opprette en ny vurdering

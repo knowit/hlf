@@ -19,8 +19,6 @@ public class TagServiceImpl implements TagService {
     @Autowired
     private TagRepo tagRepo;
 
-    //public TagServiceImpl(TagRepo tagRepo) {this.tagRepo = tagRepo;}
-
     // Methods:
     public List<Tag> getAllTags(){
         return (List<Tag>) tagRepo.findAll();
