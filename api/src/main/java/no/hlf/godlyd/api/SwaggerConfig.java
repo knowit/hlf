@@ -12,6 +12,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -26,21 +27,17 @@ public class SwaggerConfig {
                 .build();
     }
 
-    // Describe your apis
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("GodLyd APIs")
-                .description("This page lists all the rest apis for GodLyd Application.")
+                .description("This page lists all the rest apis for GodLyd.")
                 .version("1.0-SNAPSHOT")
                 .build();
     }
 
-    // Only select apis that matches the given Predicates.
     private Predicate<String> paths() {
-        // Match all paths except /error
         return Predicates.and(
-                PathSelectors.regex("/.*"),
-                Predicates.not(PathSelectors.regex("/error.*"))
+                PathSelectors.regex("/.*")
         );
     }
 }
