@@ -38,6 +38,8 @@ public class Adresse implements Serializable {
     @JoinColumn(name = "adresse")
     private Set<Sted> steder;
 
+    public Adresse(){}
+
     public Adresse(String gatenavn, String gatenummer, @NotBlank @NotNull String by, @NotBlank @NotNull String postnummer) {
         this.gatenavn = gatenavn;
         this.gatenummer = gatenummer;

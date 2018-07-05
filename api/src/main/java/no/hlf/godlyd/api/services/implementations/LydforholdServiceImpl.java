@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LydforholdServiceImpl implements LydforholdService {
 
+    @Autowired
     private LydforholdRepo lydforholdRepo;
-
-    public LydforholdServiceImpl(LydforholdRepo lydforholdRepo){
-        this.lydforholdRepo = lydforholdRepo;
-    }
 
 }

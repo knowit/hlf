@@ -21,6 +21,7 @@ public class Sted implements Serializable{
 
     @NotBlank
     @NotNull
+    @Column(unique = true)
     private String placesId; // Google Placed id
 
     private String navn;
@@ -43,6 +44,8 @@ public class Sted implements Serializable{
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "sted")
     private Set<Vurdering> vurderinger;
+
+    public Sted(){}
 
     public Sted(String placesId, String navn, String telefon, String nettside, Adresse adresse, Set<Tag> tags){
         this.placesId = placesId;

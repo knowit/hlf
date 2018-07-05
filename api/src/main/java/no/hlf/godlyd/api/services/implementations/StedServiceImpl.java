@@ -18,8 +18,6 @@ public class StedServiceImpl implements StedService {
     @Autowired
     private StedRepo stedRepo;
 
-    //public StedServiceImpl(StedRepo stedRepo) {this.stedRepo = stedRepo;}
-
     // Methods:
     @Override
     public List<Sted> getAllSteder() {
@@ -44,13 +42,13 @@ public class StedServiceImpl implements StedService {
     }
 
     @Override
-    public List<Sted> getStederByTag(Tag tag) {
-        return stedRepo.findByTags(tag);
+    public List<Sted> getStederByTag(Integer tagid) {
+        return stedRepo.findByTag(tagid);
     }
 
     @Override
-    public List<Sted> getStederByAdresse(Adresse adresse){
-        return stedRepo.findByAdresse(adresse);
+    public List<Sted> getStederByAdresse(Integer adresseid){
+        return stedRepo.findByAdresse(adresseid);
     }
 
     @Override
