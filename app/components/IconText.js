@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet} from 'react-native';
-import DefaultText from './DefaultText';
 import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import colors from '../settings/defaultStyles';
+import AppText from './AppText';
 
 
 const IconText =  ({ text, iconSettings, reversedOrder, size, iconColor}) => {
@@ -17,7 +17,7 @@ const IconText =  ({ text, iconSettings, reversedOrder, size, iconColor}) => {
     return (
         <View style={{flexDirection: !reversedOrder ? "row" : "row-reverse", alignItems: "center"}}>
             <IconComponent name={iconName} color={iconColor ? iconColor : colors.primaryTextColor} size={iconTextSize}/>
-            <DefaultText style={[textMargin, {fontSize: iconTextSize}]}>{text}</DefaultText>
+            <AppText type="header" style={[textMargin, {fontSize: iconTextSize}]}>{text}</AppText>
         </View>
     )
 }

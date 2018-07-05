@@ -13,8 +13,6 @@ export default class SearchBar extends Component {
 
         this.onInputChange = this.onInputChange.bind(this);
         this.handleSeach = _.debounce(this.handleSearch, 1000);
-
-
     }
 
     render() {

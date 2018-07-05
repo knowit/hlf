@@ -1,11 +1,15 @@
+variable "region" {
+  default = "europe-west3"
+}
+
+variable "zone" {
+  default = "europe-west3-a"
+}
+
 provider "google" {
   credentials = "${file("credentials.json")}"
   project     = "godlyd-207607"
-  region      = "europe-west3"
-}
-
-data "google_compute_image" "server_image" {
-  name = "packer-1529307002"
+  region      = "${var.region}"
 }
 
 resource "google_compute_network" "godlyd_vpc" {
@@ -13,10 +17,44 @@ resource "google_compute_network" "godlyd_vpc" {
   auto_create_subnetworks = "true"
 }
 
+resource "google_compute_backend_service" "load-balancer" {
+  name        = "loadbalancer"
+  port_name   = "http"
+  protocol    = "HTTP"
+  timeout_sec = 10
+  enable_cdn  = false
+
+  backend = {
+    group = "${google_compute_instance_group.server_group.self_link}"
+  }
+
+  health_checks = ["${google_compute_http_health_check.default_health_check.self_link}"]
+}
+
+resource "google_compute_http_health_check" "default_health_check" {
+  name               = "default-healthcheck"
+  request_path       = "/"
+  check_interval_sec = 1
+  timeout_sec        = 1
+}
+
+resource "google_compute_instance_group" "server_group" {
+  name = "godlyd-server-group"
+  zone = "${var.zone}"
+
+  instances = [
+    "${google_compute_instance.server.self_link}",
+  ]
+}
+
+data "google_compute_image" "server_image" {
+  name = "packer-1529307002"
+}
+
 resource "google_compute_instance" "server" {
   name                      = "server"
   machine_type              = "n1-standard-1"
-  zone                      = "europe-west3-a"
+  zone                      = "${var.zone}"
   allow_stopping_for_update = true
 
   boot_disk {
@@ -54,7 +92,7 @@ resource "google_compute_firewall" "firewall" {
 }
 
 resource "google_sql_database_instance" "master" {
-  name             = "main-instance-db2"
+  name             = "main-instance-db3"
   database_version = "POSTGRES_9_6"
   region           = "europe-west3"
 

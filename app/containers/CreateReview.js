@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import HorizontalRuler from '../components/HorizontalRuler';
 import IconText from '../components/IconText';
-import DefaultText from '../components/DefaultText';
 import { Entypo } from '@expo/vector-icons';
 import properties from '../settings/propertyConfig';
 import colors from '../settings/defaultStyles';
+import AppText from '../components/AppText';
 
 
 
@@ -33,7 +33,7 @@ export default class CreateReview extends Component {
                 <HorizontalRuler horizontalMargin={screenPadding * -1} />
                 <View style={styles.propertyList}>
                     <IconText text={property} iconSettings={propertyInfo} />
-                    <DefaultText style={styles.centeredText}>{propertyInfo.description}</DefaultText>
+                    <AppText type="primary" >{propertyInfo.description}</AppText>
                     <View style={styles.iconRow}>
                         <Entypo name="thumbs-up" size={20} color={colors.positiveColor} />
                         <Entypo name="info-with-circle" size={20} color={colors.secondaryTextColor} />

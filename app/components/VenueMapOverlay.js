@@ -2,9 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 import PropertyOverview from './PropertyOverview';
 import { MaterialIcons } from '@expo/vector-icons';
-import HeaderText from './HeaderText';
-import SecondaryText from './SecondaryText';
 import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
+import AppText from './AppText';
 
 
 
@@ -13,12 +12,12 @@ export default ({ selectedVenue, showDetails }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <HeaderText>{selectedVenue.description}</HeaderText>
+                <AppText type="header">{selectedVenue.description}</AppText>
                 <TouchableHighlight onPress={showDetails}>
                     <MaterialIcons name="keyboard-arrow-right" size={40} color={colors.primaryTextColor} />
                 </TouchableHighlight>
             </View>
-            <SecondaryText style={{ paddingBottom: COMPONENT_SPACING}}>Dis street</SecondaryText>
+            <AppText type="secondary">Dis street</AppText>
             <PropertyOverview />
         </View >
     )

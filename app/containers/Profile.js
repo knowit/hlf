@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, TouchableHighlight } from 'react-native';
 import HorizontalRuler from '../components/HorizontalRuler';
-import DefaultText from '../components/DefaultText';
 import IconText from '../components/IconText';
-import SecondaryText from '../components/SecondaryText';
-import HeaderText from '../components/HeaderText';
-import colors, {COMPONENT_SPACING} from '../settings/defaultStyles';
+import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
+import AppText from '../components/AppText';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const demo = ["Operahuset i Oslo", "Vitus Apotek Storgata", "Deichmanske Bibliotek"];
 
 export default class extends Component {
 
     render() {
-
+        //<IconText text="Dine vurderinger" iconSettings={{ iconLibrary: "materialIcons", iconName: "rate-review" }} size={25} />
         return (
             <View style={styles.container}>
 
-                <HeaderText>Navn navnesen</HeaderText>
-                <SecondaryText>epost@epost.com</SecondaryText>
+                <AppText type="header">Navn Navnesen</AppText>
+                <AppText type="secondary">epost@epost.com</AppText>
 
                 <HorizontalRuler horizontalMargin={COMPONENT_SPACING * -1} verticalMargin={COMPONENT_SPACING} />
-
+                <AppText type="header"><MaterialIcons name="rate-review"/>Dine vurderinger</AppText>
                 <View style={styles.reviews}>
-                    <IconText text="Dine vurderinger" iconSettings={{ iconLibrary: "materialIcons", iconName: "rate-review" }} size={25} />
+                    
 
-                    {demo.map((item, index) => <DefaultText key={index} style={styles.review}>{item}</DefaultText>)}
+                    {demo.map((item, index) => <AppText key={index} type="primary">{item}</AppText>)}
                 </View>
                 <HorizontalRuler horizontalMargin={COMPONENT_SPACING * -1} />
                 <TouchableHighlight style={{ paddingVertical: COMPONENT_SPACING }} onPress={() => console.log("logout")}>

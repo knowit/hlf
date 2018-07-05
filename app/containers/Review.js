@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import DefaultText from '../components/DefaultText';
 import PropertyTitle from '../components/IconText';
 import { Entypo } from '@expo/vector-icons';
 import HorizontalRuler from '../components/HorizontalRuler';
+import AppText from '../components/AppText';
 
 export default class Review extends Component {
     constructor(props) {
@@ -21,8 +21,8 @@ export default class Review extends Component {
                 <View style={styles.header}>
                     <Image style={styles.image} source={require("../img/profileimg.jpeg")} />
                     <View style={styles.nameWrap}>
-                        <DefaultText>{review.date}</DefaultText>
-                        <DefaultText style={styles.name}>{review.name}</DefaultText>
+                        <AppText type="primary">{review.date}</AppText>
+                        <AppText type="primary" style={styles.name}>{review.name}</AppText>
                     </View>
                 </View>
                 {this.renderProperties(review.properties)}
