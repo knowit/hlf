@@ -12,6 +12,7 @@ import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -31,12 +32,10 @@ public class GodLydApplication {
 	    run(GodLydApplication.class, args);
 	}
 
-	/*
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
 	    return new BCryptPasswordEncoder();
     }
-    */
 
     /*
 	@Bean
