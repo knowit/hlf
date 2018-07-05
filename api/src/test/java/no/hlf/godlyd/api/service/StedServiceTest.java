@@ -1,10 +1,7 @@
 package no.hlf.godlyd.api.service;
 
 import no.hlf.godlyd.api.GodLydApplication;
-import no.hlf.godlyd.api.Gruppe;
-import no.hlf.godlyd.api.model.Adresse;
 import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.Tag;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.implementations.StedServiceImpl;
@@ -49,50 +46,19 @@ public class StedServiceTest {
     private StedRepo stedRepo;
 
     private Sted sted;
-    private Tag tag;
 
     @BeforeEach
     public void setUp(){
-        this.tag = new Tag("tagnavn", Gruppe.GRUPPE1);
-        Set<Tag> tags = Stream.of(tag).collect(Collectors.toSet());
-        this.sted =  new Sted("TestPlacesId","Navn","Telefon","Nettside",
-                new Adresse("Gatenavn", "Gatenummer", "By", "Postnummer"), tags);
+        this.sted =  new Sted("TestPlacesId");
     }
 
     // TEST CASES
     @Test
     public void testGetStedByPlacesId() {
-        Mockito.when(stedRepo.findByPlacesId(sted.getPlacesId())).thenReturn(sted);
+        Mockito.when(stedRepo.findByPlaceId(sted.getPlaceId())).thenReturn(sted);
 
-        Sted found = stedService.getStedFromPlacesId(sted.getPlacesId());
-        assertEquals(sted.getNavn(), found.getNavn());
-    }
-
-    @Test
-    public void testGetStedByNavn() {
-        Mockito.when(stedRepo.findByNavnIgnoreCase(sted.getNavn())).thenReturn(Arrays.asList(sted));
-
-        List<Sted> found = stedService.getStederByNavn(sted.getNavn());
-        assertTrue(found.contains(sted));
-        assertEquals(sted.getId(), found.get(0).getId());
-    }
-
-    @Test
-    public void testGetStedByTag() {
-        Mockito.when(stedRepo.findByTag(tag.getId())).thenReturn(Arrays.asList(sted));
-
-        List<Sted> found = stedService.getStederByTag(tag.getId());
-        assertTrue(found.contains(sted));
-        assertEquals(sted.getId(), found.get(0).getId());
-    }
-
-    @Test
-    public void testGetStedByAdresse() {
-        Mockito.when(stedRepo.findByAdresse(sted.getAdresse().getId())).thenReturn(Arrays.asList(sted));
-
-        List<Sted> found = stedService.getStederByAdresse(sted.getAdresse().getId());
-        assertTrue(found.contains(sted));
-        assertEquals(sted.getId(), found.get(0).getId());
+        Sted found = stedService.getStedFromPlaceId(sted.getPlaceId());
+        assertEquals(sted, found);
     }
 
     @Test

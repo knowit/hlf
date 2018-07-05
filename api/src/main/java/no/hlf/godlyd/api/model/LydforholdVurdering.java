@@ -1,13 +1,11 @@
 package no.hlf.godlyd.api.model;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "lydforhold_vurdering")
+@Table(name = "lydforholdvurdering")
 //@JsonTypeName("lydforhold")
 public class LydforholdVurdering extends Vurdering{
 

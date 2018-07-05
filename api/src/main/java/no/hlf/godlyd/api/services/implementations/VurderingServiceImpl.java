@@ -27,8 +27,8 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerBySted(Integer stedid){
-        return vurderingRepo.findBySted(stedid);
+    public List<Vurdering> getVurderingerBySted(Integer id){
+        return vurderingRepo.findBySted(id);
     }
 
     @Override

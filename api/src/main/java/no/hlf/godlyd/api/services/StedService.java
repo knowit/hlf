@@ -6,17 +6,20 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface StedService {
+
     List<Sted> getAllSteder();
 
     Sted getStedFromId(Integer id);
 
+    /*
     List<Sted> getStederByTag(Integer tagid);
 
     List<Sted> getStederByAdresse(Integer adresseid);
+    */
 
-    Sted getStedFromPlacesId(String placesId);
+    Sted getStedFromPlaceId(String placeId);
 
-    List<Sted> getStederByNavn(String navn);
+    //List<Sted> getStederByNavn(String navn);
 
     Sted createSted(Sted sted);
 

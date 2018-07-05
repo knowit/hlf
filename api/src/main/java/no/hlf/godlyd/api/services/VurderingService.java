@@ -12,7 +12,7 @@ public interface VurderingService {
 
     Map<String, List<Vurdering>> getAllVurderinger();
 
-    List<Vurdering> getVurderingerBySted(Integer stedid);
+    List<Vurdering> getVurderingerBySted(Integer id);
 
     Vurdering getVurderingFromId(Integer id);
 

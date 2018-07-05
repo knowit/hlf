@@ -1,9 +1,8 @@
 package no.hlf.godlyd.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import no.hlf.godlyd.api.Vurderingsstatistikk;
-import no.hlf.godlyd.api.model.Adresse;
 import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.Tag;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.StedService;
 
@@ -12,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +28,8 @@ public class StedController {
     @Autowired
     VurderingService vurderingService;
 
+    // Hent ut all info om et sted gitt en placeId. Denne bruker appen til å hente ønsket info!
+
     @GetMapping()
     public List<Sted> getAllSteder(){
         return stedService.getAllSteder();
@@ -38,17 +40,30 @@ public class StedController {
         return stedService.getStedFromId(id);
     }
 
-    @GetMapping("/placesId={placesId}")
-    public Sted getStedByPlacesId(@PathVariable(value = "placesId") String placesId){
-        return stedService.getStedFromPlacesId(placesId);
+    @GetMapping("/placeId={placeId}")
+    public Sted getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
+        return stedService.getStedFromPlaceId(placeId);
     }
 
+    // BRUKER GOOGLE API
+    @GetMapping("/info/{placeId}")
+    public String getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId){
+        RestTemplate restTemplate = new RestTemplate();
+        String uri = "https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACE_ID}" +
+                "&language=no&fields=name,place_id,formatted_address,formatted_phone_number," +
+                "international_phone_number,website,opening_hours,type,scope,url&key={API_KEY}";
+
+        String result = restTemplate.getForObject(uri, String.class, placeId,
+                "AIzaSyAc1T0RZlE1CO1mCathSjl29WPZs5GS47U");
+
+        return result;
+    }
+
+    /*
     @GetMapping("/navn={navn}")
     public List<Sted> getStederByNavn(@PathVariable(value = "navn") String navn){
         return stedService.getStederByNavn(navn);
     }
-
-    // Get alle tags for et sted?
 
     @GetMapping("/tagId={tag}")
     public List<Sted> getStederByTag(@PathVariable(value = "tag") Integer tagid){
@@ -59,8 +74,8 @@ public class StedController {
     public List<Sted> getStederByAdresse(@PathVariable(value = "adresse") Integer adresseid){
         return stedService.getStederByAdresse(adresseid);
     }
-
-    @GetMapping("/id={id}/totalvurdering")
+    */
+    @GetMapping("/{id}/totalvurdering")
     public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "id") Integer id){
         List<Vurdering> vurderinger = vurderingService.getVurderingerBySted(id);
         Map<String, List<Vurdering>> sorterteVurderinger = vurderingService.sorterVurderinger(vurderinger);

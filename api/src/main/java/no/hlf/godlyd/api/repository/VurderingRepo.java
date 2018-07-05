@@ -14,7 +14,7 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
     List<Vurdering> findByRegistrator(Integer brukerid);
 
     @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.id = ?1")
-    List<Vurdering> findBySted(Integer stedid);
+    List<Vurdering> findBySted(Integer id);
 
 
 }

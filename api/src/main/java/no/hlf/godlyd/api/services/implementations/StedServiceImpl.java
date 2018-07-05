@@ -1,9 +1,7 @@
 package no.hlf.godlyd.api.services.implementations;
 
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
-import no.hlf.godlyd.api.model.Adresse;
 import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.Tag;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.services.StedService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +29,11 @@ public class StedServiceImpl implements StedService {
     }
 
     @Override
-    public Sted getStedFromPlacesId(String placesId) {
-        return stedRepo.findByPlacesId(placesId);
+    public Sted getStedFromPlaceId(String placeId) {
+        return stedRepo.findByPlaceId(placeId);
     }
 
+    /*
     @Override
     public List<Sted> getStederByNavn(String navn) {
         //if (!stedRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Sted", "navn", navn); }
@@ -50,6 +49,7 @@ public class StedServiceImpl implements StedService {
     public List<Sted> getStederByAdresse(Integer adresseid){
         return stedRepo.findByAdresse(adresseid);
     }
+    */
 
     @Override
     public Sted createSted(Sted sted) {
