@@ -24,7 +24,11 @@ public class BrukerServiceImpl implements BrukerService {
     }
 
     public Bruker createBruker(Bruker bruker){
-        return brukerRepo.save(bruker);
+        Bruker b = brukerRepo.findByBrukernavn(bruker.getBrukernavn());
+        if(b != null){
+            return brukerRepo.save(bruker);
+        }
+        else return null;
     }
 
     public List<Bruker> getAllBrukere(){

@@ -20,6 +20,16 @@ public class BrukerController {
         return brukerService.getAllBrukere();
     }
 
+    @GetMapping("/innlogging")
+    public String innlogging(){
+        return "innlogging";
+    }
+
+    @GetMapping("/registrering")
+    public String registrering(){
+        return "registrering";
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/registrering")
     public Bruker registrering(@RequestBody Bruker bruker){
