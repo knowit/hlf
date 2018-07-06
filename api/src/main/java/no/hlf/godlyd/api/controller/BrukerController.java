@@ -1,29 +1,34 @@
 package no.hlf.godlyd.api.controller;
 
 import no.hlf.godlyd.api.model.Bruker;
-import no.hlf.godlyd.api.repository.BrukerRepo;
+import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/bruker")
+@RequestMapping("/brukere")
 public class BrukerController {
 
     @Autowired
-    private BrukerRepo brukerRepo;
+    private BrukerService brukerService;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @GetMapping()
+    public List<Bruker> bruker(){
+        return brukerService.getAllBrukere();
+    }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/registrering")
-    public void registrering(@RequestBody Bruker bruker){
-        bruker.setPassord(bCryptPasswordEncoder.encode(bruker.getPassord()));
-        brukerRepo.save(bruker);
+    public Bruker registrering(@RequestBody Bruker bruker){
+        return brukerService.createBruker(bruker);
+    }
+
+    @PostMapping("/innlogging")
+    public Bruker innlogging(@RequestBody Bruker bruker){
+        return brukerService.login(bruker);
     }
 
 }
