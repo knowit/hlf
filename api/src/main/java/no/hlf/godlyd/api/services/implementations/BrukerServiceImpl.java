@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import static no.hlf.godlyd.api.security.SecurityConstants.SECRET;
 
-import javax.servlet.ServletException;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class BrukerServiceImpl implements BrukerService {
         String jwtToken = "";
         String brukernavn = bruker.getBrukernavn();
         String passord = bruker.getPassord();
-        Bruker b = brukerRepo.findByBrukernavn(brukernavn);
+        Bruker b = findByBrukernavn(brukernavn);
         if(b == null){
             return null;
         }
