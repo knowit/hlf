@@ -24,15 +24,9 @@ public class StedRepoTest {
 
     /* USED FOR TESTING:
     STED:
-     id |           navn            |     nettside      |          places_id          |     telefon     | adresse
-    ----+---------------------------+-----------------------------------------------------------+-------------------
-      1 | Pascal Konditori-Brasseri | http://pascal.no/ | ChIJmeCJ639uQUYRc3OrOTekBZw | +47 22 55 00 20 |       4
-
-    STED_TAG:
-    sted_id | tag_id
-    ---------+--------
-           1 |      2
-
+     id |          places_id
+    ----+-----------------------------+
+      1 | ChIJmeCJ639uQUYRc3OrOTekBZw
      */
 
     // TEST CASES

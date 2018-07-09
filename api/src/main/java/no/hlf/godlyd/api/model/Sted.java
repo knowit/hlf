@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,16 +25,21 @@ public class Sted implements Serializable{
     @Column(unique = true)
     private String placeId; // Google Placed id
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY) //mappedBy = "sted"
     @JoinColumn(name = "sted")
     private List<Vurdering> vurderinger;
-
 
     public Sted(){}
 
     public Sted(String placeId){
         this.placeId = placeId;
     }
+
+    public void addVurdering(Vurdering vurdering){
+        this.vurderinger.add(vurdering);
+        //vurdering.setSted(this);
+    }
+
 
     // Getters og setters
     public Integer getId() { return id; }
@@ -44,6 +50,7 @@ public class Sted implements Serializable{
 
     public void setPlaceId(String placeId) { this.placeId = placeId; }
 
+    @JsonIgnore
     public List<Vurdering> getVurderinger() { return vurderinger; }
 
     public void setVurderinger(List<Vurdering> vurderinger) { this.vurderinger = vurderinger; }

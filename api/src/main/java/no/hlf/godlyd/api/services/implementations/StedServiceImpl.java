@@ -33,24 +33,6 @@ public class StedServiceImpl implements StedService {
         return stedRepo.findByPlaceId(placeId);
     }
 
-    /*
-    @Override
-    public List<Sted> getStederByNavn(String navn) {
-        //if (!stedRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Sted", "navn", navn); }
-        return stedRepo.findByNavnIgnoreCase(navn);
-    }
-
-    @Override
-    public List<Sted> getStederByTag(Integer tagid) {
-        return stedRepo.findByTag(tagid);
-    }
-
-    @Override
-    public List<Sted> getStederByAdresse(Integer adresseid){
-        return stedRepo.findByAdresse(adresseid);
-    }
-    */
-
     @Override
     public Sted createSted(Sted sted) {
         return stedRepo.save(sted);

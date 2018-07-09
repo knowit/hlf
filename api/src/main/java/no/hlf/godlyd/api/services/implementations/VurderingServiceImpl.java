@@ -2,6 +2,7 @@ package no.hlf.godlyd.api.services.implementations;
 
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
+import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Autowired
     private VurderingRepo vurderingRepo;
+    @Autowired
+    private StedRepo stedRepo;
 
     // Methods:
     @Override
@@ -27,9 +30,12 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerBySted(Integer id){
-        return vurderingRepo.findBySted(id);
+    public List<Vurdering> getVurderingerByStedId(Integer id){
+        return vurderingRepo.findByStedId(id);
     }
+
+    @Override
+    public List<Vurdering> getVurderingerByPlaceId(String placeId){ return vurderingRepo.findByPlaceId(placeId);}
 
     @Override
     public Vurdering getVurderingFromId(Integer id) {
@@ -41,12 +47,12 @@ public class VurderingServiceImpl implements VurderingService {
     public List<Vurdering> getVurderingerByBruker(Integer brukerid) {
         return vurderingRepo.findByRegistrator(brukerid);
     }
-
+    /*
     @Override
     public Vurdering createVurdering(Vurdering vurdering) {
         return vurderingRepo.save(vurdering);
     }
-
+    */
     @Override
     public ResponseEntity<?> deleteVurdering(Integer id) {
         Vurdering vurdering = vurderingRepo.findById(id)
@@ -68,9 +74,19 @@ public class VurderingServiceImpl implements VurderingService {
                 .filter(vurdering -> vurdering instanceof LydforholdVurdering)
                 .collect(Collectors.toList());
 
+        List<Vurdering> lydutjevningVurderinger = vurderinger.stream()
+                .filter(vurdering -> vurdering instanceof LydutjevningVurdering)
+                .collect(Collectors.toList());
+
+        List<Vurdering> informasjonVurderinger = vurderinger.stream()
+                .filter(vurdering -> vurdering instanceof InformasjonVurdering)
+                .collect(Collectors.toList());
+
         Map<String,List<Vurdering>> map =new HashMap();
         map.put("Teleslyngevurderinger",teleslyngeVurderinger);
         map.put("Lydforholdvurderinger",lydforholdVurderinger);
+        map.put("Lydutjevningvurderinger", lydutjevningVurderinger);
+        map.put("Informasjonvurderinger", informasjonVurderinger);
 
         return map;
     }

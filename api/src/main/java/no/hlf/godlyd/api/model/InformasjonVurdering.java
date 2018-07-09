@@ -6,13 +6,13 @@ import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 
 @Entity
-@Table(name = "teleslyngevurdering")
-public class TeleslyngeVurdering extends Vurdering {
+@Table(name = "informasjonvurdering")
+public class InformasjonVurdering extends Vurdering {
 
     @NotNull
     private boolean rangering;  // Kan rangeres som tommel opp (1) eller ned (0)
 
-    public TeleslyngeVurdering(Sted sted, Bruker registrator, String kommentar, boolean rangering){
+    public InformasjonVurdering(Sted sted, Bruker registrator, String kommentar, boolean rangering){
         super(sted, registrator, kommentar);
         this.rangering = rangering;
 
@@ -20,12 +20,12 @@ public class TeleslyngeVurdering extends Vurdering {
         //registrator.addVurdering(this);
     }
 
-    public TeleslyngeVurdering(){}
+    public InformasjonVurdering(){}
 
     /*
     @Override
     public String toString() {
-        return "TeleslyngeVurdering{ id: " + super.getId() + " registrator: " + super.getRegistrator() +
+        return "InformasjonVurdering{ id: " + super.getId() + " registrator: " + super.getRegistrator() +
                 "sted: " + super.getSted() + "rangering:" + rangering +
                 "dato: " + new SimpleDateFormat("dd/MM/yyy").format(super.getDato()) +
                 "kommentar: " + super.getKommentar() + '}';

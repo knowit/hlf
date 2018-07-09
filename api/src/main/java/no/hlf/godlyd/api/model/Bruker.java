@@ -1,15 +1,16 @@
 package no.hlf.godlyd.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "bruker")
+@JsonIgnoreProperties({"passord", "epost"})
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Bruker implements Serializable {
 
@@ -27,10 +28,20 @@ public class Bruker implements Serializable {
     @Column(unique = true)
     private String epost;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "registrator")
-    private Set<Vurdering> vurderinger;
+    @OneToMany(mappedBy = "registrator")
+    private List<Vurdering> vurderinger;
 
+    public Bruker(String brukernavn, String epost) {
+        this.brukernavn = brukernavn;
+        this.epost = epost;
+    }
+
+    public Bruker(){}
+
+    public void addVurdering(Vurdering vurdering){
+        this.vurderinger.add(vurdering);
+        //vurdering.setRegistrator(this);
+    }
 
     // Getters og setters
     public Integer getId() { return id; }
@@ -57,7 +68,8 @@ public class Bruker implements Serializable {
 
     public void setEpost(String epost) { this.epost = epost; }
 
-    public Set<Vurdering> getVurderinger() { return vurderinger; }
+    @JsonIgnore
+    public List<Vurdering> getVurderinger() { return vurderinger; }
 
-    public void setVurderinger(Set<Vurdering> vurderinger) { this.vurderinger = vurderinger; }
+    public void setVurderinger(List<Vurdering> vurderinger) { this.vurderinger = vurderinger; }
 }

@@ -1,10 +1,9 @@
 package no.hlf.godlyd.api.repository;
 
-import no.hlf.godlyd.api.model.TeleslyngeVurdering;
+import no.hlf.godlyd.api.model.InformasjonVurdering;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TeleslyngeRepo extends CrudRepository<TeleslyngeVurdering, Integer> {
-
+public interface InformasjonRepo extends CrudRepository<InformasjonVurdering, Integer> {
 }
