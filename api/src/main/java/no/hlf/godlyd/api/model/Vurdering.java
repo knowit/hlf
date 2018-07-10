@@ -51,7 +51,7 @@ public abstract class Vurdering implements Serializable {
 
     protected Vurdering(){}
 
-    public abstract boolean getRangering();
+    public abstract boolean isRangering();
     public abstract void setRangering(boolean rangering);
 
     //Getters and setters

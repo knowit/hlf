@@ -1,7 +1,6 @@
 package no.hlf.godlyd.api.controller;
 
-import no.hlf.godlyd.api.model.Bruker;
-import no.hlf.godlyd.api.repository.BrukerRepo;
+import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BrukerController {
 
     @Autowired
-    private BrukerRepo brukerRepo;
+    private BrukerService brukerService;
     /*
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

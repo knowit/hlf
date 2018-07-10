@@ -38,10 +38,12 @@ public class Bruker implements Serializable {
 
     public Bruker(){}
 
+    /*
     public void addVurdering(Vurdering vurdering){
         this.vurderinger.add(vurdering);
         //vurdering.setRegistrator(this);
     }
+    */
 
     // Getters og setters
     public Integer getId() { return id; }

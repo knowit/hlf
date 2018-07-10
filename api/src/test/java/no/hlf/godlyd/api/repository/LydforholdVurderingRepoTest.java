@@ -34,14 +34,14 @@ public class LydforholdVurderingRepoTest {
         Sted sted = stedRepo.findByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         Bruker bruker = brukerRepo.findByBrukernavn("user4");
 
-        LydforholdVurdering tv = new LydforholdVurdering(sted, bruker, "Bra lydforhold", true);
-        LydforholdVurdering saved = lydforholdRepo.save(tv);
+        LydforholdVurdering lv = new LydforholdVurdering(sted, bruker, "Bra lydforhold", true);
+        LydforholdVurdering saved = lydforholdRepo.save(lv);
         assertNotNull(saved);
         //System.out.println("Dato: " + new SimpleDateFormat("dd/MM/yyy").format(saved.getDato()));
 
         // Sjekker om alt er lagret rett: Er det vurderingen i vurderingstabellen og i lista for sted og bruker?
-        assertTrue(vurderingRepo.findByPlaceId(sted.getPlaceId()).contains(tv));
-        assertTrue(stedRepo.findByPlaceId(sted.getPlaceId()).getVurderinger().contains(tv));
-        assertTrue(brukerRepo.findByBrukernavn(bruker.getBrukernavn()).getVurderinger().contains(tv));
+        assertTrue(vurderingRepo.findByPlaceId(sted.getPlaceId()).contains(lv));
+        assertTrue(stedRepo.findByPlaceId(sted.getPlaceId()).getVurderinger().contains(lv));
+        assertTrue(brukerRepo.findByBrukernavn(bruker.getBrukernavn()).getVurderinger().contains(lv));
     }
 }

@@ -33,7 +33,7 @@ public class LydutjevningVurdering extends Vurdering {
     */
 
     // Getters and setters
-    public boolean getRangering() {
+    public boolean isRangering() {
         return rangering;
     }
 

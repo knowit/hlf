@@ -35,14 +35,14 @@ public class InformasjonVurderingRepoTest {
         Sted sted = stedRepo.findByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         Bruker bruker = brukerRepo.findByBrukernavn("user3");
 
-        InformasjonVurdering tv = new InformasjonVurdering(sted, bruker, "Bra informasjon", true);
-        InformasjonVurdering saved = informasjonRepo.save(tv);
+        InformasjonVurdering iv = new InformasjonVurdering(sted, bruker, "Bra informasjon", true);
+        InformasjonVurdering saved = informasjonRepo.save(iv);
         assertNotNull(saved);
         //System.out.println("Dato: " + new SimpleDateFormat("dd/MM/yyy").format(saved.getDato()));
 
         // Sjekker om alt er lagret rett: Er det vurderingen i vurderingstabellen og i lista for sted og bruker?
-        assertTrue(vurderingRepo.findByPlaceId(sted.getPlaceId()).contains(tv));
-        assertTrue(stedRepo.findByPlaceId(sted.getPlaceId()).getVurderinger().contains(tv));
-        assertTrue(brukerRepo.findByBrukernavn(bruker.getBrukernavn()).getVurderinger().contains(tv));
+        assertTrue(vurderingRepo.findByPlaceId(sted.getPlaceId()).contains(iv));
+        assertTrue(stedRepo.findByPlaceId(sted.getPlaceId()).getVurderinger().contains(iv));
+        assertTrue(brukerRepo.findByBrukernavn(bruker.getBrukernavn()).getVurderinger().contains(iv));
     }
 }
