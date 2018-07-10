@@ -8,6 +8,14 @@ export const colors =  {
     transparentColor: "rgba(0,0,0,0)"
 }
 
+export const sizes ={
+    xlarge:  25,
+    large: 22,
+    medium: 18,
+    small: 15,    
+}
+
+
 export const COMPONENT_SPACING = 20;
 
 export default colors;

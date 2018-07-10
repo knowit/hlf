@@ -1,82 +1,166 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, TouchableHighlight, StyleSheet, TextInput } from 'react-native';
 import HorizontalRuler from '../components/HorizontalRuler';
-import IconText from '../components/IconText';
-import { Entypo } from '@expo/vector-icons';
 import properties from '../settings/propertyConfig';
-import colors from '../settings/defaultStyles';
+import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
+import Entypo from '@expo/vector-icons/Entypo';
 import AppText from '../components/AppText';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+
 
 
 
 export default class CreateReview extends Component {
     constructor(props) {
         super(props);
+        this.state = this.resetInputValues();
+            
+
+
     }
     render() {
-
         return (
-            <View style={styles.container}> 
-                {Object.keys(properties).map(property => this.renderPropertyInput(property))}
-                <Button onPress={() => console.log("ok")} title="Publiser" />
-                <Button onPress={() => console.log("ok")} title="Tøm felter" />
-            </View>
+            <View style={styles.container}>
+                {properties.map(property => this.renderPropertyInput(property))}
 
+                <TouchableHighlight style={[styles.button, styles.submitButton]}>
+                    <AppText type="inverse" size="xlarge" style={{ textAlign: "center" }}><Entypo name="globe" />Publiser</AppText>
+                </TouchableHighlight>
+                <TouchableHighlight style={[styles.button, styles.resetButton]} onPress={() => this.setState(this.resetInputValues())}>
+                    <AppText type="primary" size="large" style={{ textAlign: "center" }}><Ionicons name="md-remove-circle" />Tøm felter</AppText>
+                </TouchableHighlight>
+            </View>
         )
 
     }
 
     renderPropertyInput(property) {
-        const propertyInfo = properties[property];
+        const { value } = this.state[property.name]
         return (
-            <View key={property} style={styles.property}>
-                <HorizontalRuler horizontalMargin={screenPadding * -1} />
-                <View style={styles.propertyList}>
-                    <IconText text={property} iconSettings={propertyInfo} />
-                    <AppText type="primary" >{propertyInfo.description}</AppText>
+            <View style={styles.property} key={property.name}>
+
+                <AppText type="primary" size="large" style={{ textAlign: "center" }}>{property.icon} {property.name}</AppText>
+                <AppText type="secondary" size="medium" style={{ textAlign: "center" }}>{property.description}</AppText>
+                <View style={styles.iconRowWrap}>
                     <View style={styles.iconRow}>
-                        <Entypo name="thumbs-up" size={20} color={colors.positiveColor} />
-                        <Entypo name="info-with-circle" size={20} color={colors.secondaryTextColor} />
-                        <Entypo name="thumbs-down" size={20} color={colors.negativeColor} />
+                        <TouchableHighlight onPress={() => this.changePropertyValue(property.name, 1)} style={[styles.valueOption, value === 1 ? styles.positiveIsSelected : {},]} >
+                            <AppText type={value === undefined ? "primary" : value === 1 ? "positive" : "secondary"} size="xlarge">
+                                <Entypo name="thumbs-up" /> Ja
+                            </AppText>
+                        </TouchableHighlight>
+                        <AppText type="secondary" size="large" style={StyleSheet.flatten(styles.infoIcon)}>
+                            <Ionicons name="ios-information-circle-outline" />
+                        </AppText>
+                        <TouchableHighlight onPress={() => this.changePropertyValue(property.name, 0)} style={[styles.valueOption, value === 0 ? styles.negativeIsSelected : {},]} >
+                            <AppText type={value === undefined ? "primary" : value === 0 ? "negative" : "secondary"} size="xlarge">
+                                Nei <Entypo name="thumbs-down" />
+                            </AppText>
+                        </TouchableHighlight>
                     </View>
-                    <TextInput
-                        numberOfLines={4}
-                        multiline={true}
-                        style={styles.textArea}
-                        selectionColor={colors.primaryTextColor} 
-                        underlineColorAndroid={colors.transparentColor}
-                        placeholder="Skriv en kommentar..."
-                        placeholderTextColor={colors.secondaryTextColor} />
                 </View>
+                <View style={styles.commentWrap}>
+                    <TextInput
+                        multiline={true}
+                        numberOfLines={6}
+                        style={styles.textArea}
+                        placeholder="Skriv en kommentar..."
+                        underlineColorAndroid={colors.transparentColor}
+                        placeholderTextColor={colors.secondaryTextColor}
+                        selectionColor={colors.primaryTextColor}
+                        onChangeText={text => this.onCommentChange(property.name, text)}
+                        value={this.state[property.name].comment}
+
+                    />
+                </View>
+
+                <HorizontalRuler horizontalMargin={COMPONENT_SPACING * -1} verticalMargin={COMPONENT_SPACING * 1.5} />
             </View>
         )
     }
+
+    changePropertyValue(propertyName, selected) {
+        const newValue = this.state[propertyName].value === selected ? undefined : selected;
+
+        const nextState = { ...this.state[propertyName], value: newValue }
+        this.setState({ [propertyName]: nextState })
+    }
+
+    onCommentChange(propertyName, text){
+        const nextState = {...this.state[propertyName], comment: text};
+        this.setState({[propertyName]: nextState})
+    }
+
+    resetInputValues() {
+        return properties
+            .map(property => {
+                return {
+                    name: property.name,
+                    value: undefined,
+                    comment: ""
+                }
+            }
+            ).reduce((obj, item) => {
+                obj[item.name] = item
+                return obj
+            }, {})
+    }
+
 }
-const screenPadding = 20;
+
 const styles = StyleSheet.create({
     container: {
-        padding: screenPadding
-    },  
-    propertyList: {
+        alignItems: "stretch",
+        padding: COMPONENT_SPACING
+    },
+
+    iconRowWrap: {
         alignItems: "center",
-        paddingVertical: screenPadding
-    },
-    textArea: {
-        backgroundColor: colors.secondaryBackgroundColor,
-        borderWidth: 1,
-        borderColor: colors.secondaryTextColor,
-        color: colors.primaryTextColor,
-        textAlignVertical: "top",
-        padding: 10,
-        width: "100%",
-    },
-    centeredText: {
-        textAlign: "center",
     },
     iconRow: {
         flexDirection: "row",
-        width: "10%",
+        alignItems: "center",
         justifyContent: "space-between",
-        paddingVertical: screenPadding
+        marginVertical: COMPONENT_SPACING,
+
+    },
+    valueOption: {
+        paddingHorizontal: COMPONENT_SPACING,
+        paddingVertical: COMPONENT_SPACING / 3,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: colors.transparentColor
+    },
+    positiveIsSelected: {
+        borderColor: colors.positiveColor
+    },
+    negativeIsSelected: {
+        borderColor: colors.negativeColor
+
+    },
+    infoIcon: {
+        marginHorizontal: COMPONENT_SPACING / 2
+    },
+    textArea: {
+        backgroundColor: colors.secondaryBackgroundColor,
+        borderRadius: 10,
+        textAlignVertical: "top",
+        fontSize: 19,
+        padding: 10,
+        color: colors.primaryTextColor,
+        borderWidth: 1,
+        borderColor: colors.primaryTextColor
+    },
+    button: {
+        marginVertical: 5,
+        borderRadius: 5,
+        paddingVertical: COMPONENT_SPACING
+
+    },
+    submitButton: {
+        backgroundColor: colors.primaryTextColor,
+    },
+    resetButton: {
+        backgroundColor: colors.secondaryBackgroundColor
     }
 })

@@ -12,12 +12,12 @@ export default ({ selectedVenue, showDetails }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <AppText type="header">{selectedVenue.description}</AppText>
+                <AppText type="primary" size="large">{selectedVenue.description}</AppText>
                 <TouchableHighlight onPress={showDetails}>
                     <MaterialIcons name="keyboard-arrow-right" size={40} color={colors.primaryTextColor} />
                 </TouchableHighlight>
             </View>
-            <AppText type="secondary">Dis street</AppText>
+            <AppText type="secondary" size="medium">Dis street</AppText>
             <PropertyOverview />
         </View >
     )

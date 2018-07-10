@@ -4,6 +4,8 @@ import _ from 'lodash';
 import axios from 'axios';
 import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
 import { API_KEY }  from '../credentials';
+import AppText from './AppText';
+import Entypo from '@expo/vector-icons/Entypo';
 
 
 export default class SearchBar extends Component {
@@ -48,11 +50,10 @@ export default class SearchBar extends Component {
     }
 
     renderSearchResult(item) {
-
         return (
             <TouchableHighlight key={item.place_id} onPress={() => this.props.onVenueSelect(item)} >
                 <View style={styles.row}>
-                    <Text style={styles.resultText} numberOfLines={1}>{item.description}</Text>
+                    <AppText type="primary" size="medium"><Entypo name="location-pin"/> {item.description}</AppText>
                 </View>
             </TouchableHighlight>
         )
@@ -111,9 +112,5 @@ const styles = StyleSheet.create({
         color: colors.primaryTextColor,
         fontSize: 18
     },
-    resultText: {
-        color: colors.primaryTextColor,
-        fontSize: 18,
-        alignItems: "center",
-    }
+
 })

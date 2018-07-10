@@ -1,31 +1,44 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
-import { NEW_REVIEW_SELECTED, REVIEWS_SELECTED } from '../containers/VenueDetails'
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
-import IconText from './IconText';
+import { NEW_REVIEW_SCREEN, REVIEW_SCREEN } from '../containers/VenueDetails'
+import {  MaterialCommunityIcons } from '@expo/vector-icons'
 import colors from '../settings/defaultStyles';
+import AppText from './AppText';
+
 
 
 export default ({ onScreenChange, currentScreen }) => {
+
+    const screens = [{
+        name: REVIEW_SCREEN,
+        icon: <MaterialCommunityIcons name="pencil" />
+    },
+    {
+        name: NEW_REVIEW_SCREEN,
+        icon: <MaterialCommunityIcons name="star" />
+    }];
+
+
     return (
         <View style={styles.container}>
 
-        {renderOption(currentScreen, REVIEWS_SELECTED, "Anmeldelser", onScreenChange, {iconLibrary: "materialIcons", iconName: "star"})}
-        {renderOption(currentScreen, NEW_REVIEW_SELECTED, "Din vurdering", onScreenChange, {iconLibrary: "materialCommunityIcons", iconName: "pencil"})}
+            {screens.map(screen => {
+                return (
+                    <TouchableHighlight
+                        onPress={() => onScreenChange(screen.name)}
+                        style={[screen.name === currentScreen ? styles.selectedOption : styles.unselectedOption, styles.menuComponent]}
+                        key={screen.name}>
+                        <AppText type="primary" size="large">{screen.icon} {screen.name}</AppText>
+                    </TouchableHighlight>
+                )
+            })}
+
 
         </View>
     )
 }
 
-const renderOption = (currentScreen, name, title, onScreenChange, iconSettings) => { // todo fix
-    const isSelected = currentScreen == name;
-    return (
-        <TouchableHighlight onPress={() => onScreenChange(name)} style={styles.menuComponent}>
-        <IconText text={title} iconSettings={iconSettings} size={17} />
-           
-        </TouchableHighlight>
-    )
-}
+
 
 
 
@@ -35,9 +48,13 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     menuComponent: {
-        flex: 1
+        flex: 1,
+        alignItems: "center",
+        paddingVertical: 10
     },
+    selectedOption: {
 
+    },
     unselectedOption: {
         backgroundColor: colors.secondaryBackgroundColor
     },

@@ -8,3 +8,4 @@ export default ({ horizontalMargin, verticalMargin }) => {
         <View style={{ borderBottomColor: colors.secondaryTextColor, borderBottomWidth: 1 , marginHorizontal: horizontalMargin, marginVertical: verticalMargin}} />
     )
 }
+
