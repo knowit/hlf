@@ -18,7 +18,6 @@ export default class SearchBar extends Component {
     }
 
     render() {
-
         return (
             <View style={styles.wrap}>
                 {this.renderMenuBar()}
@@ -37,6 +36,7 @@ export default class SearchBar extends Component {
                     <Text style={styles.icon}>☰</Text>
                 </TouchableHighlight>
                 <TextInput
+                    ref={input => this.input = input}
                     value={this.state.searchPrompt}
                     style={styles.searchInput}
                     placeholder="Søk..."
@@ -80,8 +80,9 @@ export default class SearchBar extends Component {
     }
 
     onVenueSelect(placeId) {
+        this.input.blur();
+        this.setState({searchPrompt: ""})
         const url = `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`;
-        console.log(url)
         axios.get(url)
             .then(({ data }) => {
                 this.props.onVenueSelect(data.result);

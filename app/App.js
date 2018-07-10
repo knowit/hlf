@@ -1,12 +1,11 @@
 import React from 'react';
 
-import Map from './containers/Map';
+import MainScreen from './containers/MainScreen';
 import VenueDetails from './containers/VenueDetails';
 import { BackHandler } from 'react-native';
 import {createDrawerNavigator} from 'react-navigation';
 import Profile from './containers/Profile';
-import axios from 'axios';
-import { API_KEY } from './credentials';
+
 
 
 
@@ -35,11 +34,9 @@ class LydApp extends React.Component {
   }
 
   render() {
-
     const { selectedVenue, showDetails } = this.state;
-    //<Map {...props} onVenueSelect={onVenueSelect} selectedVenue={selectedVenue} showDetails={showDetails} />
     return !selectedVenue || !showDetails
-      ? <Map onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails}/>
+      ? <MainScreen onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails} openDrawer={this.props.navigation.openDrawer}/>
       : <VenueDetails selectedVenue={this.state.selectedVenue} hideDetails={this.hideDetails} />
   }
 
@@ -58,7 +55,7 @@ class LydApp extends React.Component {
   }
 }
 
-export default ({ onVenueSelect, selectedVenue, showDetails }) => {
+export default () => {
   const Wrapper = createDrawerNavigator({
       Home: LydApp
   },
