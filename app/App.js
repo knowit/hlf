@@ -3,12 +3,14 @@ import React from 'react';
 import Map from './containers/Map';
 import VenueDetails from './containers/VenueDetails';
 import { BackHandler } from 'react-native';
+import {createDrawerNavigator} from 'react-navigation';
+import Profile from './containers/Profile';
 import axios from 'axios';
 import { API_KEY } from './credentials';
 
 
 
-export default class App extends React.Component {
+class LydApp extends React.Component {
 
   constructor(props) {
     super(props);
@@ -20,7 +22,7 @@ export default class App extends React.Component {
 
   }
   componentDidMount() {
-
+  
     BackHandler.addEventListener("hardwareBackPress", () => {
       if (this.state.showDetails) {
         this.setState({ showDetails: false })
@@ -35,6 +37,7 @@ export default class App extends React.Component {
   render() {
 
     const { selectedVenue, showDetails } = this.state;
+    //<Map {...props} onVenueSelect={onVenueSelect} selectedVenue={selectedVenue} showDetails={showDetails} />
     return !selectedVenue || !showDetails
       ? <Map onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails}/>
       : <VenueDetails selectedVenue={this.state.selectedVenue} hideDetails={this.hideDetails} />
@@ -53,4 +56,12 @@ export default class App extends React.Component {
   hideDetails() {
     this.setState({ showDetails: false });
   }
+}
+
+export default ({ onVenueSelect, selectedVenue, showDetails }) => {
+  const Wrapper = createDrawerNavigator({
+      Home: LydApp
+  },
+      { contentComponent: Profile })
+  return <Wrapper />
 }

@@ -20,10 +20,8 @@ class Map extends Component {
 
         this.onVenueSelect = this.onVenueSelect.bind(this);
 
-        
-
-
     }
+
 
     componentWillMount() {
         if (Platform.OS === 'android' && !Constants.isDevice) {
