@@ -10,5 +10,6 @@ import java.util.List;
 public interface BrukerRepo extends CrudRepository<Bruker, Integer> {
 
     Bruker findByBrukernavn(String brukernavn);
+    Bruker findByEpost(String epost);
     List<Bruker> findAll();
 }

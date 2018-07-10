@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.repository.BrukerRepo;
+import no.hlf.godlyd.api.security.Auth0Connection;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,18 @@ public class BrukerServiceImpl implements BrukerService {
 
     public List<Bruker> getAllBrukere(){
         return brukerRepo.findAll();
+    }
+
+    public String loginGoogle(String userId)throws Exception{
+        Auth0Connection auth0Con = new Auth0Connection(userId);
+        String access_token = auth0Con.getUserAccessToken();
+        if(access_token == null || access_token.equals("")){
+            return null;
+        }
+        String jwtToken = Jwts.builder().setSubject(userId).setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS512, SECRET.getBytes()).compact();
+
+        return jwtToken;
     }
 
     public String login(Bruker bruker){

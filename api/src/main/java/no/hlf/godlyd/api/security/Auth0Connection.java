@@ -1,5 +1,6 @@
 package no.hlf.godlyd.api.security;
 
+import no.hlf.godlyd.api.model.Bruker;
 import org.springframework.beans.factory.annotation.Value;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -28,7 +29,13 @@ public class Auth0Connection {
     @Value(value = "${com.auth0.clientSecret}")
     private String clientSecret;
 
-    private String getUserAccessToken(String userId) throws Exception{
+    private String userId;
+
+    public Auth0Connection(String userId){
+        this.userId = userId;
+    }
+
+    public String getUserAccessToken() throws Exception{
         return ((ArrayList<Hashtable<String, Object>>)getFullUserProfileJson(userId).get("identities")).get(0)
                 .get("access_token").toString();
     }
