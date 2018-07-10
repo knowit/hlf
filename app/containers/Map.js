@@ -15,8 +15,14 @@ class Map extends Component {
                 longitude: 10.756853,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
-            }, bottomMap: 10
+            }
         }
+
+        this.onVenueSelect = this.onVenueSelect.bind(this);
+
+        
+
+
     }
 
     componentWillMount() {
@@ -40,24 +46,37 @@ class Map extends Component {
         }
     }
 
-    render() {
 
+    onVenueSelect(data) {
+        this.props.onVenueSelect(data);
+        const {location} = data.geometry;
+        /*this.map.animateToCoordinate({
+            latitude: location.lat,
+            longitude: location.lng
+          }, 1000)*/
+        
+    }
+
+
+    render() {
         return (
 
-            <View style={styles.overallViewContainer}>
+            <View style={styles.overallViewContainer} >
                 {<MapView
-                    style={[{bottom:this.state.bottomMap},styles.map]}
+                    provider="google"
+                    ref={map => this.map = map}
+                    style={[styles.map]}
                     zoomEnabled={true}
                     scrollEnabled={true}
                     showsUserLocation={true}
                     showsMyLocationButton={true}
                     showsCompass={true}
-                    initialRegion={this.state.selectedRegion}
+                    region={this.state.selectedRegion}
                 >
 
                 </MapView>}
                 <View style={styles.overlays}>
-                    <SearchBar onMenuPress={this.props.navigation.openDrawer} onVenueSelect={this.props.onVenueSelect} />
+                    <SearchBar onMenuPress={this.props.navigation.openDrawer} onVenueSelect={this.onVenueSelect} />
                     {this.props.selectedVenue ? <VenueMapOverlay selectedVenue={this.props.selectedVenue} showDetails={this.props.showDetails} /> : null}
                 </View>
             </View>
@@ -89,6 +108,7 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0,
+        bottom: 0,
         flexDirection: 'column',
         justifyContent: 'space-between'
     },

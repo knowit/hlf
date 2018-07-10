@@ -3,7 +3,7 @@ import { TextInput, StyleSheet, View, Text, TouchableHighlight } from 'react-nat
 import _ from 'lodash';
 import axios from 'axios';
 import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
-import { API_KEY }  from '../credentials';
+import { API_KEY } from '../credentials';
 import AppText from './AppText';
 import Entypo from '@expo/vector-icons/Entypo';
 
@@ -51,9 +51,9 @@ export default class SearchBar extends Component {
 
     renderSearchResult(item) {
         return (
-            <TouchableHighlight key={item.place_id} onPress={() => this.props.onVenueSelect(item)} >
+            <TouchableHighlight key={item.place_id} onPress={() => this.onVenueSelect(item.place_id)} >
                 <View style={styles.row}>
-                    <AppText type="primary" size="medium"><Entypo name="location-pin"/> {item.description}</AppText>
+                    <AppText type="primary" size="medium"><Entypo name="location-pin" /> {item.description}</AppText>
                 </View>
             </TouchableHighlight>
         )
@@ -76,6 +76,17 @@ export default class SearchBar extends Component {
                 })
             }))
             .catch(req => console.log(req));
+
+    }
+
+    onVenueSelect(placeId) {
+        const url = `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`;
+        console.log(url)
+        axios.get(url)
+            .then(({ data }) => {
+                this.props.onVenueSelect(data.result);
+            })
+            .catch(e => console.log(e));
 
     }
 

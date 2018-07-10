@@ -36,18 +36,14 @@ export default class App extends React.Component {
 
     const { selectedVenue, showDetails } = this.state;
     return !selectedVenue || !showDetails
-      ? <Map onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails} />
+      ? <Map onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails}/>
       : <VenueDetails selectedVenue={this.state.selectedVenue} hideDetails={this.hideDetails} />
   }
 
 
 
   onVenueSelect(selectedVenue) {
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${selectedVenue.place_id}`;
-    axios.get(url)
-      .then(({data}) => console.log(data.result))
-      .catch(e => console.log("error"));
-
+      this.setState({selectedVenue: selectedVenue})
   }
 
   showDetails() {

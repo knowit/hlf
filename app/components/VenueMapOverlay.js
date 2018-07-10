@@ -8,16 +8,15 @@ import AppText from './AppText';
 
 
 export default ({ selectedVenue, showDetails }) => {
-
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <AppText type="primary" size="large">{selectedVenue.description}</AppText>
+                <AppText type="primary" size="large">{selectedVenue.name}</AppText>
                 <TouchableHighlight onPress={showDetails}>
                     <MaterialIcons name="keyboard-arrow-right" size={40} color={colors.primaryTextColor} />
                 </TouchableHighlight>
             </View>
-            <AppText type="secondary" size="medium">Dis street</AppText>
+            <AppText type="secondary" size="medium">{selectedVenue.formatted_address}</AppText>
             <PropertyOverview />
         </View >
     )
