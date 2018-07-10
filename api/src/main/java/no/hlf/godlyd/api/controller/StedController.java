@@ -28,8 +28,6 @@ public class StedController {
     @Autowired
     VurderingService vurderingService;
 
-    // Hent ut all info om et sted gitt en placeId. Denne bruker appen til å hente ønsket info!
-
     @GetMapping()
     public List<Sted> getAllSteder(){
         return stedService.getAllSteder();
@@ -45,7 +43,7 @@ public class StedController {
         return stedService.getStedFromPlaceId(placeId);
     }
 
-    // BRUKER GOOGLE API
+    // GOOGLE API
     @GetMapping("/info/{placeId}")
     public Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -77,6 +75,8 @@ public class StedController {
         map.put("Totalt antall vurderinger", vurderinger.size());
         map.put("Teleslyngevurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Teleslyngevurderinger")));
         map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
+        map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
+        map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
 
         return map;
     }
