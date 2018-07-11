@@ -21,9 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private String issuer;
     @Value(value = "${com.auth0.domain}")
     private String domain;
-    @Value(value = "${com.auth0.clientId}")
+    @Value(value = "${com.auth0.api.clientId}")
     private String clientId;
-    @Value(value = "${com.auth0.clientSecret}")
+    @Value(value = "${com.auth0.api.clientSecret}")
     private String clientSecret;
 
 

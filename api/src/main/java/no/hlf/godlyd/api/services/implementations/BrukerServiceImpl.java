@@ -31,6 +31,7 @@ public class BrukerServiceImpl implements BrukerService {
         if(b == null){
             b = new Bruker();
         }
+        b.setAuth0UserId(bruker.getAuth0UserId());
         b.setFornavn(bruker.getFornavn());
         b.setEtternavn(bruker.getEtternavn());
         save(b);

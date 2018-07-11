@@ -1,6 +1,5 @@
 package no.hlf.godlyd.api.security;
 
-import org.springframework.beans.factory.annotation.Value;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -13,21 +12,10 @@ import java.util.Stack;
 
 public class Auth0Connection {
 
-    @Value(value = "${auth0.apiAudience}")
-    private String apiAudience;
-
-    @Value(value = "${auth0.issuer}")
-    private String issuer;
-
-    @Value(value = "${com.auth0.domain}")
-    private String domain;
-
-    @Value(value = "${com.auth0.clientId}")
-    private String clientId;
-
-    @Value(value = "${com.auth0.clientSecret}")
-    private String clientSecret;
-
+    private static final String tokenUrl = "https://hlf-godlyd.eu.auth0.com/oauth/token";
+    private static final String clientId = "DQ3EL0M3tDziTnbGyabj3TKyeJnXXkAh";
+    private static final String clientSecret = "NvBtZwlnfoHnwdY2NLF2yjyuxPf83Fw2FnY-RKBlwID7ReXLtLVOGVzOwrDiBBxM";
+    private static final String audience = "https://hlf-godlyd.eu.auth0.com/api/v2/";
 
     public Hashtable<String, Object> getUserInfo(String access_token) throws Exception{
 
@@ -41,8 +29,7 @@ public class Auth0Connection {
 
     public Hashtable<String, Object> getFullUserProfileJson(String access_token) throws Exception{
 
-        String userId = "";
-        userId = getUserInfo(access_token).get("sub").toString();
+        String userId = getUserInfo(access_token).get("sub").toString();
 
         String url = "https://hlf-godlyd.eu.auth0.com/api/v2/users/"+userId;
         String method = "GET";
@@ -52,14 +39,14 @@ public class Auth0Connection {
         return parseJson(jsonResponse);
     }
 
-    private String getManagementAPIToken() throws Exception{
+    public String getManagementAPIToken() throws Exception{
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Content-Type", "application/json");
         String res = postRequest(
-                "https://hlf-godlyd.eu.auth0.com/oauth/token",
+                tokenUrl,
                 "POST",
                 headers,
-                "{\"client_id\":\""+clientId+"\",\"client_secret\":\""+clientSecret+"\",\"audience\":\""+apiAudience+"\",\"grant_type\":\"client_credentials\"}");
+                "{\"client_id\":\""+clientId+"\",\"client_secret\":\""+clientSecret+"\",\"audience\":\""+audience+"\",\"grant_type\":\"client_credentials\"}");
 
         String token = getJsonField(res, "access_token").toString();
         return token;
@@ -84,18 +71,18 @@ public class Auth0Connection {
         return res.toString();
     }
 
-    private String postRequest(String url, String method, Hashtable<String, String> headers, String payload) throws Exception{
+    private String postRequest(String url, String method, Hashtable<String, String> headers, String payload) throws Exception {
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
         con.setRequestMethod(method);
         con.setDoInput(true);
-        for(String header: headers.keySet()){
+        for (String header : headers.keySet()) {
             con.setRequestProperty(header, headers.get(header));
         }
         con.setRequestProperty("Content-Language", "en-US");
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        if(payload != null){
+        if (payload != null) {
             wr.writeBytes(payload);
         }
         wr.flush();
@@ -105,7 +92,7 @@ public class Auth0Connection {
         String inputLine;
         StringBuffer res = new StringBuffer();
 
-        while((inputLine = in.readLine()) != null){
+        while ((inputLine = in.readLine()) != null) {
             res.append(inputLine);
         }
         in.close();
