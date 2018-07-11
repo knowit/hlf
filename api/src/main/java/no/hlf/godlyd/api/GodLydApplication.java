@@ -33,11 +33,6 @@ public class GodLydApplication {
 	    run(GodLydApplication.class, args);
 	}
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-	    return new BCryptPasswordEncoder();
-    }
-
     /*
 	@Bean
 	public WebMvcConfigurer corsConfigurer(){

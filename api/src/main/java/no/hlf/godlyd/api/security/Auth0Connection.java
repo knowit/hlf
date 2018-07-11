@@ -17,16 +17,6 @@ public class Auth0Connection {
     private static final String clientSecret = "NvBtZwlnfoHnwdY2NLF2yjyuxPf83Fw2FnY-RKBlwID7ReXLtLVOGVzOwrDiBBxM";
     private static final String audience = "https://hlf-godlyd.eu.auth0.com/api/v2/";
 
-    public Hashtable<String, Object> getUserInfo(String access_token) throws Exception{
-
-        String url = "https://hlf-godlyd.eu.auth0.com/userinfo";
-        String method = "GET";
-        Hashtable<String, String> headers = new Hashtable<>();
-        headers.put("Authorization", "Bearer "+access_token);
-        String req = getRequest(url, method, headers);
-        return parseJson(req);
-    }
-
     public Hashtable<String, Object> getFullUserProfileJson(String access_token) throws Exception{
 
         String userId = getUserInfo(access_token).get("sub").toString();
@@ -39,12 +29,21 @@ public class Auth0Connection {
         return parseJson(jsonResponse);
     }
 
-    public String getManagementAPIToken() throws Exception{
+    private Hashtable<String, Object> getUserInfo(String access_token) throws Exception{
+
+        String url = "https://hlf-godlyd.eu.auth0.com/userinfo";
+        String method = "GET";
+        Hashtable<String, String> headers = new Hashtable<>();
+        headers.put("Authorization", "Bearer "+access_token);
+        String req = getRequest(url, method, headers);
+        return parseJson(req);
+    }
+
+    private String getManagementAPIToken() throws Exception{
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Content-Type", "application/json");
         String res = postRequest(
                 tokenUrl,
-                "POST",
                 headers,
                 "{\"client_id\":\""+clientId+"\",\"client_secret\":\""+clientSecret+"\",\"audience\":\""+audience+"\",\"grant_type\":\"client_credentials\"}");
 
@@ -71,10 +70,10 @@ public class Auth0Connection {
         return res.toString();
     }
 
-    private String postRequest(String url, String method, Hashtable<String, String> headers, String payload) throws Exception {
+    private String postRequest(String url, Hashtable<String, String> headers, String payload) throws Exception {
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-        con.setRequestMethod(method);
+        con.setRequestMethod("POST");
         con.setDoInput(true);
         for (String header : headers.keySet()) {
             con.setRequestProperty(header, headers.get(header));
