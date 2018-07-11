@@ -10,9 +10,11 @@ public interface BrukerService {
 
     Bruker findByAuth0UserId(String auth0UserId);
 
-    Bruker createBruker(Bruker bruker);
+    Bruker updateBruker(String access_token);
 
     List<Bruker> getAllBrukere();
+
+    Bruker getCredentials(String access_token);
 
 
 }
