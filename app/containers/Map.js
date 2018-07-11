@@ -23,23 +23,25 @@ export default class Map extends Component {
                 provider="google"
                 ref={map => this.map = map}
                 style={{
-                    position: 'absolute',
-                    width: "100%",
-                    height: "100%",
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
+                    flex: 1,
                 }}
                 zoomEnabled={true}
                 scrollEnabled={true}
                 showsUserLocation={true}
                 showsMyLocationButton={true}
                 showsCompass={true}
+                showsPointsOfInterest={true}
                 region={{
                     latitude: 59.916634,
                     longitude: 10.756853,
                     latitudeDelta: 0.003,
                     longitudeDelta: 0.003,
                 }}
+                onPress={e => {
+                    this.props.onVenueSelect(undefined);
+                }}
+                onPoiClick={e => {
+                    this.props.onVenueSelect(e.nativeEvent.placeId)}}
             >
                
             </MapView>

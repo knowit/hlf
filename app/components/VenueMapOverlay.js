@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
 import AppText from './AppText';
 import ViewContainer from './ViewContainer';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 
 

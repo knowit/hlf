@@ -5,12 +5,12 @@ import SearchBar from '../containers/SearchBar';
 import Map from './Map';
 
 import VenueMapOverlay from '../components/VenueMapOverlay';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default class MainScreen extends Component {
     constructor(props) {
         super(props);
         this.map = React.createRef();
-        this.onVenueSelect = this.onVenueSelect.bind(this);
     }
 
 
@@ -24,7 +24,7 @@ export default class MainScreen extends Component {
 
     }
 
-    componentDidMount() {
+    componentDidMount() {
         /*setTimeout(() => {
             this.map.animateTo(
 
@@ -47,14 +47,13 @@ export default class MainScreen extends Component {
         }
     }
 
-    onVenueSelect(data) {
-        const {location} = data.geometry;
+    notifyMapOnChange() {
+       const { location } = this.props.selectedVenue.geometry;
         this.map.animateTo({
             latitude: location.lat,
             longitude: location.lng
-        }),
-        this.props.onVenueSelect(data);
-        
+        })
+        console.log("MAPCHANGE!");
     }
 
     render() {
@@ -63,10 +62,10 @@ export default class MainScreen extends Component {
         return (
 
             <View style={styles.overallViewContainer} >
-                <Map ref={map => this.map = map} style={styles.map}/>
-                <View style={styles.overlays}>
-                    <SearchBar onMenuPress={() => this.props.openDrawer()} onVenueSelect={this.onVenueSelect} />
-                    {this.props.selectedVenue ? <VenueMapOverlay selectedVenue={this.props.selectedVenue} showDetails={this.props.showDetails} /> : null}
+                <Map ref={map => this.map = map} onVenueSelect={this.props.onVenueSelect}/>
+                {this.props.selectedVenue ? <VenueMapOverlay selectedVenue={this.props.selectedVenue} showDetails={this.props.showDetails} /> : null}
+                <View style={styles.searchBar}>
+                    <SearchBar onMenuPress={() => this.props.openDrawer()} onVenueSelect={this.props.onVenueSelect} style={styles.searchBar} />
                 </View>
             </View>
         )
@@ -76,18 +75,20 @@ export default class MainScreen extends Component {
 
 const styles = StyleSheet.create({
     overallViewContainer: {
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
+        ...StyleSheet.absoluteFillObject,
     },
-    map: {
-        width: 100,
-        height: 100
+    searchBar: {
+        position: "absolute",
+        top: 0,
+        width: "100%"
     },
+
     overlays: {
-        flex: 1,
-        position: "relative",
-        alignItems: "center",
-        justifyContent: "space-between"
+        top: 0,
+        left: 0,
+        width: 100,
+        height: 100,
+        position: "absolute",
+        backgroundColor: "green"
     }
 });

@@ -3,8 +3,10 @@ import React from 'react';
 import MainScreen from './containers/MainScreen';
 import VenueDetails from './containers/VenueDetails';
 import { BackHandler } from 'react-native';
-import {createDrawerNavigator} from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation';
 import Profile from './containers/Profile';
+import { API_KEY } from './credentials';
+import axios from 'axios';
 
 
 
@@ -21,7 +23,7 @@ class LydApp extends React.Component {
 
   }
   componentDidMount() {
-  
+
     BackHandler.addEventListener("hardwareBackPress", () => {
       if (this.state.showDetails) {
         this.setState({ showDetails: false })
@@ -36,14 +38,28 @@ class LydApp extends React.Component {
   render() {
     const { selectedVenue, showDetails } = this.state;
     return !selectedVenue || !showDetails
-      ? <MainScreen onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails} openDrawer={this.props.navigation.openDrawer}/>
+      ? <MainScreen ref={main => this.main = main} onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails} openDrawer={this.props.navigation.openDrawer} />
       : <VenueDetails selectedVenue={this.state.selectedVenue} hideDetails={this.hideDetails} />
   }
 
+  onVenueSelect(placeId) {
+    if (!placeId) {
+      this.setState({ selectedVenue: undefined });
+    }
+    else {
+      this.getVenueDetails(placeId);
+    }
+  }
 
-
-  onVenueSelect(selectedVenue) {
-      this.setState({selectedVenue: selectedVenue})
+  getVenueDetails(placeId) {
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`;
+    axios.get(url)
+      .then(({ data }) => {
+        this.setState({ selectedVenue: data.result }, () => {
+            this.main.notifyMapOnChange();
+        })
+      })
+      .catch(e => console.log(e));
   }
 
   showDetails() {
@@ -57,8 +73,8 @@ class LydApp extends React.Component {
 
 export default () => {
   const Wrapper = createDrawerNavigator({
-      Home: LydApp
+    Home: LydApp
   },
-      { contentComponent: Profile })
+    { contentComponent: Profile })
   return <Wrapper />
 }

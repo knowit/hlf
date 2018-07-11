@@ -15,8 +15,10 @@ else {
     const iconSize = sizes[size];
     output = React.Children.map(children, child => {
         if(child.type && child.type.name === "Icon") {
-            return React.cloneElement(child, {size: iconSize})
+            const element = React.cloneElement(child, {size: iconSize});
+            return element;
         }
+        
         return child;
     })
 }

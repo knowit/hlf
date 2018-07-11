@@ -52,7 +52,11 @@ export default class SearchBar extends Component {
 
     renderSearchResult(item) {
         return (
-            <TouchableHighlight key={item.place_id} onPress={() => this.onVenueSelect(item.place_id)} >
+            <TouchableHighlight key={item.place_id} onPress={() => {
+                this.props.onVenueSelect(item.place_id)
+                this.input.blur();
+                this.setState({searchPrompt: ""})
+                }}>
                 <View style={styles.row}>
                     <AppText type="primary" size="medium"><Entypo name="location-pin" /> {item.description}</AppText>
                 </View>
@@ -80,20 +84,7 @@ export default class SearchBar extends Component {
 
     }
 
-    onVenueSelect(placeId) {
-        this.input.blur();
-        this.setState({searchPrompt: ""})
-        const url = `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`;
-        axios.get(url)
-            .then(({ data }) => {
-                this.props.onVenueSelect(data.result);
-            })
-            .catch(e => console.log(e));
-
     }
-
-
-}
 
 const styles = StyleSheet.create({
     row: {
