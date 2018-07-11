@@ -14,6 +14,5 @@ public interface BrukerService {
 
     List<Bruker> getAllBrukere();
 
-    String login(Bruker bruker);
 
 }
