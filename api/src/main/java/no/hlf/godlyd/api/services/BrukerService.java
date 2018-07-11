@@ -8,7 +8,7 @@ public interface BrukerService {
 
     void save(Bruker bruker);
 
-    Bruker findByBrukernavn(String brukernavn);
+    Bruker findByAuth0UserId(String auth0UserId);
 
     Bruker createBruker(Bruker bruker);
 

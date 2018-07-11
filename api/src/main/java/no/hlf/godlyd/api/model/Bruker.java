@@ -16,14 +16,11 @@ public class Bruker implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String brukernavn;
-    private String passord;
+    @Column(unique = true)
+    private String auth0UserId;
 
     private String fornavn;
     private String etternavn;
-
-    @Column(unique = true)
-    private String epost;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "registrator")
@@ -35,13 +32,13 @@ public class Bruker implements Serializable {
 
     public void setId(Integer id) { this.id = id; }
 
-    public String getBrukernavn() { return brukernavn; }
+    public String getAuth0UserId(){
+        return auth0UserId;
+    }
 
-    public void setBrukernavn(String brukernavn) { this.brukernavn = brukernavn; }
-
-    public String getPassord() { return passord; }
-
-    public void setPassord(String passord) { this.passord = passord; }
+    public void setAuth0UserId(String auth0UserId){
+        this.auth0UserId = auth0UserId;
+    }
 
     public String getFornavn() { return fornavn; }
 
@@ -51,9 +48,6 @@ public class Bruker implements Serializable {
 
     public void setEtternavn(String etternavn) { this.etternavn = etternavn; }
 
-    public String getEpost() { return epost; }
-
-    public void setEpost(String epost) { this.epost = epost; }
 
     public Set<Vurdering> getVurderinger() { return vurderinger; }
 
