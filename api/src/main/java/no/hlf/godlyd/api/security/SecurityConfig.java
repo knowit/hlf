@@ -3,30 +3,40 @@ package no.hlf.godlyd.api.security;
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-/*
-@Configuration
+import org.springframework.security.config.http.SessionCreationPolicy;
+
 @EnableWebSecurity
+@Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value(value = "${auth0.apiAudience}")
     private String apiAudience;
-
     @Value(value = "${auth0.issuer}")
     private String issuer;
+    @Value(value = "${com.auth0.domain}")
+    private String domain;
+    @Value(value = "${com.auth0.clientId}")
+    private String clientId;
+    @Value(value = "${com.auth0.clientSecret}")
+    private String clientSecret;
 
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         JwtWebSecurityConfigurer
                 .forRS256(apiAudience, issuer)
                 .configure(http)
-                .cors().and().csrf().disable().authorizeRequests()
-                .anyRequest().permitAll();
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/**").authenticated()
+                .and()
+                .logout().permitAll();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
     }
 }
-*/

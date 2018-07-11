@@ -7,8 +7,11 @@ import no.hlf.godlyd.api.repository.BrukerRepo;
 import no.hlf.godlyd.api.security.Auth0Connection;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import static no.hlf.godlyd.api.security.SecurityConstants.EXPIRATION_TIME;
 import static no.hlf.godlyd.api.security.SecurityConstants.SECRET;
 
 import java.util.Date;
@@ -47,33 +50,39 @@ public class BrukerServiceImpl implements BrukerService {
         return brukerRepo.findAll();
     }
 
-    public String loginGoogle(String userId)throws Exception{
-        Auth0Connection auth0Con = new Auth0Connection(userId);
-        String access_token = auth0Con.getUserAccessToken();
-        if(access_token == null || access_token.equals("")){
-            return null;
-        }
-        String jwtToken = Jwts.builder().setSubject(userId).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS512, SECRET.getBytes()).compact();
-
-        return jwtToken;
-    }
-
     public String login(Bruker bruker){
-        String jwtToken = "";
-        String brukernavn = bruker.getBrukernavn();
-        String passord = bruker.getPassord();
-        Bruker b = findByBrukernavn(brukernavn);
-        if(b == null){
-            return null;
+        try{
+            String userId = bruker.getBrukernavn();
+            Auth0Connection con = new Auth0Connection(userId);
+            String access_token = con.getUserAccessToken();
+
+            if(access_token == null || access_token.equals("")){
+                return null;
+            }
+
+            Bruker b = brukerRepo.findByBrukernavn(userId);
+
+            if(b == null){
+                b = new Bruker();
+                b.setBrukernavn(bruker.getBrukernavn());
+                b.setPassord(bCryptPasswordEncoder.encode(access_token));
+                save(b);
+            }
+
+            if(bCryptPasswordEncoder.matches(bruker.getPassord(), b.getPassord())){
+                String token = Jwts.builder()
+                        .setSubject(userId)
+                        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                        .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
+                        .compact();
+                return token;
+            }
+
+
+        }catch(Exception e){
+
         }
-        String pwd = b.getPassord();
-        if(!bCryptPasswordEncoder.matches(passord, pwd)){
-            return null;
-        }
-        jwtToken = Jwts.builder().setSubject(brukernavn).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS512, SECRET.getBytes()).compact();
-        return jwtToken;
+        return null;
     }
 
 
