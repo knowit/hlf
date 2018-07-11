@@ -4,12 +4,13 @@ import PropertyOverview from './PropertyOverview';
 import { MaterialIcons } from '@expo/vector-icons';
 import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
 import AppText from './AppText';
+import ViewContainer from './ViewContainer';
 
 
 
 export default ({ selectedVenue, showDetails }) => {
     return (
-        <View style={styles.container}>
+        <ViewContainer heightAdjusting="auto" opaque={true}>
             <View style={styles.header}>
                 <AppText type="primary" size="large">{selectedVenue.name}</AppText>
                 <TouchableHighlight onPress={showDetails}>
@@ -18,19 +19,14 @@ export default ({ selectedVenue, showDetails }) => {
             </View>
             <AppText type="secondary" size="medium">{selectedVenue.formatted_address}</AppText>
             <PropertyOverview />
-        </View >
+        </ViewContainer>
     )
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        width: "100%",
-        height: "auto",
-        backgroundColor: colors.primaryBackgroundColor,
-        padding: COMPONENT_SPACING
-    },
     header: {
+        width: "100%",
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row"

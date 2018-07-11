@@ -17,5 +17,6 @@ export const sizes ={
 
 
 export const COMPONENT_SPACING = 20;
+export const BORDER_RADIUS = 5;
 
 export default colors;

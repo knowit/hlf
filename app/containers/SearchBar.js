@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { TextInput, StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 import _ from 'lodash';
 import axios from 'axios';
-import colors, { COMPONENT_SPACING } from '../settings/defaultStyles';
+import colors, { COMPONENT_SPACING, BORDER_RADIUS } from '../settings/defaultStyles';
 import { API_KEY } from '../credentials';
-import AppText from './AppText';
+import AppText from '../components/AppText';
 import Entypo from '@expo/vector-icons/Entypo';
+import ViewContainer from '../components/ViewContainer';
 
 
 export default class SearchBar extends Component {
@@ -19,13 +20,13 @@ export default class SearchBar extends Component {
 
     render() {
         return (
-            <View style={styles.wrap}>
+            <ViewContainer heightAdjusting="auto" transparent={true}>
                 {this.renderMenuBar()}
                 {this.state.searchPrompt && this.state.results.length > 0
                     ? this.state.results.map(item => this.renderSearchResult(item))
                     : null
                 }
-            </View>
+            </ViewContainer>
         )
     }
 
@@ -33,7 +34,7 @@ export default class SearchBar extends Component {
         return (
             <View style={styles.row}>
                 <TouchableHighlight onPress={this.props.onMenuPress}>
-                    <Text style={styles.icon}>☰</Text>
+                    <AppText type="secondary" size="xlarge" style={StyleSheet.flatten(styles.icon)}>☰</AppText>
                 </TouchableHighlight>
                 <TextInput
                     ref={input => this.input = input}
@@ -95,14 +96,10 @@ export default class SearchBar extends Component {
 }
 
 const styles = StyleSheet.create({
-    wrap: {
-        width: "100%",
-        padding: COMPONENT_SPACING,
-    },
     row: {
         backgroundColor: colors.primaryBackgroundColor,
         height: 40,
-        borderRadius: 3,
+        borderRadius: BORDER_RADIUS,
         marginBottom: 2,
         flexDirection: "row",
         padding: 4,
@@ -112,11 +109,9 @@ const styles = StyleSheet.create({
     },
 
     icon: {
-        color: colors.secondaryTextColor,
-        fontSize: 24,
         borderRightWidth: 1,
         borderRightColor: colors.secondaryTextColor,
-        paddingHorizontal: 7
+        paddingHorizontal: COMPONENT_SPACING / 2
     },
     searchInput: {
         marginHorizontal: COMPONENT_SPACING / 2,

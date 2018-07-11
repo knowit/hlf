@@ -24,10 +24,8 @@ export default class Map extends Component {
                 ref={map => this.map = map}
                 style={{
                     position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
+                    width: "100%",
+                    height: "100%",
                     flexDirection: 'column',
                     justifyContent: 'space-between'
                 }}
@@ -43,7 +41,7 @@ export default class Map extends Component {
                     longitudeDelta: 0.003,
                 }}
             >
-                <MapView.Marker coordinate={this.state.selectedLocation}/>
+               
             </MapView>
         )
     }

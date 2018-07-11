@@ -4,8 +4,8 @@ import PropertyOverview from '../components/PropertyOverview';
 import sampleReviews from '../sampleReviews';
 import Review from './Review';
 import { MaterialIcons } from '@expo/vector-icons';
-import {COMPONENT_SPACING} from '../settings/defaultStyles';
 import colors from '../settings/defaultStyles';
+import ViewContainer from '../components/ViewContainer';
 
 
 export default class VenueReviews extends Component {
@@ -18,9 +18,9 @@ export default class VenueReviews extends Component {
     render() {
         return (
             <View>
-                <View style={{ padding: COMPONENT_SPACING }}>
+                <ViewContainer heightAdjusting="auto">
                     <PropertyOverview />
-                </View>
+                </ViewContainer>
 
                 {!this.state.showReviews ? this.renderShowReviewArrow() : this.renderReviewList()}
 

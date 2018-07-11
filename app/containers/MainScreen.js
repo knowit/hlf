@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { Location, Permissions, Constants } from 'expo';
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../containers/SearchBar';
 import Map from './Map';
 
 import VenueMapOverlay from '../components/VenueMapOverlay';
@@ -25,7 +25,7 @@ export default class MainScreen extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
+        /*setTimeout(() => {
             this.map.animateTo(
 
 
@@ -34,7 +34,7 @@ export default class MainScreen extends Component {
                     longitude: 8.362465,
                 
             })
-        }, 3000);
+        }, 3000); */
     }
     getCurrentLocation = async () => {
         let permissionStatus = await Permissions.askAsync(Permissions.LOCATION);
@@ -63,7 +63,7 @@ export default class MainScreen extends Component {
         return (
 
             <View style={styles.overallViewContainer} >
-                <Map ref={map => this.map = map}/>
+                <Map ref={map => this.map = map} style={styles.map}/>
                 <View style={styles.overlays}>
                     <SearchBar onMenuPress={() => this.props.openDrawer()} onVenueSelect={this.onVenueSelect} />
                     {this.props.selectedVenue ? <VenueMapOverlay selectedVenue={this.props.selectedVenue} showDetails={this.props.showDetails} /> : null}
@@ -79,6 +79,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         height: '100%',
         width: '100%',
+    },
+    map: {
+        width: 100,
+        height: 100
     },
     overlays: {
         flex: 1,

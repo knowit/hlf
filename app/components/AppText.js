@@ -12,7 +12,7 @@ const TextNode = ({type, size, children, style}) => {
         output = children;
     }
 else {
-    const iconSize = StyleSheet.flatten(styles[size]).fontSize;
+    const iconSize = sizes[size];
     output = React.Children.map(children, child => {
         if(child.type && child.type.name === "Icon") {
             return React.cloneElement(child, {size: iconSize})
@@ -22,7 +22,7 @@ else {
 }
 
     return (
-        <Text style={[styles[size], styles[type], style]}>{output}</Text>
+        <Text style={[{fontSize: sizes[size]}, styles[type], style]}>{output}</Text>
     ) 
 }
 export default TextNode;
@@ -43,18 +43,6 @@ const styles = StyleSheet.create({
     },
     negative: {
         color: colors.negativeColor
-    },
-    xlarge: {  
-        fontSize: sizes.xlarge
-    },
-    large: {
-        fontSize: sizes.large
-    },
-    medium: {
-        fontSize: sizes.medium
-    },
-    small: {
-        fontSize: sizes.small
     }
 
 })

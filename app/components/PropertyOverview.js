@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import properties from '../settings/propertyConfig';
-import colors, {sizes} from '../settings/defaultStyles';
+import colors, {sizes, BORDER_RADIUS} from '../settings/defaultStyles';
 import AppText from './AppText';
 import { positiveIcon, negativeIcon } from '../settings/icons';
 
 export default ({ venueProperties }) => {
     return (
-        <View style={styles.container}>
+        <View>
             {properties.map(property => renderProperty(property, Math.random() * 100))}
         </View>
     )
@@ -19,8 +19,7 @@ const renderProperty = (property, value) => {
     const {name, icon} = property;
     return (
         <View key={name} style={styles.property}>
-            <AppText type="primary" size="medium">{icon} {name}</AppText>
-            <View style={{flex:1}}></View> 
+            <AppText type="primary" size="medium" style={{flex: 1}}>{icon} {name}</AppText>
             
             {positiveIcon(isPositive, sizes.large)}
             {valueBar(value)}
@@ -60,12 +59,12 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         backgroundColor: colors.negativeColor,
-        borderRadius: 7
+        borderRadius: BORDER_RADIUS
     },
     progress: {
         backgroundColor: colors.positiveColor,
         height: "100%",
         position: "relative",
-        borderRadius: 7
+        borderRadius: BORDER_RADIUS
     }
 });
