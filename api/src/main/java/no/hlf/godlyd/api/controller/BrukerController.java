@@ -1,6 +1,7 @@
 package no.hlf.godlyd.api.controller;
 
 import no.hlf.godlyd.api.model.Bruker;
+import no.hlf.godlyd.api.security.Auth0Connection;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,5 +28,12 @@ public class BrukerController {
                 +"\nfornavn: "+bruker.getFornavn()
                 +"\netternavn: "+bruker.getEtternavn();
         return response;
+    }
+
+    @GetMapping("/authorize")
+    @ResponseBody
+    public String authorize(@RequestHeader("authorization_code") String authorizationCode) throws Exception{
+        Auth0Connection con = new Auth0Connection();
+        return con.getTokens(authorizationCode).toString();
     }
 }
