@@ -22,7 +22,7 @@ const properties = [
   },
   {
     name: "Informasjon",
-    icon: <Ionicons name="ios-information-circle-outline" />,
+    icon: <MaterialCommunityIcons name="information-outline" />,
     description: "Er det informasjon på stedet om lydutstyr?",
     iconName: "info-outline"
   }

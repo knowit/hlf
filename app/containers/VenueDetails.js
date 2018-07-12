@@ -32,7 +32,10 @@ export default class VenueDetails extends Component {
         heightAdjusting="flex"
         padding={0}
       >
-        <VenueImage photoReference={photoReference} />
+        <VenueImage
+          photoReference={photoReference}
+          onBackPress={this.props.hideDetails}
+        />
         <VenueMenu
           onScreenChange={newScreen =>
             this.setState({ currentScreen: newScreen })

@@ -5,7 +5,8 @@ export const colors = {
   secondaryBackgroundColor: "#3F4F64",
   positiveColor: "#C1E0F8",
   negativeColor: "#FF969E",
-  transparentColor: "rgba(0,0,0,0)"
+  transparentColor: "rgba(0,0,0,0)",
+  transparentPrimaryBackGround: "rgba(13, 20, 40,0.8)"
 };
 
 export const sizes = {

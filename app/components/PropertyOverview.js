@@ -16,27 +16,36 @@ export default ({ venueProperties }) => {
 };
 
 const renderProperty = (property, value) => {
-  const isPositive = value >= 50;
   const { name, icon } = property;
+  const isSet = Math.round(Math.random());
   return (
     <View key={name} style={styles.property}>
       <AppText type="primary" size="medium" style={{ flex: 1 }}>
         {icon} {name}
       </AppText>
 
-      {positiveIcon(isPositive, sizes.large)}
-      {valueBar(value)}
-      {negativeIcon(!isPositive, sizes.large)}
+      {isSet ? (
+        valueBar(value)
+      ) : (
+        <AppText type="primary" size="medium">
+          Ingen vurderinger
+        </AppText>
+      )}
     </View>
   );
 };
 
 const valueBar = value => {
+  const isPositive = value >= 50;
   return (
-    <View style={styles.barWrap}>
-      <View style={styles.barContainer}>
-        <View style={[{ width: `${value}%` }, styles.progress]} />
+    <View style={{ flexDirection: "row" }}>
+      {positiveIcon(isPositive, sizes.large)}
+      <View style={styles.barWrap}>
+        <View style={styles.barContainer}>
+          <View style={[{ width: `${value}%` }, styles.progress]} />
+        </View>
       </View>
+      {negativeIcon(!isPositive, sizes.large)}
     </View>
   );
 };
