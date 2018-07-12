@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import DefaultText from '../components/DefaultText';
-import PropertyTitle from '../components/IconText';
 import { Entypo } from '@expo/vector-icons';
 import HorizontalRuler from '../components/HorizontalRuler';
+import AppText from '../components/AppText';
+import properties from '../settings/propertyConfig';
+import colors, { COMPONENT_SPACING, sizes, BORDER_RADIUS } from '../settings/defaultStyles';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import ViewContainer from '../components/ViewContainer';
 
 export default class Review extends Component {
     constructor(props) {
@@ -14,49 +17,35 @@ export default class Review extends Component {
 
     render() {
         const { review } = this.props;
-
         return (
-            <View style={styles.container}>
-                <HorizontalRuler  />
-                <View style={styles.header}>
-                    <Image style={styles.image} source={require("../img/profileimg.jpeg")} />
-                    <View style={styles.nameWrap}>
-                        <DefaultText>{review.date}</DefaultText>
-                        <DefaultText style={styles.name}>{review.name}</DefaultText>
-                    </View>
+            <ViewContainer heightAdjusting="auto">
+                <HorizontalRuler verticalMargin={15} />
+                <AppText type="secondary" size="medium">{review.date}</AppText>
+                <AppText type="primary" size="large">{review.name}</AppText>
+
+                <View style={styles.propertyList}>
+                    {properties.map(property => this.renderProperty(property, review.properties[property.name]))}
                 </View>
-                {this.renderProperties(review.properties)}
-                <TouchableHighlight onPress={() => this.toggleComments()} style={{width: "auto"}}>
-                    <Text style={styles.toggleComments}>{this.state.showComments ? "Skjul" : "Vis"} kommentarer</Text>
+                <TouchableHighlight onPress={() => this.toggleComments()} style={{ width: "auto" }}>
+                    <AppText type="secondary" size="large" style={StyleSheet.flatten(styles.toggleComments)}>
+                        {this.state.showComments ? "Skjul kommentarer" : "Vis kommentarer"}<MaterialCommunityIcons name="chevron-down" />
+                    </AppText>
                 </TouchableHighlight>
 
 
-            </View>
+            </ViewContainer>
         )
     }
 
-    renderProperties(properties) {
+    renderProperty(property, review) {
+        const size = "medium"
         return (
-            <View style={styles.propertyList}>
-                {this.renderProperty("Lydforhold", properties.soundCondition)}
-                {this.renderProperty("Teleslynge", properties.remote)}
-                {this.renderProperty("Lydutjevning", properties.smoothing)}
-                {this.renderProperty("Informasjon", properties.information)}
-            </View>
-        )
-    }
-
-    renderProperty(name, value) {
-        return (
-            <View>
-                <View style={styles.property}>
-                    <PropertyTitle name={name} />
-                    {value.value
-                        ? <Entypo name="thumbs-up" size={20} color={`rgb(193, 224, 248)`} />
-                        : <Entypo name="thumbs-down" size={20} color={`rgb(255, 150, 158)`} />}
-                </View>
-                {this.state.showComments && value.comment ? <DefaultText style={styles.comment}>{value.comment}</DefaultText> : null}
-
+            <View key={property.name} style={styles.property}>
+                <AppText type="primary" size={size}>{property.icon} {property.name}</AppText>
+                {review.value
+                    ? <Entypo style={styles.icon} name="thumbs-up" size={sizes[size]} color={colors.positiveColor} />
+                    : <Entypo style={styles.icon} name="thumbs-down" size={sizes[size]} color={colors.negativeColor} />}
+                {this.state.showComments && review.comment ? <AppText type="primary" size="medium" style={StyleSheet.flatten(styles.comment)}>{review.comment}</AppText> : null}
             </View>
         )
     }
@@ -65,62 +54,40 @@ export default class Review extends Component {
         this.setState({ showComments: !this.state.showComments })
     }
 
-
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        marginBottom: 20
 
-    },
-    header: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginTop: 20,
-        paddingHorizontal: 20
-    },
-    image: {
-        width: 60,
-        height: 60,
-        borderRadius: 5
-    },
-    nameWrap: {
-        flex: 1,
-        marginLeft: 15
-    },
-    name: {
-        fontSize: 17,
-    },
     comment: {
         fontStyle: "italic",
         width: "100%",
-        paddingHorizontal: 20, 
-        paddingVertical: 10,
-        marginLeft: 20
-
     },
     propertyList: {
-        marginVertical: 8,
-        paddingHorizontal: 20
+        backgroundColor: colors.secondaryBackgroundColor,
+        marginVertical: 10,
+        borderRadius: BORDER_RADIUS,
     },
-
     property: {
         flexDirection: "row",
-        padding: 8,
-        justifyContent: "flex-start"
+        flexWrap: "wrap",
+        paddingLeft: COMPONENT_SPACING,
+        margin: 10,
+        justifyContent: "space-between",
+        width: 200
+
+    },
+    icon: {
+        marginLeft: 10
     },
     toggleComments: {
-        color: "#A4A4A4",
-        width: "auto",
-        borderColor: "#A4A4A4",
+        borderColor: colors.secondaryTextColor,
         borderWidth: 1,
-        borderRadius: 5,
-        marginHorizontal: 20,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        alignSelf: "flex-start"
+        borderRadius: BORDER_RADIUS,
+        alignSelf: "flex-start",
+        paddingHorizontal: COMPONENT_SPACING,
+        paddingVertical: COMPONENT_SPACING / 3
 
-    }
+    },
 
 })

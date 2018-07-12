@@ -1,32 +1,30 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
-import IconText from './IconText';
-import Properties from '../settings/propertyConfig';
-import colors from '../settings/colors';
+import properties from '../settings/propertyConfig';
+import colors, {sizes, BORDER_RADIUS} from '../settings/defaultStyles';
+import AppText from './AppText';
+import { positiveIcon, negativeIcon } from '../settings/icons';
 
 export default ({ venueProperties }) => {
-
-
     return (
-        <View style={styles.container}>
-            {Object.keys(Properties).map(name => renderProperty(name, Math.random() * 100))}
+        <View>
+            {properties.map(property => renderProperty(property, Math.random() * 100))}
         </View>
     )
 }
 
 
-const renderProperty = (name, value) => {
+const renderProperty = (property, value) => {
     const isPositive = value >= 50
+    const {name, icon} = property;
     return (
         <View key={name} style={styles.property}>
-            <IconText text={name} iconSettings={Properties[name]} />
-
-            <View style={{flex:1}}></View> 
+            <AppText type="primary" size="medium" style={{flex: 1}}>{icon} {name}</AppText>
             
-            <Entypo name="thumbs-up" size={20} color={colors.positiveColor} style={{opacity: isPositive ? 1 : 0}}/>
+            {positiveIcon(isPositive, sizes.large)}
             {valueBar(value)}
-            <Entypo name="thumbs-down" size={20} color={colors.negativeColor} style={{opacity: !isPositive ? 1 : 0}} />
+            {negativeIcon(!isPositive, sizes.large)}
+            
         </View>
     )
 }
@@ -47,7 +45,6 @@ const styles = StyleSheet.create({
 
     property: {
         flexDirection: "row",
-        justifyContent: "flex-end",
         alignItems: "center",
         paddingVertical: 7
     },
@@ -62,12 +59,12 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         backgroundColor: colors.negativeColor,
-        borderRadius: 7
+        borderRadius: BORDER_RADIUS
     },
     progress: {
         backgroundColor: colors.positiveColor,
         height: "100%",
         position: "relative",
-        borderRadius: 7
+        borderRadius: BORDER_RADIUS
     }
 });

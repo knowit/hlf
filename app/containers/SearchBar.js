@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { TextInput, StyleSheet, View, Text, TouchableHighlight} from 'react-native';
+import { TextInput, StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 import _ from 'lodash';
 import axios from 'axios';
-import colors from '../settings/colors';
-import {API_KEY} from '../credentials';
+import colors, { COMPONENT_SPACING, BORDER_RADIUS } from '../settings/defaultStyles';
+import { API_KEY } from '../credentials';
+import AppText from '../components/AppText';
+import Entypo from '@expo/vector-icons/Entypo';
+import ViewContainer from '../components/ViewContainer';
+
 
 export default class SearchBar extends Component {
     constructor(props) {
@@ -11,31 +15,29 @@ export default class SearchBar extends Component {
         this.state = { searchPrompt: "", results: [] }
 
         this.onInputChange = this.onInputChange.bind(this);
-        this.handleSeach = _.debounce(this.handleSeach, 1000);
-
-
+        this.handleSeach = _.debounce(this.handleSearch, 1000);
     }
 
     render() {
-
         return (
-            <View style={styles.wrap}>
+            <ViewContainer heightAdjusting="auto" transparent={true}>
                 {this.renderMenuBar()}
                 {this.state.searchPrompt && this.state.results.length > 0
                     ? this.state.results.map(item => this.renderSearchResult(item))
                     : null
                 }
-            </View>
+            </ViewContainer>
         )
     }
 
     renderMenuBar() {
         return (
             <View style={styles.row}>
-                <TouchableHighlight style={styles.iconWrap} onPress={this.props.onMenuPress}>
-                    <Text style={styles.icon}>☰</Text>
+                <TouchableHighlight onPress={this.props.onMenuPress}>
+                    <AppText type="secondary" size="xlarge" style={StyleSheet.flatten(styles.icon)}>☰</AppText>
                 </TouchableHighlight>
                 <TextInput
+                    ref={input => this.input = input}
                     value={this.state.searchPrompt}
                     style={styles.searchInput}
                     placeholder="Søk..."
@@ -43,17 +45,21 @@ export default class SearchBar extends Component {
                     onChangeText={this.onInputChange}
                     selectionColor={colors.primaryTextColor}
                     underlineColorAndroid={colors.transparentColor}
+                    onFocus={() => this.props.onVenueSelect(undefined)}
                 />
             </View>
         )
     }
 
     renderSearchResult(item) {
-
         return (
-            <TouchableHighlight key={item.place_id} onPress={() => this.props.onVenueSelect(item)} >
+            <TouchableHighlight key={item.place_id} onPress={() => {
+                this.props.onVenueSelect(item.place_id)
+                this.input.blur();
+                this.setState({searchPrompt: ""})
+                }}>
                 <View style={styles.row}>
-                    <Text style={styles.resultText} numberOfLines={1}>{item.description}</Text>
+                    <AppText type="primary" size="medium"><Entypo name="location-pin" /> {item.description}</AppText>
                 </View>
             </TouchableHighlight>
         )
@@ -61,10 +67,12 @@ export default class SearchBar extends Component {
 
     onInputChange(prompt) {
         this.setState({ searchPrompt: prompt })
-        this.handleSeach();
+
+        this.handleSearch();
     }
 
-    handleSeach() {
+    handleSearch() {
+
         const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${this.state.searchPrompt}&key=${API_KEY}&region=no`;
         const request = axios.get(url)
             .then(({ data }) => this.setState({
@@ -77,21 +85,13 @@ export default class SearchBar extends Component {
 
     }
 
-
-}
+    }
 
 const styles = StyleSheet.create({
-    wrap: {
-        width: "100%",
-        height: "auto",
-        display: "flex",
-        padding: 20,
-        flexDirection: "column",
-    },
     row: {
         backgroundColor: colors.primaryBackgroundColor,
         height: 40,
-        borderRadius: 3,
+        borderRadius: BORDER_RADIUS,
         marginBottom: 2,
         flexDirection: "row",
         padding: 4,
@@ -101,21 +101,15 @@ const styles = StyleSheet.create({
     },
 
     icon: {
-        color: colors.secondaryTextColor,
-        fontSize: 24,
         borderRightWidth: 1,
         borderRightColor: colors.secondaryTextColor,
-        paddingHorizontal: 7
+        paddingHorizontal: COMPONENT_SPACING / 2
     },
     searchInput: {
-        marginLeft: 10,
+        marginHorizontal: COMPONENT_SPACING / 2,
         flex: 1,
         color: colors.primaryTextColor,
         fontSize: 18
     },
-    resultText: {
-        color: colors.primaryTextColor,
-        fontSize: 18,
-        alignItems: "center",
-    }
+
 })
