@@ -9,7 +9,7 @@ export const AppButton = ({ onPress, children, inverse}) => {
 
     return (
         <TouchableHighlight style={[styles.button, !inverse ? styles.primary : styles.inverse]} onPress={onPress}>
-            <AppText type={!inverse ? "inverse" : "primary"} size="large" style={{ textAlign: "center" }}>{children}</AppText>
+            <AppText type={!inverse ? "inverse" : "primary"} size="large">{children}</AppText>
         </TouchableHighlight>
     )
 }
@@ -19,7 +19,9 @@ const styles = StyleSheet.create({
     button: {
         marginVertical: 5,
         borderRadius: BORDER_RADIUS,
-        paddingVertical: COMPONENT_SPACING
+        paddingVertical: COMPONENT_SPACING,
+        alignItems: "center",
+        justifyContent: "center"
 
     },
     primary: {

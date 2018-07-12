@@ -3,9 +3,8 @@ import { View, StyleSheet, Platform } from 'react-native';
 import { Location, Permissions, Constants } from 'expo';
 import SearchBar from '../containers/SearchBar';
 import Map from './Map';
-
 import VenueMapOverlay from '../components/VenueMapOverlay';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 
 export default class MainScreen extends Component {
     constructor(props) {
@@ -24,18 +23,7 @@ export default class MainScreen extends Component {
 
     }
 
-    componentDidMount() {
-        /*setTimeout(() => {
-            this.map.animateTo(
 
-
-                {
-                    latitude: 58.253041,
-                    longitude: 8.362465,
-                
-            })
-        }, 3000); */
-    }
     getCurrentLocation = async () => {
         let permissionStatus = await Permissions.askAsync(Permissions.LOCATION);
         if (permissionStatus !== "granted") {

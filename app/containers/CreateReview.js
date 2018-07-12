@@ -36,8 +36,8 @@ export default class CreateReview extends Component {
         return (
             <View style={styles.property} key={property.name}>
 
-                <AppText type="primary" size="large" style={{ textAlign: "center" }}>{property.icon} {property.name}</AppText>
-                <AppText type="secondary" size="medium" style={{ textAlign: "center" }}>{property.description}</AppText>
+                <AppText type="primary" size="large" alignment="center">{property.icon} {property.name}</AppText>
+                <AppText type="secondary" size="medium" alignment="center">{property.description}</AppText>
                 <View style={styles.iconRow}>
                     <ReviewOption onPress={() => this.onPropertyValueChange(property.name, 1)} id={1} value={value}><Entypo name="thumbs-up" /> Ja</ReviewOption>
                     <AppText type="secondary" size="xlarge" style={StyleSheet.flatten(styles.infoIcon)}>
@@ -120,19 +120,3 @@ const styles = StyleSheet.create({
     },
 })
 
-/**
- * 
- * <TouchableHighlight onPress={() => this.changePropertyValue(property.name, 1)} style={[styles.valueOption, value === 1 ? styles.positiveIsSelected : {},]} >
-                            <AppText type={value === undefined ? "primary" : value === 1 ? "positive" : "secondary"} size="xlarge">
-                                <Entypo name="thumbs-up" /> Ja
-                            </AppText>
-                        </TouchableHighlight>
-                        <AppText type="secondary" size="large" style={StyleSheet.flatten(styles.infoIcon)}>
-                            <Ionicons name="ios-information-circle-outline" />
-                        </AppText>
-                        <TouchableHighlight onPress={() => this.changePropertyValue(property.name, 0)} style={[styles.valueOption, value === 0 ? styles.negativeIsSelected : {},]} >
-                            <AppText type={value === undefined ? "primary" : value === 0 ? "negative" : "secondary"} size="xlarge">
-                                Nei <Entypo name="thumbs-down" />
-                            </AppText>
-                        </TouchableHighlight>
- */
