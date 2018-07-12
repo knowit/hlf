@@ -27,3 +27,4 @@ cloud/creds.json
 cloud/.terraform
 cloud/terraform.tfstate
 cloud/terraform.tfstate.backup
+creds/*

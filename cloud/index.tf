@@ -8,7 +8,7 @@ variable "zone" {
 
 provider "google" {
   credentials = "${file("credentials.json")}"
-  project     = "godlyd-207607"
+  project     = "godlydpatruljen"
   region      = "${var.region}"
 }
 
@@ -48,7 +48,7 @@ resource "google_compute_instance_group" "server_group" {
 }
 
 data "google_compute_image" "server_image" {
-  name = "packer-1529307002"
+  name = "packer-1531395416"
 }
 
 resource "google_compute_instance" "server" {
@@ -76,7 +76,7 @@ resource "google_compute_instance" "server" {
   }
 
   service_account {
-    email  = "cloud-adm@godlyd-207607.iam.gserviceaccount.com"
+    email  = "terraform@godlydpatruljen.iam.gserviceaccount.com"
     scopes = ["userinfo-email", "compute-rw", "storage-rw", "logging-write", "monitoring-write"]
   }
 }
@@ -92,7 +92,7 @@ resource "google_compute_firewall" "firewall" {
 }
 
 resource "google_sql_database_instance" "master" {
-  name             = "main-instance-db3"
+  name             = "main-instance-db"
   database_version = "POSTGRES_9_6"
   region           = "europe-west3"
 
