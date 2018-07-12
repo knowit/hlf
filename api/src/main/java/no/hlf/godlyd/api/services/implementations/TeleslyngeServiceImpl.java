@@ -55,4 +55,6 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
         return teleslyngeRepo.save(teleslynge);
     }
 
+
+
 }

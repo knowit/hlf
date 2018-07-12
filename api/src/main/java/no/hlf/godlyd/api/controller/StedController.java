@@ -46,13 +46,13 @@ public class StedController {
     // GOOGLE API
     @GetMapping("/info/{placeId}")
     public Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
+        String API_KEY = "AIzaSyAh4aY8MmtOlCx1iDHYI4Z8c3P5VVgK2IY";
         RestTemplate restTemplate = new RestTemplate();
         String uri = "https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACE_ID}" +
                 "&language=no&fields=name,place_id,formatted_address,formatted_phone_number," +
                 "international_phone_number,website,opening_hours,type,scope,url&key={API_KEY}";
 
-        String result = restTemplate.getForObject(uri, String.class, placeId,
-                "AIzaSyAc1T0RZlE1CO1mCathSjl29WPZs5GS47U");
+        String result = restTemplate.getForObject(uri, String.class, placeId, API_KEY);
         JsonNode jsonNode = (new ObjectMapper()).readTree(result);
 
         Sted sted = stedService.getStedFromPlaceId(placeId);

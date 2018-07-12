@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 //import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,5 +43,16 @@ public class TeleslyngeController {
         return teleslyngeService.createTeleslynge(teleslynge);
     }
 
+    @PutMapping("/id/{id}")
+    public TeleslyngeVurdering updateVurdering(@PathVariable(value = "id") Integer id,
+                                     @RequestBody TeleslyngeVurdering endring){
+
+        TeleslyngeVurdering teleslyngevurdering = teleslyngeService.getTeleslyngeFromId(id);
+        teleslyngevurdering.setKommentar(endring.getKommentar());
+        teleslyngevurdering.setRangering(endring.isRangering());
+
+        TeleslyngeVurdering oppdatert = teleslyngeService.createTeleslynge(teleslyngevurdering);
+        return oppdatert;
+    }
 
 }

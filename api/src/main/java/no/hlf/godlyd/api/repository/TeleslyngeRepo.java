@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TeleslyngeRepo extends CrudRepository<TeleslyngeVurdering, Integer> {
-
 }

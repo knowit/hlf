@@ -46,46 +46,32 @@ public class Bruker implements Serializable {
 
     public Bruker(){}
 
-    /*
-    public void addVurdering(Vurdering vurdering){
-        this.vurderinger.add(vurdering);
-        //vurdering.setRegistrator(this);
-    }
-    */
 
     // Getters og setters
-    //@JsonView(Views.Public.class)
     public Integer getId() { return id; }
 
     public void setId(Integer id) { this.id = id; }
 
-    //@JsonView(Views.Public.class)
     public String getBrukernavn() { return brukernavn; }
 
     public void setBrukernavn(String brukernavn) { this.brukernavn = brukernavn; }
 
-    //@JsonView(Views.Internal.class)
-    //@JsonIgnore
     public String getPassord() { return passord; }
 
     public void setPassord(String passord) { this.passord = passord; }
 
-    //@JsonView(Views.Public.class)
     public String getFornavn() { return fornavn; }
 
     public void setFornavn(String fornavn) { this.fornavn = fornavn; }
 
-    //@JsonView(Views.Public.class)
     public String getEtternavn() { return etternavn; }
 
     public void setEtternavn(String etternavn) { this.etternavn = etternavn; }
 
-    //@JsonView(Views.Internal.class)
     public String getEpost() { return epost; }
 
     public void setEpost(String epost) { this.epost = epost; }
 
-    //@JsonView(Views.Internal.class)
     @JsonIgnore
     public List<Vurdering> getVurderinger() { return vurderinger; }
 

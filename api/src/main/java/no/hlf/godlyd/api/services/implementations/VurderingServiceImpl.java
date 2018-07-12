@@ -53,12 +53,6 @@ public class VurderingServiceImpl implements VurderingService {
         return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
     }
 
-    /*
-    @Override
-    public Vurdering createVurdering(Vurdering vurdering) {
-        return vurderingRepo.save(vurdering);
-    }
-    */
     @Override
     public ResponseEntity<?> deleteVurdering(Integer id) {
         Vurdering vurdering = vurderingRepo.findById(id)
