@@ -2,6 +2,7 @@ package no.hlf.godlyd.api.controller;
 
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
+import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.TeleslyngeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ public class TeleslyngeController {
 
     @Autowired
     TeleslyngeService teleslyngeService;
+    @Autowired
+    StedService stedService;
 
     @GetMapping()
     public List<TeleslyngeVurdering> getAllTeleslyngeVurderinger() {

@@ -4,6 +4,7 @@ import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class BrukerController {
     private BrukerService brukerService;
 
     @GetMapping
-    public List<Bruker> getAllBrukernavn(){
+    public List<Bruker> getAllBrukere(){
         return brukerService.getAllBrukere();
     }
 
@@ -24,6 +25,18 @@ public class BrukerController {
     public Bruker getBrukerFromBrukernavn(@PathVariable(value = "brukernavn") String brukernavn){
         return brukerService.getBrukerFromBrukernavn(brukernavn);
     }
+
+    @GetMapping("/internal/brukernavn/{brukernavn}")
+    public Bruker getBrukerFromBrukernavnInternal(@PathVariable(value = "brukernavn") String brukernavn){
+        return brukerService.getBrukerFromBrukernavn(brukernavn);
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public Bruker createBruker(@RequestBody Bruker bruker){
+        return brukerService.createBruker(bruker);
+    }
+
 
     /*
     @Autowired

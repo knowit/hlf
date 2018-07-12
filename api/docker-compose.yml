@@ -1,0 +1,19 @@
+version: '3'
+services:
+  api:
+    image: lydpatruljen/godlyd:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  db:
+    image: postgres:9.6
+    volumes:
+      - /var/lib/postgresql/data
+    ports:
+      - 5000:5432
+    environment:
+    - POSTGRES_PASSWORD=hlf123
+    - POSTGRES_USER=hlf
+    - POSTGRES_DB=godlyd
+    - PGDATA=/var/lib/postgresql/data/pgdata

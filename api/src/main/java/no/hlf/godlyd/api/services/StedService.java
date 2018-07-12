@@ -9,6 +9,8 @@ public interface StedService {
 
     List<Sted> getAllSteder();
 
+    boolean existsByPlaceId(String placeId);
+
     Sted getStedFromId(Integer id);
 
     /*

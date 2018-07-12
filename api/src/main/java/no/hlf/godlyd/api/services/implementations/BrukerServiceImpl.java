@@ -22,4 +22,7 @@ public class BrukerServiceImpl implements BrukerService {
         return brukerRepo.findByBrukernavn(brukernavn);
     }
 
+    @Override
+    public Bruker createBruker(Bruker bruker){ return brukerRepo.save(bruker);}
+
 }

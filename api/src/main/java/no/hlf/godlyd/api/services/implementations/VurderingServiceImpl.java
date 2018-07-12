@@ -47,6 +47,12 @@ public class VurderingServiceImpl implements VurderingService {
     public List<Vurdering> getVurderingerByBruker(Integer brukerid) {
         return vurderingRepo.findByRegistrator(brukerid);
     }
+
+    @Override
+    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId) {
+        return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
+    }
+
     /*
     @Override
     public Vurdering createVurdering(Vurdering vurdering) {

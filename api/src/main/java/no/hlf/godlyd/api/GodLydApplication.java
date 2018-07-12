@@ -23,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 })
 */
 @SpringBootApplication
+@EnableJpaAuditing
 @ComponentScan
 @EnableAutoConfiguration
 public class GodLydApplication {

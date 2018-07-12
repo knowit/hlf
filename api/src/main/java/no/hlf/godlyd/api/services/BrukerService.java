@@ -10,4 +10,6 @@ public interface BrukerService {
 
     Bruker getBrukerFromBrukernavn(String brukernavn);
 
+    Bruker createBruker(Bruker bruker);
+
 }

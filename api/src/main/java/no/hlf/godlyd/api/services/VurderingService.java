@@ -20,6 +20,8 @@ public interface VurderingService {
 
     List<Vurdering> getVurderingerByBruker(Integer brukerid);
 
+    List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId);
+
     //Vurdering createVurdering(Vurdering vurdering);
 
     ResponseEntity<?> deleteVurdering(Integer id);

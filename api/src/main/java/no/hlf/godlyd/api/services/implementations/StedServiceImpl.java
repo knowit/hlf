@@ -23,6 +23,9 @@ public class StedServiceImpl implements StedService {
     }
 
     @Override
+    public boolean existsByPlaceId(String placeId){ return stedRepo.existsByPlaceId(placeId);}
+
+    @Override
     public Sted getStedFromId(Integer id) {
         return stedRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sted", "id", id));

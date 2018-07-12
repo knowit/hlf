@@ -15,12 +15,13 @@ import java.util.Date;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "vurdering")
-//@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 /*@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = TeleslyngeVurdering.class, name = "teleslynge"),
         @JsonSubTypes.Type(value = LydforholdVurdering.class, name = "lydforhold")})*/
+@JsonIgnoreProperties(value = "dato", allowGetters = true)
 public abstract class Vurdering implements Serializable {
 
     @Id
@@ -37,7 +38,7 @@ public abstract class Vurdering implements Serializable {
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.DATE)
-    //@CreatedDate
+    @CreatedDate
     private Date dato;
 
     private String kommentar;
@@ -46,7 +47,6 @@ public abstract class Vurdering implements Serializable {
         this.sted = sted;
         this.registrator = registrator;
         this.kommentar = kommentar;
-        dato = new Date();
     }
 
     protected Vurdering(){}

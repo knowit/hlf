@@ -1,6 +1,7 @@
 package no.hlf.godlyd.api.model;
 
 import com.fasterxml.jackson.annotation.*;
+import no.hlf.godlyd.api.Views;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,7 +11,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "bruker")
-@JsonIgnoreProperties({"passord", "epost"})
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Bruker implements Serializable {
 
@@ -20,8 +20,8 @@ public class Bruker implements Serializable {
 
     @Column(unique = true)
     private String brukernavn;
-    private String passord;
 
+    private String passord;
     private String fornavn;
     private String etternavn;
 
@@ -36,6 +36,14 @@ public class Bruker implements Serializable {
         this.epost = epost;
     }
 
+    public Bruker(String brukernavn, String passord, String fornavn, String etternavn, String epost){
+        this.brukernavn = brukernavn;
+        this.passord = passord;
+        this.fornavn = fornavn;
+        this.etternavn = etternavn;
+        this.epost = epost;
+    }
+
     public Bruker(){}
 
     /*
@@ -46,30 +54,38 @@ public class Bruker implements Serializable {
     */
 
     // Getters og setters
+    //@JsonView(Views.Public.class)
     public Integer getId() { return id; }
 
     public void setId(Integer id) { this.id = id; }
 
+    //@JsonView(Views.Public.class)
     public String getBrukernavn() { return brukernavn; }
 
     public void setBrukernavn(String brukernavn) { this.brukernavn = brukernavn; }
 
+    //@JsonView(Views.Internal.class)
+    //@JsonIgnore
     public String getPassord() { return passord; }
 
     public void setPassord(String passord) { this.passord = passord; }
 
+    //@JsonView(Views.Public.class)
     public String getFornavn() { return fornavn; }
 
     public void setFornavn(String fornavn) { this.fornavn = fornavn; }
 
+    //@JsonView(Views.Public.class)
     public String getEtternavn() { return etternavn; }
 
     public void setEtternavn(String etternavn) { this.etternavn = etternavn; }
 
+    //@JsonView(Views.Internal.class)
     public String getEpost() { return epost; }
 
     public void setEpost(String epost) { this.epost = epost; }
 
+    //@JsonView(Views.Internal.class)
     @JsonIgnore
     public List<Vurdering> getVurderinger() { return vurderinger; }
 

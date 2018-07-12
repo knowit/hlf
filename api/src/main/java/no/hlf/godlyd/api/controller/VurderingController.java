@@ -36,17 +36,17 @@ public class VurderingController {
         return vurderingService.getVurderingerByPlaceId(placeId);
     }
 
+    @GetMapping("/placeId/{placeId}/brukerId/{brukerId}")
+    public List<Vurdering> getVurderingerByPlaceIdAndBrukerId(
+            @PathVariable(value = "placeId") String placeId,
+            @PathVariable(value = "brukerId") Integer brukerId){
+
+        return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, brukerId);
+    }
+
     @DeleteMapping("/id/{id}")
     public ResponseEntity<?> deleteVurdering(@PathVariable(value = "id") Integer id){
         return vurderingService.deleteVurdering(id);
     }
 
-    /*
-    // Opprette en ny vurdering
-    @PostMapping(produces = {"application/json"})
-    @ResponseStatus(HttpStatus.CREATED)
-    public Vurdering createVurdering(@RequestBody Vurdering vurdering){
-        return vurderingService.createVurdering(vurdering);
-    }
-    */
 }

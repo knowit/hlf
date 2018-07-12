@@ -12,6 +12,8 @@ public interface StedRepo extends CrudRepository<Sted, Integer> {
 
     //List<Sted> findByNavnIgnoreCase(String navn);
 
+    boolean existsByPlaceId(String placeId);
+
     Sted findByPlaceId(String placeId);
 
     /*
