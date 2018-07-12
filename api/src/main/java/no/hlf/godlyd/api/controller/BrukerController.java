@@ -22,7 +22,7 @@ public class BrukerController {
 
     @GetMapping("/profil")
     @ResponseBody
-    public String profil(@RequestHeader("Authorization") String authorization) throws Exception{
+    public String profil(@RequestHeader("Authorization") String authorization){
         Bruker bruker = brukerService.updateBruker(authorization.substring(7));
         String response = "userId: "+bruker.getAuth0UserId()
                 +"\nfornavn: "+bruker.getFornavn()
@@ -32,7 +32,7 @@ public class BrukerController {
 
     @GetMapping("/authorize")
     @ResponseBody
-    public String authorize(@RequestHeader("authorization_code") String authorizationCode) throws Exception{
+    public String authorize(@RequestHeader("authorization_code") String authorizationCode){
         Auth0Connection con = new Auth0Connection();
         return con.getTokens(authorizationCode).toString();
     }

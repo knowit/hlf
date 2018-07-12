@@ -19,7 +19,7 @@ public class Auth0Connection {
     private static final String clientId = "3pAWoFhOFgb5o9hS121EVFT7Hwwvsa7p";
     private static final String clientSecret = "8EgYCzNbl3KOShaK2cUJSaz_1hoVaSaQl0Xti2sAJh2iMj53lP6kIZ7d2or9NccI";
 
-    public Hashtable<String, String> getTokens(String authorizationCode) throws Exception{
+    public Hashtable<String, String> getTokens(String authorizationCode){
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Content-Type", "application/json");
         String res = postRequest(tokenUrl, headers,
@@ -39,7 +39,7 @@ public class Auth0Connection {
         return tokens;
     }
 
-    public Hashtable<String, Object> getFullUserProfileJson(String access_token) throws Exception{
+    public Hashtable<String, Object> getFullUserProfileJson(String access_token){
 
         String userId = getUserInfo(access_token).get("sub").toString();
 
@@ -51,7 +51,7 @@ public class Auth0Connection {
         return parseJson(jsonResponse);
     }
 
-    private Hashtable<String, Object> getUserInfo(String access_token) throws Exception{
+    private Hashtable<String, Object> getUserInfo(String access_token){
 
         String url = "https://hlf-godlyd.eu.auth0.com/userinfo";
         Hashtable<String, String> headers = new Hashtable<>();
@@ -60,7 +60,7 @@ public class Auth0Connection {
         return parseJson(req);
     }
 
-    public String getManagementAPIToken() throws Exception{
+    public String getManagementAPIToken(){
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Content-Type", "application/json");
         String res = postRequest(
@@ -73,55 +73,64 @@ public class Auth0Connection {
                         "\"grant_type\":\"client_credentials\"" +
                         "}");
 
-        String token = getJsonField(res, "access_token").toString();
-        return token;
+        return getJsonField(res, "access_token").toString();
     }
 
-    private String getRequest(String url, Hashtable<String, String> headers) throws Exception{
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("GET");
-        con.setDoInput(true);
-        for(String header: headers.keySet()){
-            con.setRequestProperty(header, headers.get(header));
-        }
-        BufferedReader in = new BufferedReader((new InputStreamReader(con.getInputStream())));
-        String inputLine;
-        StringBuffer res = new StringBuffer();
+    private String getRequest(String url, Hashtable<String, String> headers){
+        try{
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("GET");
+            con.setDoInput(true);
+            for(String header: headers.keySet()){
+                con.setRequestProperty(header, headers.get(header));
+            }
+            BufferedReader in = new BufferedReader((new InputStreamReader(con.getInputStream())));
+            String inputLine;
+            StringBuffer res = new StringBuffer();
 
-        while((inputLine = in.readLine()) != null){
-            res.append(inputLine);
+            while((inputLine = in.readLine()) != null){
+                res.append(inputLine);
+            }
+            in.close();
+            return res.toString();
+        }catch(Exception e){
+            // Handle exception
         }
-        in.close();
-        return res.toString();
+        return null;
     }
 
-    private String postRequest(String url, Hashtable<String, String> headers, String payload) throws Exception {
-        URL obj = new URL(url);
-        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setDoInput(true);
-        for (String header : headers.keySet()) {
-            con.setRequestProperty(header, headers.get(header));
-        }
-        con.setRequestProperty("Content-Language", "en-US");
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        if (payload != null) {
-            wr.writeBytes(payload);
-        }
-        wr.flush();
-        wr.close();
+    private String postRequest(String url, Hashtable<String, String> headers, String payload){
+        try{
+            URL obj = new URL(url);
+            HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+            con.setRequestMethod("POST");
+            con.setDoInput(true);
+            for (String header : headers.keySet()) {
+                con.setRequestProperty(header, headers.get(header));
+            }
+            con.setRequestProperty("Content-Language", "en-US");
+            con.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            if (payload != null) {
+                wr.writeBytes(payload);
+            }
+            wr.flush();
+            wr.close();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer res = new StringBuffer();
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer res = new StringBuffer();
 
-        while ((inputLine = in.readLine()) != null) {
-            res.append(inputLine);
+            while ((inputLine = in.readLine()) != null) {
+                res.append(inputLine);
+            }
+            in.close();
+            return res.toString();
+        }catch(Exception e){
+            // Handle exception
         }
-        in.close();
-        return res.toString();
+        return null;
     }
 
 
