@@ -42,11 +42,11 @@ public class BrukerServiceImpl implements BrukerService {
         return brukerRepo.findAll();
     }
 
-    public Bruker getCredentials(String access_token){
+    private Bruker getCredentials(String access_token){
         try{
             Bruker bruker = new Bruker();
             Auth0Connection con = new Auth0Connection();
-            Hashtable<String, Object> userInfo = con.getFullUserProfileJson(access_token);
+            Hashtable<String, Object> userInfo = con.getUserProfile(access_token);
             bruker.setAuth0UserId(userInfo.get("user_id").toString());
             bruker.setFornavn(userInfo.get("given_name").toString());
             bruker.setEtternavn(userInfo.get("family_name").toString());
@@ -57,6 +57,10 @@ public class BrukerServiceImpl implements BrukerService {
 
         }
         return null;
+    }
+
+    public Bruker login(String access_token){
+        return updateBruker(access_token);
     }
 
 

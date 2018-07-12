@@ -14,7 +14,7 @@ public interface BrukerService {
 
     List<Bruker> getAllBrukere();
 
-    Bruker getCredentials(String access_token);
+    Bruker login(String authorization_code);
 
 
 }

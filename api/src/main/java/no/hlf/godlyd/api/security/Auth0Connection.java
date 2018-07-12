@@ -16,35 +16,12 @@ public class Auth0Connection {
     private static final String managementClientId = "DQ3EL0M3tDziTnbGyabj3TKyeJnXXkAh";
     private static final String managementClientSecret = "NvBtZwlnfoHnwdY2NLF2yjyuxPf83Fw2FnY-RKBlwID7ReXLtLVOGVzOwrDiBBxM";
     private static final String managementAudience = "https://hlf-godlyd.eu.auth0.com/api/v2/";
-    private static final String clientId = "3pAWoFhOFgb5o9hS121EVFT7Hwwvsa7p";
-    private static final String clientSecret = "8EgYCzNbl3KOShaK2cUJSaz_1hoVaSaQl0Xti2sAJh2iMj53lP6kIZ7d2or9NccI";
 
-    public Hashtable<String, String> getTokens(String authorizationCode){
-        Hashtable<String, String> headers = new Hashtable<>();
-        headers.put("Content-Type", "application/json");
-        String res = postRequest(tokenUrl, headers,
-                "{" +
-                "\"grant_type\":\"authorization_code\"," +
-                "\"client_id\": \""+clientId+"\"," +
-                "\"client_secret\": \""+clientSecret+"\"," +
-                "\"code\": \""+authorizationCode+"\"," +
-                "\"redirect_uri\": \"http://localhost:8080/brukere\"" +
-                "}");
-
-        Hashtable<String, Object> response = parseJson(res);
-
-        Hashtable<String, String> tokens = new Hashtable<>();
-        tokens.put("access_token", response.get("access_token").toString());
-        tokens.put("refresh_token", response.get("refresh_token").toString());
-        return tokens;
-    }
-
-    public Hashtable<String, Object> getFullUserProfileJson(String access_token){
+    public Hashtable<String, Object> getUserProfile(String access_token){
 
         String userId = getUserInfo(access_token).get("sub").toString();
 
         String url = "https://hlf-godlyd.eu.auth0.com/api/v2/users/"+userId;
-        String method = "GET";
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("authorization", "Bearer "+getManagementAPIToken());
         String jsonResponse = getRequest(url, headers);
@@ -60,7 +37,7 @@ public class Auth0Connection {
         return parseJson(req);
     }
 
-    public String getManagementAPIToken(){
+    private String getManagementAPIToken(){
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Content-Type", "application/json");
         String res = postRequest(
