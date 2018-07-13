@@ -28,3 +28,5 @@ cloud/.terraform
 cloud/terraform.tfstate
 cloud/terraform.tfstate.backup
 creds/*
+
+.vscode

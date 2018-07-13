@@ -1,69 +1,93 @@
-import React from 'react';
+import React from "react";
 
-import MainScreen from './containers/MainScreen';
-import VenueDetails from './containers/VenueDetails';
-import { BackHandler } from 'react-native';
-import { createDrawerNavigator } from 'react-navigation';
-import Profile from './containers/Profile';
-import { API_KEY } from './credentials';
-import axios from 'axios';
-
-
-
+import MainScreen from "./containers/MainScreen";
+import VenueDetails from "./containers/VenueDetails";
+import { BackHandler } from "react-native";
+import { createDrawerNavigator } from "react-navigation";
+import Profile from "./containers/Profile";
+import { API_KEY } from "./credentials";
+import { places } from "./settings/endpoints";
+import axios from "axios";
 
 class LydApp extends React.Component {
-
   constructor(props) {
     super(props);
 
-    this.state = { isAuthed: false, selectedVenue: undefined, showDetails: false }
+    this.state = {
+      isAuthed: false,
+      selectedVenue: undefined,
+      showDetails: false
+    };
     this.onVenueSelect = this.onVenueSelect.bind(this);
     this.showDetails = this.showDetails.bind(this);
     this.hideDetails = this.hideDetails.bind(this);
-
   }
   componentDidMount() {
-
     BackHandler.addEventListener("hardwareBackPress", () => {
       if (this.state.showDetails) {
-        this.setState({ showDetails: false })
-      }
-      else if (this.state.selectedVenue) {
-        this.setState({ selectedVenue: undefined })
+        this.setState({ showDetails: false });
+      } else if (this.state.selectedVenue) {
+        this.setState({ selectedVenue: undefined });
       }
       return true;
-    })
+    });
   }
 
   render() {
     const { selectedVenue, showDetails } = this.state;
-    return !selectedVenue || !showDetails
-      ? <MainScreen ref={main => this.main = main} onVenueSelect={this.onVenueSelect} selectedVenue={this.state.selectedVenue} showDetails={this.showDetails} openDrawer={this.props.navigation.openDrawer} />
-      : <VenueDetails selectedVenue={this.state.selectedVenue} hideDetails={this.hideDetails} />
+    return !selectedVenue || !showDetails ? (
+      <MainScreen
+        ref={main => (this.main = main)}
+        onVenueSelect={this.onVenueSelect}
+        selectedVenue={this.state.selectedVenue}
+        showDetails={this.showDetails}
+        openDrawer={this.props.navigation.openDrawer}
+      />
+    ) : (
+      <VenueDetails
+        selectedVenue={this.state.selectedVenue}
+        hideDetails={this.hideDetails}
+      />
+    );
   }
 
   onVenueSelect(placeId) {
     if (!placeId) {
       this.setState({ selectedVenue: undefined });
-    }
-    else {
+    } else {
       this.getVenueDetails(placeId);
     }
   }
 
   getVenueDetails(placeId) {
+    const url = places(1);
+    console.log(url);
+    /*
+    axios
+      .all([
+        axios.get(
+          `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`
+        )
+      ])
+      .then(first => console.log(first));
+      */
+  }
+
+  getVenueDetails1(placeId) {
     const url = `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`;
-    axios.get(url)
+
+    axios
+      .get(url)
       .then(({ data }) => {
         this.setState({ selectedVenue: data.result }, () => {
-            this.main.notifyMapOnChange();
-        })
+          this.main.notifyMapOnChange();
+        });
       })
       .catch(e => console.log(e));
   }
 
   showDetails() {
-    this.setState({ showDetails: true })
+    this.setState({ showDetails: true });
   }
 
   hideDetails() {
@@ -72,9 +96,11 @@ class LydApp extends React.Component {
 }
 
 export default () => {
-  const Wrapper = createDrawerNavigator({
-    Home: LydApp
-  },
-    { contentComponent: Profile })
-  return <Wrapper />
-}
+  const Wrapper = createDrawerNavigator(
+    {
+      Home: LydApp
+    },
+    { contentComponent: Profile }
+  );
+  return <Wrapper />;
+};

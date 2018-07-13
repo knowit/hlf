@@ -2,7 +2,6 @@ import React from "react";
 import { Text, StyleSheet, View, TouchableHighlight, Al } from "react-native";
 import PropTypes from "prop-types";
 import colors, { sizes } from "../settings/defaultStyles";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const TextNode = ({ type, size, children, style, alignment }) => {
   if (typeof children === "string") {
