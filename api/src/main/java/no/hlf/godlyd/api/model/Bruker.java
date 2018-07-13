@@ -1,14 +1,16 @@
 package no.hlf.godlyd.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
+import no.hlf.godlyd.api.Views;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "brukere")
+@Table(name = "bruker")
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Bruker implements Serializable {
 
@@ -17,14 +19,32 @@ public class Bruker implements Serializable {
     private Integer id;
 
     @Column(unique = true)
-    private String auth0UserId;
+    private String brukernavn;
 
+    private String passord;
     private String fornavn;
     private String etternavn;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "registrator")
-    private Set<Vurdering> vurderinger;
+    @Column(unique = true)
+    private String epost;
+
+    @OneToMany(mappedBy = "registrator")
+    private List<Vurdering> vurderinger;
+
+    public Bruker(String brukernavn, String epost) {
+        this.brukernavn = brukernavn;
+        this.epost = epost;
+    }
+
+    public Bruker(String brukernavn, String passord, String fornavn, String etternavn, String epost){
+        this.brukernavn = brukernavn;
+        this.passord = passord;
+        this.fornavn = fornavn;
+        this.etternavn = etternavn;
+        this.epost = epost;
+    }
+
+    public Bruker(){}
 
 
     // Getters og setters
@@ -32,13 +52,13 @@ public class Bruker implements Serializable {
 
     public void setId(Integer id) { this.id = id; }
 
-    public String getAuth0UserId(){
-        return auth0UserId;
-    }
+    public String getBrukernavn() { return brukernavn; }
 
-    public void setAuth0UserId(String auth0UserId){
-        this.auth0UserId = auth0UserId;
-    }
+    public void setBrukernavn(String brukernavn) { this.brukernavn = brukernavn; }
+
+    public String getPassord() { return passord; }
+
+    public void setPassord(String passord) { this.passord = passord; }
 
     public String getFornavn() { return fornavn; }
 
@@ -48,8 +68,12 @@ public class Bruker implements Serializable {
 
     public void setEtternavn(String etternavn) { this.etternavn = etternavn; }
 
+    public String getEpost() { return epost; }
 
-    public Set<Vurdering> getVurderinger() { return vurderinger; }
+    public void setEpost(String epost) { this.epost = epost; }
 
-    public void setVurderinger(Set<Vurdering> vurderinger) { this.vurderinger = vurderinger; }
+    @JsonIgnore
+    public List<Vurdering> getVurderinger() { return vurderinger; }
+
+    public void setVurderinger(List<Vurdering> vurderinger) { this.vurderinger = vurderinger; }
 }

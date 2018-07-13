@@ -12,13 +12,15 @@ public interface VurderingService {
 
     Map<String, List<Vurdering>> getAllVurderinger();
 
-    List<Vurdering> getVurderingerBySted(Integer stedid);
+    List<Vurdering> getVurderingerByStedId(Integer id);
+
+    List<Vurdering> getVurderingerByPlaceId(String placeId);
 
     Vurdering getVurderingFromId(Integer id);
 
     List<Vurdering> getVurderingerByBruker(Integer brukerid);
 
-    Vurdering createVurdering(Vurdering vurdering);
+    List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId);
 
     ResponseEntity<?> deleteVurdering(Integer id);
 

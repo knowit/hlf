@@ -1,11 +1,10 @@
 package no.hlf.godlyd.api.repository;
 
-import no.hlf.godlyd.api.model.Bruker;
+import no.hlf.godlyd.api.model.LydutjevningVurdering;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BrukerRepo extends CrudRepository<Bruker, Integer> {
+public interface LydutjevningRepo extends CrudRepository<LydutjevningVurdering, Integer> {
 
-    Bruker findByBrukernavn(String brukernavn);
 }

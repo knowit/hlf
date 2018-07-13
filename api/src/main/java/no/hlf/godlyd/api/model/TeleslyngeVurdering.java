@@ -1,35 +1,26 @@
 package no.hlf.godlyd.api.model;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
 
 @Entity
-@Table(name = "teleslynge_vurdering")
-//@JsonTypeName("teleslynge")
+@Table(name = "teleslyngevurdering")
 public class TeleslyngeVurdering extends Vurdering {
 
     @NotNull
     private boolean rangering;  // Kan rangeres som tommel opp (1) eller ned (0)
-    private String modell;    // den spesifikke modellen til utstyret
-    @Column(name = "type_slynge")
-    private String typeSlynge;    // type teleslynge (fastmontert, mobil osv.)
 
-    public TeleslyngeVurdering(Sted sted, Bruker registrator, String kommentar, boolean rangering,
-                               String modell, String type){
+    public TeleslyngeVurdering(Sted sted, Bruker registrator, String kommentar, boolean rangering){
         super(sted, registrator, kommentar);
         this.rangering = rangering;
-        this.modell = modell;
-        this.typeSlynge = type;
     }
 
     public TeleslyngeVurdering(){}
 
     // Getters and setters
-    public boolean getRangering() {
+    public boolean isRangering() {
         return rangering;
     }
 
@@ -37,19 +28,5 @@ public class TeleslyngeVurdering extends Vurdering {
         this.rangering = rangering;
     }
 
-    public String getModell() {
-        return modell;
-    }
 
-    public void setModell(String modell) {
-        this.modell = modell;
-    }
-
-    public String getTypeSlynge() {
-        return typeSlynge;
-    }
-
-    public void setTypeSlynge(String type) {
-        this.typeSlynge = type;
-    }
 }

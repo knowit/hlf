@@ -1,11 +1,11 @@
 package no.hlf.godlyd.api.services.implementations;
 
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
-import no.hlf.godlyd.api.model.TeleslyngeVurdering;
+import no.hlf.godlyd.api.model.InformasjonVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
-import no.hlf.godlyd.api.repository.TeleslyngeRepo;
+import no.hlf.godlyd.api.repository.InformasjonRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
-import no.hlf.godlyd.api.services.TeleslyngeService;
+import no.hlf.godlyd.api.services.InformasjonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class TeleslyngeServiceImpl implements TeleslyngeService {
+public class InformasjonServiceImpl implements InformasjonService {
 
     @Autowired
-    private TeleslyngeRepo teleslyngeRepo;
+    private InformasjonRepo informasjonRepo;
     @Autowired
     private VurderingRepo vurderingRepo;
     @Autowired
@@ -24,37 +24,35 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
 
     // Methods:
     @Override
-    public List<TeleslyngeVurdering> getAllTeleslynger() {
-        return (List<TeleslyngeVurdering>) teleslyngeRepo.findAll();
+    public List<InformasjonVurdering> getAllInformasjon() {
+        return (List<InformasjonVurdering>) informasjonRepo.findAll();
     }
 
     @Override
-    public TeleslyngeVurdering getTeleslyngeFromId(Integer id) {
-        return teleslyngeRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Teleslynge", "id", id));
+    public InformasjonVurdering getInformasjonFromId(Integer id) {
+        return informasjonRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Informasjon", "id", id));
     }
 
     @Override
-    public List<Vurdering> getTeleslyngerByBruker(Integer brukerid) {
+    public List<Vurdering> getInformasjonByBruker(Integer brukerid) {
         List<Vurdering> alleVurderinger = vurderingRepo.findByRegistrator(brukerid);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
-        return sortert.get("Teleslyngevurderinger");
+        return sortert.get("Informasjonvurderinger");
     }
 
     @Override
-    public List<Vurdering> getTeleslyngerByPlaceId(String placeId){
+    public List<Vurdering> getInformasjonByPlaceId(String placeId){
         List<Vurdering> alleVurderinger = vurderingRepo.findByPlaceId(placeId);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
-        return sortert.get("Teleslyngevurderinger");
+        return sortert.get("Informasjonvurderinger");
     }
 
     @Override
-    public TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge) {
-        return teleslyngeRepo.save(teleslynge);
+    public InformasjonVurdering createInformasjon(InformasjonVurdering informasjon) {
+        return informasjonRepo.save(informasjon);
     }
-
-
 
 }

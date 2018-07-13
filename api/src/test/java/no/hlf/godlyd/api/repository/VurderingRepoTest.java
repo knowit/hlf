@@ -27,8 +27,8 @@ public class VurderingRepoTest {
     /* USED FOR TESTING:
      id |    dato    |     kommentar     | registrator | sted
     ----+------------+-------------------+-------------+------
-      1 | 2018-07-21 | Bra teleslynge    |           1 |    1       (teleslynge_vurdering)
-      2 | 2018-06-14 | Dårlig lydforhold |           3 |    5       (lydforhold_vurdering)
+      1 | 17/12/2018 | Bra teleslynge    |           1 |    1       (teleslynge_vurdering)
+      2 | 21/05/2018 | Dårlig lydforhold |           3 |    5       (lydforhold_vurdering)
      */
 
     // TEST CASES
@@ -48,8 +48,8 @@ public class VurderingRepoTest {
 
     @Test
     public void testVurderingFindBySted(){
-        List<Vurdering> found1 = vurderingRepo.findBySted(1);
-        List<Vurdering> found2 = vurderingRepo.findBySted(5);
+        List<Vurdering> found1 = vurderingRepo.findByStedId(1);
+        List<Vurdering> found2 = vurderingRepo.findByStedId(5);
 
         assertTrue(found1.get(0) instanceof TeleslyngeVurdering);
         assertTrue(found2.get(0) instanceof LydforholdVurdering);

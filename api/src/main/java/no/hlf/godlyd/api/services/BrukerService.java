@@ -6,15 +6,10 @@ import java.util.List;
 
 public interface BrukerService {
 
-    void save(Bruker bruker);
-
-    Bruker findByAuth0UserId(String auth0UserId);
-
-    Bruker updateBruker(String access_token);
-
     List<Bruker> getAllBrukere();
 
-    Bruker login(String authorization_code);
+    Bruker getBrukerFromBrukernavn(String brukernavn);
 
+    Bruker createBruker(Bruker bruker);
 
 }

@@ -1,9 +1,7 @@
 package no.hlf.godlyd.api.services.implementations;
 
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
-import no.hlf.godlyd.api.model.Adresse;
 import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.Tag;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.services.StedService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,30 +23,17 @@ public class StedServiceImpl implements StedService {
     }
 
     @Override
+    public boolean existsByPlaceId(String placeId){ return stedRepo.existsByPlaceId(placeId);}
+
+    @Override
     public Sted getStedFromId(Integer id) {
         return stedRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Sted", "id", id));
     }
 
     @Override
-    public Sted getStedFromPlacesId(String placesId) {
-        return stedRepo.findByPlacesId(placesId);
-    }
-
-    @Override
-    public List<Sted> getStederByNavn(String navn) {
-        //if (!stedRepo.existsByNavnIgnoreCase(navn)){ throw new ResourceNotFoundException("Sted", "navn", navn); }
-        return stedRepo.findByNavnIgnoreCase(navn);
-    }
-
-    @Override
-    public List<Sted> getStederByTag(Integer tagid) {
-        return stedRepo.findByTag(tagid);
-    }
-
-    @Override
-    public List<Sted> getStederByAdresse(Integer adresseid){
-        return stedRepo.findByAdresse(adresseid);
+    public Sted getStedFromPlaceId(String placeId) {
+        return stedRepo.findByPlaceId(placeId);
     }
 
     @Override
