@@ -5,27 +5,27 @@ import colors, { sizes, BORDER_RADIUS } from "../settings/defaultStyles";
 import AppText from "./AppText";
 import { positiveIcon, negativeIcon } from "../settings/icons";
 
-export default ({ venueProperties }) => {
+export default ({ reviewSummary }) => {
   return (
     <View>
       {properties.map(property =>
-        renderProperty(property, Math.random() * 100)
+        renderProperty(property, reviewSummary[propertyMap[property.name]])
       )}
     </View>
   );
 };
 
-const renderProperty = (property, value) => {
+const renderProperty = (property, propertyReviews) => {
   const { name, icon } = property;
-  const isSet = Math.round(Math.random());
+  const { positive, negative } = propertyReviews;
   return (
     <View key={name} style={styles.property}>
       <AppText type="primary" size="medium" style={{ flex: 1 }}>
         {icon} {name}
       </AppText>
 
-      {isSet ? (
-        valueBar(value)
+      {positive || negative ? (
+        valueBar(positive, negative)
       ) : (
         <AppText type="primary" size="medium">
           Ingen vurderinger
@@ -35,7 +35,8 @@ const renderProperty = (property, value) => {
   );
 };
 
-const valueBar = value => {
+const valueBar = (positive, negative) => {
+  const value = (positive / (positive + negative)) * 100;
   const isPositive = value >= 50;
   return (
     <View style={{ flexDirection: "row" }}>
@@ -48,6 +49,13 @@ const valueBar = value => {
       {negativeIcon(!isPositive, sizes.large)}
     </View>
   );
+};
+
+const propertyMap = {
+  Lydutjevning: "Lydutjevningvurderinger",
+  Informasjon: "Informasjonvurderinger",
+  Lydforhold: "Lydforholdvurderinger",
+  Teleslynge: "Teleslyngevurderinger"
 };
 
 const styles = StyleSheet.create({

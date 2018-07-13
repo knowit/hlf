@@ -8,6 +8,7 @@ import Profile from "./containers/Profile";
 import { API_KEY } from "./credentials";
 import { places } from "./settings/endpoints";
 import axios from "axios";
+import _ from "lodash";
 
 class LydApp extends React.Component {
   constructor(props) {
@@ -61,7 +62,32 @@ class LydApp extends React.Component {
 
   getVenueDetails(placeId) {
     const url = places(1);
-    console.log(url);
+
+    axios
+      .all([
+        axios.get(url),
+        axios.get(
+          `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`
+        )
+      ])
+      .then(
+        axios.spread((api, google) => {
+          const googleData = _.pick(google.data.result, [
+            "formatted_address",
+            "name",
+            "formatted_phone_number",
+            "geometry"
+          ]);
+          const selectedVenue = Object.assign(
+            { reviews: api.data },
+            googleData
+          );
+          this.setState({ selectedVenue: selectedVenue }, () =>
+            this.main.notifyMapOnChange()
+          );
+        })
+      );
+
     /*
     axios
       .all([

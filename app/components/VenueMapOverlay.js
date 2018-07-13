@@ -24,7 +24,7 @@ export default ({ selectedVenue, showDetails }) => {
       <AppText type="secondary" size="medium">
         {selectedVenue.formatted_address}
       </AppText>
-      <PropertyOverview />
+      <PropertyOverview reviewSummary={selectedVenue.reviews} />
     </ViewContainer>
   );
 };

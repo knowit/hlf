@@ -3,8 +3,8 @@ export const colors = {
   secondaryTextColor: "#A4A4A4",
   primaryBackgroundColor: "#0d1428",
   secondaryBackgroundColor: "#3F4F64",
-  positiveColor: "#C1E0F8",
-  negativeColor: "#FF969E",
+  positiveColor: "#7CC1F9",
+  negativeColor: "#FF6C6C",
   transparentColor: "rgba(0,0,0,0)",
   transparentPrimaryBackGround: "rgba(13, 20, 40,0.8)"
 };
