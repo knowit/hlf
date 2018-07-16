@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 import PropertyOverview from "../components/PropertyOverview";
 import sampleReviews from "../sampleReviews";
 import Review from "./Review";
-import { MaterialIcons } from "@expo/vector-icons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 

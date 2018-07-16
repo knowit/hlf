@@ -1,6 +1,6 @@
 import colors from "./defaultStyles";
 import React from "react";
-import { Entypo } from "@expo/vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
 
 export const positiveIcon = (visible, size) => {
   return (

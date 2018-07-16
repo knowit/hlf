@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableHighlight } from "react-native";
 import HorizontalRuler from "../components/HorizontalRuler";
 import { COMPONENT_SPACING } from "../settings/defaultStyles";
 import AppText from "../components/AppText";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ViewContainer from "../components/ViewContainer";
 import { AppButton } from "../components/AppButton";
 

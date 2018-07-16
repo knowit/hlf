@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 import PropertyOverview from "./PropertyOverview";
-import { MaterialIcons } from "@expo/vector-icons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
 import AppText from "./AppText";
 import ViewContainer from "./ViewContainer";

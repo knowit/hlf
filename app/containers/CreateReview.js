@@ -6,9 +6,9 @@ import colors, {
   COMPONENT_SPACING,
   BORDER_RADIUS
 } from "../settings/defaultStyles";
-import Entypo from "@expo/vector-icons/Entypo";
+import Entypo from "react-native-vector-icons/Entypo";
 import AppText from "../components/AppText";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import ViewContainer from "../components/ViewContainer";
 import AppButton from "../components/AppButton";
 import ReviewOption from "../components/ReviewOption";

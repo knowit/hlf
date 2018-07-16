@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 import { NEW_REVIEW_SCREEN, REVIEW_SCREEN } from "../containers/VenueDetails";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import colors from "../settings/defaultStyles";
 import AppText from "./AppText";
 

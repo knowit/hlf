@@ -14,7 +14,7 @@ import colors, {
 } from "../settings/defaultStyles";
 import { API_KEY } from "../credentials";
 import AppText from "../components/AppText";
-import Entypo from "@expo/vector-icons/Entypo";
+import Entypo from "react-native-vector-icons/Entypo";
 import ViewContainer from "../components/ViewContainer";
 
 export default class SearchBar extends Component {

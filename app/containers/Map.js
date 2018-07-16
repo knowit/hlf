@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MapView } from "expo";
+import MapView from "react-native-maps";
 
 export default class Map extends Component {
   constructor(props) {

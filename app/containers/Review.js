@@ -6,7 +6,7 @@ import {
   Image,
   TouchableHighlight
 } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
 import HorizontalRuler from "../components/HorizontalRuler";
 import AppText from "../components/AppText";
 import properties from "../settings/propertyConfig";
@@ -15,7 +15,7 @@ import colors, {
   sizes,
   BORDER_RADIUS
 } from "../settings/defaultStyles";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ViewContainer from "../components/ViewContainer";
 
 export default class Review extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Platform } from "react-native";
-import { Location, Permissions, Constants } from "expo";
+
 import SearchBar from "../containers/SearchBar";
 import Map from "./Map";
 import VenueMapOverlay from "../components/VenueMapOverlay";
@@ -11,23 +11,9 @@ export default class MainScreen extends Component {
     this.map = React.createRef();
   }
 
-  componentWillMount() {
-    if (Platform.OS === "android" && !Constants.isDevice) {
-      console.log("aw no");
-    } else {
-      this.getCurrentLocation();
-    }
-  }
+  componentWillMount() {}
 
-  getCurrentLocation = async () => {
-    let permissionStatus = await Permissions.askAsync(Permissions.LOCATION);
-    if (permissionStatus !== "granted") {
-      console.log("mangler tillatelse");
-    } else {
-      const location = await Location.getCurrentPositionAsync();
-      this.setState({ selectedRegion: location });
-    }
-  };
+  getCurrentLocation = async () => {};
 
   notifyMapOnChange() {
     const { location } = this.props.selectedVenue.geometry;

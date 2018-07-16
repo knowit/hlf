@@ -9,7 +9,7 @@ import {
 import { API_KEY } from "../credentials";
 import { colors } from "../settings/defaultStyles";
 import AppText from "./AppText";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default ({ photoReference, onBackPress }) => {
   const photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${API_KEY}`;

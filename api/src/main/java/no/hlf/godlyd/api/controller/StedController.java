@@ -43,6 +43,13 @@ public class StedController {
         return stedService.getStedFromPlaceId(placeId);
     }
 
+    @GetMapping("/{placeId}/vurderinger")
+    public Map<String, Object>  getVurderingByPlaceId(@PathVariable(value = "placeId") String placeId) {
+
+        Sted selected = stedService.getStedFromPlaceId(placeId);
+        return getTotalvurderingForSted(selected.getId());
+    }
+
     // GOOGLE API
     @GetMapping("/info/{placeId}")
     public Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {

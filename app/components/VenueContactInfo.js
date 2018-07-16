@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import AppText from "./AppText";
 import { COMPONENT_SPACING } from "../settings/defaultStyles";
 import HorizontalRuler from "./HorizontalRuler";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ViewContainer from "./ViewContainer";
 
 export default ({ selectedVenue }) => {
