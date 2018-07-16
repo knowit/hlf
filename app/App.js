@@ -9,6 +9,7 @@ import { API_KEY } from "./credentials";
 import { places } from "./settings/endpoints";
 import axios from "axios";
 import _ from "lodash";
+import LoginScreen from "./containers/LoginScreen";
 
 class LydApp extends React.Component {
   constructor(props) {
@@ -35,6 +36,8 @@ class LydApp extends React.Component {
   }
 
   render() {
+    return <LoginScreen/>
+    /*
     const { selectedVenue, showDetails } = this.state;
     return !selectedVenue || !showDetails ? (
       <MainScreen
@@ -50,6 +53,7 @@ class LydApp extends React.Component {
         hideDetails={this.hideDetails}
       />
     );
+    */
   }
 
   onVenueSelect(placeId) {
