@@ -30,9 +30,8 @@ public class BrukerController {
         return brukerService.getBrukerFromAuth0UserId(auth0Id);
     }
 
-    @PostMapping()
-    @ResponseStatus
-    public Bruker updateBruker(@RequestHeader("Authorization")String auth){
+    @GetMapping("/login")
+    public Bruker loginBruker(@RequestHeader("Authorization")String auth){
         return brukerService.updateBruker(auth);
     }
 

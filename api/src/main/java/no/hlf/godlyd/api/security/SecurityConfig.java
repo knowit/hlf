@@ -27,7 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .forRS256(apiAudience, issuer)
                 .configure(http)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/brukere/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/**").authenticated()
                 .and()
                 .logout().permitAll();
