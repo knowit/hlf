@@ -6,6 +6,7 @@ import AppText from "./AppText";
 import { positiveIcon, negativeIcon } from "../settings/icons";
 
 export default ({ reviewSummary }) => {
+  console.log("DEBUG", reviewSummary);
   return (
     <View>
       {properties.map(property =>

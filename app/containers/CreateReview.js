@@ -12,6 +12,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import ViewContainer from "../components/ViewContainer";
 import AppButton from "../components/AppButton";
 import ReviewOption from "../components/ReviewOption";
+import ReviewProperty from "../components/ReviewProperty";
 
 export default class CreateReview extends Component {
   constructor(props) {
@@ -22,68 +23,10 @@ export default class CreateReview extends Component {
   render() {
     return (
       <ViewContainer heightAdjusting="auto">
-        {properties.map(property => this.renderPropertyInput(property))}
-
-        <AppButton>
-          <Entypo name="globe" />Publiser
-        </AppButton>
-        <AppButton
-          onPress={() => this.setState(this.resetInputValues())}
-          inverse={true}
-        >
-          <Ionicons name="md-remove-circle" />Tøm felter
-        </AppButton>
+        {properties.map(property => (
+          <ReviewProperty property={property} key={property.name} />
+        ))}
       </ViewContainer>
-    );
-  }
-
-  renderPropertyInput(property) {
-    const { value } = this.state[property.name];
-
-    return (
-      <View style={styles.property} key={property.name}>
-        <AppText type="primary" size="large" alignment="center">
-          {property.icon} {property.name}
-        </AppText>
-        <AppText type="secondary" size="medium" alignment="center">
-          {property.description}
-        </AppText>
-        <View style={styles.iconRow}>
-          <ReviewOption
-            onPress={() => this.onPropertyValueChange(property.name, 1)}
-            id={1}
-            value={value}
-          >
-            <Entypo name="thumbs-up" /> Ja
-          </ReviewOption>
-          <AppText
-            type="secondary"
-            size="xlarge"
-            style={StyleSheet.flatten(styles.infoIcon)}
-          >
-            <Ionicons name="ios-information-circle-outline" />
-          </AppText>
-          <ReviewOption
-            onPress={() => this.onPropertyValueChange(property.name, 0)}
-            id={0}
-            value={value}
-          >
-            Nei <Entypo name="thumbs-down" />{" "}
-          </ReviewOption>
-        </View>
-        <TextInput
-          multiline={true}
-          numberOfLines={6}
-          style={styles.textArea}
-          placeholder="Skriv en kommentar..."
-          underlineColorAndroid={colors.transparentColor}
-          placeholderTextColor={colors.secondaryTextColor}
-          selectionColor={colors.primaryTextColor}
-          onChangeText={text => this.onCommentChange(property.name, text)}
-          value={this.state[property.name].comment}
-        />
-        <HorizontalRuler verticalMargin={COMPONENT_SPACING * 1.5} />
-      </View>
     );
   }
 

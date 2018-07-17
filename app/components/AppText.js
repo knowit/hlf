@@ -41,6 +41,7 @@ const TextNode = ({ type, size, children, style, alignment }) => {
         });
       }
     });
+
     return (
       <View
         style={[

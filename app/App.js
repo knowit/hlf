@@ -86,34 +86,12 @@ class LydApp extends React.Component {
             { reviews: api.data },
             googleData
           );
-          this.setState({ selectedVenue: selectedVenue }, () =>
-            this.main.notifyMapOnChange()
-          );
+
+          this.setState({ selectedVenue: selectedVenue }, () => {
+            this.main.notifyMapOnChange();
+          });
         })
       );
-
-    /*
-    axios
-      .all([
-        axios.get(
-          `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`
-        )
-      ])
-      .then(first => console.log(first));
-      */
-  }
-
-  getVenueDetails1(placeId) {
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`;
-
-    axios
-      .get(url)
-      .then(({ data }) => {
-        this.setState({ selectedVenue: data.result }, () => {
-          this.main.notifyMapOnChange();
-        });
-      })
-      .catch(e => console.log(e));
   }
 
   showDetails() {
