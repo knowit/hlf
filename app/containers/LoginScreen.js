@@ -18,9 +18,7 @@ export default class LoginScreen extends Component{
 
     constructor(props){
         super(props);
-        this.access_token = '';
-        this.id_token = '';
-        this.refresh_token = '';
+        this.creds = '';
     }
 
     render(){
@@ -36,7 +34,18 @@ export default class LoginScreen extends Component{
     }
 
     printState(){
-        console.log("access_token: "+this.access_token);
+        AsyncStorage.getItem("access_token")
+        .then(value =>
+            console.log("access_token: "+value)
+        ).done();
+        AsyncStorage.getItem("id_token")
+        .then(value =>
+            console.log("id_token: "+value)
+        ).done();
+        AsyncStorage.getItem("refresh_token")
+        .then(value =>
+            console.log("refresh_token: "+value)
+        ).done();
     }
 
     login(){
@@ -48,10 +57,16 @@ export default class LoginScreen extends Component{
     .webAuth
     .authorize({scope: config.scope, audience: config.audience})
     .then(credentials =>
-        this.access_token = credentials.accessToken
+        this.saveCredentials(credentials)
     )
     .catch(error => console.log(error));
 
     }
-    
+
+    saveCredentials(credentials){
+        AsyncStorage.setItem("access_token", credentials.accessToken)
+        AsyncStorage.setItem("id_token", credentials.idToken)
+        AsyncStorage.setItem("refresh_token", credentials.refreshToken)
+    }
+
 }

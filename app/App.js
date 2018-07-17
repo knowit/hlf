@@ -36,7 +36,8 @@ class LydApp extends React.Component {
   }
 
   render() {
-    //return <LoginScreen/>
+    return <LoginScreen/>
+    /*
     const { selectedVenue, showDetails } = this.state;
     return !selectedVenue || !showDetails ? (
       <MainScreen
@@ -52,6 +53,7 @@ class LydApp extends React.Component {
         hideDetails={this.hideDetails}
       />
     );
+    */
   }
 
   onVenueSelect(placeId) {
