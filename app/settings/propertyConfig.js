@@ -1,8 +1,5 @@
-import {
-  Entypo,
-  Ionicons,
-  MaterialCommunityIcons
-} from "react-native-vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import React from "react";
 
 const properties = [

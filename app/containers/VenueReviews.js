@@ -17,7 +17,7 @@ export default class VenueReviews extends Component {
     return (
       <View>
         <ViewContainer heightAdjusting="auto">
-          <PropertyOverview />
+          <PropertyOverview reviewSummary={this.props.selectedVenue.reviews} />
         </ViewContainer>
 
         {!this.state.showReviews
