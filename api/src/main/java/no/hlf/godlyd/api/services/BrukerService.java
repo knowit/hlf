@@ -6,10 +6,12 @@ import java.util.List;
 
 public interface BrukerService {
 
+    Bruker getBrukerFromAuth0UserId(String auth0UserId);
+
+    Bruker getBrukerFromId(Integer id);
+
+    Bruker updateBruker(String access_token);
+
     List<Bruker> getAllBrukere();
-
-    Bruker getBrukerFromBrukernavn(String brukernavn);
-
-    Bruker createBruker(Bruker bruker);
 
 }

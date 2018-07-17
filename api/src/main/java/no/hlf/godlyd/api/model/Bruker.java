@@ -32,6 +32,14 @@ public class Bruker implements Serializable {
 
     public void setId(Integer id) { this.id = id; }
 
+    public String getAuth0UserId(){
+        return auth0UserId;
+    }
+
+    public void setAuth0UserId(String auth0UserId){
+        this.auth0UserId = auth0UserId;
+    }
+
     public String getFornavn() { return fornavn; }
 
     public void setFornavn(String fornavn) { this.fornavn = fornavn; }
