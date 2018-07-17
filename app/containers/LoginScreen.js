@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import { View, AsyncStorage, StyleSheet, Platform } from "react-native";
 import { AppButton } from "../components/AppButton";
-import AppText from "../components/AppText";
 
 import Auth0 from 'react-native-auth0';
 
@@ -19,30 +18,40 @@ export default class LoginScreen extends Component{
 
     constructor(props){
         super(props);
-        this.state={
-            accessToken: '',
-            idToken: '',
-            refreshToken: ''
-        }
+        this.access_token = '';
+        this.id_token = '';
+        this.refresh_token = '';
     }
 
     render(){
         return <View>
-            <AppButton onPress={() => this._authorize()}>
+            <AppButton onPress={() => this.login()}>
             Logg inn
+        </AppButton>
+        <AppButton onPress={() => this.printState()}>
+            Print state
         </AppButton>
         </View>
 
     }
 
+    printState(){
+        console.log("access_token: "+this.access_token);
+    }
+
+    login(){
+        this._authorize();
+    }
+
     _authorize = async () => {        
-    this.state.creds = await auth0
+    auth0
     .webAuth
     .authorize({scope: config.scope, audience: config.audience})
     .then(credentials =>
-      console.log(credentials)
+        this.access_token = credentials.accessToken
     )
     .catch(error => console.log(error));
 
     }
+    
 }

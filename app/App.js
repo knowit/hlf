@@ -37,7 +37,6 @@ class LydApp extends React.Component {
 
   render() {
     //return <LoginScreen/>
-
     const { selectedVenue, showDetails } = this.state;
     return !selectedVenue || !showDetails ? (
       <MainScreen
