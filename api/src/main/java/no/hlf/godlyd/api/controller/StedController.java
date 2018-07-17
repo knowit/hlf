@@ -67,7 +67,6 @@ public class StedController {
         Map<String, Object> map = new HashMap<>();
         map.put("Google Places API", jsonNode);
         map.put("Lydpatruljen", sted);
-
         return map;
     }
 
