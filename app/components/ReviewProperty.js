@@ -11,7 +11,7 @@ import {
 } from "../settings/defaultStyles";
 export default class ReviewProperty extends Component {
   render() {
-    const { name, icon } = this.props.property;
+    const { name, icon, description } = this.props.property;
     return (
       <ViewContainer
         heightAdjusting="auto"
@@ -28,7 +28,7 @@ export default class ReviewProperty extends Component {
           />
         </View>
 
-        <AppText type="primary" />
+        <AppText type="primary">{description}</AppText>
       </ViewContainer>
     );
   }

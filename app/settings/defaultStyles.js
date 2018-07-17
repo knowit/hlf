@@ -2,7 +2,7 @@ export const colors = {
   primaryTextColor: "white",
   secondaryTextColor: "#A4A4A4",
   primaryBackgroundColor: "#0d1428",
-  secondaryBackgroundColor: "#3F4F64",
+  secondaryBackgroundColor: "#1C243B",
   positiveColor: "#7CC1F9",
   negativeColor: "#FF6C6C",
   transparentColor: "rgba(0,0,0,0)",
