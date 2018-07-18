@@ -1,26 +1,38 @@
 import React from "react";
-import { Text, View, Platform } from "react-native";
+import { View } from "react-native";
 import { colors } from "../settings/defaultStyles";
-
-export default ({ property, size }) => {
+import SlimText from "./SlimText";
+import PropTypes from "prop-types";
+const PropertyTitle = ({ property, size, flex }) => {
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        flex: flex || flex == undefined ? 1 : 0
+      }}
+    >
       {React.cloneElement(property.icon, {
         color: colors.primaryTextColor,
-        size: size
+        size: size * 1.2
       })}
-      <Text
+      <SlimText
         style={{
           marginLeft: size / 2,
-          color: colors.primaryTextColor,
           fontSize: size,
-          fontFamily:
-            Platform.OS === "android" ? "sans-serif-light" : undefined,
           letterSpacing: 1
         }}
       >
         {property.name}
-      </Text>
+      </SlimText>
     </View>
   );
 };
+
+PropertyTitle.propTypes = {
+  property: PropTypes.object.isRequired,
+  size: PropTypes.number.isRequired,
+  flex: PropTypes.bool
+};
+
+export default PropertyTitle;

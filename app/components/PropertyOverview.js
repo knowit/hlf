@@ -5,6 +5,7 @@ import colors from "../settings/defaultStyles";
 import AppText from "./AppText";
 import PropertyReviewIcon from "./PropertyReviewIcon";
 import PropertyTitle from "./PropertyTitle";
+import SlimText from "./SlimText";
 
 const FONT_SIZE = 20;
 export default ({ reviewSummary }) => {
@@ -30,7 +31,7 @@ const renderProperty = (property, propertyReviews) => {
       {positive || negative ? (
         valueBar(positive, negative)
       ) : (
-        <Text style={styles.noReviews}>Ingen vurderinger</Text>
+        <SlimText style={styles.noReviews}>Ingen vurderinger</SlimText>
       )}
     </View>
   );
@@ -113,7 +114,6 @@ const styles = StyleSheet.create({
   },
   noReviews: {
     fontSize: FONT_SIZE,
-    color: colors.primaryTextColor,
     textAlign: "center",
     flex: 1
   },

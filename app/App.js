@@ -17,8 +17,33 @@ class LydApp extends React.Component {
 
     this.state = {
       isAuthed: false,
-      selectedVenue: undefined,
-      showDetails: false
+      selectedVenue: {
+        name: "test",
+        reviews: {
+          Lydutjevningvurderinger: {
+            positive: 0,
+            negative: 0
+          },
+          Sted: {
+            id: 1,
+            placeId: "ChIJmeCJ639uQUYRc3OrOTekBZw"
+          },
+          Informasjonvurderinger: {
+            positive: 0,
+            negative: 0
+          },
+          "Totalt antall vurderinger": 5,
+          Lydforholdvurderinger: {
+            positive: 0,
+            negative: 0
+          },
+          Teleslyngevurderinger: {
+            positive: 1,
+            negative: 4
+          }
+        }
+      },
+      showDetails: true
     };
     this.onVenueSelect = this.onVenueSelect.bind(this);
     this.showDetails = this.showDetails.bind(this);
@@ -78,7 +103,8 @@ class LydApp extends React.Component {
             "formatted_address",
             "name",
             "formatted_phone_number",
-            "geometry"
+            "geometry",
+            "photos"
           ]);
           const selectedVenue = Object.assign(
             { reviews: api.data },
