@@ -61,7 +61,7 @@ export default class Review extends Component {
     return (
       <View key={property.name}>
         <View style={[styles.row, styles.property]}>
-          <PropertyTitle property={property} size={22} />
+          <PropertyTitle property={property} size={22} style={{ flex: 1 }} />
           <MaterialIcons
             name={value ? "thumb-up" : "thumb-down"}
             color={value ? colors.positiveColor : colors.negativeColor}

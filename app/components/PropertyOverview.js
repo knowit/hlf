@@ -27,7 +27,7 @@ const renderProperty = (property, propertyReviews) => {
 
   return (
     <View key={property.name} style={styles.property}>
-      <PropertyTitle property={property} size={FONT_SIZE} />
+      <PropertyTitle property={property} size={FONT_SIZE} style={{ flex: 1 }} />
       {positive || negative ? (
         valueBar(positive, negative)
       ) : (

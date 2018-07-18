@@ -3,14 +3,16 @@ import { View } from "react-native";
 import { colors } from "../settings/defaultStyles";
 import SlimText from "./SlimText";
 import PropTypes from "prop-types";
-const PropertyTitle = ({ property, size, flex }) => {
+const PropertyTitle = ({ property, size, style }) => {
   return (
     <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        flex: flex || flex == undefined ? 1 : 0
-      }}
+      style={[
+        {
+          flexDirection: "row",
+          alignItems: "center"
+        },
+        style
+      ]}
     >
       {React.cloneElement(property.icon, {
         color: colors.primaryTextColor,

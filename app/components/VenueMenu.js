@@ -10,11 +10,11 @@ export default ({ onScreenChange, currentScreen }) => {
   const screens = [
     {
       name: REVIEW_SCREEN,
-      icon: "create"
+      icon: "star"
     },
     {
       name: NEW_REVIEW_SCREEN,
-      icon: "star"
+      icon: "create"
     }
   ];
   return (

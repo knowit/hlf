@@ -1,85 +1,51 @@
-import React, { Component } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
-import ViewContainer from "./ViewContainer";
-import AppText from "../components/AppText";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import {
-  COMPONENT_SPACING,
-  colors,
-  BORDER_RADIUS,
-  sizes
-} from "../settings/defaultStyles";
-import ReviewOption from "./ReviewOption";
 
-export default class ReviewProperty extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isSelected: Math.round(Math.random()) === 0,
-      showComment: false,
-      comment: ""
-    };
-  }
+import SlimText from "./SlimText";
+import PropTypes from "prop-types";
+import { colors, COMPONENT_SPACING } from "../settings/defaultStyles";
+import PropertyTitle from "./PropertyTitle";
+import ReviewOptionButton from "./ReviewOptionButton";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-  render() {
-    const { name, icon, description } = this.props.property;
-    const { isSelected } = this.state;
+const ReviewProperty = ({ propertyDescription, value, comment }) => {
+  return (
+    <View style={styles.container}>
+      <PropertyTitle
+        property={propertyDescription}
+        size={25}
+        style={{ justifyContent: "center" }}
+      />
+      <SlimText style={styles.desc}>{propertyDescription.description}</SlimText>
+      <View style={styles.buttonRow}>
+        <ReviewOptionButton buttonValue={-1} selectedValue={value} />
+        <ReviewOptionButton buttonValue={1} selectedValue={value} />
+      </View>
+    </View>
+  );
+};
 
-    return (
-      <ViewContainer
-        heightAdjusting="auto"
-        style={StyleSheet.flatten(styles.container)}
-      >
-        <View style={styles.row}>
-          <AppText type="primary" size="large">
-            {icon} {name}
-          </AppText>
-          <MaterialCommunityIcons
-            name="information"
-            color={colors.primaryTextColor}
-            size={sizes.large}
-          />
-        </View>
-        <AppText type="primary">{description}</AppText>
-        <View style={styles.row}>
-          <ReviewOption
-            color={isSelected == 1 ? "positive" : "primary"}
-            onPress={() => this.onSelectionInput(1)}
-          >
-            JA
-          </ReviewOption>
-
-          <ReviewOption
-            color={isSelected == 0 ? "negative" : "primary"}
-            onPress={() => this.onSelectionInput(0)}
-          >
-            Nei
-          </ReviewOption>
-        </View>
-      </ViewContainer>
-    );
-  }
-
-  onSelectionInput(value) {
-    if (this.state.isSelected === value) {
-      this.setState({ isSelected: undefined });
-    } else {
-      this.setState({ isSelected: value });
-    }
-  }
-}
+ReviewProperty.propTypes = {
+  propertyDescription: PropTypes.object.isRequired,
+  value: PropTypes.oneOf([1, 0, -1]).isRequired,
+  comment: PropTypes.string.isRequired
+};
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.secondaryBackgroundColor,
-    borderRadius: BORDER_RADIUS * 2,
-    borderColor: colors.secondaryTextColor,
-    borderWidth: 1,
-    marginBottom: COMPONENT_SPACING * 2
+    alignItems: "stretch",
+    borderRadius: 20,
+    padding: COMPONENT_SPACING
   },
-  row: {
+  desc: {
+    marginVertical: COMPONENT_SPACING,
+    fontSize: 20,
+    textAlign: "center"
+  },
+  buttonRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
+    justifyContent: "space-between"
   }
 });
+export default ReviewProperty;
