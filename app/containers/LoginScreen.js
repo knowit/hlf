@@ -71,7 +71,10 @@ export default class LoginScreen extends Component{
         .catch(error => {
             console.log(error);
             if(this.state.isMounted){
-                this.setState({isProcessing: false});
+                this.setState({
+                    isProcessing: false,
+                    isAuthenticated: false
+            });
             }
         });
         }
@@ -86,7 +89,7 @@ export default class LoginScreen extends Component{
         ).catch(error => {
             console.log(error);
             if(this.state.isMounted){
-                this.setState({isProcessing: false});
+                this.setState({isProcessing: false, isAuthenticated: false});
             }
         });
     }
@@ -130,7 +133,7 @@ export default class LoginScreen extends Component{
         ).catch(error => {
             console.log(error);
             if(this.state.isMounted){
-                this.setState({isProcessing: false});
+                this.setState({isProcessing: false, isAuthenticated: false});
             }
         });
     }
@@ -148,7 +151,7 @@ export default class LoginScreen extends Component{
         }).catch(error => {
             console.log(error);
             if(this.state.isMounted){
-                this.setState({isProcessing: false});
+                this.setState({isProcessing: false, isAuthenticated: false});
             }
         });
     }
