@@ -35,11 +35,21 @@ public class LydforholdController {
     }
 
     @PostMapping
-    //@PreAuthorize("hasAuthority('add:vurderinger')")
     @ResponseStatus(HttpStatus.CREATED)
     public LydforholdVurdering createLydforholdvurdering(@RequestBody LydforholdVurdering lydforhold) {
         return lydforholdService.createLydforhold(lydforhold);
     }
 
+    @PutMapping("/id/{id}")
+    public LydforholdVurdering updateLydforholdvurdering(@PathVariable(value = "id") Integer id,
+                                                         @RequestBody LydforholdVurdering endring){
+
+        LydforholdVurdering lydforholdvurdering = lydforholdService.getLydforholdFromId(id);
+        lydforholdvurdering.setKommentar(endring.getKommentar());
+        lydforholdvurdering.setRangering(endring.isRangering());
+
+        LydforholdVurdering oppdatert = lydforholdService.createLydforhold(lydforholdvurdering);
+        return oppdatert;
+    }
 
 }

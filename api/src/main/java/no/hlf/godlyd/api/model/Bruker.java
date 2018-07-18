@@ -21,6 +21,7 @@ public class Bruker implements Serializable {
     @Column(unique = true)
     private String brukernavn;
 
+    @JsonIgnore
     private String passord;
     private String fornavn;
     private String etternavn;

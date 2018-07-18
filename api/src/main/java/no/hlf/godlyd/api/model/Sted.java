@@ -23,10 +23,9 @@ public class Sted implements Serializable{
     @NotBlank
     @NotNull
     @Column(unique = true)
-    private String placeId; // Google Placed id
+    private String placeId;
 
-    @OneToMany(mappedBy = "sted", cascade = CascadeType.ALL)//fetch = FetchType.LAZY) //mappedBy = "sted"
-    //@JoinColumn(name = "sted")
+    @OneToMany(mappedBy = "sted", fetch = FetchType.EAGER)
     private List<Vurdering> vurderinger;
 
     public Sted(){}

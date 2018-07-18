@@ -6,6 +6,8 @@ import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,12 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByPlaceId(String placeId){ return vurderingRepo.findByPlaceId(placeId);}
+    public List<Vurdering> getAllVurderingerByPlaceId(String placeId){ return vurderingRepo.findByPlaceId(placeId);}
+
+    @Override
+    public Page<Vurdering> getVurderingerByPlaceId(String placeId, Pageable pagable) {
+        return vurderingRepo.findByPlaceIdPage(placeId, pagable);
+    }
 
     @Override
     public Vurdering getVurderingFromId(Integer id) {

@@ -61,7 +61,7 @@ public class VurderingServiceTest {
     public void testGetVurderingByPlaceId(){
         Mockito.when(vurderingRepo.findByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw")).thenReturn(vurderinger);
 
-        List<Vurdering> found = vurderingService.getVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
+        List<Vurdering> found = vurderingService.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         assertEquals(vurderinger.get(0), found.get(0));
     }
 
