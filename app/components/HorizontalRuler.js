@@ -1,10 +1,16 @@
-import React from 'react';
-import { View } from 'react-native';
-import colors from '../settings/colors';
+import React from "react";
+import { View } from "react-native";
+import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
 
-
-export default ({ horizontalMargin }) => {
-    return (
-        <View style={{ borderBottomColor: colors.secondaryTextColor, borderBottomWidth: 1 , marginHorizontal: horizontalMargin}} />
-    )
-}
+export default ({ verticalMargin }) => {
+  return (
+    <View
+      style={{
+        borderBottomColor: colors.secondaryTextColor,
+        borderBottomWidth: 1,
+        marginHorizontal: COMPONENT_SPACING * -1,
+        marginVertical: verticalMargin
+      }}
+    />
+  );
+};

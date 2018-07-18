@@ -1,25 +1,29 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import DefaultText from './DefaultText';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import AppText from "./AppText";
+import { COMPONENT_SPACING } from "../settings/defaultStyles";
+import HorizontalRuler from "./HorizontalRuler";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import ViewContainer from "./ViewContainer";
 
-export default ({selectedVenue}) => {
-
-    return (
-        <View style={styles.container}>
-            <DefaultText style={styles.venueName}>{selectedVenue.name}</DefaultText>
-            {selectedVenue.formatted_address ? <DefaultText style={styles.text}>{selectedVenue.formatted_address}</DefaultText> : null}
-            {selectedVenue.formatted_phone_number ? <DefaultText style={styles.text}>{selectedVenue.formatted_phone_number}</DefaultText> : null}
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 20,
-        paddingHorizontal: 20
-    },
-    venueName: {
-        fontSize: 20
-    },
-
-})
+export default ({ selectedVenue }) => {
+  return (
+    <ViewContainer heightAdjusting="auto" style={{ paddingBottom: 0 }}>
+      <AppText type="primary" size="large">
+        {selectedVenue.name}
+      </AppText>
+      {selectedVenue.formatted_address ? (
+        <AppText type="secondary" size="small">
+          {selectedVenue.formatted_address}
+        </AppText>
+      ) : null}
+      {selectedVenue.formatted_phone_number ? (
+        <AppText type="primary" size="medium">
+          <MaterialCommunityIcons name="phone" />
+          {selectedVenue.formatted_phone_number}
+        </AppText>
+      ) : null}
+      <HorizontalRuler verticalMargin={20} />
+    </ViewContainer>
+  );
+};

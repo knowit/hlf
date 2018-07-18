@@ -7,19 +7,19 @@ export default new Array(5).fill(1).map((item, index) =>  {
         date: "23 juni 2018",
         id: index,
         properties: {
-            soundCondition: {
+            Lydforhold: {
                 value: Math.random() >= 0.5,
                 comment: ""
             },
-            remote: {
+            Teleslynge: {
                 value: Math.random() >= 0.5,
                 comment: "Helt ok"
             },
-            smoothing: {
+            Lydutjevning: {
                 value: Math.random() >= 0.5,
                 comment: ""
             },
-            information: {
+            Informasjon: {
                 value: Math.random() >= 0.5,
                 comment: "Bare på latin"
             },

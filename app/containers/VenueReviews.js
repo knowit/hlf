@@ -1,53 +1,61 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
-import PropertyOverview from '../components/PropertyOverview';
-import HorizontalRuler from '../components/HorizontalRuler';
-import sampleReviews from '../sampleReviews';
-import Review from './Review';
-import { MaterialIcons } from '@expo/vector-icons';
-
+import React, { Component } from "react";
+import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
+import PropertyOverview from "../components/PropertyOverview";
+import sampleReviews from "../sampleReviews";
+import Review from "./Review";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import colors from "../settings/defaultStyles";
+import ViewContainer from "../components/ViewContainer";
 
 export default class VenueReviews extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showReviews: false };
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = { showReviews: false }
-    }
+  render() {
+    return (
+      <View>
+        <ViewContainer heightAdjusting="auto">
+          <PropertyOverview reviewSummary={this.props.selectedVenue.reviews} />
+        </ViewContainer>
 
-    render() {
-        return (
-            <View>
-                <View style={{ padding: 20 }}>
-                    <PropertyOverview />
-                </View>
+        {!this.state.showReviews
+          ? this.renderShowReviewArrow()
+          : this.renderReviewList()}
+      </View>
+    );
+  }
 
-                {!this.state.showReviews ? this.renderShowReviewArrow() : this.renderReviewList()}
+  renderShowReviewArrow() {
+    return (
+      <TouchableHighlight
+        onPress={() => this.setState({ showReviews: true })}
+        style={styles.showReviewArrow}
+      >
+        <MaterialIcons
+          name="keyboard-arrow-down"
+          color={colors.primaryTextColor}
+          size={60}
+        />
+      </TouchableHighlight>
+    );
+  }
 
-            </View>
-        )
-    }
-
-
-    renderShowReviewArrow() {
-        return (
-            <TouchableHighlight onPress={() => this.setState({ showReviews: true })} style={styles.showReviewArrow}>
-                <MaterialIcons name="keyboard-arrow-down" color="#D4D4D4" size={60} />
-            </TouchableHighlight>
-        )
-    }
-
-    renderReviewList() {
-        return (
-            <View>
-            {sampleReviews.map(review => <Review key={review.id} review={review} />)} 
-            </View>
-        )
-    }
+  renderReviewList() {
+    return (
+      <View>
+        {sampleReviews.map(review => (
+          <Review key={review.id} review={review} />
+        ))}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    showReviewArrow: {
-        width: "100%",
-        alignItems: "center"
-    }
-})
+  showReviewArrow: {
+    width: "100%",
+    alignItems: "center"
+  }
+});

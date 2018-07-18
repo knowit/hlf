@@ -1,23 +1,32 @@
-export default {
-    Lydforhold: {
-        iconLibrary: "materialIcons",
-        iconName: "insert-emoticon",
-        description: "Kan du føre samtale i rommet?" 
-    },
-    Teleslynge: {
-        iconLibrary: "materialIcons",
-        iconName: "hearing",
-        description: "Er det teleslynge om virker?"
-    },
-    Lydutjevning: {
-        iconLibrary: "materialIcons",
-        iconName: "volume-up",
-        description: "Finnes det mikrofon og høytalere?" 
-    },
-    Informasjon: {
-        iconLibrary: "materialIcons",
-        iconName: "info-outline",
-        description: "Er det informasjon på stedet om lydutstyr?" 
-    }
-}
+import Entypo from "react-native-vector-icons/Entypo";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import React from "react";
 
+const properties = [
+  {
+    name: "Lydforhold",
+    icon: <Entypo name="emoji-happy" />,
+    iconName: "insert-emoticon",
+    description: "Kan du føre samtale i rommet?"
+  },
+  {
+    name: "Teleslynge",
+    icon: <MaterialCommunityIcons name="ear-hearing" />,
+    iconName: "hearing",
+    description: "Er det teleslynge om virker?"
+  },
+  {
+    name: "Lydutjevning",
+    icon: <MaterialCommunityIcons name="volume-high" />,
+    description: "Finnes det mikrofon og høytalere?",
+    iconName: "volume-up"
+  },
+  {
+    name: "Informasjon",
+    icon: <MaterialCommunityIcons name="information-outline" />,
+    description: "Er det informasjon på stedet om lydutstyr?",
+    iconName: "info-outline"
+  }
+];
+
+export default properties;

@@ -1,6 +1,5 @@
 const venue = {
-    description: "Operahuset i Oslo, Oslo",
+  description: "Operahuset i Oslo, Oslo",
 
-    place_id: "ChIJrycdootuQUYR4EHKfJZX1J0",
-
-}
+  place_id: "ChIJrycdootuQUYR4EHKfJZX1J0"
+};
