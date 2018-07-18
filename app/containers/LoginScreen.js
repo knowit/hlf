@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, AsyncStorage } from "react-native";
 import { AppButton } from "../components/AppButton";
+import AppText from "../components/AppText";
 
 import Auth0 from 'react-native-auth0';
 
@@ -21,61 +22,34 @@ export default class LoginScreen extends Component{
         this.state={
             isAuthenticated: false,
             access_token: '',
-            isMounted: true
+            isMounted: false,
+            isProcessing: true
         }
+    }
+
+    componentDidMount(){
+        this.state.isMounted = true;
         this.setAuthenticated = this.props.setAuthenticated;
         this._getLocalToken();
     }
-
     componentWillUnmount(){
         this.state.isMounted = false;
     }
 
     render(){
-        return <AppButton onPress={() => this.login()}>
+        return !this.state.isProcessing ? (
+        <View>
+        <AppButton onPress={() => this.login()}>
             Logg inn
         </AppButton>
-    }
-
-    checkToken(token){
-        this.state.access_token = token;
-        this.checkAuthorization();
-        if(!this.state.isAuthenticated){
-            this.renewToken();
-        }
-    }
-
-    renewToken(){
-        AsyncStorage.getItem("refresh_token")
-        .then(value =>
-            this.checkRefreshToken(value)
-        ).done();
-    }
-
-    checkRefreshToken(token){
-        if((token == '' || token == null)&&this.state.isMounted){
-            this.setState({isAuthenticated: false});
-        }else{
-            this._refreshToken(token);
-        }
-    }
-
-    checkAuthorization(){
-        this._checkTokenValidation().then(auth => {
-            if(this.state.isMounted){
-                this.state.isAuthenticated = auth;
-                this.setAuthenticated(auth);
-            }
-        }
-        );
-    }
-
-    saveCredentials(credentials){
-        this.state.access_token = credentials.accessToken;
-        this.checkAuthorization();
-        AsyncStorage.setItem("access_token", credentials.accessToken)
-        AsyncStorage.setItem("id_token", credentials.idToken)
-        AsyncStorage.setItem("refresh_token", credentials.refreshToken)
+        </View>
+        ):(
+            <View>
+                <AppText type="secondary" size="large">
+                Loading
+                </AppText>
+            </View>
+        )
     }
 
     login(){
@@ -84,41 +58,98 @@ export default class LoginScreen extends Component{
         }
     }
 
-    _checkTokenValidation = async () => {
-        const token = this.state.access_token;
-        if(token == '' || token == null){
-            return false;
-        } else{
-            return true;
-        }
-    }
-
-    _authorize = async () => {        
+    _authorize = async () => {    
+        if(this.state.isMounted){
+            this.setState({isProcessing: true});
+        }    
         auth0
         .webAuth
         .authorize({scope: config.scope, audience: config.audience})
         .then(credentials =>
-            this.saveCredentials(credentials)
+            this._saveCredentials(credentials)
         )
-        .catch(error => console.log(error));
-    
+        .catch(error => {
+            console.log(error);
+            if(this.state.isMounted){
+                this.setState({isProcessing: false});
+            }
+        });
         }
-
-    _refreshToken = async(token) =>{
-        if(token != null && token != ''){
-            auth0.auth.refreshToken({refreshToken: token, scope: config.scope})
-        .then(credentials =>
-            this.saveCredentials(credentials)
-        )
-        } else{
-            this.setState({isAuthenticated: false});
-        }
-    }
 
     _getLocalToken = async () => {
+        if(this.state.isMounted){
+            this.setState({isProcessing:true});
+        }
         AsyncStorage.getItem("access_token")
         .then(value =>
-            this.checkToken(value)
-        ).done();
+            this._checkTokenValidation(value)
+        ).catch(error => {
+            console.log(error);
+            if(this.state.isMounted){
+                this.setState({isProcessing: false});
+            }
+        });
+    }
+
+    _checkTokenValidation = async (token) => {
+
+        // NOT FINISHED
+        // This method should validate the access token with the API.
+        // Requires communication with API endpoint.
+
+        this.state.access_token = token;
+        let auth = true;
+        if(token == '' || token == null){
+            auth = false;
+        }
+
+        this.state.isAuthenticated = auth;
+        this.setAuthenticated(auth);
+
+        if(!this.state.isAuthenticated){
+            this._refreshToken();
+        }
+        return auth;
+    }
+
+    _refreshToken = async() =>{
+        AsyncStorage.getItem("refresh_token")
+        .then(value => {
+            if(value != null && value != ''){
+                auth0.auth.refreshToken({refreshToken: value, scope: config.scope})
+            .then(credentials =>
+                this._saveCredentials(credentials)
+            )
+            } else{
+                this.state.isAuthenticated = false;
+                if(this.state.isMounted){
+                    this.setState({isProcessing: false});
+                }
+            }
+        }
+        ).catch(error => {
+            console.log(error);
+            if(this.state.isMounted){
+                this.setState({isProcessing: false});
+            }
+        });
+    }
+
+    _saveCredentials = async (credentials) =>{
+        if(this.state.isMounted){
+            this.setState({isProcessing: true});
+        }
+        this._checkTokenValidation(credentials.accessToken).then(auth =>{
+            if(auth){
+                AsyncStorage.setItem("access_token", credentials.accessToken)
+                AsyncStorage.setItem("id_token", credentials.idToken)
+                AsyncStorage.setItem("refresh_token", credentials.refreshToken)
+            }
+        }).catch(error => {
+            console.log(error);
+            if(this.state.isMounted){
+                this.setState({isProcessing: false});
+            }
+        });
     }
 }

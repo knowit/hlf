@@ -2,7 +2,7 @@ import React from "react";
 
 import MainScreen from "./containers/MainScreen";
 import VenueDetails from "./containers/VenueDetails";
-import { BackHandler } from "react-native";
+import { BackHandler, AsyncStorage } from "react-native";
 import { createDrawerNavigator } from "react-navigation";
 import Profile from "./containers/Profile";
 import { API_KEY } from "./credentials";
@@ -108,6 +108,12 @@ class LydApp extends React.Component {
   hideDetails() {
     this.setState({ showDetails: false });
   }
+
+  logout(){
+    AsyncStorage.clear();
+    this.setState({isAuthenticated: false});
+  }
+
 }
 
 export default () => {
