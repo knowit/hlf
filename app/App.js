@@ -16,6 +16,7 @@ class LydApp extends React.Component {
     super(props);
 
     this.state = {
+      isAuthenticated: false,
       isAuthed: false,
       selectedVenue: undefined,
       showDetails: false
@@ -36,10 +37,12 @@ class LydApp extends React.Component {
   }
 
   render() {
-    return <LoginScreen/>
-    /*
     const { selectedVenue, showDetails } = this.state;
-    return !selectedVenue || !showDetails ? (
+    return !this.state.isAuthenticated ? (
+    <LoginScreen setAuthenticated = {this.setAuthenticated}/>
+  ) : (
+    
+    !selectedVenue || !showDetails ? (
       <MainScreen
         ref={main => (this.main = main)}
         onVenueSelect={this.onVenueSelect}
@@ -52,9 +55,13 @@ class LydApp extends React.Component {
         selectedVenue={this.state.selectedVenue}
         hideDetails={this.hideDetails}
       />
-    );
-    */
+    )
+  )
   }
+
+  setAuthenticated = (isAuth) => {
+    this.setState({isAuthenticated: isAuth});
+}
 
   onVenueSelect(placeId) {
     if (!placeId) {
