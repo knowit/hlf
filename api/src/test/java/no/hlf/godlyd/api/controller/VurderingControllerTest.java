@@ -38,8 +38,10 @@ public class VurderingControllerTest {
     @BeforeEach
     private void init(){
         MockitoAnnotations.initMocks(this);
+        Bruker bruker = new Bruker(); bruker.setAuth0UserId("userid5");
+
         this.vurderinger = Stream.of(new TeleslyngeVurdering(new Sted("ChIJmeCJ639uQUYRc3OrOTekBZw"),
-                new Bruker("user2", "kari@gmail.com"), "Bra teleslynge", true))
+                bruker, "Bra teleslynge", true))
                 .collect(Collectors.toList()) ;
     }
 

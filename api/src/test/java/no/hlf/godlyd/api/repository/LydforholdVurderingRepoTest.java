@@ -32,16 +32,15 @@ public class LydforholdVurderingRepoTest {
     @Test
     public void testCreateTeleslyngevurdering() {
         Sted sted = stedRepo.findByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
-        Bruker bruker = brukerRepo.findByBrukernavn("user4");
+        Bruker bruker = brukerRepo.findByAuth0UserId("userid1");
 
         LydforholdVurdering lv = new LydforholdVurdering(sted, bruker, "Bra lydforhold", true);
         LydforholdVurdering saved = lydforholdRepo.save(lv);
         assertNotNull(saved);
-        //System.out.println("Dato: " + new SimpleDateFormat("dd/MM/yyy").format(saved.getDato()));
 
         // Sjekker om alt er lagret rett: Er det vurderingen i vurderingstabellen og i lista for sted og bruker?
         assertTrue(vurderingRepo.findByPlaceId(sted.getPlaceId()).contains(lv));
         assertTrue(stedRepo.findByPlaceId(sted.getPlaceId()).getVurderinger().contains(lv));
-        assertTrue(brukerRepo.findByBrukernavn(bruker.getBrukernavn()).getVurderinger().contains(lv));
+        assertTrue(brukerRepo.findByAuth0UserId(bruker.getAuth0UserId()).getVurderinger().contains(lv));
     }
 }

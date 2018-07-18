@@ -7,11 +7,11 @@ INSERT INTO sted(place_id) values
     ('ChIJzRhSCX5uQUYRGXgSPXSbTM4'),
     ('ChIJj1eI-X1uQUYRVfZxd5zqWLc');
 
-INSERT INTO bruker(fornavn, etternavn, epost, brukernavn, passord) values
-        ('Ola','Normann','ola@gmail.com', 'user1', 'passord'),
-        ('Kari','Normann','kari@gmail.com', 'user2', 'passord'),
-        ('Per','Hansen','per@gmail.com', 'user3', 'passord'),
-        ('Trude','Hansen','trude@gmail.com', 'user4', 'passord');
+INSERT INTO bruker(fornavn, etternavn, auth0userId) values
+        ('Ola','Normann','userid1'),
+        ('Kari','Normann','userid2'),
+        ('Per','Hansen','userid3'),
+        ('Trude','Hansen','userid4');
 
 INSERT INTO vurdering(dato, kommentar, registrator, sted) values
         (TO_DATE('17/12/2018', 'DD/MM/YYYY'),'Bra teleslynge', (select id from bruker where epost = 'ola@gmail.com'),

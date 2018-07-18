@@ -35,16 +35,15 @@ public class TeleslyngeVurderingRepoTest {
     @Test
     public void testCreateTeleslyngevurdering() {
         Sted sted = stedRepo.findByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
-        Bruker bruker = brukerRepo.findByBrukernavn("user2");
+        Bruker bruker = brukerRepo.findByAuth0UserId("userid2");
 
         TeleslyngeVurdering tv = new TeleslyngeVurdering(sted, bruker, "Bra teleslynge", true);
         TeleslyngeVurdering saved = teleslyngeRepo.save(tv);
         assertNotNull(saved);
-        //System.out.println("Dato: " + new SimpleDateFormat("dd/MM/yyy").format(saved.getDato()));
 
         // Sjekker om alt er lagret rett: Er det vurderingen i vurderingstabellen og i lista for sted og bruker?
         assertTrue(vurderingRepo.findByPlaceId(sted.getPlaceId()).contains(tv));
         assertTrue(stedRepo.findByPlaceId(sted.getPlaceId()).getVurderinger().contains(tv));
-        assertTrue(brukerRepo.findByBrukernavn(bruker.getBrukernavn()).getVurderinger().contains(tv));
+        assertTrue(brukerRepo.findByAuth0UserId(bruker.getAuth0UserId()).getVurderinger().contains(tv));
     }
 }
