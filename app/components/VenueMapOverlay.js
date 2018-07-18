@@ -3,27 +3,29 @@ import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 import PropertyOverview from "./PropertyOverview";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
-import AppText from "./AppText";
 import ViewContainer from "./ViewContainer";
 
 export default ({ selectedVenue, showDetails }) => {
   return (
-    <ViewContainer heightAdjusting="auto" opaque={true}>
+    <ViewContainer opaque={true}>
       <View style={styles.header}>
-        <AppText type="primary" size="large">
+        <Text style={styles.name} numberOfLines={2}>
           {selectedVenue.name}
-        </AppText>
+        </Text>
+
         <TouchableHighlight onPress={showDetails}>
-          <MaterialIcons
-            name="keyboard-arrow-right"
-            size={40}
-            color={colors.primaryTextColor}
-          />
+          <Text>
+            <MaterialIcons
+              name="arrow-forwardr"
+              size={40}
+              color={colors.primaryTextColor}
+            />
+          </Text>
         </TouchableHighlight>
       </View>
-      <AppText type="secondary" size="medium">
+      <Text style={styles.address} numberOfLines={1}>
         {selectedVenue.formatted_address}
-      </AppText>
+      </Text>
       <PropertyOverview reviewSummary={selectedVenue.reviews} />
     </ViewContainer>
   );
@@ -31,9 +33,20 @@ export default ({ selectedVenue, showDetails }) => {
 
 const styles = StyleSheet.create({
   header: {
-    width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row"
+  },
+  name: {
+    color: colors.primaryTextColor,
+    fontSize: 22,
+    flex: 1,
+    maxHeight: 60,
+    fontWeight: "500"
+  },
+  address: {
+    color: colors.primaryTextColor,
+    fontSize: 16,
+    marginBottom: COMPONENT_SPACING
   }
 });

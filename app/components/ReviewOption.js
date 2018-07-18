@@ -6,19 +6,11 @@ import colors, {
   COMPONENT_SPACING
 } from "../settings/defaultStyles";
 
-export default ({ children, onPress, id, value }) => {
-  const color =
-    value === undefined
-      ? "primary"
-      : value !== id
-        ? "secondary"
-        : id === 1
-          ? "positive"
-          : "negative";
+export default ({ children, onPress, color }) => {
   return (
     <TouchableHighlight
       onPress={onPress}
-      style={[styles.default, styles[color] ? styles[color] : null]}
+      style={[styles.default, { borderColor: styles[color] }]}
     >
       <AppText type={color} size="xlarge">
         {children}
@@ -33,6 +25,9 @@ const styles = StyleSheet.create({
   },
   negative: {
     borderColor: colors.negativeColor
+  },
+  secondary: {
+    borderColor: colors.secondaryTextColor
   },
   default: {
     borderRadius: BORDER_RADIUS,

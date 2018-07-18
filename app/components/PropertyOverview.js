@@ -1,12 +1,13 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import properties from "../settings/propertyConfig";
-import colors, { sizes, BORDER_RADIUS } from "../settings/defaultStyles";
+import colors from "../settings/defaultStyles";
 import AppText from "./AppText";
-import { positiveIcon, negativeIcon } from "../settings/icons";
+import PropertyReviewIcon from "./PropertyReviewIcon";
+import PropertyTitle from "./PropertyTitle";
 
+const FONT_SIZE = 20;
 export default ({ reviewSummary }) => {
-  console.log("DEBUG", reviewSummary);
   return (
     <View>
       {properties.map(property =>
@@ -17,37 +18,65 @@ export default ({ reviewSummary }) => {
 };
 
 const renderProperty = (property, propertyReviews) => {
-  const { name, icon } = property;
-  const { positive, negative } = propertyReviews;
-  return (
-    <View key={name} style={styles.property}>
-      <AppText type="primary" size="medium" style={{ flex: 1 }}>
-        {icon} {name}
-      </AppText>
+  let { positive, negative } = propertyReviews;
+  if (Math.round(Math.random())) {
+    positive = Math.random() * 10;
+    negative = Math.random() * 6;
+  }
 
+  return (
+    <View key={property.name} style={styles.property}>
+      <PropertyTitle property={property} size={FONT_SIZE} />
       {positive || negative ? (
         valueBar(positive, negative)
       ) : (
-        <AppText type="primary" size="medium">
-          Ingen vurderinger
-        </AppText>
+        <Text style={styles.noReviews}>Ingen vurderinger</Text>
       )}
     </View>
   );
 };
+//
 
 const valueBar = (positive, negative) => {
-  const value = (positive / (positive + negative)) * 100;
-  const isPositive = value >= 50;
+  const positivePercentage = Math.round(
+    (positive / (positive + negative)) * 100
+  );
+  const isPositive = positivePercentage >= 50;
   return (
     <View style={{ flexDirection: "row" }}>
-      {positiveIcon(isPositive, sizes.large)}
+      <PropertyReviewIcon
+        positive={isPositive}
+        size={FONT_SIZE}
+        hidden={!isPositive}
+      />
       <View style={styles.barWrap}>
-        <View style={styles.barContainer}>
-          <View style={[{ width: `${value}%` }, styles.progress]} />
+        <View
+          style={[
+            styles.barContainer,
+            { backgroundColor: isPositive ? "#FFFFFF" : colors.negativeColor }
+          ]}
+        >
+          <Text
+            style={[styles.barText, isPositive ? { left: 10 } : { right: 10 }]}
+          >
+            {`${isPositive ? positivePercentage : 100 - positivePercentage}%`}
+          </Text>
+          <View
+            style={[
+              {
+                width: `${positivePercentage}%`,
+                backgroundColor: isPositive ? colors.positiveColor : "#FFFFFF"
+              },
+              styles.progress
+            ]}
+          />
         </View>
       </View>
-      {negativeIcon(!isPositive, sizes.large)}
+      <PropertyReviewIcon
+        positive={isPositive}
+        size={FONT_SIZE}
+        hidden={isPositive}
+      />
     </View>
   );
 };
@@ -63,25 +92,37 @@ const styles = StyleSheet.create({
   property: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 7
+    paddingVertical: 9
   },
 
   barWrap: {
-    width: 150,
-    height: "100%",
+    width: 120,
+    height: "85%",
     marginHorizontal: 10
   },
   barContainer: {
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: colors.negativeColor,
-    borderRadius: BORDER_RADIUS
+    borderRadius: 10,
+    overflow: "hidden"
   },
   progress: {
-    backgroundColor: colors.positiveColor,
     height: "100%",
-    position: "relative",
-    borderRadius: BORDER_RADIUS
+    position: "relative"
+  },
+  noReviews: {
+    fontSize: FONT_SIZE,
+    color: colors.primaryTextColor,
+    textAlign: "center",
+    flex: 1
+  },
+  barText: {
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    zIndex: 1,
+    fontSize: 15,
+    color: colors.primaryTextColor
   }
 });

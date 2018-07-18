@@ -5,15 +5,9 @@ import React from "react";
 const properties = [
   {
     name: "Lydforhold",
-    icon: <Entypo name="emoji-happy" />,
+    icon: <Entypo name="rss" style={{ transform: [{ rotate: "90deg" }] }} />,
     iconName: "insert-emoticon",
     description: "Kan du føre samtale i rommet?"
-  },
-  {
-    name: "Teleslynge",
-    icon: <MaterialCommunityIcons name="ear-hearing" />,
-    iconName: "hearing",
-    description: "Er det teleslynge om virker?"
   },
   {
     name: "Lydutjevning",
@@ -22,8 +16,14 @@ const properties = [
     iconName: "volume-up"
   },
   {
+    name: "Teleslynge",
+    icon: <MaterialCommunityIcons name="ear-hearing" />,
+    iconName: "hearing",
+    description: "Er det teleslynge om virker?"
+  },
+  {
     name: "Informasjon",
-    icon: <MaterialCommunityIcons name="information-outline" />,
+    icon: <MaterialCommunityIcons name="information" />,
     description: "Er det informasjon på stedet om lydutstyr?",
     iconName: "info-outline"
   }

@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import {
   TextInput,
+  Text,
   StyleSheet,
   View,
-  Text,
   TouchableHighlight
 } from "react-native";
 import _ from "lodash";
 import axios from "axios";
 import colors, {
   COMPONENT_SPACING,
-  BORDER_RADIUS
+  BORDER_RADIUS,
+  sizes
 } from "../settings/defaultStyles";
 import { API_KEY } from "../credentials";
 import AppText from "../components/AppText";
@@ -28,10 +29,12 @@ export default class SearchBar extends Component {
 
   render() {
     return (
-      <ViewContainer heightAdjusting="auto" transparent={true}>
+      <ViewContainer transparent={true}>
         {this.renderMenuBar()}
         {this.state.searchPrompt && this.state.results.length > 0
-          ? this.state.results.map(item => this.renderSearchResult(item))
+          ? this.state.results
+              .slice(0, 4)
+              .map(item => this.renderSearchResult(item))
           : null}
       </ViewContainer>
     );
@@ -40,14 +43,11 @@ export default class SearchBar extends Component {
   renderMenuBar() {
     return (
       <View style={styles.row}>
-        <TouchableHighlight onPress={this.props.onMenuPress}>
-          <AppText
-            type="secondary"
-            size="xlarge"
-            style={StyleSheet.flatten(styles.icon)}
-          >
-            ☰
-          </AppText>
+        <TouchableHighlight
+          onPress={this.props.onMenuPress}
+          style={styles.iconWrap}
+        >
+          <Text style={styles.icon}>☰</Text>
         </TouchableHighlight>
         <TextInput
           ref={input => (this.input = input)}
@@ -75,9 +75,18 @@ export default class SearchBar extends Component {
         }}
       >
         <View style={styles.row}>
-          <AppText type="primary" size="medium">
-            <Entypo name="location-pin" /> {item.description}
-          </AppText>
+          <View style={styles.iconWrap}>
+            <Text>
+              <Entypo
+                name="location-pin"
+                color="white"
+                size={sizes.xlarge * 1.2}
+              />
+            </Text>
+          </View>
+          <Text style={styles.resultText} numberOfLines={2}>
+            {item.description}
+          </Text>
         </View>
       </TouchableHighlight>
     );
@@ -85,7 +94,6 @@ export default class SearchBar extends Component {
 
   onInputChange(prompt) {
     this.setState({ searchPrompt: prompt });
-
     this.handleSearch();
   }
 
@@ -93,7 +101,8 @@ export default class SearchBar extends Component {
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${
       this.state.searchPrompt
     }&key=${API_KEY}&region=no`;
-    const request = axios
+
+    axios
       .get(url)
       .then(({ data }) =>
         this.setState({
@@ -110,24 +119,38 @@ export default class SearchBar extends Component {
 const styles = StyleSheet.create({
   row: {
     backgroundColor: colors.primaryBackgroundColor,
-    height: 40,
+    height: 60,
     borderRadius: BORDER_RADIUS,
     marginBottom: 2,
     flexDirection: "row",
-    padding: 4,
     overflow: "hidden",
     alignItems: "center"
   },
-
-  icon: {
+  iconWrap: {
+    width: 60,
+    top: 0,
+    position: "absolute",
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
     borderRightWidth: 1,
-    borderRightColor: colors.secondaryTextColor,
-    paddingHorizontal: COMPONENT_SPACING / 2
+    borderRightColor: colors.divider
+  },
+  icon: {
+    fontSize: sizes.xlarge * 1.2,
+    color: "white"
   },
   searchInput: {
-    marginHorizontal: COMPONENT_SPACING / 2,
+    marginLeft: COMPONENT_SPACING / 3 + 60,
+    marginRight: COMPONENT_SPACING,
     flex: 1,
     color: colors.primaryTextColor,
-    fontSize: 18
+    fontSize: sizes.large
+  },
+  resultText: {
+    color: colors.primaryTextColor,
+    fontSize: sizes.large,
+    maxHeight: 60,
+    marginLeft: COMPONENT_SPACING / 3 + 60
   }
 });

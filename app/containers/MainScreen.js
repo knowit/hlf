@@ -21,7 +21,6 @@ export default class MainScreen extends Component {
       latitude: location.lat,
       longitude: location.lng
     });
-    console.log("MAPCHANGE!");
   }
 
   render() {
