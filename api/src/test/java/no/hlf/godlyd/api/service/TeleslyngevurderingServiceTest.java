@@ -42,8 +42,10 @@ public class TeleslyngevurderingServiceTest {
 
     @BeforeEach
     public void setUp(){
+        Bruker bruker = new Bruker(); bruker.setAuth0UserId("userid5");
+
         this.teleslyngeVurdering = new TeleslyngeVurdering(new Sted("ChIJmeCJ639uQUYRc3OrOTekBZw")
-                , new Bruker("user2", "kari@gmail.com"), "Bra teleslynge", true);
+                , bruker, "Bra teleslynge", true);
     }
 
     // TEST CASES

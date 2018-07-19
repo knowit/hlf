@@ -28,5 +28,4 @@ public class TeleslyngeVurdering extends Vurdering {
         this.rangering = rangering;
     }
 
-
 }

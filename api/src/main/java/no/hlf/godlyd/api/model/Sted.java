@@ -23,10 +23,9 @@ public class Sted implements Serializable{
     @NotBlank
     @NotNull
     @Column(unique = true)
-    private String placeId; // Google Placed id
+    private String placeId;
 
-    @OneToMany(mappedBy = "sted", cascade = CascadeType.ALL)//fetch = FetchType.LAZY) //mappedBy = "sted"
-    //@JoinColumn(name = "sted")
+    @OneToMany(mappedBy = "sted", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Vurdering> vurderinger;
 
     public Sted(){}
@@ -35,13 +34,15 @@ public class Sted implements Serializable{
         this.placeId = placeId;
     }
 
-    /*
+
     public void addVurdering(Vurdering vurdering){
         this.vurderinger.add(vurdering);
-        //vurdering.setSted(this);
+        vurdering.setSted(this);
     }
-    */
 
+    public void removeVurdering(Vurdering vurdering){
+        vurderinger.remove(vurdering);
+    }
 
     // Getters og setters
     public Integer getId() { return id; }

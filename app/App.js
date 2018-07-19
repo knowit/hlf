@@ -2,7 +2,7 @@ import React from "react";
 
 import MainScreen from "./containers/MainScreen";
 import VenueDetails from "./containers/VenueDetails";
-import { BackHandler } from "react-native";
+import { BackHandler, AsyncStorage } from "react-native";
 import { createDrawerNavigator } from "react-navigation";
 import Profile from "./containers/Profile";
 import { API_KEY } from "./credentials";
@@ -16,6 +16,7 @@ class LydApp extends React.Component {
     super(props);
 
     this.state = {
+      isAuthenticated: false,
       isAuthed: false,
       selectedVenue: undefined,
       showDetails: false
@@ -36,9 +37,12 @@ class LydApp extends React.Component {
   }
 
   render() {
-    //return <LoginScreen/>
     const { selectedVenue, showDetails } = this.state;
-    return !selectedVenue || !showDetails ? (
+    return !this.state.isAuthenticated ? (
+    <LoginScreen setAuthenticated = {this.setAuthenticated}/>
+  ) : (
+    
+    !selectedVenue || !showDetails ? (
       <MainScreen
         ref={main => (this.main = main)}
         onVenueSelect={this.onVenueSelect}
@@ -51,8 +55,13 @@ class LydApp extends React.Component {
         selectedVenue={this.state.selectedVenue}
         hideDetails={this.hideDetails}
       />
-    );
+    )
+  )
   }
+
+  setAuthenticated = (isAuth) => {
+    this.setState({isAuthenticated: isAuth});
+}
 
   onVenueSelect(placeId) {
     if (!placeId) {
@@ -99,6 +108,12 @@ class LydApp extends React.Component {
   hideDetails() {
     this.setState({ showDetails: false });
   }
+
+  logout(){
+    AsyncStorage.clear();
+    this.setState({isAuthenticated: false});
+  }
+
 }
 
 export default () => {

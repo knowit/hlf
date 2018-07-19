@@ -1,15 +1,11 @@
 package no.hlf.godlyd.api.model;
 
 import com.fasterxml.jackson.annotation.*;
-import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -17,10 +13,6 @@ import java.util.Date;
 @Table(name = "vurdering")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-/*@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = TeleslyngeVurdering.class, name = "teleslynge"),
-        @JsonSubTypes.Type(value = LydforholdVurdering.class, name = "lydforhold")})*/
 @JsonIgnoreProperties(value = "dato", allowGetters = true)
 public abstract class Vurdering implements Serializable {
 
@@ -28,7 +20,7 @@ public abstract class Vurdering implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sted")
     private Sted sted;
 
@@ -36,9 +28,9 @@ public abstract class Vurdering implements Serializable {
     @JoinColumn(name = "registrator")
     private Bruker registrator;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    @CreatedDate
+    @LastModifiedDate
     private Date dato;
 
     private String kommentar;
