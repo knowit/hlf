@@ -2,19 +2,15 @@
 -- PostgreSQL database dump
 --
 
-
 DROP TABLE IF EXISTS bruker;
 
 CREATE TABLE bruker (
     id integer NOT NULL AUTO_INCREMENT,
-    epost character varying(255),
+    auth0user_id character varying(255),
     etternavn character varying(255),
     fornavn character varying(255),
-    brukernavn character varying(255),
-    passord character varying(255),
     primary key (id)
 );
-
 
 DROP TABLE IF EXISTS sted;
 
