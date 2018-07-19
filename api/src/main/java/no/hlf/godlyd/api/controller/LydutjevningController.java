@@ -1,9 +1,8 @@
 package no.hlf.godlyd.api.controller;
 
-import no.hlf.godlyd.api.model.LydutjevningVurdering;
-import no.hlf.godlyd.api.model.TeleslyngeVurdering;
-import no.hlf.godlyd.api.model.Vurdering;
+import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.LydutjevningService;
+import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.TeleslyngeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vurdering/lydutjevning")
+@RequestMapping("/vurderinger/lydutjevning")
 public class LydutjevningController {
 
     @Autowired
     LydutjevningService lydutjevningService;
+    @Autowired
+    StedService stedService;
 
     @GetMapping()
     public List<LydutjevningVurdering> getAllLydutjevningVurderinger() {
@@ -35,11 +36,25 @@ public class LydutjevningController {
     }
 
     @PostMapping
-    //@PreAuthorize("hasAuthority('add:vurderinger')")
     @ResponseStatus(HttpStatus.CREATED)
     public LydutjevningVurdering createLydutjevningvurdering(@RequestBody LydutjevningVurdering lydutjevning) {
+        Sted sted = stedService.getStedFromPlaceId(lydutjevning.getSted().getPlaceId());
+        if (sted != null){
+            sted.addVurdering(lydutjevning);
+        }
         return lydutjevningService.createLydutjevning(lydutjevning);
     }
 
+    @PutMapping("/id/{id}")
+    public LydutjevningVurdering updateLydutjevningvurdering(@PathVariable(value = "id") Integer id,
+                                                             @RequestBody LydutjevningVurdering endring){
+
+        LydutjevningVurdering lydutjevningvurdering = lydutjevningService.getLydutjevningFromId(id);
+        lydutjevningvurdering.setKommentar(endring.getKommentar());
+        lydutjevningvurdering.setRangering(endring.isRangering());
+
+        LydutjevningVurdering oppdatert = lydutjevningService.createLydutjevning(lydutjevningvurdering);
+        return oppdatert;
+    }
 
 }

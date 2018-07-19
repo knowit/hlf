@@ -47,24 +47,7 @@ public class VurderingController {
         return vurderingService.getAllVurderingerByPlaceId(placeId);
     }
 
-    /* ØNSKER OUTPUT:
-    [   {
-        "dato": "2018-07-18",
-        "registrator": 2, (eller hele objectet)
-        "vurderinger": {
-            "teleslynge": {"kommentar": "Noe", "rangering": 1},
-            "lydforhold": {"kommentar": "Noe annet", "rangering": 0},
-            ...
-            }
-        },
-        {
-        "dato": "2018-07-17",
-        ...
-        },
-        ...
-    ]
-    */
-    @GetMapping("/placeId/{placeId}")
+    @GetMapping("/placeId/{placeId}") //pagination
     public ArrayNode getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
                                             @PageableDefault(value=40, page = 0) Pageable pagable) {
 
@@ -124,5 +107,4 @@ public class VurderingController {
     public ResponseEntity<?> deleteVurdering(@PathVariable(value = "id") Integer id){
         return vurderingService.deleteVurdering(id);
     }
-
 }

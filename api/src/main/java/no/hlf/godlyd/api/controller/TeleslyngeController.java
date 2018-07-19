@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vurdering/teleslynge")
+@RequestMapping("/vurderinger/teleslynge")
 public class TeleslyngeController {
 
     @Autowired
@@ -38,6 +38,10 @@ public class TeleslyngeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TeleslyngeVurdering createTeleslyngevurdering(@RequestBody TeleslyngeVurdering teleslynge) {
+        Sted sted = stedService.getStedFromPlaceId(teleslynge.getSted().getPlaceId());
+        if (sted != null){
+            sted.addVurdering(teleslynge);
+        }
         return teleslyngeService.createTeleslynge(teleslynge);
     }
 
