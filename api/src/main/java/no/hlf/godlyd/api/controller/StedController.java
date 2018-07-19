@@ -84,6 +84,7 @@ public class StedController {
             map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
             map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
         }
+        map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
 
         return map;
     }
