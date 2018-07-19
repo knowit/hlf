@@ -107,5 +107,4 @@ public class VurderingController {
     public ResponseEntity<?> deleteVurdering(@PathVariable(value = "id") Integer id){
         return vurderingService.deleteVurdering(id);
     }
-
 }

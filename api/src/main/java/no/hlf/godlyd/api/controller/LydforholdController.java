@@ -1,9 +1,11 @@
 package no.hlf.godlyd.api.controller;
 
 import no.hlf.godlyd.api.model.LydforholdVurdering;
+import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.LydforholdService;
+import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.TeleslyngeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,11 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vurdering/lydforhold")
+@RequestMapping("/vurderinger/lydforhold")
 public class LydforholdController {
 
     @Autowired
     LydforholdService lydforholdService;
+    @Autowired
+    StedService stedService;
 
     @GetMapping()
     public List<LydforholdVurdering> getAllLydforholdVurderinger() {
@@ -37,6 +41,10 @@ public class LydforholdController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public LydforholdVurdering createLydforholdvurdering(@RequestBody LydforholdVurdering lydforhold) {
+        Sted sted = stedService.getStedFromPlaceId(lydforhold.getSted().getPlaceId());
+        if (sted != null){
+            sted.addVurdering(lydforhold);
+        }
         return lydforholdService.createLydforhold(lydforhold);
     }
 
