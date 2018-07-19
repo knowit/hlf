@@ -24,6 +24,8 @@ public class Bruker implements Serializable {
     private String fornavn;
     private String etternavn;
 
+    private String imageUrl;
+
     @OneToMany(mappedBy = "registrator")
     private List<Vurdering> vurderinger;
 
@@ -47,6 +49,14 @@ public class Bruker implements Serializable {
     public String getEtternavn() { return etternavn; }
 
     public void setEtternavn(String etternavn) { this.etternavn = etternavn; }
+
+    public String getImageUrl(){
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
 
     @JsonIgnore
     public List<Vurdering> getVurderinger() { return vurderinger; }

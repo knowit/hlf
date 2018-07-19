@@ -25,6 +25,7 @@ export default class LoginScreen extends Component{
             isMounted: false,
             isProcessing: true
         }
+        AsyncStorage.clear();
     }
 
     componentDidMount(){
@@ -145,6 +146,7 @@ export default class LoginScreen extends Component{
         this._checkTokenValidation(credentials.accessToken).then(auth =>{
             if(auth){
                 AsyncStorage.setItem("access_token", credentials.accessToken)
+                console.log(credentials.accessToken);
                 AsyncStorage.setItem("id_token", credentials.idToken)
                 AsyncStorage.setItem("refresh_token", credentials.refreshToken)
             }

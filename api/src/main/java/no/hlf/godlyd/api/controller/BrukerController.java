@@ -32,7 +32,6 @@ public class BrukerController {
 
     @GetMapping("/login")
     public Bruker loginBruker(@RequestHeader("Authorization")String auth){
-        return brukerService.updateBruker(auth);
+        return brukerService.updateBruker(auth.substring(7));
     }
-
 }
