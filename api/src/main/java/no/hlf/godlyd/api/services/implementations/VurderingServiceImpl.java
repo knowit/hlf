@@ -71,6 +71,12 @@ public class VurderingServiceImpl implements VurderingService {
         return ResponseEntity.ok().build();
     }
 
+    @Override
+    public List<Integer> getRegistratorsByPlaceId(String placeId){
+        Integer stedId = stedRepo.findByPlaceId(placeId).getId();
+        return vurderingRepo.findRegistratorsByStedId(stedId);
+    }
+
     // Sorterer vurderinger inn i: teleslynge-, lydforhold-, lydutjevning- og informasjonsvurderinger.
     @Override
     public Map<String, List<Vurdering>> sorterVurderinger(List<Vurdering> vurderinger){

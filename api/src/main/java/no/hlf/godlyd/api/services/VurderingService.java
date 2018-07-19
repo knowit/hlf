@@ -29,4 +29,6 @@ public interface VurderingService {
     ResponseEntity<?> deleteVurdering(Integer id);
 
     Map<String, List<Vurdering>> sorterVurderinger(List<Vurdering> vurderinger);
+
+    List<Integer> getRegistratorsByPlaceId(String placeId);
 }

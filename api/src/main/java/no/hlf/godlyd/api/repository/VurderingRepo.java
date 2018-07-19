@@ -1,5 +1,6 @@
 package no.hlf.godlyd.api.repository;
 
+import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.model.Vurdering;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,5 +29,8 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
 
     @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.registrator.id = ?2")
     List<Vurdering> findByPlaceIdAndRegistrator(String placeId, Integer brukerId);
+
+    @Query(value = "SELECT v.registrator.id FROM Vurdering v WHERE v.sted.id = ?1 GROUP BY v.registrator.id")
+    List<Integer> findRegistratorsByStedId(Integer stedId);
 
 }
