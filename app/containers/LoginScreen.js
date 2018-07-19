@@ -101,19 +101,37 @@ export default class LoginScreen extends Component{
         // This method should validate the access token with the API.
         // Requires communication with API endpoint.
 
-        this.state.access_token = token;
-        let auth = true;
         if(token == '' || token == null){
-            auth = false;
-        }
-
-        this.state.isAuthenticated = auth;
-        this.setAuthenticated(auth);
-
-        if(!this.state.isAuthenticated){
+            this.state.isAuthenticated = false;
+            this.setAuthenticated(false);
             this._refreshToken();
+            return false;
         }
-        return auth;
+        fetch('http://10.170.18.223:8080/brukere/login', {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer '+token
+            }
+        }).then((response) => {
+            let auth = false;
+            if(response.ok){
+                this.state.access_token = token;
+                auth = true;
+            }
+            this.state.isAuthenticated = auth;
+            this.setAuthenticated(auth);
+            if(!auth){
+                this._refreshToken();
+            }
+            return auth;
+        }).catch((error) => {
+            console.log(error);
+            if(this.state.isMounted){
+                this.setState({isProcessing: false, isAuthenticated: false});
+                this.setAuthenticated(false);
+            }
+            return false;
+        })
     }
 
     _refreshToken = async() =>{
