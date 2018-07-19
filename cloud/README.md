@@ -19,19 +19,19 @@ This quick start is based on the assumption that the docker images is already av
 https://docs.docker.com/get-started/
 
 Next up, tag the docker image accordingly:
-
+```
 docker tag [SOURCE_IMAGE] eu.gcr.io/godlydpatruljen/server
-
+```
 Then push into the registry:
-
+```
 docker push eu.gcr.io/godlydpatruljen/server
-
+```
 The docker images should now be available in the container registry, feel free to confirm this in the console or by using:
-
+```
 gcloud container images list-tags eu.gcr.io/godlydpatruljen/server
-
+```
 Now that the image is pushed, we can update the server by using:
-
+```
 gcloud beta compute instances update-container server --container-image eu.gcr.io/godlydpatruljen/server/
-
+```
 
