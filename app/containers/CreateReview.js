@@ -7,6 +7,7 @@ import colors, {
 } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
+import CreateReviewNavigation from "../components/CreateReviewNavigation";
 
 export default class CreateReview extends Component {
   constructor(props) {
@@ -17,10 +18,15 @@ export default class CreateReview extends Component {
       properties: nextPropertyState
     };
     this.onReviewAction = this.onReviewAction.bind(this);
+    this.onPropertySelect = this.onPropertySelect.bind(this);
   }
   render() {
     return (
       <ViewContainer flex={true}>
+        <CreateReviewNavigation
+          currentProperty={this.state.currentProperty}
+          onPropertySelect={this.onPropertySelect}
+        />
         <ReviewProperty
           currentProperty={this.state.properties[this.state.currentProperty]}
           onReviewAction={this.onReviewAction}
@@ -40,6 +46,10 @@ export default class CreateReview extends Component {
         [this.state.currentProperty]: nextState
       }
     });
+  }
+
+  onPropertySelect(propertyName) {
+    this.setState({ currentProperty: propertyName });
   }
 
   getInitialState() {

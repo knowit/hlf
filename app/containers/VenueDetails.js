@@ -21,12 +21,7 @@ export default class VenueDetails extends Component {
         ? selectedVenue.photos[0].photo_reference
         : null;
     return (
-      <ViewContainer
-        opaque={true}
-        scrollable={true}
-        heightAdjusting="flex"
-        padding={0}
-      >
+      <ViewContainer opaque={true} scrollable={true} flex={true} padding={0}>
         <VenueImage
           photoReference={photoReference}
           onBackPress={this.props.hideDetails}
