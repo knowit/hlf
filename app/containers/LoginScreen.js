@@ -25,7 +25,6 @@ export default class LoginScreen extends Component{
             isMounted: false,
             isProcessing: true
         }
-        AsyncStorage.clear();
     }
 
     componentDidMount(){
@@ -97,16 +96,15 @@ export default class LoginScreen extends Component{
 
     _checkTokenValidation = async (token) => {
 
-        // NOT FINISHED
-        // This method should validate the access token with the API.
-        // Requires communication with API endpoint.
-
         if(token == '' || token == null){
             this.state.isAuthenticated = false;
             this.setAuthenticated(false);
             this._refreshToken();
             return false;
         }
+
+        // FOR TESTING PURPOSES, ENTER YOUR LOCAL IP ADDRESS
+        // MUST BE REPLACED WITH DOMAIN URL
         fetch('http://10.170.18.223:8080/brukere/login', {
             method: 'GET',
             headers: {
