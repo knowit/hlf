@@ -6,8 +6,12 @@ services:
       - 8080:8080
     depends_on:
       - db
+    logging:
+      driver: gcplogs
   db:
     image: postgres:9.6
+    logging:
+      driver: gcplogs
     volumes:
       - /var/lib/postgresql/data
     ports:

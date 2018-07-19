@@ -18,7 +18,7 @@ public class Bruker implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true)
+    @Column(name = "auth0user_id", unique = true)
     private String auth0UserId;
 
     private String fornavn;
