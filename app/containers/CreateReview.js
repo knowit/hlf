@@ -11,24 +11,43 @@ import ReviewProperty from "../components/ReviewProperty";
 export default class CreateReview extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentProperty: properties[0] };
-    console.log(this.state);
+    const nextPropertyState = this.getInitialState();
+    this.state = {
+      currentProperty: Object.keys(nextPropertyState)[0],
+      properties: nextPropertyState
+    };
+    this.onReviewAction = this.onReviewAction.bind(this);
   }
   render() {
     return (
-      <ViewContainer>
+      <ViewContainer flex={true}>
         <ReviewProperty
-          propertyDescription={this.state.currentProperty}
-          value={-1}
-          comment=""
+          currentProperty={this.state.properties[this.state.currentProperty]}
+          onReviewAction={this.onReviewAction}
         />
       </ViewContainer>
     );
   }
 
-  resetInputValues() {
-    return properties.reduce((obj, item) => {
-      obj[item.name] = item;
+  onReviewAction(actionType, newValue) {
+    const currentSelectedProperty = this.state.properties[
+      this.state.currentProperty
+    ];
+    const nextState = { ...currentSelectedProperty, [actionType]: newValue };
+    this.setState({
+      properties: {
+        ...this.state.properties,
+        [this.state.currentProperty]: nextState
+      }
+    });
+  }
+
+  getInitialState() {
+    return properties.reduce((obj, property) => {
+      obj[property.name] = Object.assign(property, {
+        comment: "",
+        value: 0
+      });
       return obj;
     }, {});
   }

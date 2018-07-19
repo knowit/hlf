@@ -7,7 +7,7 @@ import colors, {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import SlimText from "./SlimText";
 
-export default ({ buttonValue, selectedValue, onPress }) => {
+export default ({ buttonValue, selectedValue, onReviewAction }) => {
   const isPositive = buttonValue === 1;
   const isSelected = buttonValue === selectedValue;
 
@@ -19,7 +19,10 @@ export default ({ buttonValue, selectedValue, onPress }) => {
         ? colors.positiveColor
         : colors.negativeColor;
   return (
-    <TouchableHighlight onPress={onPress}>
+    <TouchableHighlight
+      onPress={() => onReviewAction("value", !isSelected ? buttonValue : 0)}
+      style={{ flex: 1 }}
+    >
       <View
         style={[
           styles.wrap,
@@ -37,7 +40,7 @@ export default ({ buttonValue, selectedValue, onPress }) => {
         <MaterialIcons
           name={`thumb-${isPositive ? "up" : "down"}`}
           style={[styles.innerElement]}
-          size={20}
+          size={23}
           color={color}
         />
       </View>
@@ -49,12 +52,12 @@ const styles = StyleSheet.create({
   wrap: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: colors.tertiaryBackgroundColor,
-    margin: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 15,
     borderRadius: 10,
-    borderWidth: 2
+    borderWidth: 2,
+    flex: 1,
+    height: 55
   },
   innerElement: {
     marginHorizontal: 7
