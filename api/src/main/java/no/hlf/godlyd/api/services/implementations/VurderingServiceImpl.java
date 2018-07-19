@@ -11,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,21 +75,10 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public Map<String, List<Vurdering>> sorterVurderinger(List<Vurdering> vurderinger){
 
-        List<Vurdering> teleslyngeVurderinger = vurderinger.stream()
-                .filter(vurdering -> vurdering instanceof TeleslyngeVurdering)
-                .collect(Collectors.toList());
-
-        List<Vurdering> lydforholdVurderinger = vurderinger.stream()
-                .filter(vurdering -> vurdering instanceof LydforholdVurdering)
-                .collect(Collectors.toList());
-
-        List<Vurdering> lydutjevningVurderinger = vurderinger.stream()
-                .filter(vurdering -> vurdering instanceof LydutjevningVurdering)
-                .collect(Collectors.toList());
-
-        List<Vurdering> informasjonVurderinger = vurderinger.stream()
-                .filter(vurdering -> vurdering instanceof InformasjonVurdering)
-                .collect(Collectors.toList());
+        List<Vurdering> teleslyngeVurderinger = isInstanceOf(vurderinger, TeleslyngeVurdering.class);
+        List<Vurdering> lydforholdVurderinger = isInstanceOf(vurderinger, LydforholdVurdering.class);
+        List<Vurdering> lydutjevningVurderinger = isInstanceOf(vurderinger, LydutjevningVurdering.class);
+        List<Vurdering> informasjonVurderinger = isInstanceOf(vurderinger, InformasjonVurdering.class);
 
         Map<String,List<Vurdering>> map =new HashMap();
         map.put("Teleslyngevurderinger",teleslyngeVurderinger);
@@ -96,6 +87,12 @@ public class VurderingServiceImpl implements VurderingService {
         map.put("Informasjonvurderinger", informasjonVurderinger);
 
         return map;
+    }
+
+    private List<Vurdering> isInstanceOf(List<Vurdering> vurderinger, Class<? extends Vurdering> vurderingsklasse) {
+        return vurderinger.stream()
+                    .filter(vurdering -> vurderingsklasse.isInstance(vurdering))
+                    .collect(Collectors.toList());
     }
 
 }
