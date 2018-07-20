@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,8 +70,12 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public List<Integer> getRegistratorsByPlaceId(String placeId){
-        Integer stedId = stedRepo.findByPlaceId(placeId).getId();
-        return vurderingRepo.findRegistratorsByStedId(stedId);
+        if (stedRepo.existsByPlaceId(placeId)){
+            Integer stedId = stedRepo.findByPlaceId(placeId).getId();
+            return vurderingRepo.findRegistratorsByStedId(stedId);
+        } else{
+            return Collections.emptyList();
+        }
     }
 
     // Sorterer vurderinger inn i: teleslynge-, lydforhold-, lydutjevning- og informasjonsvurderinger.

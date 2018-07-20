@@ -33,12 +33,12 @@ public class StedController {
         return stedService.getAllSteder();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Sted getStedById(@PathVariable(value = "id") Integer id){
         return stedService.getStedFromId(id);
     }
 
-    @GetMapping("/placeId/{placeId}")
+    @GetMapping("/place/{placeId}")
     public Sted getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
         return stedService.getStedFromPlaceId(placeId);
     }
@@ -63,7 +63,7 @@ public class StedController {
         return map;
     }
 
-    @GetMapping("/{placeId}/totalvurdering/{google}")
+    @GetMapping("/place/{placeId}/totalvurdering/{google}")
     public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "placeId") String placeId,
                                                         @PathVariable(value = "google") boolean googleinfo) throws IOException {
         Map<String, Object> map = new HashMap<>();
@@ -83,8 +83,8 @@ public class StedController {
             map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
             map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
             map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
+            map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
         }
-        map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
 
         return map;
     }
