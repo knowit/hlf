@@ -10,40 +10,40 @@ import { places } from "./settings/endpoints";
 import axios from "axios";
 import _ from "lodash";
 import LoginScreen from "./containers/LoginScreen";
-
+const offline = {
+  name: "test",
+  reviews: {
+    Lydutjevningvurderinger: {
+      positive: 0,
+      negative: 0
+    },
+    Sted: {
+      id: 1,
+      placeId: "ChIJmeCJ639uQUYRc3OrOTekBZw"
+    },
+    Informasjonvurderinger: {
+      positive: 0,
+      negative: 0
+    },
+    "Totalt antall vurderinger": 5,
+    Lydforholdvurderinger: {
+      positive: 0,
+      negative: 0
+    },
+    Teleslyngevurderinger: {
+      positive: 1,
+      negative: 4
+    }
+  }
+};
 class LydApp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isAuthed: false,
-      selectedVenue: {
-        name: "test",
-        reviews: {
-          Lydutjevningvurderinger: {
-            positive: 0,
-            negative: 0
-          },
-          Sted: {
-            id: 1,
-            placeId: "ChIJmeCJ639uQUYRc3OrOTekBZw"
-          },
-          Informasjonvurderinger: {
-            positive: 0,
-            negative: 0
-          },
-          "Totalt antall vurderinger": 5,
-          Lydforholdvurderinger: {
-            positive: 0,
-            negative: 0
-          },
-          Teleslyngevurderinger: {
-            positive: 1,
-            negative: 4
-          }
-        }
-      },
-      showDetails: true
+      selectedVenue: undefined,
+      showDetails: false
     };
     this.onVenueSelect = this.onVenueSelect.bind(this);
     this.showDetails = this.showDetails.bind(this);
@@ -87,35 +87,32 @@ class LydApp extends React.Component {
     }
   }
 
-  getVenueDetails(placeId) {
-    const url = places(1);
-
-    axios
-      .all([
-        axios.get(url),
-        axios.get(
+  async getVenueDetails(placeId) {
+    const requests = [
+      axios
+        .get(
           `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`
         )
-      ])
-      .then(
-        axios.spread((api, google) => {
-          const googleData = _.pick(google.data.result, [
+        .then(({ data }) => {
+          return _.pick(data.result, [
             "formatted_address",
             "name",
             "formatted_phone_number",
-            "geometry",
-            "photos"
+            "geometry"
           ]);
-          const selectedVenue = Object.assign(
-            { reviews: api.data },
-            googleData
-          );
-
-          this.setState({ selectedVenue: selectedVenue }, () => {
-            this.main.notifyMapOnChange();
-          });
         })
-      );
+        .catch(error => {
+          return { cake: "istrue" };
+        }),
+      axios
+        .get(`http://35.241.8.32/steder/${placeId}/totalvurdering`)
+        .then(response => response)
+        .catch(error => {
+          return this.defaultPlace();
+        })
+    ];
+    const data = await Promise.all(requests).then(response => response);
+    this.setState({ selectedVenue: Object.assign(...data) });
   }
 
   showDetails() {
@@ -124,6 +121,20 @@ class LydApp extends React.Component {
 
   hideDetails() {
     this.setState({ showDetails: false });
+  }
+
+  defaultPlace() {
+    const empty = { positive: 0, negative: 0 };
+    return {
+      reviews: {
+        "Totalt antall vurderinger": 0,
+        Teleslyngevurderinger: empty,
+        Lydforholdvurderinger: empty,
+        Lydutjevningvurderinger: empty,
+        Informasjonvurderinger: empty,
+        "Antall vurderere": 0
+      }
+    };
   }
 }
 
