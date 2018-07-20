@@ -98,7 +98,8 @@ class LydApp extends React.Component {
             "formatted_address",
             "name",
             "formatted_phone_number",
-            "geometry"
+            "geometry",
+            "photos"
           ]);
         })
         .catch(error => {
@@ -112,7 +113,9 @@ class LydApp extends React.Component {
         })
     ];
     const data = await Promise.all(requests).then(response => response);
-    this.setState({ selectedVenue: Object.assign(...data) });
+    this.setState({ selectedVenue: Object.assign(...data) }, () =>
+      this.main.notifyMapOnChange()
+    );
   }
 
   showDetails() {

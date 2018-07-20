@@ -11,7 +11,7 @@ export const NEW_REVIEW_SCREEN = "Din vurdering";
 export default class VenueDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentScreen: NEW_REVIEW_SCREEN };
+    this.state = { currentScreen: REVIEW_SCREEN };
   }
   render() {
     const { selectedVenue } = this.props;

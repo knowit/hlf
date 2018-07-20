@@ -20,10 +20,6 @@ export default ({ reviewSummary }) => {
 
 const renderProperty = (property, propertyReviews) => {
   let { positive, negative } = propertyReviews;
-  if (Math.round(Math.random())) {
-    positive = Math.random() * 10;
-    negative = Math.random() * 6;
-  }
 
   return (
     <View key={property.name} style={styles.property}>
