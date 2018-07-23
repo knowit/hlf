@@ -28,12 +28,12 @@ public class LydforholdController {
         return lydforholdService.getAllLydforhold();
     }
 
-    @GetMapping("/brukerId/{registrator}")
+    @GetMapping("/bruker/{registrator}")
     public List<Vurdering> getLydforholderByBruker(@PathVariable(value = "registrator") Integer brukerid) {
         return lydforholdService.getLydforholdByBruker(brukerid);
     }
 
-    @GetMapping("/placeId/{placeId}")
+    @GetMapping("/place/{placeId}")
     public List<Vurdering> getLydforholdVurderingerBySted(@PathVariable(value = "placeId") String placeId){
         return lydforholdService.getLydforholdByPlaceId(placeId);
     }
@@ -48,7 +48,7 @@ public class LydforholdController {
         return lydforholdService.createLydforhold(lydforhold);
     }
 
-    @PutMapping("/id/{id}")
+    @PutMapping("/{id}")
     public LydforholdVurdering updateLydforholdvurdering(@PathVariable(value = "id") Integer id,
                                                          @RequestBody LydforholdVurdering endring){
 

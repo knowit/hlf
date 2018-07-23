@@ -15,22 +15,9 @@ public class InformasjonVurdering extends Vurdering {
     public InformasjonVurdering(Sted sted, Bruker registrator, String kommentar, boolean rangering){
         super(sted, registrator, kommentar);
         this.rangering = rangering;
-
-        //sted.addVurdering(this);
-        //registrator.addVurdering(this);
     }
 
     public InformasjonVurdering(){}
-
-    /*
-    @Override
-    public String toString() {
-        return "InformasjonVurdering{ id: " + super.getId() + " registrator: " + super.getRegistrator() +
-                "sted: " + super.getSted() + "rangering:" + rangering +
-                "dato: " + new SimpleDateFormat("dd/MM/yyy").format(super.getDato()) +
-                "kommentar: " + super.getKommentar() + '}';
-    }
-    */
 
     // Getters and setters
     public boolean isRangering() {

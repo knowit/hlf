@@ -25,12 +25,12 @@ public class LydutjevningController {
         return lydutjevningService.getAllLydutjevninger();
     }
 
-    @GetMapping("/brukerId/{registrator}")
+    @GetMapping("/bruker/{registrator}")
     public List<Vurdering> getLydutjevningByBruker(@PathVariable(value = "registrator") Integer brukerid) {
         return lydutjevningService.getLydutjevningByBruker(brukerid);
     }
 
-    @GetMapping("/placeId/{placeId}")
+    @GetMapping("/place/{placeId}")
     public List<Vurdering> getLydutjevningVurderingerBySted(@PathVariable(value = "placeId") String placeId){
         return lydutjevningService.getLydutjevningByPlaceId(placeId);
     }
@@ -45,7 +45,7 @@ public class LydutjevningController {
         return lydutjevningService.createLydutjevning(lydutjevning);
     }
 
-    @PutMapping("/id/{id}")
+    @PutMapping("/{id}")
     public LydutjevningVurdering updateLydutjevningvurdering(@PathVariable(value = "id") Integer id,
                                                              @RequestBody LydutjevningVurdering endring){
 

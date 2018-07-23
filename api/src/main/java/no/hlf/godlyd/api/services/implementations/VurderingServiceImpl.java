@@ -31,15 +31,16 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByStedId(Integer id){
+    public List<Vurdering> getVurderingerByStedId(Integer id) {
         return vurderingRepo.findByStedId(id);
     }
 
     @Override
-    public List<Vurdering> getAllVurderingerByPlaceId(String placeId){ return vurderingRepo.findByPlaceId(placeId);}
+    public List<Vurdering> getAllVurderingerByPlaceId(String placeId) throws ResourceNotFoundException {
+        return vurderingRepo.findByPlaceId(placeId);}
 
     @Override
-    public Page<Vurdering> getVurderingerByPlaceId(String placeId, Pageable pagable) {
+    public Page<Vurdering> getVurderingerByPlaceId(String placeId, Pageable pagable) throws ResourceNotFoundException {
         return vurderingRepo.findByPlaceIdPage(placeId, pagable);
     }
 
@@ -50,12 +51,12 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(Integer brukerid) {
+    public List<Vurdering> getVurderingerByBruker(Integer brukerid) throws ResourceNotFoundException {
         return vurderingRepo.findByRegistrator(brukerid);
     }
 
     @Override
-    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId) {
+    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId) throws ResourceNotFoundException {
         return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
     }
 

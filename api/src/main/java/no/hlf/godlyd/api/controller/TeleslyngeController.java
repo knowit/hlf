@@ -25,12 +25,12 @@ public class TeleslyngeController {
         return teleslyngeService.getAllTeleslynger();
     }
 
-    @GetMapping("/brukerId/{registrator}")
+    @GetMapping("/bruker/{registrator}")
     public List<Vurdering> getTeleslyngerByBruker(@PathVariable(value = "registrator") Integer brukerid) {
         return teleslyngeService.getTeleslyngerByBruker(brukerid);
     }
 
-    @GetMapping("/placeId/{placeId}")
+    @GetMapping("/place/{placeId}")
     public List<Vurdering> getTeleslyngeVurderingerBySted(@PathVariable(value = "placeId") String placeId){
         return teleslyngeService.getTeleslyngerByPlaceId(placeId);
     }
@@ -45,7 +45,7 @@ public class TeleslyngeController {
         return teleslyngeService.createTeleslynge(teleslynge);
     }
 
-    @PutMapping("/id/{id}")
+    @PutMapping("/{id}")
     public TeleslyngeVurdering updateTeleslyngevurdering(@PathVariable(value = "id") Integer id,
                                                @RequestBody TeleslyngeVurdering endring){
 

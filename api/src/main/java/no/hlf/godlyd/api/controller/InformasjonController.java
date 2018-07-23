@@ -28,12 +28,12 @@ public class InformasjonController {
         return informasjonService.getAllInformasjon();
     }
 
-    @GetMapping("/brukerId/{registrator}")
+    @GetMapping("/bruker/{registrator}")
     public List<Vurdering> getInformasjonByBruker(@PathVariable(value = "registrator") Integer brukerid) {
         return informasjonService.getInformasjonByBruker(brukerid);
     }
 
-    @GetMapping("/placeId/{placeId}")
+    @GetMapping("/place/{placeId}")
     public List<Vurdering> getInformasjonVurderingerBySted(@PathVariable(value = "placeId") String placeId){
         return informasjonService.getInformasjonByPlaceId(placeId);
     }
@@ -48,7 +48,7 @@ public class InformasjonController {
         return informasjonService.createInformasjon(informasjon);
     }
 
-    @PutMapping("/id/{id}")
+    @PutMapping("/{id}")
     public InformasjonVurdering updateInformajsonvurdering(@PathVariable(value = "id") Integer id,
                                                            @RequestBody InformasjonVurdering endring){
 

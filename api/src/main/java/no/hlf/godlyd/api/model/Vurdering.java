@@ -55,18 +55,15 @@ public abstract class Vurdering implements Serializable {
 
     public void setSted(Sted sted) {
         this.sted = sted;
-        //sted.addVurdering(this);
     }
 
     public Bruker getRegistrator() { return registrator; }
 
     public void setRegistrator(Bruker registrator) {
         this.registrator = registrator;
-        //registrator.addVurdering(this);
     }
 
     public Date getDato() {
-        //String format = new SimpleDateFormat("dd/MM/yyy").format(dato);
         return dato;
     }
 
