@@ -35,7 +35,7 @@ export default class VenueDetails extends Component {
         {this.state.currentScreen == REVIEW_SCREEN ? (
           <VenueReviews selectedVenue={selectedVenue} />
         ) : (
-          <CreateReview />
+          <CreateReview selectedVenue={selectedVenue} />
         )}
       </ViewContainer>
     );

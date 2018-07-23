@@ -51,8 +51,10 @@ public class VurderingServiceTest {
 
     @BeforeEach
     public void setUp(){
+        Bruker bruker = new Bruker(); bruker.setAuth0UserId("userid5");
+
         this.vurderinger = Stream.of(new TeleslyngeVurdering(new Sted("ChIJmeCJ639uQUYRc3OrOTekBZw"),
-                new Bruker("user2", "kari@gmail.com"), "Bra teleslynge", true))
+                bruker, "Bra teleslynge", true))
                 .collect(Collectors.toList()) ;
     }
 
@@ -61,7 +63,7 @@ public class VurderingServiceTest {
     public void testGetVurderingByPlaceId(){
         Mockito.when(vurderingRepo.findByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw")).thenReturn(vurderinger);
 
-        List<Vurdering> found = vurderingService.getVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
+        List<Vurdering> found = vurderingService.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         assertEquals(vurderinger.get(0), found.get(0));
     }
 

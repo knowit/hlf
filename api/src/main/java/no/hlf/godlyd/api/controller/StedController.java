@@ -43,13 +43,6 @@ public class StedController {
         return stedService.getStedFromPlaceId(placeId);
     }
 
-    @GetMapping("/{placeId}/vurderinger")
-    public Map<String, Object>  getVurderingByPlaceId(@PathVariable(value = "placeId") String placeId) {
-
-        Sted selected = stedService.getStedFromPlaceId(placeId);
-        return getTotalvurderingForSted(selected.getId());
-    }
-
     // GOOGLE API
     @GetMapping("/info/{placeId}")
     public Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
@@ -66,23 +59,32 @@ public class StedController {
 
         Map<String, Object> map = new HashMap<>();
         map.put("Google Places API", jsonNode);
-        map.put("Lydpatruljen", sted);
+        map.put("Sted", sted);
         return map;
     }
 
-    @GetMapping("/{id}/totalvurdering")
-    public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "id") Integer id){
-        List<Vurdering> vurderinger = vurderingService.getVurderingerByStedId(id);
-        Map<String, List<Vurdering>> sorterteVurderinger = vurderingService.sorterVurderinger(vurderinger);
-
+    @GetMapping("/{placeId}/totalvurdering/{google}")
+    public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "placeId") String placeId,
+                                                        @PathVariable(value = "google") boolean googleinfo) throws IOException {
         Map<String, Object> map = new HashMap<>();
+        if (googleinfo) {
+            map = getStedInfoByPlaceId(placeId);
+        } else {
+            map.put("Sted", stedService.getStedFromPlaceId(placeId));
+        }
 
-        map.put("Sted", stedService.getStedFromId(id));
-        map.put("Totalt antall vurderinger", vurderinger.size());
-        map.put("Teleslyngevurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Teleslyngevurderinger")));
-        map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
-        map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
-        map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
+        if (stedService.existsByPlaceId(placeId)){
+            List<Vurdering> vurderinger = vurderingService.getAllVurderingerByPlaceId(placeId);
+            Map<String, List<Vurdering>> sorterteVurderinger = vurderingService.sorterVurderinger(vurderinger);
+
+
+            map.put("Totalt antall vurderinger", vurderinger.size());
+            map.put("Teleslyngevurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Teleslyngevurderinger")));
+            map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
+            map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
+            map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
+        }
+        map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
 
         return map;
     }

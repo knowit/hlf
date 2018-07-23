@@ -1,19 +1,18 @@
 package no.hlf.godlyd.api.controller;
 
+import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.TeleslyngeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vurdering/teleslynge")
+@RequestMapping("/vurderinger/teleslynge")
 public class TeleslyngeController {
 
     @Autowired
@@ -37,15 +36,18 @@ public class TeleslyngeController {
     }
 
     @PostMapping
-    //@PreAuthorize("hasAuthority('add:vurderinger')")
     @ResponseStatus(HttpStatus.CREATED)
     public TeleslyngeVurdering createTeleslyngevurdering(@RequestBody TeleslyngeVurdering teleslynge) {
+        Sted sted = stedService.getStedFromPlaceId(teleslynge.getSted().getPlaceId());
+        if (sted != null){
+            sted.addVurdering(teleslynge);
+        }
         return teleslyngeService.createTeleslynge(teleslynge);
     }
 
     @PutMapping("/id/{id}")
-    public TeleslyngeVurdering updateVurdering(@PathVariable(value = "id") Integer id,
-                                     @RequestBody TeleslyngeVurdering endring){
+    public TeleslyngeVurdering updateTeleslyngevurdering(@PathVariable(value = "id") Integer id,
+                                               @RequestBody TeleslyngeVurdering endring){
 
         TeleslyngeVurdering teleslyngevurdering = teleslyngeService.getTeleslyngeFromId(id);
         teleslyngevurdering.setKommentar(endring.getKommentar());

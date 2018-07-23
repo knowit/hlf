@@ -38,18 +38,20 @@ public class VurderingControllerTest {
     @BeforeEach
     private void init(){
         MockitoAnnotations.initMocks(this);
+        Bruker bruker = new Bruker(); bruker.setAuth0UserId("userid5");
+
         this.vurderinger = Stream.of(new TeleslyngeVurdering(new Sted("ChIJmeCJ639uQUYRc3OrOTekBZw"),
-                new Bruker("user2", "kari@gmail.com"), "Bra teleslynge", true))
+                bruker, "Bra teleslynge", true))
                 .collect(Collectors.toList()) ;
     }
 
     // TEST CASES
     @Test
     public void testGetVurderingerFromPlaceId() {
-        when(vurderingService.getVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw"))
+        when(vurderingService.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw"))
                 .thenReturn(vurderinger);
 
-        List<Vurdering> found = vurderingController.getVurderingByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
+        List<Vurdering> found = vurderingController.getAllVurderingByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         assertEquals(vurderinger.get(0), found.get(0));
     }
 

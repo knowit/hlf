@@ -88,6 +88,7 @@ class LydApp extends React.Component {
   }
 
   async getVenueDetails(placeId) {
+    //
     const requests = [
       axios
         .get(
@@ -99,7 +100,8 @@ class LydApp extends React.Component {
             "name",
             "formatted_phone_number",
             "geometry",
-            "photos"
+            "photos",
+            "place_id"
           ]);
         })
         .catch(error => {

@@ -32,6 +32,7 @@ public class BrukerServiceImpl implements BrukerService {
         b.setAuth0UserId(bruker.getAuth0UserId());
         b.setFornavn(bruker.getFornavn());
         b.setEtternavn(bruker.getEtternavn());
+        b.setImageUrl(bruker.getImageUrl());
         brukerRepo.save(b);
         return b;
     }
@@ -48,6 +49,7 @@ public class BrukerServiceImpl implements BrukerService {
             bruker.setAuth0UserId(userInfo.get("user_id").toString());
             bruker.setFornavn(userInfo.get("given_name").toString());
             bruker.setEtternavn(userInfo.get("family_name").toString());
+            bruker.setImageUrl(userInfo.get("picture").toString());
             return bruker;
 
         }
@@ -55,10 +57,6 @@ public class BrukerServiceImpl implements BrukerService {
 
         }
         return null;
-    }
-
-    public Bruker login(String access_token){
-        return updateBruker(access_token);
     }
 
 }

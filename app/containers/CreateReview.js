@@ -8,6 +8,8 @@ import colors, {
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
+import { ROOT_API_URL } from "../settings/endpoints";
+import axios from "axios";
 
 export default class CreateReview extends Component {
   constructor(props) {
@@ -36,16 +38,25 @@ export default class CreateReview extends Component {
   }
 
   onReviewAction(actionType, newValue) {
-    const currentSelectedProperty = this.state.properties[
-      this.state.currentProperty
-    ];
-    const nextState = { ...currentSelectedProperty, [actionType]: newValue };
-    this.setState({
-      properties: {
-        ...this.state.properties,
-        [this.state.currentProperty]: nextState
-      }
-    });
+    const url = `${ROOT_API_URL}/vurderinger/${this.state.currentProperty.toLowerCase()}`;
+    const currentProperty = this.state.properties[this.state.currentProperty];
+
+    const reviewBody = {
+      sted: {
+        placeId: this.props.selectedVenue.place_id
+      },
+
+      registrator: { id: 3 },
+      kommentar: actionType === "comment" ? newValue : currentProperty.comment,
+      rangering:
+        actionType === "value"
+          ? newValue === 1
+            ? true
+            : false
+          : currentProperty.value
+    };
+    console.log(reviewBody);
+    //axios.post(url, reviewBody);
   }
 
   onPropertySelect(propertyName) {
