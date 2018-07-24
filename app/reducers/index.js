@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import venueReducer from "./venueReducer";
+import selectedVenue from "./venueReducer";
 import userReducer from "./userReducer";
 
 export default combineReducers({
-  venueReducer,
+  selectedVenue,
   userReducer
 });

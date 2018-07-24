@@ -1,11 +1,16 @@
 export const VENUE_SELECTED = "VENUE_SELECTED";
+export const VENUE_DESELECTED = "VENUE_DESELECTED";
+
 import { API_KEY } from "../credentials";
 import axios from "axios";
 import _ from "lodash";
 import { ROOT_API_URL } from "../settings/endpoints";
+import { AsyncStorage } from "react-native";
 
 export const fetchVenueData = placeId => {
-  return dispatch => {
+  return async dispatch => {
+    const token = await fetchAccessToken();
+
     const requests = [
       axios
         .get(
@@ -28,19 +33,30 @@ export const fetchVenueData = placeId => {
           return { cake: "istrue" };
         }),
       axios
-        .get(`${ROOT_API_URL}/steder/${placeId}/totalvurdering`)
+        .get(`${ROOT_API_URL}/steder/${placeId}/totalvurdering`, {
+          headers: {
+            Authorization: "Bearer " + token + "1"
+          }
+        })
         .then(response => response)
         .catch(error => {
-          console.log(error);
+          console.log("EMPTY PLACE / ERROR TOKEN");
           return defaultPlace();
         })
     ];
 
     Promise.all(requests).then(values => {
-      console.log(values);
       dispatch({ type: VENUE_SELECTED, payload: Object.assign(...values) });
     });
   };
+};
+
+const fetchAccessToken = async () => {
+  return AsyncStorage.getItem("access_token").then(result => result);
+};
+
+export const deselectVenue = () => {
+  return { type: VENUE_DESELECTED };
 };
 
 const defaultPlace = () => {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StackNavigator, createDrawerNavigator } from "react-navigation";
+import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 import MainScreen from "../containers/MainScreen";
 import VenueDetails from "../containers/VenueDetails";
 import Profile from "../containers/Profile";
@@ -22,9 +22,23 @@ class Navigation extends Component {
     if (!isAuthenticated)
       return <LoginScreen loginSuccessful={loginSuccessful} />;
 
-    const Wrapper = createDrawerNavigator(
+    const Stack = createStackNavigator(
       {
-        Home: MainScreen
+        MainScreen: {
+          screen: MainScreen
+        },
+        Details: {
+          screen: VenueDetails
+        }
+      },
+      {
+        headerMode: "none"
+      }
+    );
+
+    const Drawer = createDrawerNavigator(
+      {
+        Stack: Stack
       },
       {
         contentComponent: props => (
@@ -32,7 +46,7 @@ class Navigation extends Component {
         )
       }
     );
-    return <Wrapper />;
+    return <Drawer />;
   }
 }
 

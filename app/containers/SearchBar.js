@@ -58,7 +58,7 @@ export default class SearchBar extends Component {
           onChangeText={this.onInputChange}
           selectionColor={colors.primaryTextColor}
           underlineColorAndroid={colors.transparentColor}
-          onFocus={() => this.props.onVenueSelect(undefined)}
+          onFocus={() => this.props.deselectVenue()}
         />
       </View>
     );

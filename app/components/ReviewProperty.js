@@ -13,7 +13,6 @@ import { colors, COMPONENT_SPACING } from "../settings/defaultStyles";
 import PropertyTitle from "./PropertyTitle";
 import ReviewOptionButton from "./ReviewOptionButton";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import InformationModal from "./InformationModal";
 
 class ReviewProperty extends Component {
   constructor(props) {

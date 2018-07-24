@@ -36,7 +36,7 @@ export default class Map extends Component {
           longitudeDelta: 0.003
         }}
         onPress={e => {
-          this.props.onVenueSelect(undefined);
+          this.props.deselectVenue();
         }}
         onPoiClick={e => {
           this.props.onVenueSelect(e.nativeEvent.placeId);

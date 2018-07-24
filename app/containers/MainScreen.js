@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import SearchBar from "../containers/SearchBar";
 import Map from "./Map";
 import VenueMapOverlay from "../components/VenueMapOverlay";
-import { fetchVenueData } from "../actions";
-console.log("FETCH", fetchVenueData);
+import { fetchVenueData, deselectVenue } from "../actions";
+
 class MainScreen extends Component {
   constructor(props) {
     super(props);
@@ -26,23 +26,26 @@ class MainScreen extends Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.overallViewContainer}>
         <Map
           ref={map => (this.map = map)}
           onVenueSelect={this.props.fetchVenueData}
+          deselectVenue={this.props.deselectVenue}
         />
         {this.props.selectedVenue ? (
           <VenueMapOverlay
             selectedVenue={this.props.selectedVenue}
-            showDetails={this.props.showDetails}
+            showDetails={() => navigate("Details")}
           />
         ) : null}
         <View style={styles.searchBar}>
           <SearchBar
             onMenuPress={() => this.props.navigation.openDrawer()}
-            onVenueSelect={this.props.onVenueSelect}
+            onVenueSelect={this.props.fetchVenueData}
             style={styles.searchBar}
+            deselectVenue={this.props.deselectVenue}
           />
         </View>
       </View>
@@ -50,13 +53,11 @@ class MainScreen extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return ownProps;
-};
+const mapStateToProps = ({ selectedVenue }) => ({ selectedVenue });
 
 export default connect(
   mapStateToProps,
-  { fetchVenueData }
+  { fetchVenueData, deselectVenue }
 )(MainScreen);
 
 const styles = StyleSheet.create({
