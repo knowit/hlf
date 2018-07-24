@@ -22,9 +22,9 @@ public interface VurderingService {
 
     Vurdering getVurderingFromId(Integer id);
 
-    List<Vurdering> getVurderingerByBruker(Integer brukerid);
+    List<Vurdering> getVurderingerByBruker(String access_token);
 
-    List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId);
+    List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String access_token);
 
     ResponseEntity<?> deleteVurdering(Integer id);
 

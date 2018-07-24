@@ -2,8 +2,10 @@ package no.hlf.godlyd.api.services.implementations;
 
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
+import no.hlf.godlyd.api.repository.BrukerRepo;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
+import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ public class VurderingServiceImpl implements VurderingService {
     private VurderingRepo vurderingRepo;
     @Autowired
     private StedRepo stedRepo;
+    @Autowired
+    private BrukerService brukerService;
 
     // Methods:
     @Override
@@ -51,12 +55,14 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(Integer brukerid) throws ResourceNotFoundException {
-        return vurderingRepo.findByRegistrator(brukerid);
+    public List<Vurdering> getVurderingerByBruker(String access_token) throws ResourceNotFoundException {
+        Integer brukerId = brukerService.updateBruker(access_token).getId();
+        return vurderingRepo.findByRegistrator(brukerId);
     }
 
     @Override
-    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId) throws ResourceNotFoundException {
+    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String access_token) throws ResourceNotFoundException {
+        Integer brukerId = brukerService.updateBruker(access_token).getId();
         return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
     }
 
