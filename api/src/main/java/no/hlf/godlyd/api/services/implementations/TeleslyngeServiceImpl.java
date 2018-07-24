@@ -58,7 +58,7 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
     @Override
     public TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge, String authorization) {
         teleslynge.setRegistrator(brukerService.updateBruker(authorization));
-        Sted sted = stedService.getStedFromPlaceId(teleslynge.getSted().getPlaceId());
+        Sted sted = stedService.updateSted(teleslynge.getSted().getPlaceId());
         if (sted != null){
             sted.addVurdering(teleslynge);
         }
@@ -73,7 +73,7 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
         if(teleslyngevurdering.getRegistrator().getId().equals(brukerId)){
             teleslyngevurdering.setKommentar(endring.getKommentar());
             teleslyngevurdering.setRangering(endring.isRangering());
-            return teleslyngevurdering;
+            return teleslyngeRepo.save(teleslyngevurdering);
         } else{
             throw new AccessDeniedException("alter", "informasjonsvurdering, id: "+id);
         }

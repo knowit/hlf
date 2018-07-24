@@ -60,7 +60,7 @@ public class LydforholdServiceImpl implements LydforholdService {
     public LydforholdVurdering createLydforhold(LydforholdVurdering lydforhold, String authorization) {
         Bruker bruker = brukerService.updateBruker(authorization);
         lydforhold.setRegistrator(bruker);
-        Sted sted = stedService.getStedFromPlaceId(lydforhold.getSted().getPlaceId());
+        Sted sted = stedService.updateSted(lydforhold.getSted().getPlaceId());
         if (sted != null){
             sted.addVurdering(lydforhold);
         }
@@ -75,7 +75,7 @@ public class LydforholdServiceImpl implements LydforholdService {
         if(lydforholdvurdering.getRegistrator().getId().equals(brukerId)){
             lydforholdvurdering.setKommentar(endring.getKommentar());
             lydforholdvurdering.setRangering(endring.isRangering());
-            return lydforholdvurdering;
+            return lydforholdRepo.save(lydforholdvurdering);
         } else{
             throw new AccessDeniedException("alter", "lydforholdvurdering, id: "+id);
         }

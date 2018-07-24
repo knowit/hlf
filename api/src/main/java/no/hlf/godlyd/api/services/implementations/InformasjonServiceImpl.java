@@ -60,7 +60,7 @@ public class InformasjonServiceImpl implements InformasjonService {
     public InformasjonVurdering createInformasjon(InformasjonVurdering informasjon, String authorization) {
         Bruker bruker = brukerService.updateBruker(authorization);
         informasjon.setRegistrator(bruker);
-        Sted sted = stedService.getStedFromPlaceId(informasjon.getSted().getPlaceId());
+        Sted sted = stedService.updateSted(informasjon.getSted().getPlaceId());
         if (sted != null){
             sted.addVurdering(informasjon);
         }
@@ -74,7 +74,7 @@ public class InformasjonServiceImpl implements InformasjonService {
         if(informasjonvurdering.getRegistrator().getId().equals(brukerId)){
             informasjonvurdering.setKommentar(endring.getKommentar());
             informasjonvurdering.setRangering(endring.isRangering());
-            return informasjonvurdering;
+            return informasjonRepo.save(informasjonvurdering);
         } else{
             throw new AccessDeniedException("alter", "informasjonsvurdering, id: "+id);
         }

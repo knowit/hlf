@@ -60,7 +60,7 @@ public class LydutjevningServiceImpl implements LydutjevningService {
     public LydutjevningVurdering createLydutjevning(LydutjevningVurdering lydutjevning, String authorization) {
         Bruker bruker = brukerService.updateBruker(authorization);
         lydutjevning.setRegistrator(bruker);
-        Sted sted = stedService.getStedFromPlaceId(lydutjevning.getSted().getPlaceId());
+        Sted sted = stedService.updateSted(lydutjevning.getSted().getPlaceId());
         if (sted != null){
             sted.addVurdering(lydutjevning);
         }
@@ -74,7 +74,7 @@ public class LydutjevningServiceImpl implements LydutjevningService {
         if(lydutjevningvurdering.getRegistrator().getId().equals(brukerId)){
             lydutjevningvurdering.setKommentar(endring.getKommentar());
             lydutjevningvurdering.setRangering(endring.isRangering());
-            return lydutjevningvurdering;
+            return lydutjevningRepo.save(lydutjevningvurdering);
         } else{
             throw new AccessDeniedException("alter", "lydutjevningvurdering, id: "+id);
         }

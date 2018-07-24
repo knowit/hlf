@@ -8,8 +8,6 @@ import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -87,17 +85,4 @@ public class StedController {
 
         return map;
     }
-
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public Sted createSted(@RequestBody Sted sted){
-        return stedService.createSted(sted);
-    }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSted(@PathVariable(value = "id") Integer id){
-        return stedService.deleteSted(id);
-    }
-
 }
