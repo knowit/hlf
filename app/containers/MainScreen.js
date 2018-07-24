@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Platform } from "react-native";
+import { connect } from "react-redux";
 
 import SearchBar from "../containers/SearchBar";
 import Map from "./Map";
 import VenueMapOverlay from "../components/VenueMapOverlay";
-
-export default class MainScreen extends Component {
+import { fetchVenueData } from "../actions";
+console.log("FETCH", fetchVenueData);
+class MainScreen extends Component {
   constructor(props) {
     super(props);
     this.map = React.createRef();
@@ -28,7 +30,7 @@ export default class MainScreen extends Component {
       <View style={styles.overallViewContainer}>
         <Map
           ref={map => (this.map = map)}
-          onVenueSelect={this.props.onVenueSelect}
+          onVenueSelect={this.props.fetchVenueData}
         />
         {this.props.selectedVenue ? (
           <VenueMapOverlay
@@ -38,7 +40,7 @@ export default class MainScreen extends Component {
         ) : null}
         <View style={styles.searchBar}>
           <SearchBar
-            onMenuPress={() => this.props.openDrawer()}
+            onMenuPress={() => this.props.navigation.openDrawer()}
             onVenueSelect={this.props.onVenueSelect}
             style={styles.searchBar}
           />
@@ -47,6 +49,15 @@ export default class MainScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return ownProps;
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchVenueData }
+)(MainScreen);
 
 const styles = StyleSheet.create({
   overallViewContainer: {

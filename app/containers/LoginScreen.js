@@ -2,10 +2,10 @@ import React, { Component } from "react";
 var credentials = require("../settings/authConfig");
 import Auth0 from "react-native-auth0";
 const auth0 = new Auth0(credentials);
-import { View, AsyncStorage } from "react-native";
-import SlimText from "../components/SlimText";
+import { AsyncStorage } from "react-native";
+import Loading from "../components/Loading";
 
-export default ({ setAuthenticated }) => {
+export default ({ loginSuccessful }) => {
   auth0.webAuth
     .authorize({
       scope: credentials.scope,
@@ -13,14 +13,10 @@ export default ({ setAuthenticated }) => {
     })
     .then(credentials => {
       saveTokens(credentials);
-      setAuthenticated(true);
+      loginSuccessful();
     })
     .catch(error => console.log(error));
-  return (
-    <View>
-      <SlimText>Loading...</SlimText>
-    </View>
-  );
+  return <Loading />;
 };
 
 const saveTokens = credentials => {
