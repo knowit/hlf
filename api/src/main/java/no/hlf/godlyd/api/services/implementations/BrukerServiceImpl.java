@@ -1,5 +1,6 @@
 package no.hlf.godlyd.api.services.implementations;
 
+import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.repository.BrukerRepo;
 import no.hlf.godlyd.api.security.Auth0Connection;
@@ -17,12 +18,19 @@ public class BrukerServiceImpl implements BrukerService {
     BrukerRepo brukerRepo;
 
     public Bruker getBrukerFromId(Integer id){
-        return brukerRepo.findBrukerById(id);
+        return brukerRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bruker", "id", id));
     }
 
     public Bruker getBrukerFromAuth0UserId(String auth0UserId){
-        return brukerRepo.findByAuth0UserId(auth0UserId);
+        Bruker bruker = brukerRepo.findByAuth0UserId(auth0UserId);
+        if (bruker != null){
+            return bruker;
+        } else {
+            throw new ResourceNotFoundException("Bruker", "auth0UserId", auth0UserId);
+        }
     }
+
     public Bruker updateBruker(String access_token){
         Bruker bruker = getCredentials(access_token);
         Bruker b = getBrukerFromAuth0UserId(bruker.getAuth0UserId());

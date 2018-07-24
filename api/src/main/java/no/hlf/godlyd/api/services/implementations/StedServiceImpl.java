@@ -33,7 +33,12 @@ public class StedServiceImpl implements StedService {
 
     @Override
     public Sted getStedFromPlaceId(String placeId) {
-        return stedRepo.findByPlaceId(placeId);
+        Sted sted = stedRepo.findByPlaceId(placeId);
+        if (sted != null) {
+            return sted;
+        } else {
+            throw new ResourceNotFoundException("Sted", "placeId", placeId);
+        }
     }
 
     @Override
