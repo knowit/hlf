@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 const ViewContainer = ({
   children,
-  heightAdjusting,
+  flex,
   style,
   opaque,
   padding,
@@ -16,7 +16,7 @@ const ViewContainer = ({
     <Component
       style={[
         opaque ? styles.opaque : null,
-        styles[heightAdjusting],
+        flex ? styles.flex : null,
         padding != undefined ? { padding: padding } : styles.padding,
         style
       ]}
@@ -33,17 +33,13 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1
   },
-  auto: {
-    width: "100%",
-    height: "auto"
-  },
   padding: {
     padding: COMPONENT_SPACING
   }
 });
 
 ViewContainer.propTypes = {
-  heightAdjusting: PropTypes.oneOf(["flex", "auto"]).isRequired,
+  flex: PropTypes.bool,
   style: PropTypes.object,
   opaque: PropTypes.bool,
   scrollable: PropTypes.bool,

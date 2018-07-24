@@ -45,7 +45,7 @@ export default class extends Component {
           ))}
         </ViewContainer>
         <HorizontalRuler />
-        <AppButton onPress={() => console.log("logout")}>
+        <AppButton onPress={() => this.props.signout()}>
           <MaterialCommunityIcons name="logout" /> Logg ut
         </AppButton>
       </ViewContainer>

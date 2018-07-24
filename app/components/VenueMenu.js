@@ -1,39 +1,50 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 import { NEW_REVIEW_SCREEN, REVIEW_SCREEN } from "../containers/VenueDetails";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors from "../settings/defaultStyles";
-import AppText from "./AppText";
+import SlimText from "./SlimText";
 
+const FONT_SIZE = 20;
 export default ({ onScreenChange, currentScreen }) => {
   const screens = [
     {
       name: REVIEW_SCREEN,
-      icon: <MaterialCommunityIcons name="pencil" />
+      icon: "star"
     },
     {
       name: NEW_REVIEW_SCREEN,
-      icon: <MaterialCommunityIcons name="star" />
+      icon: "create"
     }
   ];
-
   return (
     <View style={styles.container}>
       {screens.map(screen => {
+        isSelected = screen.name === currentScreen;
         return (
           <TouchableHighlight
             onPress={() => onScreenChange(screen.name)}
             style={[
-              screen.name === currentScreen
-                ? styles.selectedOption
-                : styles.unselectedOption,
+              isSelected ? {} : styles.unselectedOption,
               styles.menuComponent
             ]}
             key={screen.name}
           >
-            <AppText type="primary" size="large">
-              {screen.icon} {screen.name}
-            </AppText>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <MaterialIcons
+                name={screen.icon}
+                color={colors.primaryTextColor}
+                size={FONT_SIZE}
+              />
+              <SlimText
+                style={{
+                  fontSize: FONT_SIZE,
+                  fontWeight: isSelected ? "bold" : "normal"
+                }}
+              >
+                {screen.name}
+              </SlimText>
+            </View>
           </TouchableHighlight>
         );
       })}
@@ -43,15 +54,16 @@ export default ({ onScreenChange, currentScreen }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    width: "100%"
+    flexDirection: "row"
   },
   menuComponent: {
+    flexDirection: "row",
     flex: 1,
     alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 10
   },
-  selectedOption: {},
+
   unselectedOption: {
     backgroundColor: colors.secondaryBackgroundColor
   }
