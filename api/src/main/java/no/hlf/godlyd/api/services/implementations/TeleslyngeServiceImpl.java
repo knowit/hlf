@@ -6,7 +6,6 @@ import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.repository.TeleslyngeRepo;
-import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.TeleslyngeService;
@@ -21,8 +20,6 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
 
     @Autowired
     private TeleslyngeRepo teleslyngeRepo;
-    @Autowired
-    private VurderingRepo vurderingRepo;
     @Autowired
     private VurderingServiceImpl vurderingService;
     @Autowired
@@ -44,8 +41,7 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
 
     @Override
     public List<Vurdering> getTeleslyngerByBruker(String authorization) {
-        Integer brukerid = brukerService.updateBruker(authorization).getId();
-        List<Vurdering> alleVurderinger = vurderingRepo.findByRegistrator(brukerid);
+        List<Vurdering> alleVurderinger = vurderingService.getVurderingerByBruker(authorization);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
         return sortert.get("Teleslyngevurderinger");
@@ -53,7 +49,7 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
 
     @Override
     public List<Vurdering> getTeleslyngerByPlaceId(String placeId){
-        List<Vurdering> alleVurderinger = vurderingRepo.findByPlaceId(placeId);
+        List<Vurdering> alleVurderinger = vurderingService.getAllVurderingerByPlaceId(placeId);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
         return sortert.get("Teleslyngevurderinger");

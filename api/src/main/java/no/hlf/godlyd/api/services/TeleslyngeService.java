@@ -1,9 +1,7 @@
 package no.hlf.godlyd.api.services;
 
-import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 

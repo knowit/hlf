@@ -7,7 +7,6 @@ import no.hlf.godlyd.api.model.LydforholdVurdering;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.repository.LydforholdRepo;
-import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.LydforholdService;
 import no.hlf.godlyd.api.services.StedService;
@@ -22,8 +21,6 @@ public class LydforholdServiceImpl implements LydforholdService {
 
     @Autowired
     private LydforholdRepo lydforholdRepo;
-    @Autowired
-    private VurderingRepo vurderingRepo;
     @Autowired
     private VurderingServiceImpl vurderingService;
     @Autowired
@@ -45,8 +42,7 @@ public class LydforholdServiceImpl implements LydforholdService {
 
     @Override
     public List<Vurdering> getLydforholdByBruker(String authorization) {
-        Integer brukerid = brukerService.updateBruker(authorization).getId();
-        List<Vurdering> alleVurderinger = vurderingRepo.findByRegistrator(brukerid);
+        List<Vurdering> alleVurderinger = vurderingService.getVurderingerByBruker(authorization);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
         return sortert.get("Lydforholdvurderinger");
@@ -54,7 +50,7 @@ public class LydforholdServiceImpl implements LydforholdService {
 
     @Override
     public List<Vurdering> getLydforholdByPlaceId(String placeId){
-        List<Vurdering> alleVurderinger = vurderingRepo.findByPlaceId(placeId);
+        List<Vurdering> alleVurderinger = vurderingService.getAllVurderingerByPlaceId(placeId);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
         return sortert.get("Lydforholdvurderinger");
