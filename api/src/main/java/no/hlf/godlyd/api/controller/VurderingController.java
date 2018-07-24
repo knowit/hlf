@@ -99,7 +99,9 @@ public class VurderingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteVurdering(@PathVariable(value = "id") Integer id){
-        return vurderingService.deleteVurdering(id);
+    public ResponseEntity<?> deleteVurdering(
+            @PathVariable(value = "id") Integer id,
+            @RequestHeader("Authorization") String auth){
+        return vurderingService.deleteVurdering(id, auth.substring(7));
     }
 }

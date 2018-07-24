@@ -26,7 +26,7 @@ public interface VurderingService {
 
     List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String access_token);
 
-    ResponseEntity<?> deleteVurdering(Integer id);
+    ResponseEntity<?> deleteVurdering(Integer id, String access_token);
 
     Map<String, List<Vurdering>> sorterVurderinger(List<Vurdering> vurderinger);
 

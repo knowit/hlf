@@ -11,9 +11,12 @@ public interface InformasjonService {
 
     InformasjonVurdering getInformasjonFromId(Integer id);
 
-    List<Vurdering> getInformasjonByBruker(Integer brukerid);
+    List<Vurdering> getInformasjonByBruker(String access_token);
 
     List<Vurdering> getInformasjonByPlaceId(String placeId);
 
-    InformasjonVurdering createInformasjon(InformasjonVurdering informasjon);
+    InformasjonVurdering createInformasjon(InformasjonVurdering informasjon, String access_token);
+
+    InformasjonVurdering updateInformasjon(Integer id, InformasjonVurdering endring, String access_token);
+
 }

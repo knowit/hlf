@@ -67,12 +67,17 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public ResponseEntity<?> deleteVurdering(Integer id) {
+    public ResponseEntity<?> deleteVurdering(Integer id, String access_token) {
+        Integer brukerid = brukerService.updateBruker(access_token).getId();
         Vurdering vurdering = vurderingRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vurdering", "id", id));
 
-        vurderingRepo.delete(vurdering);
-        return ResponseEntity.ok().build();
+        if(vurdering.getRegistrator().getId().equals(brukerid)){
+            vurderingRepo.delete(vurdering);
+            return ResponseEntity.ok().build();
+        } else{
+            return ResponseEntity.status(401).build();
+        }
     }
 
     @Override
