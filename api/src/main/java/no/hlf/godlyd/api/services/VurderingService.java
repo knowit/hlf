@@ -22,11 +22,11 @@ public interface VurderingService {
 
     Vurdering getVurderingFromId(Integer id);
 
-    List<Vurdering> getVurderingerByBruker(String access_token);
+    List<Vurdering> getVurderingerByBruker(String authorization);
 
-    List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String access_token);
+    List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization);
 
-    ResponseEntity<?> deleteVurdering(Integer id, String access_token);
+    ResponseEntity<?> deleteVurdering(Integer id, String authorization);
 
     Map<String, List<Vurdering>> sorterVurderinger(List<Vurdering> vurderinger);
 

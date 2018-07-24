@@ -55,20 +55,20 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(String access_token) throws ResourceNotFoundException {
-        Integer brukerId = brukerService.updateBruker(access_token).getId();
+    public List<Vurdering> getVurderingerByBruker(String authorization) throws ResourceNotFoundException {
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
         return vurderingRepo.findByRegistrator(brukerId);
     }
 
     @Override
-    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String access_token) throws ResourceNotFoundException {
-        Integer brukerId = brukerService.updateBruker(access_token).getId();
+    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization) throws ResourceNotFoundException {
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
         return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
     }
 
     @Override
-    public ResponseEntity<?> deleteVurdering(Integer id, String access_token) {
-        Integer brukerid = brukerService.updateBruker(access_token).getId();
+    public ResponseEntity<?> deleteVurdering(Integer id, String authorization) {
+        Integer brukerid = brukerService.updateBruker(authorization).getId();
         Vurdering vurdering = vurderingRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vurdering", "id", id));
 
@@ -76,7 +76,7 @@ public class VurderingServiceImpl implements VurderingService {
             vurderingRepo.delete(vurdering);
             return ResponseEntity.ok().build();
         } else{
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(403).build();
         }
     }
 

@@ -44,8 +44,8 @@ public class InformasjonServiceImpl implements InformasjonService {
     }
 
     @Override
-        public List<Vurdering> getInformasjonByBruker(String access_token) {
-        Integer brukerid = brukerService.updateBruker(access_token).getId();
+        public List<Vurdering> getInformasjonByBruker(String authorization) {
+        Integer brukerid = brukerService.updateBruker(authorization).getId();
         List<Vurdering> alleVurderinger = vurderingRepo.findByRegistrator(brukerid);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
@@ -61,8 +61,8 @@ public class InformasjonServiceImpl implements InformasjonService {
     }
 
     @Override
-    public InformasjonVurdering createInformasjon(InformasjonVurdering informasjon, String access_token) {
-        Bruker bruker = brukerService.updateBruker(access_token);
+    public InformasjonVurdering createInformasjon(InformasjonVurdering informasjon, String authorization) {
+        Bruker bruker = brukerService.updateBruker(authorization);
         informasjon.setRegistrator(bruker);
         Sted sted = stedService.getStedFromPlaceId(informasjon.getSted().getPlaceId());
         if (sted != null){
@@ -72,9 +72,9 @@ public class InformasjonServiceImpl implements InformasjonService {
     }
 
     @Override
-    public InformasjonVurdering updateInformasjon(Integer id, InformasjonVurdering endring, String access_token){
+    public InformasjonVurdering updateInformasjon(Integer id, InformasjonVurdering endring, String authorization){
         InformasjonVurdering informasjonvurdering = getInformasjonFromId(id);
-        Integer brukerId = brukerService.updateBruker(access_token).getId();
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
         if(informasjonvurdering.getRegistrator().getId().equals(brukerId)){
             informasjonvurdering.setKommentar(endring.getKommentar());
             informasjonvurdering.setRangering(endring.isRangering());

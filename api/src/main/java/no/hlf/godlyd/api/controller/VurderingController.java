@@ -34,7 +34,7 @@ public class VurderingController {
     @GetMapping("/bruker")
     public List<Vurdering> getVurderingerByBruker(
             @RequestHeader("Authorization") String auth){
-        return vurderingService.getVurderingerByBruker(auth.substring(7));
+        return vurderingService.getVurderingerByBruker(auth);
     }
 
     @GetMapping("/all/place/{placeId}")
@@ -95,13 +95,13 @@ public class VurderingController {
             @PathVariable(value = "placeId") String placeId,
             @RequestHeader("Authorization") String auth){
 
-        return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth.substring(7));
+        return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVurdering(
             @PathVariable(value = "id") Integer id,
             @RequestHeader("Authorization") String auth){
-        return vurderingService.deleteVurdering(id, auth.substring(7));
+        return vurderingService.deleteVurdering(id, auth);
     }
 }

@@ -26,7 +26,7 @@ public class InformasjonController {
 
     @GetMapping("/bruker")
     public List<Vurdering> getInformasjonByBruker(@RequestHeader("Authorization") String auth) {
-        return informasjonService.getInformasjonByBruker(auth.substring(7));
+        return informasjonService.getInformasjonByBruker(auth);
     }
 
     @GetMapping("/place/{placeId}")
@@ -39,14 +39,14 @@ public class InformasjonController {
     public InformasjonVurdering createInformasjonvurdering(
             @RequestBody InformasjonVurdering informasjon,
             @RequestHeader("Authorization") String auth) {
-        return informasjonService.createInformasjon(informasjon, auth.substring(7));
+        return informasjonService.createInformasjon(informasjon, auth);
     }
 
     @PutMapping("/{id}")
     public InformasjonVurdering updateInformajsonvurdering(@PathVariable(value = "id") Integer id,
                                                            @RequestBody InformasjonVurdering endring,
                                                            @RequestHeader("Authorization") String auth){
-        return informasjonService.updateInformasjon(id, endring, auth.substring(7));
+        return informasjonService.updateInformasjon(id, endring, auth);
     }
 
 }
