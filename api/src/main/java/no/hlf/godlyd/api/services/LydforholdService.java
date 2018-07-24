@@ -11,9 +11,12 @@ public interface LydforholdService {
 
     LydforholdVurdering getLydforholdFromId(Integer id);
 
-    List<Vurdering> getLydforholdByBruker(Integer brukerid);
+    List<Vurdering> getLydforholdByBruker(String authorization);
 
     List<Vurdering> getLydforholdByPlaceId(String placeId);
 
-    LydforholdVurdering createLydforhold(LydforholdVurdering lydforhold);
+    LydforholdVurdering createLydforhold(LydforholdVurdering lydforhold, String authorization);
+
+    LydforholdVurdering updateLydforhold(Integer id, LydforholdVurdering endring, String authorization);
+
 }
