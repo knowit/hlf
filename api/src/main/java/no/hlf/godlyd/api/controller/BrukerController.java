@@ -30,7 +30,7 @@ public class BrukerController {
     }
 
     @GetMapping("/login")
-    public boolean loginBruker(@RequestHeader("Authorization")String auth){
-        return true;
+    public Bruker loginBruker(@RequestHeader("Authorization")String auth){
+        return brukerService.updateBruker(auth);
     }
 }

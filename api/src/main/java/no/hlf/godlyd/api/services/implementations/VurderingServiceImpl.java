@@ -1,5 +1,6 @@
 package no.hlf.godlyd.api.services.implementations;
 
+import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.repository.BrukerRepo;
@@ -76,7 +77,7 @@ public class VurderingServiceImpl implements VurderingService {
             vurderingRepo.delete(vurdering);
             return ResponseEntity.ok().build();
         } else{
-            return ResponseEntity.status(403).build();
+            throw new AccessDeniedException("delete", "vurdering, id: "+id);
         }
     }
 
