@@ -13,10 +13,12 @@ public interface TeleslyngeService {
 
     TeleslyngeVurdering getTeleslyngeFromId(Integer id);
 
-    List<Vurdering> getTeleslyngerByBruker(Integer brukerid);
+    List<Vurdering> getTeleslyngerByBruker(String authorization);
 
     List<Vurdering> getTeleslyngerByPlaceId(String placeId);
 
-    TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge);
+    TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge, String authorization);
+
+    TeleslyngeVurdering updateTeleslynge(Integer id, TeleslyngeVurdering endring, String authorization);
 
 }

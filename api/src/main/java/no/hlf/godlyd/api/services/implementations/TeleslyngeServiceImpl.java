@@ -1,10 +1,14 @@
 package no.hlf.godlyd.api.services.implementations;
 
+import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
+import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.repository.TeleslyngeRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
+import no.hlf.godlyd.api.services.BrukerService;
+import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.TeleslyngeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,10 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
     private VurderingRepo vurderingRepo;
     @Autowired
     private VurderingServiceImpl vurderingService;
+    @Autowired
+    private BrukerService brukerService;
+    @Autowired
+    private StedService stedService;
 
     // Methods:
     @Override
@@ -35,7 +43,8 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
     }
 
     @Override
-    public List<Vurdering> getTeleslyngerByBruker(Integer brukerid) {
+    public List<Vurdering> getTeleslyngerByBruker(String authorization) {
+        Integer brukerid = brukerService.updateBruker(authorization).getId();
         List<Vurdering> alleVurderinger = vurderingRepo.findByRegistrator(brukerid);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
@@ -51,8 +60,27 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
     }
 
     @Override
-    public TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge) {
+    public TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge, String authorization) {
+        teleslynge.setRegistrator(brukerService.updateBruker(authorization));
+        Sted sted = stedService.getStedFromPlaceId(teleslynge.getSted().getPlaceId());
+        if (sted != null){
+            sted.addVurdering(teleslynge);
+        }
         return teleslyngeRepo.save(teleslynge);
+    }
+
+    @Override
+    public TeleslyngeVurdering updateTeleslynge(Integer id, TeleslyngeVurdering endring, String authorization){
+
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
+        TeleslyngeVurdering teleslyngevurdering = getTeleslyngeFromId(id);
+        if(teleslyngevurdering.getRegistrator().getId().equals(brukerId)){
+            teleslyngevurdering.setKommentar(endring.getKommentar());
+            teleslyngevurdering.setRangering(endring.isRangering());
+            return teleslyngevurdering;
+        } else{
+            throw new AccessDeniedException("alter", "informasjonsvurdering, id: "+id);
+        }
     }
 
 
