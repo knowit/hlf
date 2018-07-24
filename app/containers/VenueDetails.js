@@ -4,11 +4,12 @@ import CreateReview from "./CreateReview";
 import VenueImage from "../components/VenueImage";
 import VenueMenu from "../components/VenueMenu";
 import ViewContainer from "../components/ViewContainer";
+import { connect } from "react-redux";
 
 export const REVIEW_SCREEN = "Anmeldelser";
 export const NEW_REVIEW_SCREEN = "Din vurdering";
 
-export default class VenueDetails extends Component {
+class VenueDetails extends Component {
   constructor(props) {
     super(props);
     this.state = { currentScreen: REVIEW_SCREEN };
@@ -41,3 +42,7 @@ export default class VenueDetails extends Component {
     );
   }
 }
+
+export default connect(({ selectedVenue }) => ({ selectedVenue }))(
+  VenueDetails
+);
