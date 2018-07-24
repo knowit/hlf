@@ -1,21 +1,8 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableHighlight
-} from "react-native";
+import { View, StyleSheet, TouchableHighlight } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import HorizontalRuler from "../components/HorizontalRuler";
-import AppText from "../components/AppText";
 import properties from "../settings/propertyConfig";
-import {
-  COMPONENT_SPACING,
-  colors,
-  BORDER_RADIUS
-} from "../settings/defaultStyles";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { COMPONENT_SPACING, colors } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import SlimText from "../components/SlimText";
 import PropertyTitle from "../components/PropertyTitle";

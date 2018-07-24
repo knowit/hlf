@@ -2,68 +2,48 @@ import React from "react";
 
 import MainScreen from "./containers/MainScreen";
 import VenueDetails from "./containers/VenueDetails";
-import { BackHandler } from "react-native";
+import { BackHandler, AsyncStorage } from "react-native";
 import { createDrawerNavigator } from "react-navigation";
 import Profile from "./containers/Profile";
 import { API_KEY } from "./credentials";
-import { places } from "./settings/endpoints";
+import { places, ROOT_API_URL } from "./settings/endpoints";
 import axios from "axios";
 import _ from "lodash";
 import LoginScreen from "./containers/LoginScreen";
-const offline = {
-  name: "test",
-  reviews: {
-    Lydutjevningvurderinger: {
-      positive: 0,
-      negative: 0
-    },
-    Sted: {
-      id: 1,
-      placeId: "ChIJmeCJ639uQUYRc3OrOTekBZw"
-    },
-    Informasjonvurderinger: {
-      positive: 0,
-      negative: 0
-    },
-    "Totalt antall vurderinger": 5,
-    Lydforholdvurderinger: {
-      positive: 0,
-      negative: 0
-    },
-    Teleslyngevurderinger: {
-      positive: 1,
-      negative: 4
-    }
-  }
-};
+import Loading from "./components/Loading";
+
 class LydApp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isAuthed: false,
+      isAuthenticated: false,
+      isLoginComplete: false,
       selectedVenue: undefined,
       showDetails: false
     };
     this.onVenueSelect = this.onVenueSelect.bind(this);
     this.showDetails = this.showDetails.bind(this);
     this.hideDetails = this.hideDetails.bind(this);
+    this.setAuthenticated = this.setAuthenticated.bind(this);
   }
+
   componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", () => {
-      if (this.state.showDetails) {
-        this.setState({ showDetails: false });
-      } else if (this.state.selectedVenue) {
-        this.setState({ selectedVenue: undefined });
-      }
-      return true;
-    });
+    this.addBackListener();
+    this.checkStoredLogin();
   }
 
   render() {
-    //return <LoginScreen/>
-    const { selectedVenue, showDetails } = this.state;
-    return !selectedVenue || !showDetails ? (
+    const { showDetails, isAuthenticated, isLoginComplete } = this.state;
+
+    if (!isLoginComplete && !isAuthenticated) {
+      return <Loading />;
+    }
+
+    if (!isAuthenticated) {
+      return <LoginScreen setAuthenticated={this.setAuthenticated} />;
+    }
+    return !showDetails ? (
       <MainScreen
         ref={main => (this.main = main)}
         onVenueSelect={this.onVenueSelect}
@@ -85,6 +65,15 @@ class LydApp extends React.Component {
     } else {
       this.getVenueDetails(placeId);
     }
+  }
+
+  setAuthenticated = isAuth => {
+    this.setState({ isAuthenticated: isAuth });
+  };
+
+  logout() {
+    AsyncStorage.multiRemove[("access_token", "id_token", "refresh_token")];
+    this.setState({ isAuthenticated: false });
   }
 
   async getVenueDetails(placeId) {
@@ -120,6 +109,49 @@ class LydApp extends React.Component {
     );
   }
 
+  addBackListener() {
+    BackHandler.addEventListener("hardwareBackPress", () => {
+      if (this.state.showDetails) {
+        this.setState({ showDetails: false });
+      } else if (this.state.selectedVenue) {
+        this.setState({ selectedVenue: undefined });
+      }
+      return true;
+    });
+  }
+
+  async checkStoredLogin() {
+    AsyncStorage.getItem("access_token")
+      .then(storedValue => {
+        if (!storedValue) {
+          this.setState({ isAuthenticated: false, isLoginComplete: true });
+        } else {
+          axios
+            .get(`${ROOT_API_URL}/brukere/login`, {
+              headers: {
+                Authorization: "Bearer " + storedValue
+              }
+            })
+            .then(result => {
+              if (result.status === 200) {
+                this.setState({ isAuthenticated: true, isLoginComplete: true });
+              } else {
+                this.setState({
+                  isAuthenticated: false,
+                  isLoginComplete: true
+                });
+              }
+            })
+            .catch(value => {
+              this.setState({ isAuthenticated: false, isLoginComplete: true });
+            });
+        }
+      })
+      .catch(value => {
+        console.log("could not read asyncstorage");
+      });
+  }
+
   showDetails() {
     this.setState({ showDetails: true });
   }
@@ -148,7 +180,7 @@ export default () => {
     {
       Home: LydApp
     },
-    { contentComponent: Profile }
+    { contentComponent: props => <Profile {...props} /> }
   );
   return <Wrapper />;
 };

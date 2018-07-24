@@ -15,6 +15,7 @@ const demo = [
 
 export default class extends Component {
   render() {
+    console.log(this.props);
     return (
       <ViewContainer
         heightAdjusting="flex"
