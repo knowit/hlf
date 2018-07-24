@@ -9,6 +9,7 @@ CREATE TABLE bruker (
     auth0user_id character varying(255),
     etternavn character varying(255),
     fornavn character varying(255),
+    image_url character varying(255),
     primary key (id)
 );
 
@@ -17,7 +18,7 @@ DROP TABLE IF EXISTS sted;
 CREATE TABLE sted (
     id integer NOT NULL AUTO_INCREMENT,
     place_id character varying(255) NOT NULL,
-    primary key (id),
+    primary key (id)
 );
 
 
