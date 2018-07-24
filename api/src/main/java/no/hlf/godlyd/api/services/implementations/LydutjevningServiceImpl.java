@@ -1,11 +1,16 @@
 package no.hlf.godlyd.api.services.implementations;
 
+import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
+import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.model.LydutjevningVurdering;
+import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.repository.LydutjevningRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
+import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.LydutjevningService;
+import no.hlf.godlyd.api.services.StedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +26,10 @@ public class LydutjevningServiceImpl implements LydutjevningService {
     private VurderingRepo vurderingRepo;
     @Autowired
     private VurderingServiceImpl vurderingService;
+    @Autowired
+    private BrukerService brukerService;
+    @Autowired
+    private StedService stedService;
 
     // Methods:
     @Override
@@ -35,7 +44,8 @@ public class LydutjevningServiceImpl implements LydutjevningService {
     }
 
     @Override
-    public List<Vurdering> getLydutjevningByBruker(Integer brukerid) {
+    public List<Vurdering> getLydutjevningByBruker(String authorization) {
+        Integer brukerid = brukerService.updateBruker(authorization).getId();
         List<Vurdering> alleVurderinger = vurderingRepo.findByRegistrator(brukerid);
         Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
 
@@ -51,8 +61,27 @@ public class LydutjevningServiceImpl implements LydutjevningService {
     }
 
     @Override
-    public LydutjevningVurdering createLydutjevning(LydutjevningVurdering lydutjevning) {
+    public LydutjevningVurdering createLydutjevning(LydutjevningVurdering lydutjevning, String authorization) {
+        Bruker bruker = brukerService.updateBruker(authorization);
+        lydutjevning.setRegistrator(bruker);
+        Sted sted = stedService.getStedFromPlaceId(lydutjevning.getSted().getPlaceId());
+        if (sted != null){
+            sted.addVurdering(lydutjevning);
+        }
         return lydutjevningRepo.save(lydutjevning);
+    }
+
+    @Override
+    public LydutjevningVurdering updateLydutjevning(Integer id, LydutjevningVurdering endring, String authorization){
+        LydutjevningVurdering lydutjevningvurdering = getLydutjevningFromId(id);
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
+        if(lydutjevningvurdering.getRegistrator().getId().equals(brukerId)){
+            lydutjevningvurdering.setKommentar(endring.getKommentar());
+            lydutjevningvurdering.setRangering(endring.isRangering());
+            return lydutjevningvurdering;
+        } else{
+            throw new AccessDeniedException("alter", "lydutjevningvurdering, id: "+id);
+        }
     }
 
 }
