@@ -28,9 +28,9 @@ public class LydforholdController {
         return lydforholdService.getAllLydforhold();
     }
 
-    @GetMapping("/bruker/{registrator}")
-    public List<Vurdering> getLydforholderByBruker(@PathVariable(value = "registrator") Integer brukerid) {
-        return lydforholdService.getLydforholdByBruker(brukerid);
+    @GetMapping("/bruker")
+    public List<Vurdering> getLydforholderByBruker(@RequestHeader("Authorization") String auth) {
+        return lydforholdService.getLydforholdByBruker(auth);
     }
 
     @GetMapping("/place/{placeId}")
@@ -40,24 +40,17 @@ public class LydforholdController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LydforholdVurdering createLydforholdvurdering(@RequestBody LydforholdVurdering lydforhold) {
-        Sted sted = stedService.getStedFromPlaceId(lydforhold.getSted().getPlaceId());
-        if (sted != null){
-            sted.addVurdering(lydforhold);
-        }
-        return lydforholdService.createLydforhold(lydforhold);
+    public LydforholdVurdering createLydforholdvurdering(
+            @RequestBody LydforholdVurdering lydforhold,
+            @RequestHeader("Authorization") String auth) {
+        return lydforholdService.createLydforhold(lydforhold, auth);
     }
 
     @PutMapping("/{id}")
     public LydforholdVurdering updateLydforholdvurdering(@PathVariable(value = "id") Integer id,
-                                                         @RequestBody LydforholdVurdering endring){
-
-        LydforholdVurdering lydforholdvurdering = lydforholdService.getLydforholdFromId(id);
-        lydforholdvurdering.setKommentar(endring.getKommentar());
-        lydforholdvurdering.setRangering(endring.isRangering());
-
-        LydforholdVurdering oppdatert = lydforholdService.createLydforhold(lydforholdvurdering);
-        return oppdatert;
+                                                           @RequestBody LydforholdVurdering endring,
+                                                           @RequestHeader("Authorization") String auth){
+        return lydforholdService.updateLydforhold(id, endring, auth);
     }
 
 }

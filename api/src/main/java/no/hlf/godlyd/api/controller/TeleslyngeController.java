@@ -26,8 +26,8 @@ public class TeleslyngeController {
     }
 
     @GetMapping("/bruker/{registrator}")
-    public List<Vurdering> getTeleslyngerByBruker(@PathVariable(value = "registrator") Integer brukerid) {
-        return teleslyngeService.getTeleslyngerByBruker(brukerid);
+    public List<Vurdering> getTeleslyngerByBruker(@RequestHeader("Authorization") String authorization) {
+        return teleslyngeService.getTeleslyngerByBruker(authorization);
     }
 
     @GetMapping("/place/{placeId}")
@@ -37,24 +37,20 @@ public class TeleslyngeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TeleslyngeVurdering createTeleslyngevurdering(@RequestBody TeleslyngeVurdering teleslynge) {
+    public TeleslyngeVurdering createTeleslyngevurdering(@RequestBody TeleslyngeVurdering teleslynge,
+                                                         @RequestHeader("Authorization") String authorization) {
         Sted sted = stedService.getStedFromPlaceId(teleslynge.getSted().getPlaceId());
         if (sted != null){
             sted.addVurdering(teleslynge);
         }
-        return teleslyngeService.createTeleslynge(teleslynge);
+        return teleslyngeService.createTeleslynge(teleslynge, authorization);
     }
 
     @PutMapping("/{id}")
     public TeleslyngeVurdering updateTeleslyngevurdering(@PathVariable(value = "id") Integer id,
-                                               @RequestBody TeleslyngeVurdering endring){
-
-        TeleslyngeVurdering teleslyngevurdering = teleslyngeService.getTeleslyngeFromId(id);
-        teleslyngevurdering.setKommentar(endring.getKommentar());
-        teleslyngevurdering.setRangering(endring.isRangering());
-
-        TeleslyngeVurdering oppdatert = teleslyngeService.createTeleslynge(teleslyngevurdering);
-        return oppdatert;
+                                                         @RequestBody TeleslyngeVurdering endring,
+                                                         @RequestHeader("Authorization") String authorization){
+        return teleslyngeService.updateTeleslynge(id, endring, authorization);
     }
 
 }

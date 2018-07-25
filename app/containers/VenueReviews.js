@@ -1,22 +1,33 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
+import { View, StyleSheet, TouchableHighlight } from "react-native";
 import PropertyOverview from "../components/PropertyOverview";
 import sampleReviews from "../sampleReviews";
 import Review from "./Review";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import colors from "../settings/defaultStyles";
+import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
+import VenueContactInfo from "../components/VenueContactInfo";
+import HorizontalRuler from "../components/HorizontalRuler";
 
 export default class VenueReviews extends Component {
   constructor(props) {
     super(props);
-    this.state = { showReviews: false };
+    this.state = { showReviews: true };
   }
 
   render() {
+    const { selectedVenue } = this.props;
+
     return (
       <View>
-        <ViewContainer heightAdjusting="auto">
+        <VenueContactInfo
+          name={selectedVenue.name}
+          formatted_address={selectedVenue.formatted_address}
+          formatted_phone={selectedVenue.formatted_phone_number}
+          style={{ padding: COMPONENT_SPACING }}
+        />
+        <HorizontalRuler />
+        <ViewContainer>
           <PropertyOverview reviewSummary={this.props.selectedVenue.reviews} />
         </ViewContainer>
 
@@ -45,9 +56,14 @@ export default class VenueReviews extends Component {
   renderReviewList() {
     return (
       <View>
-        {sampleReviews.map(review => (
-          <Review key={review.id} review={review} />
-        ))}
+        {sampleReviews.map(review => {
+          return (
+            <View key={review.id}>
+              <HorizontalRuler key />
+              <Review review={review} />
+            </View>
+          );
+        })}
       </View>
     );
   }

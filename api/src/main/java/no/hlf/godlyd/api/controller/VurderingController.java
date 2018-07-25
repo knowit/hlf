@@ -31,9 +31,10 @@ public class VurderingController {
         return vurderingService.getVurderingFromId(id);
     }
 
-    @GetMapping("/bruker/{registrator}")
-    public List<Vurdering> getVurderingerByBruker(@PathVariable(value = "registrator") Integer brukerid){
-        return vurderingService.getVurderingerByBruker(brukerid);
+    @GetMapping("/bruker")
+    public List<Vurdering> getVurderingerByBruker(
+            @RequestHeader("Authorization") String auth){
+        return vurderingService.getVurderingerByBruker(auth);
     }
 
     @GetMapping("/all/place/{placeId}")
@@ -89,16 +90,18 @@ public class VurderingController {
         return ferdigJSON;
     }
 
-    @GetMapping("/place/{placeId}/bruker/{brukerId}")
+    @GetMapping("/place/{placeId}/bruker")
     public List<Vurdering> getVurderingerByPlaceIdAndBrukerId(
             @PathVariable(value = "placeId") String placeId,
-            @PathVariable(value = "brukerId") Integer brukerId){
+            @RequestHeader("Authorization") String auth){
 
-        return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, brukerId);
+        return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteVurdering(@PathVariable(value = "id") Integer id){
-        return vurderingService.deleteVurdering(id);
+    public ResponseEntity<?> deleteVurdering(
+            @PathVariable(value = "id") Integer id,
+            @RequestHeader("Authorization") String auth){
+        return vurderingService.deleteVurdering(id, auth);
     }
 }

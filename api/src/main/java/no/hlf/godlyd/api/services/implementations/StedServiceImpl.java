@@ -5,7 +5,6 @@ import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.services.StedService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,16 +41,12 @@ public class StedServiceImpl implements StedService {
     }
 
     @Override
-    public Sted createSted(Sted sted) {
+    public Sted updateSted(String placeId){
+        Sted sted = stedRepo.findByPlaceId(placeId);
+        if(sted == null){
+            sted = new Sted();
+            sted.setPlaceId(placeId);
+        }
         return stedRepo.save(sted);
-    }
-
-    @Override
-    public ResponseEntity<?> deleteSted(Integer id) {
-        Sted sted = stedRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Sted", "id", id));
-
-        stedRepo.delete(sted);
-        return ResponseEntity.ok().build();
     }
 }

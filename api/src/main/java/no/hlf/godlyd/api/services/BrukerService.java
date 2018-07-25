@@ -10,7 +10,7 @@ public interface BrukerService {
 
     Bruker getBrukerFromId(Integer id);
 
-    Bruker updateBruker(String access_token);
+    Bruker updateBruker(String authorization);
 
     List<Bruker> getAllBrukere();
 

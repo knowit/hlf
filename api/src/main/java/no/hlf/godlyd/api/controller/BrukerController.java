@@ -3,7 +3,6 @@ package no.hlf.godlyd.api.controller;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class BrukerController {
     }
 
     @GetMapping("/login")
-    public boolean loginBruker(@RequestHeader("Authorization")String auth){
-        return true;
+    public Bruker loginBruker(@RequestHeader("Authorization")String auth){
+        return brukerService.updateBruker(auth);
     }
 }

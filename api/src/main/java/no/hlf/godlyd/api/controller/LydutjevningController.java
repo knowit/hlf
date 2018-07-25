@@ -3,10 +3,8 @@ package no.hlf.godlyd.api.controller;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.LydutjevningService;
 import no.hlf.godlyd.api.services.StedService;
-import no.hlf.godlyd.api.services.TeleslyngeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +23,9 @@ public class LydutjevningController {
         return lydutjevningService.getAllLydutjevninger();
     }
 
-    @GetMapping("/bruker/{registrator}")
-    public List<Vurdering> getLydutjevningByBruker(@PathVariable(value = "registrator") Integer brukerid) {
-        return lydutjevningService.getLydutjevningByBruker(brukerid);
+    @GetMapping("/bruker")
+    public List<Vurdering> getLydutjevningByBruker(@RequestHeader("Authorization") String auth) {
+        return lydutjevningService.getLydutjevningByBruker(auth);
     }
 
     @GetMapping("/place/{placeId}")
@@ -37,24 +35,17 @@ public class LydutjevningController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LydutjevningVurdering createLydutjevningvurdering(@RequestBody LydutjevningVurdering lydutjevning) {
-        Sted sted = stedService.getStedFromPlaceId(lydutjevning.getSted().getPlaceId());
-        if (sted != null){
-            sted.addVurdering(lydutjevning);
-        }
-        return lydutjevningService.createLydutjevning(lydutjevning);
+    public LydutjevningVurdering createLydutjevningvurdering(
+            @RequestBody LydutjevningVurdering lydutjevning,
+            @RequestHeader("Authorization") String auth) {
+        return lydutjevningService.createLydutjevning(lydutjevning, auth);
     }
 
     @PutMapping("/{id}")
     public LydutjevningVurdering updateLydutjevningvurdering(@PathVariable(value = "id") Integer id,
-                                                             @RequestBody LydutjevningVurdering endring){
-
-        LydutjevningVurdering lydutjevningvurdering = lydutjevningService.getLydutjevningFromId(id);
-        lydutjevningvurdering.setKommentar(endring.getKommentar());
-        lydutjevningvurdering.setRangering(endring.isRangering());
-
-        LydutjevningVurdering oppdatert = lydutjevningService.createLydutjevning(lydutjevningvurdering);
-        return oppdatert;
+                                                             @RequestBody LydutjevningVurdering endring,
+                                                             @RequestHeader("Authorization") String auth){
+        return lydutjevningService.updateLydutjevning(id, endring, auth);
     }
 
 }

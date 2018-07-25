@@ -11,9 +11,12 @@ public interface LydutjevningService {
 
     LydutjevningVurdering getLydutjevningFromId(Integer id);
 
-    List<Vurdering> getLydutjevningByBruker(Integer brukerid);
+    List<Vurdering> getLydutjevningByBruker(String authorization);
 
     List<Vurdering> getLydutjevningByPlaceId(String placeId);
 
-    LydutjevningVurdering createLydutjevning(LydutjevningVurdering lydutjevning);
+    LydutjevningVurdering createLydutjevning(LydutjevningVurdering lydutjevning, String authorization);
+
+    LydutjevningVurdering updateLydutjevning(Integer id, LydutjevningVurdering endring, String authorization);
+
 }

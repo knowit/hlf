@@ -1,9 +1,11 @@
 package no.hlf.godlyd.api.services.implementations;
 
+import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
+import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,8 @@ public class VurderingServiceImpl implements VurderingService {
     private VurderingRepo vurderingRepo;
     @Autowired
     private StedRepo stedRepo;
+    @Autowired
+    private BrukerService brukerService;
 
     // Methods:
     @Override
@@ -51,22 +54,29 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(Integer brukerid) {
-        return vurderingRepo.findByRegistrator(brukerid);
+    public List<Vurdering> getVurderingerByBruker(String authorization) throws ResourceNotFoundException {
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
+        return vurderingRepo.findByRegistrator(brukerId);
     }
 
     @Override
-    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId) throws ResourceNotFoundException {
+    public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization) throws ResourceNotFoundException {
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
         return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
     }
 
     @Override
-    public ResponseEntity<?> deleteVurdering(Integer id) {
+    public ResponseEntity<?> deleteVurdering(Integer id, String authorization) {
+        Integer brukerid = brukerService.updateBruker(authorization).getId();
         Vurdering vurdering = vurderingRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vurdering", "id", id));
 
-        vurderingRepo.delete(vurdering);
-        return ResponseEntity.ok().build();
+        if(vurdering.getRegistrator().getId().equals(brukerid)){
+            vurderingRepo.delete(vurdering);
+            return ResponseEntity.ok().build();
+        } else{
+            throw new AccessDeniedException("delete", "vurdering, id: "+id);
+        }
     }
 
     @Override

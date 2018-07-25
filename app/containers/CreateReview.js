@@ -1,83 +1,77 @@
 import React, { Component } from "react";
-import { View, TouchableHighlight, StyleSheet, TextInput } from "react-native";
-import HorizontalRuler from "../components/HorizontalRuler";
+import { StyleSheet } from "react-native";
 import properties from "../settings/propertyConfig";
 import colors, {
   COMPONENT_SPACING,
   BORDER_RADIUS
 } from "../settings/defaultStyles";
-import Entypo from "react-native-vector-icons/Entypo";
-import AppText from "../components/AppText";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import ViewContainer from "../components/ViewContainer";
-import AppButton from "../components/AppButton";
-import ReviewOption from "../components/ReviewOption";
 import ReviewProperty from "../components/ReviewProperty";
+import CreateReviewNavigation from "../components/CreateReviewNavigation";
+import { ROOT_API_URL } from "../settings/endpoints";
+import axios from "axios";
 
 export default class CreateReview extends Component {
   constructor(props) {
     super(props);
-    this.state = this.resetInputValues();
-    this.onPropertyValueChange = this.onPropertyValueChange.bind(this);
+    const nextPropertyState = this.getInitialState();
+    this.state = {
+      currentProperty: Object.keys(nextPropertyState)[0],
+      properties: nextPropertyState
+    };
+    this.onReviewAction = this.onReviewAction.bind(this);
+    this.onPropertySelect = this.onPropertySelect.bind(this);
   }
   render() {
     return (
-      <ViewContainer heightAdjusting="auto">
-        {properties.map(property => (
-          <ReviewProperty property={property} key={property.name} />
-        ))}
+      <ViewContainer flex={true}>
+        <CreateReviewNavigation
+          currentProperty={this.state.currentProperty}
+          onPropertySelect={this.onPropertySelect}
+        />
+        <ReviewProperty
+          currentProperty={this.state.properties[this.state.currentProperty]}
+          onReviewAction={this.onReviewAction}
+        />
       </ViewContainer>
     );
   }
 
-  onPropertyValueChange(propertyName, selected) {
-    const newValue =
-      this.state[propertyName].value === selected ? undefined : selected;
+  onReviewAction(actionType, newValue) {
+    const url = `${ROOT_API_URL}/vurderinger/${this.state.currentProperty.toLowerCase()}`;
+    const currentProperty = this.state.properties[this.state.currentProperty];
 
-    const nextState = { ...this.state[propertyName], value: newValue };
-    this.setState({ [propertyName]: nextState });
+    const reviewBody = {
+      sted: {
+        placeId: this.props.selectedVenue.place_id
+      },
+
+      registrator: { id: 3 },
+      kommentar: actionType === "comment" ? newValue : currentProperty.comment,
+      rangering:
+        actionType === "value"
+          ? newValue === 1
+            ? true
+            : false
+          : currentProperty.value
+    };
+    console.log(reviewBody);
+    //axios.post(url, reviewBody);
   }
 
-  onCommentChange(propertyName, text) {
-    const nextState = { ...this.state[propertyName], comment: text };
-    this.setState({ [propertyName]: nextState });
+  onPropertySelect(propertyName) {
+    this.setState({ currentProperty: propertyName });
   }
 
-  resetInputValues() {
-    return properties
-      .map(property => {
-        return {
-          name: property.name,
-          value: undefined,
-          comment: ""
-        };
-      })
-      .reduce((obj, item) => {
-        obj[item.name] = item;
-        return obj;
-      }, {});
+  getInitialState() {
+    return properties.reduce((obj, property) => {
+      obj[property.name] = Object.assign(property, {
+        comment: "",
+        value: 0
+      });
+      return obj;
+    }, {});
   }
 }
 
-const styles = StyleSheet.create({
-  iconRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginVertical: COMPONENT_SPACING,
-    padding: COMPONENT_SPACING
-  },
-  infoIcon: {
-    marginHorizontal: COMPONENT_SPACING / 2
-  },
-  textArea: {
-    backgroundColor: colors.secondaryBackgroundColor,
-    borderRadius: BORDER_RADIUS,
-    textAlignVertical: "top",
-    fontSize: 19,
-    padding: 10,
-    color: colors.primaryTextColor,
-    borderWidth: 1,
-    borderColor: colors.primaryTextColor
-  }
-});
+const styles = StyleSheet.create({});
