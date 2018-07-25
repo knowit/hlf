@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .configure(http)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/healthcheck").permitAll()
-                .antMatchers(HttpMethod.GET, "/**").authenticated()
+                .antMatchers("/**").authenticated()
                 .and()
                 .logout().permitAll();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
