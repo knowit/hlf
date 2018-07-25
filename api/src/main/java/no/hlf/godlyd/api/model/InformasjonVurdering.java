@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "informasjonvurdering")
-@PrimaryKeyJoinColumn(name = "informasjonId")
+@PrimaryKeyJoinColumn(name = "id")
 public class InformasjonVurdering extends Vurdering {
 
     @NotNull

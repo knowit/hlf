@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 
 @Entity
 @Table(name = "lydforholdvurdering")
-@PrimaryKeyJoinColumn(name = "lydforholdId")
+@PrimaryKeyJoinColumn(name = "id")
 public class LydforholdVurdering extends Vurdering {
 
     @NotNull
