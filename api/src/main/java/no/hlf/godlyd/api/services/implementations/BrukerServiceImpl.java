@@ -33,11 +33,11 @@ public class BrukerServiceImpl implements BrukerService {
 
     public Bruker updateBruker(String authorization){
         Bruker bruker = getCredentials(authorization);
-        Bruker b = getBrukerFromAuth0UserId(bruker.getAuth0UserId());
+        Bruker b = brukerRepo.findByAuth0UserId(bruker.getAuth0UserId());
         if(b == null){
-            throw new ResourceNotFoundException("Bruker", "authorization", authorization);
+            b = new Bruker();
+            b.setAuth0UserId(bruker.getAuth0UserId());
         }
-        b.setAuth0UserId(bruker.getAuth0UserId());
         b.setFornavn(bruker.getFornavn());
         b.setEtternavn(bruker.getEtternavn());
         b.setImageUrl(bruker.getImageUrl());
