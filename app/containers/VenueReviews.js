@@ -1,21 +1,25 @@
 import React, { Component } from "react";
 import { View, StyleSheet, TouchableHighlight } from "react-native";
 import PropertyOverview from "../components/PropertyOverview";
-import sampleReviews from "../sampleReviews";
 import Review from "./Review";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import VenueContactInfo from "../components/VenueContactInfo";
 import HorizontalRuler from "../components/HorizontalRuler";
+import { connect } from "react-redux";
+import Loading from "../components/Loading";
+import { fetchReviews } from "../actions";
+import SlimText from "../components/SlimText";
 
-export default class VenueReviews extends Component {
+class VenueReviews extends Component {
   constructor(props) {
     super(props);
-    this.state = { showReviews: true };
+    this.state = { showReviews: false };
   }
 
   render() {
+    console.log("VENUEREVIEW", this.props);
     const { selectedVenue } = this.props;
 
     return (
@@ -41,7 +45,10 @@ export default class VenueReviews extends Component {
   renderShowReviewArrow() {
     return (
       <TouchableHighlight
-        onPress={() => this.setState({ showReviews: true })}
+        onPress={() => {
+          this.props.fetchReviews(this.props.selectedVenue.place_id);
+          this.setState({ showReviews: true });
+        }}
         style={styles.showReviewArrow}
       >
         <MaterialIcons
@@ -54,9 +61,22 @@ export default class VenueReviews extends Component {
   }
 
   renderReviewList() {
+    const { reviewsList, isLoading } = this.props.reviewList;
+
+    if (isLoading) {
+      return <Loading inline={true} />;
+    }
+    if (reviewsList.length === 0) {
+      return (
+        <SlimText style={{ fontSize: 23, textAlign: "center", marginTop: 15 }}>
+          Ingen vurderinger registrert
+        </SlimText>
+      );
+    }
+
     return (
       <View>
-        {sampleReviews.map(review => {
+        {reviewsList.map(review => {
           return (
             <View key={review.id}>
               <HorizontalRuler key />
@@ -68,6 +88,11 @@ export default class VenueReviews extends Component {
     );
   }
 }
+
+export default connect(
+  ({ reviewList }) => ({ reviewList }),
+  { fetchReviews }
+)(VenueReviews);
 
 const styles = StyleSheet.create({
   showReviewArrow: {

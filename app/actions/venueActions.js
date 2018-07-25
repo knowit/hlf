@@ -5,6 +5,7 @@ import { API_KEY } from "../credentials";
 import axios from "axios";
 import _ from "lodash";
 import { ROOT_API_URL } from "../settings/endpoints";
+import { fetchAccessToken } from "./";
 import { AsyncStorage } from "react-native";
 
 export const fetchVenueData = placeId => {
@@ -30,16 +31,17 @@ export const fetchVenueData = placeId => {
           return googleObject;
         })
         .catch(error => {
-          return { cake: "istrue" };
+          return {};
         }),
       axios
-        .get(`${ROOT_API_URL}/steder/${placeId}/totalvurdering`, {
+        .get(`/steder/${placeId}/totalvurdering`, {
           headers: {
-            Authorization: "Bearer " + token + "1"
+            Authorization: "Bearer " + token
           }
         })
         .then(response => response)
         .catch(error => {
+          console.log(error);
           console.log("EMPTY PLACE / ERROR TOKEN");
           return defaultPlace();
         })
@@ -49,10 +51,6 @@ export const fetchVenueData = placeId => {
       dispatch({ type: VENUE_SELECTED, payload: Object.assign(...values) });
     });
   };
-};
-
-const fetchAccessToken = async () => {
-  return AsyncStorage.getItem("access_token").then(result => result);
 };
 
 export const deselectVenue = () => {
