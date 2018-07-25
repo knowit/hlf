@@ -1,5 +1,6 @@
 package no.hlf.godlyd.api.services.implementations;
 
+import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.repository.BrukerRepo;
 import no.hlf.godlyd.api.security.Auth0Connection;
@@ -27,7 +28,7 @@ public class BrukerServiceImpl implements BrukerService {
         Bruker bruker = getCredentials(authorization);
         Bruker b = getBrukerFromAuth0UserId(bruker.getAuth0UserId());
         if(b == null){
-            b = new Bruker();
+            throw new ResourceNotFoundException("Bruker", "authorization", authorization);
         }
         b.setAuth0UserId(bruker.getAuth0UserId());
         b.setFornavn(bruker.getFornavn());

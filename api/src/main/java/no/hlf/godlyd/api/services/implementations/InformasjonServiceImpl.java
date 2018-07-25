@@ -7,6 +7,7 @@ import no.hlf.godlyd.api.model.InformasjonVurdering;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.repository.InformasjonRepo;
+import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.InformasjonService;
 import no.hlf.godlyd.api.services.StedService;
@@ -58,25 +59,32 @@ public class InformasjonServiceImpl implements InformasjonService {
 
     @Override
     public InformasjonVurdering createInformasjon(InformasjonVurdering informasjon, String authorization) {
-        Bruker bruker = brukerService.updateBruker(authorization);
-        informasjon.setRegistrator(bruker);
         Sted sted = stedService.updateSted(informasjon.getSted().getPlaceId());
-        if (sted != null){
-            sted.addVurdering(informasjon);
-        }
-        return informasjonRepo.save(informasjon);
+        Bruker bruker = brukerService.updateBruker(authorization);
+        InformasjonVurdering i = new InformasjonVurdering();
+        i.setSted(sted);
+        i.setRegistrator(bruker);
+        i.setDato(informasjon.getDato());
+        i.setRangering(informasjon.isRangering());
+        i.setKommentar(informasjon.getKommentar());
+        return informasjonRepo.save(i);
     }
 
     @Override
     public InformasjonVurdering updateInformasjon(Integer id, InformasjonVurdering endring, String authorization){
-        InformasjonVurdering informasjonvurdering = getInformasjonFromId(id);
-        Integer brukerId = brukerService.updateBruker(authorization).getId();
-        if(informasjonvurdering.getRegistrator().getId().equals(brukerId)){
-            informasjonvurdering.setKommentar(endring.getKommentar());
-            informasjonvurdering.setRangering(endring.isRangering());
-            return informasjonRepo.save(informasjonvurdering);
+        if(informasjonRepo.existsById(id)){
+            InformasjonVurdering informasjon = getInformasjonFromId(id);
+            Bruker bruker = brukerService.updateBruker(authorization);
+            if(informasjon.getRegistrator().getId().equals(bruker.getId())){
+                informasjon.setKommentar(endring.getKommentar());
+                informasjon.setRangering(endring.isRangering());
+                informasjon.setDato(endring.getDato());
+                return informasjonRepo.save(informasjon);
+            } else{
+                throw new AccessDeniedException("alter", "Informasjonsvurdering", "id", id);   // Placeholder
+            }
         } else{
-            throw new AccessDeniedException("alter", "informasjonsvurdering, id: "+id);
+            throw new ResourceNotFoundException("Informasjonsvurdering", "id", id);
         }
     }
 }

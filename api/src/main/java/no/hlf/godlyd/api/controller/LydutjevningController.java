@@ -35,16 +35,16 @@ public class LydutjevningController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LydutjevningVurdering createLydutjevningvurdering(
-            @RequestBody LydutjevningVurdering lydutjevning,
+    public LydutjevningVurdering createLydutjevningVurdering(
+            @RequestBody LydutjevningVurdering Lydutjevning,
             @RequestHeader("Authorization") String auth) {
-        return lydutjevningService.createLydutjevning(lydutjevning, auth);
+        return lydutjevningService.createLydutjevning(Lydutjevning, auth);
     }
 
     @PutMapping("/{id}")
-    public LydutjevningVurdering updateLydutjevningvurdering(@PathVariable(value = "id") Integer id,
-                                                             @RequestBody LydutjevningVurdering endring,
-                                                             @RequestHeader("Authorization") String auth){
+    public LydutjevningVurdering updateLydutjevningVurdering(@PathVariable(value = "id") Integer id,
+                                                         @RequestBody LydutjevningVurdering endring,
+                                                         @RequestHeader("Authorization") String auth){
         return lydutjevningService.updateLydutjevning(id, endring, auth);
     }
 

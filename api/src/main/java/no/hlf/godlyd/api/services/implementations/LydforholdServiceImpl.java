@@ -55,30 +55,34 @@ public class LydforholdServiceImpl implements LydforholdService {
 
         return sortert.get("Lydforholdvurderinger");
     }
-
     @Override
     public LydforholdVurdering createLydforhold(LydforholdVurdering lydforhold, String authorization) {
-        Bruker bruker = brukerService.updateBruker(authorization);
-        lydforhold.setRegistrator(bruker);
         Sted sted = stedService.updateSted(lydforhold.getSted().getPlaceId());
-        if (sted != null){
-            sted.addVurdering(lydforhold);
-        }
-        return lydforholdRepo.save(lydforhold);
+        Bruker bruker = brukerService.updateBruker(authorization);
+        LydforholdVurdering i = new LydforholdVurdering();
+        i.setSted(sted);
+        i.setRegistrator(bruker);
+        i.setDato(lydforhold.getDato());
+        i.setRangering(lydforhold.isRangering());
+        i.setKommentar(lydforhold.getKommentar());
+        return lydforholdRepo.save(i);
     }
-
 
     @Override
     public LydforholdVurdering updateLydforhold(Integer id, LydforholdVurdering endring, String authorization){
-        LydforholdVurdering lydforholdvurdering = getLydforholdFromId(id);
-        Integer brukerId = brukerService.updateBruker(authorization).getId();
-        if(lydforholdvurdering.getRegistrator().getId().equals(brukerId)){
-            lydforholdvurdering.setKommentar(endring.getKommentar());
-            lydforholdvurdering.setRangering(endring.isRangering());
-            return lydforholdRepo.save(lydforholdvurdering);
+        if(lydforholdRepo.existsById(id)){
+            LydforholdVurdering lydforhold = getLydforholdFromId(id);
+            Bruker bruker = brukerService.updateBruker(authorization);
+            if(lydforhold.getRegistrator().getId().equals(bruker.getId())){
+                lydforhold.setKommentar(endring.getKommentar());
+                lydforhold.setRangering(endring.isRangering());
+                lydforhold.setDato(endring.getDato());
+                return lydforholdRepo.save(lydforhold);
+            } else{
+                throw new AccessDeniedException("alter", "Lydforholdvurdering", "id", id);   // Placeholder
+            }
         } else{
-            throw new AccessDeniedException("alter", "lydforholdvurdering, id: "+id);
+            throw new ResourceNotFoundException("Lydforholdvurdering", "id", id);
         }
     }
-
 }

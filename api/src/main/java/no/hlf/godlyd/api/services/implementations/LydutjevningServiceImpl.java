@@ -58,25 +58,32 @@ public class LydutjevningServiceImpl implements LydutjevningService {
 
     @Override
     public LydutjevningVurdering createLydutjevning(LydutjevningVurdering lydutjevning, String authorization) {
-        Bruker bruker = brukerService.updateBruker(authorization);
-        lydutjevning.setRegistrator(bruker);
         Sted sted = stedService.updateSted(lydutjevning.getSted().getPlaceId());
-        if (sted != null){
-            sted.addVurdering(lydutjevning);
-        }
-        return lydutjevningRepo.save(lydutjevning);
+        Bruker bruker = brukerService.updateBruker(authorization);
+        LydutjevningVurdering i = new LydutjevningVurdering();
+        i.setSted(sted);
+        i.setRegistrator(bruker);
+        i.setDato(lydutjevning.getDato());
+        i.setRangering(lydutjevning.isRangering());
+        i.setKommentar(lydutjevning.getKommentar());
+        return lydutjevningRepo.save(i);
     }
 
     @Override
     public LydutjevningVurdering updateLydutjevning(Integer id, LydutjevningVurdering endring, String authorization){
-        LydutjevningVurdering lydutjevningvurdering = getLydutjevningFromId(id);
-        Integer brukerId = brukerService.updateBruker(authorization).getId();
-        if(lydutjevningvurdering.getRegistrator().getId().equals(brukerId)){
-            lydutjevningvurdering.setKommentar(endring.getKommentar());
-            lydutjevningvurdering.setRangering(endring.isRangering());
-            return lydutjevningRepo.save(lydutjevningvurdering);
+        if(lydutjevningRepo.existsById(id)){
+            LydutjevningVurdering lydutjevning = getLydutjevningFromId(id);
+            Bruker bruker = brukerService.updateBruker(authorization);
+            if(lydutjevning.getRegistrator().getId().equals(bruker.getId())){
+                lydutjevning.setKommentar(endring.getKommentar());
+                lydutjevning.setRangering(endring.isRangering());
+                lydutjevning.setDato(endring.getDato());
+                return lydutjevningRepo.save(lydutjevning);
+            } else{
+                throw new AccessDeniedException("alter", "Lydutjevningvurdering", "id", id);   // Placeholder
+            }
         } else{
-            throw new AccessDeniedException("alter", "lydutjevningvurdering, id: "+id);
+            throw new ResourceNotFoundException("Lydutjevningvurdering", "id", id);
         }
     }
 

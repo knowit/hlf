@@ -37,7 +37,7 @@ public class StedController {
 
     @GetMapping("/place/{placeId}")
     public Sted getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
-        return stedService.getStedFromPlaceId(placeId);
+        return stedService.updateSted(placeId);
     }
 
     // GOOGLE API
@@ -52,7 +52,7 @@ public class StedController {
         String result = restTemplate.getForObject(uri, String.class, placeId, API_KEY);
         JsonNode jsonNode = (new ObjectMapper()).readTree(result);
 
-        Sted sted = stedService.getStedFromPlaceId(placeId);
+        Sted sted = stedService.updateSted(placeId);
 
         Map<String, Object> map = new HashMap<>();
         map.put("Google Places API", jsonNode);
@@ -67,7 +67,7 @@ public class StedController {
         if (googleinfo) {
             map = getStedInfoByPlaceId(placeId);
         } else {
-            map.put("Sted", stedService.getStedFromPlaceId(placeId));
+            map.put("Sted", stedService.updateSted(placeId));
         }
 
         if (stedService.existsByPlaceId(placeId)){

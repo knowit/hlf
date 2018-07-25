@@ -1,6 +1,5 @@
 package no.hlf.godlyd.api.controller;
 
-import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.StedService;
@@ -37,20 +36,17 @@ public class TeleslyngeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TeleslyngeVurdering createTeleslyngevurdering(@RequestBody TeleslyngeVurdering teleslynge,
-                                                         @RequestHeader("Authorization") String authorization) {
-        Sted sted = stedService.getStedFromPlaceId(teleslynge.getSted().getPlaceId());
-        if (sted != null){
-            sted.addVurdering(teleslynge);
-        }
-        return teleslyngeService.createTeleslynge(teleslynge, authorization);
+    public TeleslyngeVurdering createTeleslyngeVurdering(
+            @RequestBody TeleslyngeVurdering teleslynge,
+            @RequestHeader("Authorization") String auth) {
+        return teleslyngeService.createTeleslynge(teleslynge, auth);
     }
 
     @PutMapping("/{id}")
-    public TeleslyngeVurdering updateTeleslyngevurdering(@PathVariable(value = "id") Integer id,
+    public TeleslyngeVurdering updateTeleslyngeVurdering(@PathVariable(value = "id") Integer id,
                                                          @RequestBody TeleslyngeVurdering endring,
-                                                         @RequestHeader("Authorization") String authorization){
-        return teleslyngeService.updateTeleslynge(id, endring, authorization);
+                                                         @RequestHeader("Authorization") String auth){
+        return teleslyngeService.updateTeleslynge(id, endring, auth);
     }
 
 }

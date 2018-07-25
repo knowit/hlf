@@ -39,9 +39,9 @@ public class StedServiceImpl implements StedService {
     public Sted updateSted(String placeId){
         Sted sted = stedRepo.findByPlaceId(placeId);
         if(sted == null){
-            sted = new Sted();
-            sted.setPlaceId(placeId);
+            sted = new Sted(placeId);
+            stedRepo.save(sted);
         }
-        return stedRepo.save(sted);
+        return sted;
     }
 }

@@ -1,15 +1,11 @@
 package no.hlf.godlyd.api.controller;
 
 import no.hlf.godlyd.api.model.LydforholdVurdering;
-import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.LydforholdService;
 import no.hlf.godlyd.api.services.StedService;
-import no.hlf.godlyd.api.services.TeleslyngeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,16 +36,16 @@ public class LydforholdController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LydforholdVurdering createLydforholdvurdering(
+    public LydforholdVurdering createLydforholdVurderingg(
             @RequestBody LydforholdVurdering lydforhold,
             @RequestHeader("Authorization") String auth) {
         return lydforholdService.createLydforhold(lydforhold, auth);
     }
 
     @PutMapping("/{id}")
-    public LydforholdVurdering updateLydforholdvurdering(@PathVariable(value = "id") Integer id,
-                                                           @RequestBody LydforholdVurdering endring,
-                                                           @RequestHeader("Authorization") String auth){
+    public LydforholdVurdering updateLydforholdVurdering(@PathVariable(value = "id") Integer id,
+                                                         @RequestBody LydforholdVurdering endring,
+                                                         @RequestHeader("Authorization") String auth){
         return lydforholdService.updateLydforhold(id, endring, auth);
     }
 

@@ -2,6 +2,7 @@ package no.hlf.godlyd.api.services.implementations;
 
 import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
+import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
@@ -57,25 +58,32 @@ public class TeleslyngeServiceImpl implements TeleslyngeService {
 
     @Override
     public TeleslyngeVurdering createTeleslynge(TeleslyngeVurdering teleslynge, String authorization) {
-        teleslynge.setRegistrator(brukerService.updateBruker(authorization));
         Sted sted = stedService.updateSted(teleslynge.getSted().getPlaceId());
-        if (sted != null){
-            sted.addVurdering(teleslynge);
-        }
-        return teleslyngeRepo.save(teleslynge);
+        Bruker bruker = brukerService.updateBruker(authorization);
+        TeleslyngeVurdering i = new TeleslyngeVurdering();
+        i.setSted(sted);
+        i.setRegistrator(bruker);
+        i.setDato(teleslynge.getDato());
+        i.setRangering(teleslynge.isRangering());
+        i.setKommentar(teleslynge.getKommentar());
+        return teleslyngeRepo.save(i);
     }
 
     @Override
     public TeleslyngeVurdering updateTeleslynge(Integer id, TeleslyngeVurdering endring, String authorization){
-
-        Integer brukerId = brukerService.updateBruker(authorization).getId();
-        TeleslyngeVurdering teleslyngevurdering = getTeleslyngeFromId(id);
-        if(teleslyngevurdering.getRegistrator().getId().equals(brukerId)){
-            teleslyngevurdering.setKommentar(endring.getKommentar());
-            teleslyngevurdering.setRangering(endring.isRangering());
-            return teleslyngeRepo.save(teleslyngevurdering);
+        if(teleslyngeRepo.existsById(id)){
+            TeleslyngeVurdering teleslynge = getTeleslyngeFromId(id);
+            Bruker bruker = brukerService.updateBruker(authorization);
+            if(teleslynge.getRegistrator().getId().equals(bruker.getId())){
+                teleslynge.setKommentar(endring.getKommentar());
+                teleslynge.setRangering(endring.isRangering());
+                teleslynge.setDato(endring.getDato());
+                return teleslyngeRepo.save(teleslynge);
+            } else{
+                throw new AccessDeniedException("alter", "Teleslyngevurdering", "id", id);   // Placeholder
+            }
         } else{
-            throw new AccessDeniedException("alter", "informasjonsvurdering, id: "+id);
+            throw new ResourceNotFoundException("Teleslyngevurdering", "id", id);
         }
     }
 

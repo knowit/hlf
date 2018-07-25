@@ -75,7 +75,7 @@ public class VurderingServiceImpl implements VurderingService {
             vurderingRepo.delete(vurdering);
             return ResponseEntity.ok().build();
         } else{
-            throw new AccessDeniedException("delete", "vurdering, id: "+id);
+            throw new AccessDeniedException("delete", "Vurdering", "id", id);
         }
     }
 
@@ -112,5 +112,4 @@ public class VurderingServiceImpl implements VurderingService {
                     .filter(vurdering -> vurderingsklasse.isInstance(vurdering))
                     .collect(Collectors.toList());
     }
-
 }
