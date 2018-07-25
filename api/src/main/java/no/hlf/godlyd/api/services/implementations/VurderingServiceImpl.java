@@ -39,11 +39,11 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getAllVurderingerByPlaceId(String placeId) throws ResourceNotFoundException {
+    public List<Vurdering> getAllVurderingerByPlaceId(String placeId) {
         return vurderingRepo.findByPlaceId(placeId);}
 
     @Override
-    public Page<Vurdering> getVurderingerByPlaceId(String placeId, Pageable pagable) throws ResourceNotFoundException {
+    public Page<Vurdering> getVurderingerByPlaceId(String placeId, Pageable pagable) {
         return vurderingRepo.findByPlaceIdPage(placeId, pagable);
     }
 

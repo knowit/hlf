@@ -18,12 +18,19 @@ public class BrukerServiceImpl implements BrukerService {
     BrukerRepo brukerRepo;
 
     public Bruker getBrukerFromId(Integer id){
-        return brukerRepo.findBrukerById(id);
+        return brukerRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bruker", "id", id));
     }
 
     public Bruker getBrukerFromAuth0UserId(String auth0UserId){
-        return brukerRepo.findByAuth0UserId(auth0UserId);
+        Bruker bruker = brukerRepo.findByAuth0UserId(auth0UserId);
+        if (bruker != null){
+            return bruker;
+        } else {
+            throw new ResourceNotFoundException("Bruker", "auth0UserId", auth0UserId);
+        }
     }
+
     public Bruker updateBruker(String authorization){
         Bruker bruker = getCredentials(authorization);
         Bruker b = getBrukerFromAuth0UserId(bruker.getAuth0UserId());

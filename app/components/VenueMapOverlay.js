@@ -1,39 +1,29 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
+import { View, TouchableHighlight } from "react-native";
 import PropertyOverview from "./PropertyOverview";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
-import AppText from "./AppText";
 import ViewContainer from "./ViewContainer";
+import VenueContactInfo from "./VenueContactInfo";
 
 export default ({ selectedVenue, showDetails }) => {
   return (
-    <ViewContainer heightAdjusting="auto" opaque={true}>
-      <View style={styles.header}>
-        <AppText type="primary" size="large">
-          {selectedVenue.name}
-        </AppText>
+    <ViewContainer opaque={true}>
+      <View style={{ flexDirection: "row", marginBottom: COMPONENT_SPACING }}>
+        <VenueContactInfo
+          name={selectedVenue.name}
+          formatted_address={selectedVenue.formatted_address}
+          style={{ flex: 1 }}
+        />
         <TouchableHighlight onPress={showDetails}>
           <MaterialIcons
-            name="keyboard-arrow-right"
+            name="arrow-forward"
             size={40}
             color={colors.primaryTextColor}
           />
         </TouchableHighlight>
       </View>
-      <AppText type="secondary" size="medium">
-        {selectedVenue.formatted_address}
-      </AppText>
       <PropertyOverview reviewSummary={selectedVenue.reviews} />
     </ViewContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    width: "100%",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row"
-  }
-});
