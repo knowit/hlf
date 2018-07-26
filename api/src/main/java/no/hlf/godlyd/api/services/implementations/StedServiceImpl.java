@@ -41,7 +41,7 @@ public class StedServiceImpl implements StedService {
     }
 
     @Override
-    public Sted updateSted(String placeId){
+    public Sted getPlaceByPlaceIdAndCreateOnMissing(String placeId){
         Sted sted = stedRepo.findByPlaceId(placeId);
         if(sted == null){
             sted = new Sted(placeId);

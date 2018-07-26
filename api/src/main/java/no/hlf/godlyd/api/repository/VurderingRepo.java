@@ -15,8 +15,12 @@ import java.util.List;
 @Repository
 public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.registrator.id = ?1")
-    List<Vurdering> findByRegistrator(Integer brukerid);
+    @Query(value = "SELECT v from Vurdering v WHERE v.dato = current_date AND v.registrator.id = ?1 AND v.sted.placeId = ?2" )
+    List<Vurdering> getReviewsFromTodayByUserAndPlaceId(Integer brukerId, String placeId);
+
+
+    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.registrator.id = ?2")
+    List<Vurdering> findByPlaceIdAndRegistrator(String placeId, Integer brukerId);
 
     @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.id = ?1")
     List<Vurdering> findByStedId(Integer id);
@@ -27,12 +31,23 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
     @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 ORDER BY v.dato DESC")
     Page<Vurdering> findByPlaceIdPage(String placeid, Pageable pagable);
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.registrator.id = ?2")
-    List<Vurdering> findByPlaceIdAndRegistrator(String placeId, Integer brukerId);
+    @Query(value = "SELECT count(*) FROM Vurdering v WHERE v.sted.placeId = ?1 GROUP BY v.registrator.id")
+    int getRegistratorCountByPlaceId(String placeId);
+
+
+
+    /*@Query(value = "SELECT v FROM Vurdering v WHERE v.registrator.id = ?1")
+    List<Vurdering> findByRegistrator(Integer brukerid);
+
+
+
+
+
+
 
     @Query(value = "SELECT v.registrator.id FROM Vurdering v WHERE v.sted.id = ?1 GROUP BY v.registrator.id")
     List<Integer> findRegistratorsByStedId(Integer stedId);
 
     boolean existsById(Integer id);
-
+*/
 }

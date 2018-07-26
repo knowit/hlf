@@ -2,6 +2,8 @@ package no.hlf.godlyd.api.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.hlf.godlyd.api.Vurderingsstatistikk;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.Vurdering;
@@ -17,72 +19,35 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/steder")
+@RequestMapping("/sted")
 public class StedController {
 
     @Autowired
-    StedService stedService;
+    private StedService stedService;
     @Autowired
-    VurderingService vurderingService;
+    private VurderingService vurderingService;
 
     @GetMapping()
     public List<Sted> getAllSteder(){
         return stedService.getAllSteder();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/byId/{id}")
     public Sted getStedById(@PathVariable(value = "id") Integer id){
         return stedService.getStedFromId(id);
     }
 
-    @GetMapping("/place/{placeId}")
-    public Sted getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
-        return stedService.updateSted(placeId);
+    @GetMapping("/{placeId}")
+    public ObjectNode getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
+        Sted sted = stedService.getStedFromPlaceId(placeId);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode object = mapper.valueToTree(sted);
+        ArrayNode reviews = mapper.valueToTree(vurderingService.getAllVurderingerByPlaceID(placeId));
+        object.put("reviewerCount", vurderingService.getRegistratorCount(placeId));
+        object.putPOJO("stats", vurderingService.getReviewStats(placeId));
+
+        return object;
     }
 
-    // GOOGLE API
-    @GetMapping("/info/place/{placeId}")
-    public Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
-        String API_KEY = "AIzaSyAh4aY8MmtOlCx1iDHYI4Z8c3P5VVgK2IY";
-        RestTemplate restTemplate = new RestTemplate();
-        String uri = "https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACE_ID}" +
-                "&language=no&fields=name,place_id,formatted_address,formatted_phone_number," +
-                "international_phone_number,website,opening_hours,type,scope,url&key={API_KEY}";
 
-        String result = restTemplate.getForObject(uri, String.class, placeId, API_KEY);
-        JsonNode jsonNode = (new ObjectMapper()).readTree(result);
-
-        Sted sted = stedService.updateSted(placeId);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("Google Places API", jsonNode);
-        map.put("Sted", sted);
-        return map;
-    }
-
-    @GetMapping("/place/{placeId}/totalvurdering/{google}")
-    public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "placeId") String placeId,
-                                                        @PathVariable(value = "google") boolean googleinfo) throws IOException {
-        Map<String, Object> map = new HashMap<>();
-        if (googleinfo) {
-            map = getStedInfoByPlaceId(placeId);
-        } else {
-            map.put("Sted", stedService.updateSted(placeId));
-        }
-
-        if (stedService.existsByPlaceId(placeId)){
-            List<Vurdering> vurderinger = vurderingService.getAllVurderingerByPlaceId(placeId);
-            Map<String, List<Vurdering>> sorterteVurderinger = vurderingService.sorterVurderinger(vurderinger);
-
-
-            map.put("Totalt antall vurderinger", vurderinger.size());
-            map.put("Teleslyngevurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Teleslyngevurderinger")));
-            map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
-            map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
-            map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
-            map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
-        }
-
-        return map;
-    }
 }

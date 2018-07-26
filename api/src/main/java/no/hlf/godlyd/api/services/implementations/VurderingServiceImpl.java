@@ -1,16 +1,12 @@
 package no.hlf.godlyd.api.services.implementations;
 
-import no.hlf.godlyd.api.exception.AccessDeniedException;
-import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
+import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,11 +17,84 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Autowired
     private VurderingRepo vurderingRepo;
-    @Autowired
-    private StedRepo stedRepo;
+
     @Autowired
     private BrukerService brukerService;
 
+    @Autowired
+    private StedService stedService;
+
+    @Override
+    public List<Vurdering> getAllVurderinger() {
+            return (List<Vurdering>) vurderingRepo.findAll();
+    }
+
+
+    @Override
+    public List<Vurdering> getAllVurderingerByPlaceID(String placeId) {
+        List<Vurdering> vurderinger = vurderingRepo.findByPlaceId(placeId);
+        return vurderinger;
+    }
+
+
+
+    @Override
+    public int getRegistratorCount(String placeId) {
+        return vurderingRepo.getRegistratorCountByPlaceId(placeId);
+    }
+
+    @Override
+    public Map<String, Map<String, Integer>> getReviewStats(String placeId) {
+        List<Vurdering> vurderinger = getAllVurderingerByPlaceID(placeId);
+        Map<String, List<Vurdering>> reviewsGrouped =
+                vurderinger.stream().collect(Collectors.groupingBy(v -> v.getClass().getSimpleName()));
+
+        HashMap<String, Map<String, Integer>> result = new HashMap<>();
+        for(Map.Entry<String, List<Vurdering>> entry : reviewsGrouped.entrySet()) {
+            Map<String, Integer> count = new HashMap<>();
+            count.put("positive", (int) entry.getValue().stream().filter(review -> review.isRangering()).count());
+            count.put("negative", (int) entry.getValue().stream().filter(review -> !review.isRangering()).count());
+            result.put(entry.getKey(), count);
+        }
+
+
+
+
+        return result;
+    }
+
+
+    @Override
+    public Vurdering createVurdering(Vurdering vurdering) {
+        vurdering.setSted(stedService.getPlaceByPlaceIdAndCreateOnMissing(vurdering.getSted().getPlaceId()));
+        //
+        List<Vurdering> previousVurderinger = vurderingRepo.getReviewsFromTodayByUserAndPlaceId(vurdering.getRegistrator().getId(), vurdering.getSted().getPlaceId());
+        if(previousVurderinger.size() > 0) {
+            Vurdering oldVurdering = previousVurderinger.get(0);
+            oldVurdering.setKommentar(vurdering.getKommentar());
+            oldVurdering.setRangering(vurdering.isRangering());
+            vurderingRepo.save(oldVurdering);
+            return oldVurdering;
+        }
+        else {
+            System.out.println(previousVurderinger);
+            vurderingRepo.save(vurdering);
+            return vurdering;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
     // Methods:
     @Override
     public Map<String, List<Vurdering>> getAllVurderinger() {
@@ -112,4 +181,70 @@ public class VurderingServiceImpl implements VurderingService {
                     .filter(vurdering -> vurderingsklasse.isInstance(vurdering))
                     .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Vurdering> getAllPropertyReviews() {
+
+        ArrayList<Vurdering> result  = new ArrayList<>();
+
+        vurderingRepo.findAll().forEach(result::add);
+        return result;
+    }
+
+    @Override
+    public Vurdering getPropertyReviewFromId(Integer id) {
+        return vurderingRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Informasjon", "id", id));
+    }
+
+    @Override
+    public List<Vurdering> getPropertyReviewsByUser(String authorization) {
+        List<Vurdering> alleVurderinger = vurderingService.getVurderingerByBruker(authorization);
+        Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
+
+        return sortert.get("Informasjonvurderinger");
+    }
+
+    @Override
+    public List<Vurdering> getPropertyReviewsByPlaceId(String placeId) {
+        List<Vurdering> alleVurderinger = vurderingService.getAllVurderingerByPlaceId(placeId);
+        Map<String, List<Vurdering>> sortert = vurderingService.sorterVurderinger(alleVurderinger);
+
+        return sortert.get("Informasjonvurderinger");
+    }
+
+    @Override
+    public Vurdering createPropertyReview(Vurdering property, String authorization) {
+        Sted sted = stedService.getStedFromPlaceId(property.getSted().getPlaceId());
+        if(sted==null) {
+            sted = new Sted(property.getSted().getPlaceId());
+        }
+        Bruker bruker = brukerService.updateBruker(authorization);
+        InformasjonVurdering i = new InformasjonVurdering();
+        i.setSted(sted);
+        i.setRegistrator(bruker);
+        i.setDato(property.getDato());
+        i.setRangering(property.isRangering());
+        i.setKommentar(property.getKommentar());
+        return vurderingRepo.save(i);
+    }
+
+    @Override
+    public Vurdering updatePropertyReview(Integer id, Vurdering endring, String authorization) {
+        if(vurderingRepo.existsById(id)){
+            Vurdering informasjon = getPropertyReviewFromId(id);
+            Bruker bruker = brukerService.updateBruker(authorization);
+            if(informasjon.getRegistrator().getId().equals(bruker.getId())){
+                informasjon.setKommentar(endring.getKommentar());
+                informasjon.setRangering(endring.isRangering());
+                informasjon.setDato(endring.getDato());
+                return vurderingRepo.save(informasjon);
+            } else{
+                throw new AccessDeniedException("alter", "Informasjonsvurdering", "id", id);   // Placeholder
+            }
+        } else{
+            throw new ResourceNotFoundException("Informasjonsvurdering", "id", id);
+        }
+    }
+    */
 }

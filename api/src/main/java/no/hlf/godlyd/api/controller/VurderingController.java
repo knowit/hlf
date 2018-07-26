@@ -1,27 +1,52 @@
 package no.hlf.godlyd.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/vurderinger")
 public class VurderingController {
 
     @Autowired
-    VurderingService vurderingService;
+    private VurderingService vurderingService;
 
-    @GetMapping()
+
+    @GetMapping
+    public List<Vurdering> getAllVurderinger() {
+        return vurderingService.getAllVurderinger();
+    }
+
+
+    @PostMapping("create/")
+    public Vurdering createReview(@RequestBody Vurdering vurdering) {
+
+        return vurderingService.createVurdering(vurdering);
+    }
+
+
+
+    /*PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Vurdering createPropertyReview(
+            @RequestBody InformasjonVurdering informasjon,
+            @RequestHeader("Authorization") String auth) {
+        return vurderingService.createPropertyReview(informasjon, auth);
+    }
+
+
+
+*/
+
+
+
+
+
+
+    /*@GetMapping()
     public Map<String, List<Vurdering>> getAllVurderinger(){
         return vurderingService.getAllVurderinger();
     }
@@ -40,6 +65,31 @@ public class VurderingController {
     @GetMapping("/all/place/{placeId}")
     public List<Vurdering> getAllVurderingByPlaceId(@PathVariable(value = "placeId") String placeId){
         return vurderingService.getAllVurderingerByPlaceId(placeId);
+    }
+
+    @GetMapping("/bruker")
+    public List<Vurdering> getPropertyReviewsByBruker(@RequestHeader("Authorization") String auth) {
+        return vurderingService.getPropertyReviewsByUser(auth);
+    }
+
+    @GetMapping("/place/{placeId}")
+    public List<Vurdering> getPropertyReviewsByPlace(@PathVariable(value = "placeId") String placeId){
+        return vurderingService.getPropertyReviewsByPlaceId(placeId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Vurdering createPropertyReview(
+            @RequestBody InformasjonVurdering informasjon,
+            @RequestHeader("Authorization") String auth) {
+        return vurderingService.createPropertyReview(informasjon, auth);
+    }
+
+    @PutMapping("/{id}")
+    public Vurdering updateInformajsonvurdering(@PathVariable(value = "id") Integer id,
+                                                @RequestBody Vurdering endring,
+                                                @RequestHeader("Authorization") String auth){
+        return vurderingService.updatePropertyReview(id, endring, auth);
     }
 
     @GetMapping("/place/{placeId}") //pagination
@@ -103,5 +153,5 @@ public class VurderingController {
             @PathVariable(value = "id") Integer id,
             @RequestHeader("Authorization") String auth){
         return vurderingService.deleteVurdering(id, auth);
-    }
+    }*/
 }

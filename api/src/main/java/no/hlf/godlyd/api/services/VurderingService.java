@@ -1,16 +1,19 @@
 package no.hlf.godlyd.api.services;
 
 import no.hlf.godlyd.api.model.Vurdering;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
 
 public interface VurderingService {
 
-    Map<String, List<Vurdering>> getAllVurderinger();
+
+    public List<Vurdering> getAllVurderinger();
+    public Vurdering createVurdering(Vurdering vurdering);
+    public List<Vurdering> getAllVurderingerByPlaceID(String placeId);
+    public int getRegistratorCount(String placeId);
+    public Map<String, Map<String, Integer>> getReviewStats(String placeId);
+    /*Map<String, List<Vurdering>> getAllVurderinger();
 
     List<Vurdering> getVurderingerByStedId(Integer id);
 
@@ -29,4 +32,16 @@ public interface VurderingService {
     Map<String, List<Vurdering>> sorterVurderinger(List<Vurdering> vurderinger);
 
     List<Integer> getRegistratorsByPlaceId(String placeId);
+
+    List<Vurdering> getAllPropertyReviews();
+
+    Vurdering getPropertyReviewFromId(Integer id);
+
+    List<Vurdering> getPropertyReviewsByUser(String authorization);
+
+    List<Vurdering> getPropertyReviewsByPlaceId(String placeId);
+
+    Vurdering createPropertyReview(Vurdering property, String authorization);
+
+    Vurdering updatePropertyReview(Integer id, Vurdering endring, String authorization);*/
 }

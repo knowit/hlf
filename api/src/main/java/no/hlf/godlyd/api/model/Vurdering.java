@@ -1,10 +1,14 @@
 package no.hlf.godlyd.api.model;
 
+
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,6 +18,15 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @JsonIgnoreProperties(value = "dato", allowGetters = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = InformasjonVurdering.class, name = "InformasjonVurdering"),
+        @JsonSubTypes.Type(value = LydforholdVurdering.class, name = "LydforholdVurdering"),
+        @JsonSubTypes.Type(value = LydutjevningVurdering.class, name = "LydutjevningVurdering"),
+        @JsonSubTypes.Type(value = TeleslyngeVurdering.class, name = "TeleslyngeVurdering"),
+
+})
+
 public abstract class Vurdering implements Serializable {
 
     @Id
@@ -35,16 +48,18 @@ public abstract class Vurdering implements Serializable {
 
     private String kommentar;
 
-    protected Vurdering(Sted sted, Bruker registrator, String kommentar) {
+    @NotNull
+    private boolean rangering;
+
+    protected Vurdering(Sted sted, Bruker registrator, String kommentar, boolean rangering) {
         this.sted = sted;
         this.registrator = registrator;
         this.kommentar = kommentar;
+        this.rangering = rangering;
     }
 
     protected Vurdering(){}
 
-    public abstract boolean isRangering();
-    public abstract void setRangering(boolean rangering);
 
     //Getters and setters
     public Integer getId() { return id; }
@@ -72,4 +87,12 @@ public abstract class Vurdering implements Serializable {
     public String getKommentar() { return kommentar; }
 
     public void setKommentar(String kommentar) { this.kommentar = kommentar; }
+
+    public boolean isRangering() {
+        return rangering;
+    }
+
+    public void setRangering(boolean rangering) {
+        this.rangering = rangering;
+    }
 }

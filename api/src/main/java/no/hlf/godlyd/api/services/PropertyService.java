@@ -7,15 +7,5 @@ import java.util.List;
 
 public interface PropertyService {
 
-    List<Vurdering> getAllPropertyReviews();
 
-    Vurdering getPropertyReviewFromId(Integer id);
-
-    List<Vurdering> getPropertyReviewsByUser(String authorization);
-
-    List<Vurdering> getPropertyReviewsByPlaceId(String placeId);
-
-    Vurdering createPropertyReview(Vurdering property, String authorization);
-
-    Vurdering updatePropertyReview(Integer id, Vurdering endring, String authorization);
 }

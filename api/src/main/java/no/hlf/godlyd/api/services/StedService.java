@@ -18,10 +18,11 @@ public interface StedService {
     List<Sted> getStederByAdresse(Integer adresseid);
     */
 
+    Sted getPlaceByPlaceIdAndCreateOnMissing(String placeId);
     Sted getStedFromPlaceId(String placeId);
 
     //List<Sted> getStederByNavn(String navn);
 
-    Sted updateSted(String placeId);
+
 
 }
