@@ -1,6 +1,8 @@
 package no.hlf.godlyd.api.services.implementations;
 
+import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Bruker;
+import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.repository.BrukerRepo;
 import no.hlf.godlyd.api.security.Auth0Connection;
 import no.hlf.godlyd.api.services.BrukerService;
@@ -36,6 +38,8 @@ public class BrukerServiceImpl implements BrukerService {
         brukerRepo.save(b);
         return b;
     }
+
+
 
     public List<Bruker> getAllBrukere(){
         return brukerRepo.findAll();

@@ -22,7 +22,7 @@ public interface VurderingService {
 
     Vurdering getVurderingFromId(Integer id);
 
-    List<Vurdering> getVurderingerByBruker(Integer brukerid);
+    List<Vurdering> getVurderingerByBruker(String brukerid);
 
     List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, Integer brukerId);
 

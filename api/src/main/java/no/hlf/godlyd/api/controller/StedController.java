@@ -20,7 +20,7 @@ import java.util.Map;
 
 // This is the REST API
 @RestController
-@RequestMapping("/steder")
+@RequestMapping("/sted")
 public class StedController {
 
     @Autowired
@@ -38,14 +38,13 @@ public class StedController {
         return stedService.getStedFromId(id);
     }
 
-    @GetMapping("/placeId/{placeId}")
+    @GetMapping("/{placeId}")
     public Sted getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
         return stedService.getStedFromPlaceId(placeId);
     }
 
-    // GOOGLE API
-    @GetMapping("/info/{placeId}")
-    public Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
+
+    private  Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
         String API_KEY = "AIzaSyAh4aY8MmtOlCx1iDHYI4Z8c3P5VVgK2IY";
         RestTemplate restTemplate = new RestTemplate();
         String uri = "https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACE_ID}" +
@@ -89,17 +88,6 @@ public class StedController {
         return map;
     }
 
-    // Opprette et nytt sted
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public Sted createSted(@RequestBody Sted sted){
-        return stedService.createSted(sted);
-    }
 
-    // Slett et sted
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<?> deleteSted(@PathVariable(value = "id") Integer id){
-        return stedService.deleteSted(id);
-    }
 
 }

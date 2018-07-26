@@ -4,6 +4,7 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
+import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class VurderingServiceImpl implements VurderingService {
+
+    @Autowired
+    private BrukerService brukerService;
 
     @Autowired
     private VurderingRepo vurderingRepo;
@@ -53,8 +57,9 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(Integer brukerid) {
-        return vurderingRepo.findByRegistrator(brukerid);
+    public List<Vurdering> getVurderingerByBruker(String authorization) throws ResourceNotFoundException {
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
+        return vurderingRepo.findByRegistrator(brukerId);
     }
 
     @Override

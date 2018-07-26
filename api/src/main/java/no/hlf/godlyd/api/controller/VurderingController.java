@@ -1,22 +1,18 @@
 package no.hlf.godlyd.api.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.VurderingService;
-import no.hlf.godlyd.api.services.implementations.LydutjevningServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -25,7 +21,7 @@ import static java.util.stream.Collectors.groupingBy;
 public class VurderingController {
 
     @Autowired
-    VurderingService vurderingService;
+    private VurderingService vurderingService;
 
     @GetMapping()
     public Map<String, List<Vurdering>> getAllVurderinger(){
@@ -37,9 +33,10 @@ public class VurderingController {
         return vurderingService.getVurderingFromId(id);
     }
 
-    @GetMapping("/brukerId/{registrator}")
-    public List<Vurdering> getVurderingerByBruker(@PathVariable(value = "registrator") Integer brukerid){
-        return vurderingService.getVurderingerByBruker(brukerid);
+    @GetMapping("/bruker")
+    public List<Vurdering> getVurderingerByBruker(
+            @RequestHeader("Authorization") String auth) {
+        return vurderingService.getVurderingerByBruker(auth);
     }
 
     @GetMapping("/all/placeId/{placeId}")
