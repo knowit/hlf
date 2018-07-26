@@ -8,8 +8,6 @@ import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,9 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// This is the REST API
 @RestController
-@RequestMapping("/sted")
+@RequestMapping("/steder")
 public class StedController {
 
     @Autowired
@@ -33,18 +30,19 @@ public class StedController {
         return stedService.getAllSteder();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Sted getStedById(@PathVariable(value = "id") Integer id){
         return stedService.getStedFromId(id);
     }
 
-    @GetMapping("/{placeId}")
+    @GetMapping("/place/{placeId}")
     public Sted getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
-        return stedService.getStedFromPlaceId(placeId);
+        return stedService.updateSted(placeId);
     }
 
-
-    private  Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
+    // GOOGLE API
+    @GetMapping("/info/place/{placeId}")
+    public Map<String, Object> getStedInfoByPlaceId(@PathVariable(value = "placeId") String placeId) throws IOException {
         String API_KEY = "AIzaSyAh4aY8MmtOlCx1iDHYI4Z8c3P5VVgK2IY";
         RestTemplate restTemplate = new RestTemplate();
         String uri = "https://maps.googleapis.com/maps/api/place/details/json?placeid={PLACE_ID}" +
@@ -54,7 +52,7 @@ public class StedController {
         String result = restTemplate.getForObject(uri, String.class, placeId, API_KEY);
         JsonNode jsonNode = (new ObjectMapper()).readTree(result);
 
-        Sted sted = stedService.getStedFromPlaceId(placeId);
+        Sted sted = stedService.updateSted(placeId);
 
         Map<String, Object> map = new HashMap<>();
         map.put("Google Places API", jsonNode);
@@ -62,14 +60,14 @@ public class StedController {
         return map;
     }
 
-    @GetMapping("/{placeId}/totalvurdering/{google}")
+    @GetMapping("/place/{placeId}/totalvurdering/{google}")
     public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "placeId") String placeId,
                                                         @PathVariable(value = "google") boolean googleinfo) throws IOException {
         Map<String, Object> map = new HashMap<>();
         if (googleinfo) {
             map = getStedInfoByPlaceId(placeId);
         } else {
-            map.put("Sted", stedService.getStedFromPlaceId(placeId));
+            map.put("Sted", stedService.updateSted(placeId));
         }
 
         if (stedService.existsByPlaceId(placeId)){
@@ -82,12 +80,9 @@ public class StedController {
             map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
             map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
             map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
+            map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
         }
-        map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
 
         return map;
     }
-
-
-
 }

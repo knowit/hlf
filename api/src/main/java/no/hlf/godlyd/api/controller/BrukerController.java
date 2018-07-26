@@ -3,7 +3,6 @@ package no.hlf.godlyd.api.controller;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +19,13 @@ public class BrukerController {
         return brukerService.getAllBrukere();
     }
 
-    @GetMapping("/brukernavn/{id}")
-    public Bruker getBrukerFromBrukernavn(@PathVariable(value = "id") String id){
-        return brukerService.getBrukerFromId(Integer.getInteger(id));
+    @GetMapping("/{id}")
+    public Bruker getBrukerFromId(@PathVariable(value = "id") Integer id){
+        return brukerService.getBrukerFromId(id);
     }
 
-    @GetMapping("/internal/brukernavn/{auth0Id}")
-    public Bruker getBrukerFromBrukernavnInternal(@PathVariable(value = "auth0Id") String auth0Id){
+    @GetMapping("/auth0id/{auth0Id}")
+    public Bruker getBrukerFromAuth0UserId(@PathVariable(value = "auth0Id") String auth0Id){
         return brukerService.getBrukerFromAuth0UserId(auth0Id);
     }
 

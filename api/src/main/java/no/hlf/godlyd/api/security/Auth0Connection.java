@@ -17,9 +17,9 @@ public class Auth0Connection {
     private static final String managementClientSecret = "NvBtZwlnfoHnwdY2NLF2yjyuxPf83Fw2FnY-RKBlwID7ReXLtLVOGVzOwrDiBBxM";
     private static final String managementAudience = "https://hlf-godlyd.eu.auth0.com/api/v2/";
 
-    public Hashtable<String, Object> getUserProfile(String access_token){
+    public Hashtable<String, Object> getUserProfile(String authorization){
 
-        String userId = getUserInfo(access_token).get("sub").toString();
+        String userId = getUserInfo(authorization).get("sub").toString();
 
         String url = "https://hlf-godlyd.eu.auth0.com/api/v2/users/"+userId;
         Hashtable<String, String> headers = new Hashtable<>();
@@ -28,8 +28,8 @@ public class Auth0Connection {
         return parseJson(jsonResponse);
     }
 
-    private Hashtable<String, Object> getUserInfo(String access_token){
-
+    private Hashtable<String, Object> getUserInfo(String authorization){
+        String access_token = extractToken(authorization);
         String url = "https://hlf-godlyd.eu.auth0.com/userinfo";
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Authorization", "Bearer "+access_token);
@@ -183,5 +183,8 @@ public class Auth0Connection {
         }
 
         return object;
+    }
+    private String extractToken(String authorization){
+        return authorization.substring(7);
     }
 }

@@ -33,4 +33,6 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
     @Query(value = "SELECT v.registrator.id FROM Vurdering v WHERE v.sted.id = ?1 GROUP BY v.registrator.id")
     List<Integer> findRegistratorsByStedId(Integer stedId);
 
+    boolean existsById(Integer id);
+
 }

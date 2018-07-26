@@ -14,37 +14,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
-
 @RestController
 @RequestMapping("/vurderinger")
 public class VurderingController {
 
     @Autowired
-    private VurderingService vurderingService;
+    VurderingService vurderingService;
 
     @GetMapping()
     public Map<String, List<Vurdering>> getAllVurderinger(){
         return vurderingService.getAllVurderinger();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Vurdering getVurderingById(@PathVariable(value = "id") Integer id){
         return vurderingService.getVurderingFromId(id);
     }
 
     @GetMapping("/bruker")
     public List<Vurdering> getVurderingerByBruker(
-            @RequestHeader("Authorization") String auth) {
+            @RequestHeader("Authorization") String auth){
         return vurderingService.getVurderingerByBruker(auth);
     }
 
-    @GetMapping("/all/placeId/{placeId}")
+    @GetMapping("/all/place/{placeId}")
     public List<Vurdering> getAllVurderingByPlaceId(@PathVariable(value = "placeId") String placeId){
         return vurderingService.getAllVurderingerByPlaceId(placeId);
     }
 
-    @GetMapping("/placeId/{placeId}") //pagination
+    @GetMapping("/place/{placeId}") //pagination
     public ArrayNode getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
                                             @PageableDefault(value=40, page = 0) Pageable pagable) {
 
@@ -92,16 +90,18 @@ public class VurderingController {
         return ferdigJSON;
     }
 
-    @GetMapping("/placeId/{placeId}/brukerId/{brukerId}")
+    @GetMapping("/place/{placeId}/bruker")
     public List<Vurdering> getVurderingerByPlaceIdAndBrukerId(
             @PathVariable(value = "placeId") String placeId,
-            @PathVariable(value = "brukerId") Integer brukerId){
+            @RequestHeader("Authorization") String auth){
 
-        return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, brukerId);
+        return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth);
     }
 
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<?> deleteVurdering(@PathVariable(value = "id") Integer id){
-        return vurderingService.deleteVurdering(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteVurdering(
+            @PathVariable(value = "id") Integer id,
+            @RequestHeader("Authorization") String auth){
+        return vurderingService.deleteVurdering(id, auth);
     }
 }

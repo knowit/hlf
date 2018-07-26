@@ -14,7 +14,7 @@ resource "google_compute_backend_service" "load-balancer" {
 
 resource "google_compute_http_health_check" "default_health_check" {
   name               = "default-healthcheck"
-  request_path       = "/"
+  request_path       = "/healthcheck"
   check_interval_sec = 1
   timeout_sec        = 1
 }

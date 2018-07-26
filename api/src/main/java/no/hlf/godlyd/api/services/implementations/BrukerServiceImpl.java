@@ -19,19 +19,28 @@ public class BrukerServiceImpl implements BrukerService {
     BrukerRepo brukerRepo;
 
     public Bruker getBrukerFromId(Integer id){
-        return brukerRepo.findBrukerById(id);
+        return brukerRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bruker", "id", id));
     }
 
     public Bruker getBrukerFromAuth0UserId(String auth0UserId){
-        return brukerRepo.findByAuth0UserId(auth0UserId);
-    }
-    public Bruker updateBruker(String access_token){
-        Bruker bruker = getCredentials(access_token);
-        Bruker b = getBrukerFromAuth0UserId(bruker.getAuth0UserId());
-        if(b == null){
-            b = new Bruker();
+        Bruker bruker = brukerRepo.findByAuth0UserId(auth0UserId);
+        if (bruker != null){
+            return bruker;
+        } else {
+            throw new ResourceNotFoundException("Bruker", "auth0UserId", auth0UserId);
         }
-        b.setAuth0UserId(bruker.getAuth0UserId());
+    }
+
+    public Bruker updateBruker(String authorization){
+        Bruker bruker = getCredentials(authorization);
+        Bruker b;
+        try{
+            b = getBrukerFromAuth0UserId(bruker.getAuth0UserId());
+        } catch(ResourceNotFoundException e){
+            b = new Bruker();
+            b.setAuth0UserId(bruker.getAuth0UserId());
+        }
         b.setFornavn(bruker.getFornavn());
         b.setEtternavn(bruker.getEtternavn());
         b.setImageUrl(bruker.getImageUrl());
@@ -45,11 +54,11 @@ public class BrukerServiceImpl implements BrukerService {
         return brukerRepo.findAll();
     }
 
-    private Bruker getCredentials(String access_token){
+    private Bruker getCredentials(String authorization){
         try{
             Bruker bruker = new Bruker();
             Auth0Connection con = new Auth0Connection();
-            Hashtable<String, Object> userInfo = con.getUserProfile(access_token);
+            Hashtable<String, Object> userInfo = con.getUserProfile(authorization);
             bruker.setAuth0UserId(userInfo.get("user_id").toString());
             bruker.setFornavn(userInfo.get("given_name").toString());
             bruker.setEtternavn(userInfo.get("family_name").toString());

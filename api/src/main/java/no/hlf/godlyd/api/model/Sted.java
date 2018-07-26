@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,6 @@ public class Sted implements Serializable{
 
     @OneToMany(mappedBy = "sted", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Vurdering> vurderinger;
-
     public Sted(){}
 
     public Sted(String placeId){
@@ -57,4 +57,5 @@ public class Sted implements Serializable{
     public List<Vurdering> getVurderinger() { return vurderinger; }
 
     public void setVurderinger(List<Vurdering> vurderinger) { this.vurderinger = vurderinger; }
+
 }
