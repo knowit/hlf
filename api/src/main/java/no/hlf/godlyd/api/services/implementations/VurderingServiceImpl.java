@@ -57,9 +57,6 @@ public class VurderingServiceImpl implements VurderingService {
             result.put(entry.getKey(), count);
         }
 
-
-
-
         return result;
     }
 

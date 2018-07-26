@@ -1,22 +1,15 @@
 package no.hlf.godlyd.api.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import no.hlf.godlyd.api.Vurderingsstatistikk;
 import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/sted")
@@ -47,6 +40,11 @@ public class StedController {
         object.putPOJO("stats", vurderingService.getReviewStats(placeId));
 
         return object;
+    }
+
+    @GetMapping("/{placeId}/{userId}")
+    public String getReviewsByUser(@PathVariable(value ="placeId") String placeId, @PathVariable(value= "userId") String userId) {
+        return "ok";
     }
 
 

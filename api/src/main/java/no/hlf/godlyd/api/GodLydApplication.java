@@ -15,13 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//@ComponentScan(basePackages = "com.auth0.example")
-/*
-@PropertySources({
-        @PropertySource("classpath:application.properties"),
-        @PropertySource("classpath:auth0.properties")
-})
-*/
+
 @SpringBootApplication
 @EnableJpaAuditing
 @ComponentScan
@@ -32,38 +26,5 @@ public class GodLydApplication {
 	    run(GodLydApplication.class, args);
 	}
 
-	/*
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-	    return new BCryptPasswordEncoder();
-    }
-    */
 
-    /*
-	@Bean
-	public WebMvcConfigurer corsConfigurer(){
-		return new WebMvcConfigurer(){
-			@Override
-			public void addCorsMappings(CorsRegistry registry){
-				registry.addMapping("/**").allowedMethods("GET", "PUT", "DELETE", "POST", "OPTIONS");
-			}
-		};
-	}
-	*/
-
-    /*
-            <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>mvc-auth-commons</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.0.7.Final</version>
-        </dependency>
-
-     */
 }
