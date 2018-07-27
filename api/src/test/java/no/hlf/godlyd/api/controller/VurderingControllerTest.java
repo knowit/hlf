@@ -54,13 +54,5 @@ public class VurderingControllerTest {
         List<Vurdering> found = vurderingController.getAllVurderingByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         assertEquals(vurderinger.get(0), found.get(0));
     }
-
-    @Test
-    public void testGetVurderingerFromBrukerId(){
-        when(vurderingService.getVurderingerByBruker(2)).thenReturn(vurderinger);
-
-        List<Vurdering> found = vurderingController.getVurderingerByBruker(2);
-        assertEquals(vurderinger.get(0), found.get(0));
-    }
 }
 

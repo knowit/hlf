@@ -54,11 +54,4 @@ public class StedControllerTest {
         assertEquals(sted, found);
     }
 
-    @Test
-    public void testCreateSted(){
-        when(stedService.createSted(sted)).thenReturn(sted);
-
-        Sted found = stedController.createSted(sted);
-        assertEquals(sted, found);
-    }
 }

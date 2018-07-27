@@ -53,12 +53,4 @@ public class StedServiceTest {
         assertEquals(sted, found);
     }
 
-    @Test
-    public void testCreateSted(){
-        Mockito.when(stedRepo.save(sted)).thenReturn(sted);
-
-        Sted created = stedService.createSted(sted);
-        assertEquals(sted, created);
-    }
-
 }

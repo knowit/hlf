@@ -90,12 +90,30 @@ public class VurderingController {
         return ferdigJSON;
     }
 
+    @GetMapping("/type/{vurderingstype}/place/{placeId}")
+    public List<Vurdering> getAllVurderingerByTypeAndPlaceId(
+            @PathVariable(value = "placeId") String placeId,
+            @PathVariable(value = "vurderingstype") String vurderingstype){
+        return vurderingService.getVurderingerByTypeAndPlaceId(vurderingstype, placeId);
+    }
+
     @GetMapping("/place/{placeId}/bruker")
     public List<Vurdering> getVurderingerByPlaceIdAndBrukerId(
             @PathVariable(value = "placeId") String placeId,
             @RequestHeader("Authorization") String auth){
-
         return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth);
+    }
+
+    @PostMapping
+    public Vurdering createVurdering(@RequestBody Vurdering vurdering, @RequestHeader("Authorization") String authorization) {
+        return vurderingService.createVurdering(vurdering, authorization);
+    }
+
+    @PutMapping("/{id}")
+    public Vurdering updateVurdering(@PathVariable(value = "id") Integer id,
+                                     @RequestBody Vurdering endring){
+                                     //@RequestHeader("Authorization") String authorization){
+        return vurderingService.updateVurdering(id, endring);//, authorization);
     }
 
     @DeleteMapping("/{id}")

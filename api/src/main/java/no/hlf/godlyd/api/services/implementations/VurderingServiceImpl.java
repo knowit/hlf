@@ -6,6 +6,7 @@ import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
+import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ public class VurderingServiceImpl implements VurderingService {
     @Autowired
     private VurderingRepo vurderingRepo;
     @Autowired
-    private StedRepo stedRepo;
+    private StedService stedService;
     @Autowired
     private BrukerService brukerService;
 
@@ -60,9 +61,43 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
+    public List<Vurdering> getVurderingerByTypeAndPlaceId(String vurderingstype, String placeId){
+        switch (vurderingstype){
+            case "teleslynge":  return vurderingRepo.findTeleslyngeByPlaceId(placeId);
+            case "lydforhold":  return vurderingRepo.findLydforholdByPlaceId(placeId);
+            case "lydutjevning": return vurderingRepo.findLydutjevningByPlaceId(placeId);
+            case "informasjon": return vurderingRepo.findInformasjonByPlaceId(placeId);
+            default: return Collections.emptyList();
+        }
+    }
+
+    @Override
     public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
         return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
+    }
+
+    @Override
+    public Vurdering createVurdering(Vurdering vurdering, String authorization) {
+        vurdering.setRegistrator(brukerService.updateBruker(authorization));
+        Sted sted = stedService.updateSted(vurdering.getSted().getPlaceId());
+        if (sted != null){
+            sted.addVurdering(vurdering);
+        }
+        return vurderingRepo.save(vurdering);
+    }
+
+    @Override
+    public Vurdering updateVurdering(Integer id, Vurdering endring){//}, String authorization){
+        //Integer brukerId = brukerService.updateBruker(authorization).getId();
+        Vurdering vurdering = getVurderingFromId(id);
+        //if(vurdering.getRegistrator().getId().equals(brukerId)){
+            vurdering.setKommentar(endring.getKommentar());
+            vurdering.setRangering(endring.isRangering());
+            return vurderingRepo.save(vurdering);
+        //} else{
+            //throw new AccessDeniedException("alter", "informasjonsvurdering, id: "+ id);
+        //}
     }
 
     @Override
@@ -81,8 +116,8 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public List<Integer> getRegistratorsByPlaceId(String placeId){
-        if (stedRepo.existsByPlaceId(placeId)){
-            Integer stedId = stedRepo.findByPlaceId(placeId).getId();
+        if (stedService.existsByPlaceId(placeId)){
+            Integer stedId = stedService.getStedFromPlaceId(placeId).getId();
             return vurderingRepo.findRegistratorsByStedId(stedId);
         } else{
             return Collections.emptyList();

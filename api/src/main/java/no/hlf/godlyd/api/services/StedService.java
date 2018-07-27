@@ -12,15 +12,7 @@ public interface StedService {
 
     Sted getStedFromId(Integer id);
 
-    /*
-    List<Sted> getStederByTag(Integer tagid);
-
-    List<Sted> getStederByAdresse(Integer adresseid);
-    */
-
     Sted getStedFromPlaceId(String placeId);
-
-    //List<Sted> getStederByNavn(String navn);
 
     Sted updateSted(String placeId);
 

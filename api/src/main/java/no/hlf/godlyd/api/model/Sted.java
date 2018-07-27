@@ -29,7 +29,7 @@ public class Sted implements Serializable{
     @OneToMany(mappedBy = "sted", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Vurdering> vurderinger;
 
-    private long timestamp;
+    //private long timestamp;
 
     public Sted(){}
 
@@ -61,7 +61,5 @@ public class Sted implements Serializable{
 
     public void setVurderinger(List<Vurdering> vurderinger) { this.vurderinger = vurderinger; }
 
-    public void setTimestamp(){
-        this.timestamp = System.currentTimeMillis();
-    }
+    //public void setTimestamp(){this.timestamp = System.currentTimeMillis();}
 }
