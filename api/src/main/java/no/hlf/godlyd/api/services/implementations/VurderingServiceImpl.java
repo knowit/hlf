@@ -88,16 +88,16 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public Vurdering updateVurdering(Integer id, Vurdering endring){//}, String authorization){
-        //Integer brukerId = brukerService.updateBruker(authorization).getId();
+    public Vurdering updateVurdering(Integer id, Vurdering endring, String authorization){
+        Integer brukerId = brukerService.updateBruker(authorization).getId();
         Vurdering vurdering = getVurderingFromId(id);
-        //if(vurdering.getRegistrator().getId().equals(brukerId)){
+        if(vurdering.getRegistrator().getId().equals(brukerId)){
             vurdering.setKommentar(endring.getKommentar());
             vurdering.setRangering(endring.isRangering());
             return vurderingRepo.save(vurdering);
-        //} else{
-            //throw new AccessDeniedException("alter", "informasjonsvurdering, id: "+ id);
-        //}
+        } else{
+            throw new AccessDeniedException("alter", "informasjonsvurdering", "id", id);
+        }
     }
 
     @Override

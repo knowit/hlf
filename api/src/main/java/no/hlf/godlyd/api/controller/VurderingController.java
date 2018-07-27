@@ -111,9 +111,9 @@ public class VurderingController {
 
     @PutMapping("/{id}")
     public Vurdering updateVurdering(@PathVariable(value = "id") Integer id,
-                                     @RequestBody Vurdering endring){
-                                     //@RequestHeader("Authorization") String authorization){
-        return vurderingService.updateVurdering(id, endring);//, authorization);
+                                     @RequestBody Vurdering endring,
+                                     @RequestHeader("Authorization") String authorization){
+        return vurderingService.updateVurdering(id, endring, authorization);
     }
 
     @DeleteMapping("/{id}")

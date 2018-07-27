@@ -28,7 +28,7 @@ public interface VurderingService {
 
     Vurdering createVurdering(Vurdering vurdering, String authorization);
 
-    Vurdering updateVurdering(Integer id, Vurdering endring);
+    Vurdering updateVurdering(Integer id, Vurdering endring, String authorization);
 
     ResponseEntity<?> deleteVurdering(Integer id, String authorization);
 
