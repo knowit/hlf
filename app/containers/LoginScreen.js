@@ -15,7 +15,7 @@ export default ({ loginSuccessful }) => {
       saveTokens(credentials);
       loginSuccessful();
     })
-    .catch(error => console.log(error));
+    .catch(error => error);
   return <Loading />;
 };
 

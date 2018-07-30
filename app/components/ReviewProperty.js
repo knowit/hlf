@@ -17,11 +17,19 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 class ReviewProperty extends Component {
   constructor(props) {
     super(props);
-    this.state = { commentInput: "", modalVisible: true };
+    this.state = { newComment: "" };
+  }
+
+  componentDidUpdate(previousProps) {
+    if (
+      previousProps.currentProperty.name !== this.props.currentProperty.name
+    ) {
+      this.setState({ newComment: "" });
+    }
   }
 
   render() {
-    const { currentProperty, onReviewAction } = this.props;
+    const { currentProperty, onOptionSelected } = this.props;
     const { value } = currentProperty;
     return (
       <View style={styles.container}>
@@ -36,7 +44,7 @@ class ReviewProperty extends Component {
             <ReviewOptionButton
               buttonValue={-1}
               selectedValue={value}
-              onReviewAction={onReviewAction}
+              onOptionSelected={onOptionSelected}
             />
             <MaterialIcons
               name="info-outline"
@@ -47,7 +55,7 @@ class ReviewProperty extends Component {
             <ReviewOptionButton
               buttonValue={1}
               selectedValue={value}
-              onReviewAction={onReviewAction}
+              onOptionSelected={onOptionSelected}
             />
           </View>
         </View>
@@ -59,11 +67,11 @@ class ReviewProperty extends Component {
             placeholderTextColor={colors.secondaryTextColor}
             multiline={true}
             numberOfLines={3}
-            value={this.state.commentInput}
-            onChangeText={text => this.setState({ commentInput: text })}
+            value={this.state.newComment}
+            onChangeText={text => this.setState({ newComment: text })}
           />
           <TouchableHighlight
-            onPress={() => onReviewAction("comment", this.state.commentInput)}
+            onPress={() => onOptionSelected("comment", this.state.newComment)}
           >
             <MaterialIcons
               name="chevron-right"
@@ -79,7 +87,7 @@ class ReviewProperty extends Component {
 
 ReviewProperty.propTypes = {
   currentProperty: PropTypes.object.isRequired,
-  onReviewAction: PropTypes.func.isRequired
+  onOptionSelected: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

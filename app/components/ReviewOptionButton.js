@@ -7,7 +7,7 @@ import colors, {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import SlimText from "./SlimText";
 
-export default ({ buttonValue, selectedValue, onReviewAction }) => {
+export default ({ buttonValue, selectedValue, onOptionSelected }) => {
   const isPositive = buttonValue === 1;
   const isSelected = buttonValue === selectedValue;
 
@@ -20,7 +20,7 @@ export default ({ buttonValue, selectedValue, onReviewAction }) => {
         : colors.negativeColor;
   return (
     <TouchableHighlight
-      onPress={() => onReviewAction("value", !isSelected ? buttonValue : 0)}
+      onPress={() => onOptionSelected("value", !isSelected ? buttonValue : 0)}
       style={{ flex: 1 }}
     >
       <View

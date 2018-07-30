@@ -6,9 +6,15 @@ import axios from "axios";
 import _ from "lodash";
 import { ROOT_API_URL } from "../settings/endpoints";
 import { fetchAccessToken } from "./";
-import { AsyncStorage } from "react-native";
 
 export const fetchVenueData = placeId => {
+  const url = `${ROOT_API_URL}/steder/place/${placeId}/totalvurdering/0`;
+
+  //`${ROOT_API_URL}/steder/place/${placeId}/totalvurdering/0`;
+
+  //http://35.198.153.18:80/steder/place/ChIJFVLTKWduQUYRK4owC-eIqBg/totalvurdering/0
+  //http://35.198.153.18:80/steder/place/ChIJAAAAAAAAAAARK4owC-eIqBg/totalvurdering/0
+
   return async dispatch => {
     const token = await fetchAccessToken();
 
@@ -34,15 +40,15 @@ export const fetchVenueData = placeId => {
           return {};
         }),
       axios
-        .get(`/steder/${placeId}/totalvurdering`, {
+        .get(url, {
           headers: {
             Authorization: "Bearer " + token
           }
         })
-        .then(response => response)
+        .then(({ data }) => {
+          return { reviews: data };
+        })
         .catch(error => {
-          console.log(error);
-          console.log("EMPTY PLACE / ERROR TOKEN");
           return defaultPlace();
         })
     ];

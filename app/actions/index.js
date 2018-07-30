@@ -1,6 +1,7 @@
 export * from "./venueActions";
 export * from "./userAction";
 export * from "./reviewListActions";
+export * from "./createReview";
 
 import { AsyncStorage } from "react-native";
 

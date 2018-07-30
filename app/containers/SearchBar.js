@@ -112,7 +112,7 @@ export default class SearchBar extends Component {
           })
         })
       )
-      .catch(req => console.log(req));
+      .catch(req => req);
   }
 }
 

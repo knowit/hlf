@@ -19,7 +19,6 @@ class VenueReviews extends Component {
   }
 
   render() {
-    console.log("VENUEREVIEW", this.props);
     const { selectedVenue } = this.props;
 
     return (
