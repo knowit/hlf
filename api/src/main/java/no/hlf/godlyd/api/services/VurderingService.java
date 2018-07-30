@@ -1,5 +1,6 @@
 package no.hlf.godlyd.api.services;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import no.hlf.godlyd.api.model.Vurdering;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ public interface VurderingService {
 
     List<Vurdering> getAllVurderingerByPlaceId(String placeId);
 
-    Page<Vurdering> getVurderingerByPlaceId(String placeId, Pageable pagable);
+    ArrayNode getVurderingerByPlaceId(String placeId, Pageable pagable);
 
     Vurdering getVurderingFromId(Integer id);
 

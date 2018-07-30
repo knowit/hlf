@@ -44,50 +44,8 @@ public class VurderingController {
 
     @GetMapping("/place/{placeId}") //pagination
     public ArrayNode getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
-                                            @PageableDefault(value=40, page = 0) Pageable pagable) {
-
-        List<Vurdering> vurderingerInPage = (vurderingService.getVurderingerByPlaceId(placeId, pagable)).getContent();
-        List<List<Vurdering>> vurderingsliste = new ArrayList<>();
-
-        for (Vurdering vurdering : vurderingerInPage) {
-            List<Vurdering> sammeVurdering = vurderingerInPage.stream()
-                    .filter(v -> v.getDato().equals(vurdering.getDato()) && v.getRegistrator().equals(vurdering.getRegistrator()))
-                    .collect(Collectors.toList());
-            if (!vurderingsliste.contains(sammeVurdering)) {
-                vurderingsliste.add(sammeVurdering);
-            }
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode ferdigJSON = mapper.createArrayNode();
-
-        for (List<Vurdering> list : vurderingsliste) {
-            ObjectNode vurderinger = mapper.createObjectNode();
-
-            for (Vurdering vurdering : list) {
-                ObjectNode vurderingNode = mapper.createObjectNode()
-                        .put("kommentar", vurdering.getKommentar())
-                        .put("rangering", vurdering.isRangering());
-
-                if (vurdering instanceof TeleslyngeVurdering) {
-                    vurderinger.putPOJO("teleslynge", vurderingNode);
-                } else if (vurdering instanceof LydforholdVurdering) {
-                    vurderinger.putPOJO("lydforhold", vurderingNode);
-                } else if (vurdering instanceof LydutjevningVurdering) {
-                    vurderinger.putPOJO("teleslynge", vurderingNode);
-                } else if (vurdering instanceof InformasjonVurdering) {
-                    vurderinger.putPOJO("informasjon", vurderingNode);
-                }
-            }
-
-            ObjectNode objectNode = mapper.createObjectNode()
-                    .putPOJO("dato", list.get(0).getDato())
-                    .putPOJO("registrator", list.get(0).getRegistrator())
-                    .putPOJO("vurderinger", vurderinger);
-            ferdigJSON.add(objectNode);
-        }
-
-        return ferdigJSON;
+                                             @PageableDefault(value=40, page = 0) Pageable pagable) {
+        return vurderingService.getVurderingerByPlaceId(placeId, pagable);
     }
 
     @GetMapping("/type/{vurderingstype}/place/{placeId}")
