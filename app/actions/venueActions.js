@@ -18,44 +18,42 @@ export const fetchVenueData = placeId => {
   return async dispatch => {
     const token = await fetchAccessToken();
 
-    const requests = [
-      axios
-        .get(
-          `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`
-        )
-        .then(({ data }) => {
-          const googleObject = _.pick(data.result, [
-            "formatted_address",
-            "name",
-            "formatted_phone_number",
-            "geometry",
-            "photos",
-            "place_id"
-          ]);
-          if (googleObject.photos)
-            googleObject.photos = googleObject.photos.slice(0, 1);
-          return googleObject;
-        })
-        .catch(error => {
-          return {};
-        }),
-      axios
-        .get(url, {
-          headers: {
-            Authorization: "Bearer " + token
-          }
-        })
-        .then(({ data }) => {
-          return { reviews: data };
-        })
-        .catch(error => {
-          return defaultPlace();
-        })
-    ];
-
-    Promise.all(requests).then(values => {
-      dispatch({ type: VENUE_SELECTED, payload: Object.assign(...values) });
-    });
+    const data = axios
+      .get(
+        `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&placeid=${placeId}`
+      )
+      .then(({ data }) => {
+        const googleObject = _.pick(data.result, [
+          "formatted_address",
+          "name",
+          "formatted_phone_number",
+          "geometry",
+          "photos",
+          "place_id"
+        ]);
+        if (googleObject.photos)
+          googleObject.photos = googleObject.photos.slice(0, 1);
+        return googleObject;
+      })
+      .then(response => {
+        axios
+          .get(
+            `${ROOT_API_URL}/steder/place/${
+              response.place_id
+            }/totalvurdering/0`,
+            {
+              headers: {
+                Authorization: "Bearer " + token
+              }
+            }
+          )
+          .then(({ data }) => {
+            dispatch({
+              type: VENUE_SELECTED,
+              payload: Object.assign(response, { reviews: data })
+            });
+          });
+      });
   };
 };
 

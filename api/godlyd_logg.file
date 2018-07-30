@@ -9222,3 +9222,9 @@ Using generated security password: 1919c2a3-44ec-48df-9393-9cc3cf6a6ee1
 2018-07-30 15:34:04.389  INFO 9328 --- [http-nio-8080-exec-1] c.a.s.s.api.JwtAuthenticationProvider    : Authenticated with jwt with scopes [openid, profile, offline_access]
 2018-07-30 15:52:19.258  INFO 9328 --- [http-nio-8080-exec-3] c.a.s.s.api.JwtAuthenticationProvider    : Authenticated with jwt with scopes [openid, profile, offline_access]
 2018-07-30 15:52:19.498  WARN 9328 --- [http-nio-8080-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved exception caused by Handler execution: org.springframework.web.bind.ServletRequestBindingException: Missing request header 'Authorization' for method parameter of type String
+2018-07-30 17:32:13.235  INFO 9328 --- [Thread-10] ConfigServletWebServerApplicationContext : Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@76323097: startup date [Mon Jul 30 15:33:34 CEST 2018]; root of context hierarchy
+2018-07-30 17:32:13.248  INFO 9328 --- [Thread-10] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2018-07-30 17:32:13.259  INFO 9328 --- [Thread-10] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans
+2018-07-30 17:32:13.270  INFO 9328 --- [Thread-10] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2018-07-30 17:32:13.276  INFO 9328 --- [Thread-10] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2018-07-30 17:32:13.306  INFO 9328 --- [Thread-10] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
