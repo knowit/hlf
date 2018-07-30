@@ -4,12 +4,20 @@ data "google_compute_image" "server_image" {
   project = "godlydpatruljen"
 }
 
+data "google_compute_global_address" "hlf-address" {
+  name = "load-balancer-static-ip"
+  project = "godlydpatruljen"
+}
+
+#### MODULES ####
 module "develop" {
   source = "../../tf_config"
 
   ## Add variables that can be changed
   env = "dev"
   server_image = "${data.google_compute_image.server_image.self_link}"
+
+  load_balancer_static_ip = "${data.google_compute_global_address.hlf-address.address}"
 
   health_check_path = "/healthcheck"
 

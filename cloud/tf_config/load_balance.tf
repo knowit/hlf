@@ -1,5 +1,6 @@
 #### VARIABLES ####
 variable "health_check_path" {}
+variable "load_balancer_static_ip" {}
 
 #### RESOURCES ####
 resource "google_compute_backend_service" "load-balancer" {
@@ -37,4 +38,5 @@ resource "google_compute_global_forwarding_rule" "godlyd_http_forward" {
   name       = "godlyd-http-forward-${var.env}"
   target     = "${google_compute_target_http_proxy.godlyd_http_proxy.self_link}"
   port_range = 80
+  ip_address = "${var.load_balancer_static_ip}"
 }

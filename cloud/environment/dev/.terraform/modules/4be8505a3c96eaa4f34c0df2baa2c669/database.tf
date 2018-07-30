@@ -9,12 +9,12 @@ resource "google_sql_database_instance" "database" {
 
   settings {
     tier = "db-f1-micro"
-
     backup_configuration {enabled = true}
-
-    //ip_configuration {
-      //authorized_networks {value = "${google_compute_instance.server.network_interface.access_config.nat_ip}"}
-    //}
+    ip_configuration {
+      authorized_networks {
+        name = "${google_compute_address.hlf-static-ip-address.name}"
+        value = "${google_compute_address.hlf-static-ip-address.address}"}
+    }
   }
 }
 

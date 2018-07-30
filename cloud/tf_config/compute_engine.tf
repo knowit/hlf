@@ -26,18 +26,20 @@ resource "google_compute_instance" "server" {
 
   network_interface {
     network = "${google_compute_network.godlyd_vpc.name}"
-
-    access_config { // Ephemeral IP
+    access_config {
+      nat_ip = "${google_compute_address.hlf-static-ip-address.address}"
     }
   }
-
   metadata {
     gce-container-declaration = "${var.gce_container_config}"
-    //"spec:\n  containers:\n  - image: eu.gcr.io/godlydpatruljen/server\n    name: godlyd\n    securityContext:\n      privileged: false\n    stdin: false\n    tty: false\n    volumeMounts: []\n  restartPolicy: Always\n  volumes: []\n"
   }
 
   service_account {
     email  = "terraform@godlydpatruljen.iam.gserviceaccount.com"
     scopes = ["userinfo-email", "compute-rw", "storage-rw", "logging-write", "monitoring-write"]
   }
+}
+
+resource "google_compute_address" "hlf-static-ip-address" {
+  name = "static-ip-address-${var.env}"
 }
