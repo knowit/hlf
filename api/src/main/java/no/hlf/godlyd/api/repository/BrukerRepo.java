@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface BrukerRepo extends CrudRepository<Bruker, Integer> {
 
-    Bruker findBrukerById(Integer id);
     Bruker findByAuth0UserId(String auth0UserId);
+
     List<Bruker> findAll();
 }

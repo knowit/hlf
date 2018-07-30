@@ -5,11 +5,8 @@ import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
-import no.hlf.godlyd.api.repository.TeleslyngeRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
-import no.hlf.godlyd.api.services.TeleslyngeService;
 import no.hlf.godlyd.api.services.VurderingService;
-import no.hlf.godlyd.api.services.implementations.TeleslyngeServiceImpl;
 import no.hlf.godlyd.api.services.implementations.VurderingServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,14 +61,6 @@ public class VurderingServiceTest {
         Mockito.when(vurderingRepo.findByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw")).thenReturn(vurderinger);
 
         List<Vurdering> found = vurderingService.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
-        assertEquals(vurderinger.get(0), found.get(0));
-    }
-
-    @Test
-    public void testGetVurderingByRegistrator(){
-        Mockito.when(vurderingRepo.findByRegistrator(2)).thenReturn(vurderinger);
-
-        List<Vurdering> found = vurderingService.getVurderingerByBruker(2);
         assertEquals(vurderinger.get(0), found.get(0));
     }
 

@@ -14,6 +14,13 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @JsonIgnoreProperties(value = "dato", allowGetters = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = TeleslyngeVurdering.class, name = "Teleslyngevurdering"),
+        @JsonSubTypes.Type(value = LydforholdVurdering.class, name = "Lydforholdvurdering"),
+        @JsonSubTypes.Type(value = LydutjevningVurdering.class, name = "Lydutjevningvurdering"),
+        @JsonSubTypes.Type(value = InformasjonVurdering.class, name = "Informasjonvurdering")
+})
 public abstract class Vurdering implements Serializable {
 
     @Id
@@ -55,18 +62,15 @@ public abstract class Vurdering implements Serializable {
 
     public void setSted(Sted sted) {
         this.sted = sted;
-        //sted.addVurdering(this);
     }
 
     public Bruker getRegistrator() { return registrator; }
 
     public void setRegistrator(Bruker registrator) {
         this.registrator = registrator;
-        //registrator.addVurdering(this);
     }
 
     public Date getDato() {
-        //String format = new SimpleDateFormat("dd/MM/yyy").format(dato);
         return dato;
     }
 
