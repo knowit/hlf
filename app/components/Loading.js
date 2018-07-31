@@ -2,7 +2,7 @@ import React from "react";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
 import colors from "../settings/defaultStyles";
 
-export default ({ inline }) => {
+export default ({ inline, style }) => {
   return (
     <View
       style={[
@@ -11,6 +11,7 @@ export default ({ inline }) => {
           justifyContent: "center",
           alignItems: "center"
         },
+        style,
         !inline ? { ...StyleSheet.absoluteFillObject } : { flex: 1 }
       ]}
     >

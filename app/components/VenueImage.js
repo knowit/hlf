@@ -22,7 +22,7 @@ export default ({ photoReference, onBackPress }) => {
       <Image style={styles.image} source={{ uri: photoUrl }} />
       <TouchableHighlight
         style={styles.backButton}
-        onPress={() => onBackPress()}
+        onPress={() => onBackPress("MainScreen")}
       >
         <AppText type="primary" size="xlarge">
           <Ionicons name="ios-arrow-back" />

@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
 import selectedVenue from "./venueReducer";
-import userReducer from "./userReducer";
+import user from "./userReducer";
 import reviewList from "./reviewList";
+import newReview from "./newReview";
 
 export default combineReducers({
   selectedVenue,
-  userReducer,
-  reviewList
+  user,
+  reviewList,
+  newReview
 });

@@ -23,7 +23,7 @@ export const checkOfflineStorage = () => {
             })
             .then(result => {
               if (result.status === 200) {
-                dispatch({ type: LOGIN_SUCCESS });
+                dispatch({ type: LOGIN_SUCCESS, payload: result.data });
               } else {
                 dispatch({ type: LOGIN_FAILED });
               }

@@ -8,8 +8,9 @@ import colors, {
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import { createReview } from "../actions/";
+import { createReview, fetchPreviousReviews } from "../actions/";
 import { connect } from "react-redux";
+import Loading from "../components/Loading";
 
 class CreateReview extends Component {
   constructor(props) {
@@ -23,8 +24,17 @@ class CreateReview extends Component {
     this.onReviewSubmit = this.onReviewSubmit.bind(this);
     this.sendReview = this.sendReview.bind(this);
   }
+
+  componentDidMount() {
+    this.props.fetchPreviousReviews(this.props.selectedVenue.place_id);
+  }
+
   render() {
+    if (!this.props.newReview.hasLoaded)
+      return <Loading inline={true} style={{ marginTop: COMPONENT_SPACING }} />;
+    console.log(this.props.newReview);
     const { propertiesInput, currentProperty } = this.state;
+
     return (
       <ViewContainer flex={true}>
         <CreateReviewNavigation
@@ -56,15 +66,17 @@ class CreateReview extends Component {
   sendReview() {
     const { currentProperty, propertiesInput } = this.state;
     const currentPropertyData = propertiesInput[currentProperty];
-    if (currentPropertyData.value === 0) return;
+    const { value } = currentPropertyData;
+    if (value === 0) return;
     const body = {
       sted: {
         placeId: this.props.selectedVenue.place_id
       },
       type: currentPropertyData.name + "vurdering",
-      rangering: currentPropertyData.value,
+      rangering: value === 1 ? true : false,
       kommentar: currentPropertyData.comment
     };
+
     this.props.createReview(body);
   }
 
@@ -87,8 +99,8 @@ class CreateReview extends Component {
 }
 
 export default connect(
-  ({ selectedVenue }) => ({ selectedVenue }),
-  { createReview }
+  ({ selectedVenue, newReview }) => ({ selectedVenue, newReview }),
+  { createReview, fetchPreviousReviews }
 )(CreateReview);
 
 const styles = StyleSheet.create({});

@@ -25,7 +25,7 @@ class VenueDetails extends Component {
       <ViewContainer opaque={true} scrollable={true} flex={true} padding={0}>
         <VenueImage
           photoReference={photoReference}
-          onBackPress={this.props.hideDetails}
+          onBackPress={this.props.navigation.navigate}
         />
         <VenueMenu
           onScreenChange={newScreen =>
