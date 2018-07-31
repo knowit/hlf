@@ -30,6 +30,10 @@ class ReviewProperty extends Component {
 
   render() {
     const { currentProperty, onOptionSelected } = this.props;
+    const cons = Object.assign({}, currentProperty);
+    delete cons.icon;
+    delete cons.longDescription;
+    console.log(cons);
     const { value } = currentProperty;
     return (
       <View style={styles.container}>
@@ -42,7 +46,7 @@ class ReviewProperty extends Component {
           <SlimText style={styles.desc}>{currentProperty.description}</SlimText>
           <View style={styles.buttonRow}>
             <ReviewOptionButton
-              buttonValue={-1}
+              buttonValue={false}
               selectedValue={value}
               onOptionSelected={onOptionSelected}
             />
@@ -53,7 +57,7 @@ class ReviewProperty extends Component {
               style={styles.infoIcon}
             />
             <ReviewOptionButton
-              buttonValue={1}
+              buttonValue={true}
               selectedValue={value}
               onOptionSelected={onOptionSelected}
             />

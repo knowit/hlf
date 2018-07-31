@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-import propertiesData from "../settings/propertyConfig";
+import properties from "../settings/propertyConfig";
 import colors, {
   COMPONENT_SPACING,
   BORDER_RADIUS
@@ -15,11 +15,10 @@ import Loading from "../components/Loading";
 class CreateReview extends Component {
   constructor(props) {
     super(props);
-    const nextPropertyState = this.getInitialState();
     this.state = {
-      currentProperty: Object.keys(nextPropertyState)[0],
-      propertiesInput: nextPropertyState
+      currentProperty: properties[0].name
     };
+
     this.onPropertySelect = this.onPropertySelect.bind(this);
     this.onReviewSubmit = this.onReviewSubmit.bind(this);
     this.sendReview = this.sendReview.bind(this);
@@ -30,10 +29,15 @@ class CreateReview extends Component {
   }
 
   render() {
-    if (!this.props.newReview.hasLoaded)
+    const { hasLoaded, propertyInput } = this.props.newReview;
+    if (!hasLoaded)
       return <Loading inline={true} style={{ marginTop: COMPONENT_SPACING }} />;
-    console.log(this.props.newReview);
-    const { propertiesInput, currentProperty } = this.state;
+    const { currentProperty } = this.state;
+
+    const propertyData = properties.filter(
+      item => item.name === currentProperty
+    )[0];
+    const currentPropertyInput = propertyInput[currentProperty];
 
     return (
       <ViewContainer flex={true}>
@@ -42,7 +46,7 @@ class CreateReview extends Component {
           onPropertySelect={this.onPropertySelect}
         />
         <ReviewProperty
-          currentProperty={propertiesInput[currentProperty]}
+          currentProperty={Object.assign(propertyData, currentPropertyInput)}
           onPropertyChange={this.onPropertyChange}
           onOptionSelected={this.onReviewSubmit}
         />
@@ -77,24 +81,11 @@ class CreateReview extends Component {
       kommentar: currentPropertyData.comment
     };
 
-    this.props.createReview(body);
+    //this.props.createReview(body);
   }
 
   onPropertySelect(propertyName) {
     this.setState({ currentProperty: propertyName });
-  }
-
-  getInitialState() {
-    const state = propertiesData.reduce((obj, property) => {
-      obj[property.name] = Object.assign(property, {
-        property,
-        comment: "",
-        value: 0
-      });
-      return obj;
-    }, {});
-
-    return state;
   }
 }
 
