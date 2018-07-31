@@ -21,7 +21,9 @@ export default ({ buttonValue, selectedValue, onOptionSelected }) => {
           : colors.negativeColor;
   return (
     <TouchableHighlight
-      onPress={() => onOptionSelected("value", !isSelected ? buttonValue : 0)}
+      onPress={() =>
+        onOptionSelected("value", !isSelected ? buttonValue : undefined)
+      }
       style={{ flex: 1 }}
     >
       <View

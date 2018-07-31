@@ -48,23 +48,20 @@ class CreateReview extends Component {
         <ReviewProperty
           currentProperty={Object.assign(propertyData, currentPropertyInput)}
           onPropertyChange={this.onPropertyChange}
-          onOptionSelected={this.onReviewSubmit}
+          onReviewSubmit={this.onReviewSubmit}
         />
       </ViewContainer>
     );
   }
 
-  onReviewSubmit(type, value) {
-    const { propertiesInput, currentProperty } = this.state;
-    const previousState = propertiesInput[currentProperty];
-    const nextState = { ...previousState, [type]: value };
-
-    this.setState(
-      {
-        propertiesInput: { ...propertiesInput, [currentProperty]: nextState }
+  onReviewSubmit(reviewValues) {
+    const reviewBody = Object.assign(reviewValues, {
+      sted: {
+        placeId: this.props.selectedVenue.place_id
       },
-      () => this.sendReview()
-    );
+      type: this.state.currentProperty + "vurdering"
+    });
+    this.props.createReview(reviewBody);
   }
 
   sendReview() {
@@ -81,7 +78,7 @@ class CreateReview extends Component {
       kommentar: currentPropertyData.comment
     };
 
-    //this.props.createReview(body);
+    this.props.createReview(body);
   }
 
   onPropertySelect(propertyName) {

@@ -35,6 +35,7 @@ export const fetchPreviousReviews = placeId => {
 };
 
 export const createReview = reviewBody => {
+  console.log(reviewBody);
   return async dispatch => {
     const token = await fetchAccessToken();
     dispatch({ type: CREATE_REVIEW_INIT });
@@ -45,7 +46,9 @@ export const createReview = reviewBody => {
           Authorization: "Bearer " + token
         }
       })
-      .then(response => response)
+      .then(response =>
+        dispatch({ type: CREATE_REVIEW_SUCCESS, payload: response.data })
+      )
       .catch(error => error);
   };
 };

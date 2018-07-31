@@ -1,5 +1,9 @@
 import properties from "../settings/propertyConfig";
-import { FETCH_PREVIOUS_SUCCESS, VENUE_SELECTED } from "../actions";
+import {
+  FETCH_PREVIOUS_SUCCESS,
+  VENUE_SELECTED,
+  CREATE_REVIEW_SUCCESS
+} from "../actions";
 
 const defaultState = () =>
   properties.reduce((obj, property) => {
@@ -27,6 +31,16 @@ export default (
         };
       }
       return { propertyInput: data, hasLoaded: true };
+    case CREATE_REVIEW_SUCCESS:
+      console.log(action.payload);
+      const { kommentar, rangering, type } = action.payload;
+      const nextState = { comment: kommentar, value: rangering };
+      const propertyInputs = {
+        ...state.propertyInput,
+        [type.replace("vurdering", "")]: nextState
+      };
+
+      return { ...state, propertyInput: propertyInputs };
     default:
       return state;
   }

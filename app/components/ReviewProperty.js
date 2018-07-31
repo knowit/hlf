@@ -18,6 +18,7 @@ class ReviewProperty extends Component {
   constructor(props) {
     super(props);
     this.state = { newComment: "" };
+    this.onReviewSubmit = this.onReviewSubmit.bind(this);
   }
 
   componentDidUpdate(previousProps) {
@@ -29,11 +30,11 @@ class ReviewProperty extends Component {
   }
 
   render() {
-    const { currentProperty, onOptionSelected } = this.props;
+    const { currentProperty } = this.props;
     const cons = Object.assign({}, currentProperty);
     delete cons.icon;
     delete cons.longDescription;
-    console.log(cons);
+    //console.log(cons);
     const { value } = currentProperty;
     return (
       <View style={styles.container}>
@@ -48,7 +49,7 @@ class ReviewProperty extends Component {
             <ReviewOptionButton
               buttonValue={false}
               selectedValue={value}
-              onOptionSelected={onOptionSelected}
+              onOptionSelected={this.onReviewSubmit}
             />
             <MaterialIcons
               name="info-outline"
@@ -59,7 +60,7 @@ class ReviewProperty extends Component {
             <ReviewOptionButton
               buttonValue={true}
               selectedValue={value}
-              onOptionSelected={onOptionSelected}
+              onOptionSelected={this.onReviewSubmit}
             />
           </View>
         </View>
@@ -74,9 +75,7 @@ class ReviewProperty extends Component {
             value={this.state.newComment}
             onChangeText={text => this.setState({ newComment: text })}
           />
-          <TouchableHighlight
-            onPress={() => onOptionSelected("comment", this.state.newComment)}
-          >
+          <TouchableHighlight onPress={() => this.onReviewSubmit("comment")}>
             <MaterialIcons
               name="chevron-right"
               color={colors.secondaryTextColor}
@@ -87,11 +86,22 @@ class ReviewProperty extends Component {
       </View>
     );
   }
+
+  onReviewSubmit(source, newValue) {
+    const comment = this.state.newComment;
+    const value =
+      source === "value" ? newValue : this.props.currentProperty.value;
+    const body = {
+      kommentar: comment,
+      rangering: value === undefined ? null : value
+    };
+    this.props.onReviewSubmit(body);
+  }
 }
 
 ReviewProperty.propTypes = {
   currentProperty: PropTypes.object.isRequired,
-  onOptionSelected: PropTypes.func.isRequired
+  onReviewSubmit: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
