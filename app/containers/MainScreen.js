@@ -13,9 +13,15 @@ class MainScreen extends Component {
     this.map = React.createRef();
   }
 
-  componentWillMount() {}
-
-  getCurrentLocation = async () => {};
+  componentDidUpdate(prevProps) {
+    if (
+      !prevProps.selectedVenue ||
+      (this.props.selectedVenue &&
+        prevProps.selectedVenue.name !== this.props.selectedVenue.name)
+    ) {
+      this.notifyMapOnChange();
+    }
+  }
 
   notifyMapOnChange() {
     const { location } = this.props.selectedVenue.geometry;

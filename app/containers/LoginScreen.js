@@ -13,7 +13,7 @@ export default ({ loginSuccessful }) => {
     })
     .then(credentials => {
       saveTokens(credentials);
-      loginSuccessful();
+      loginSuccessful(credentials.accessToken);
     })
     .catch(error => error);
   return <Loading />;

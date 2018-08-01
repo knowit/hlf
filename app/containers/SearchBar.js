@@ -14,9 +14,9 @@ import colors, {
   sizes
 } from "../settings/defaultStyles";
 import { API_KEY } from "../credentials";
-import AppText from "../components/AppText";
 import Entypo from "react-native-vector-icons/Entypo";
 import ViewContainer from "../components/ViewContainer";
+import SlimText from "../components/SlimText";
 
 export default class SearchBar extends Component {
   constructor(props) {
@@ -76,17 +76,17 @@ export default class SearchBar extends Component {
       >
         <View style={styles.row}>
           <View style={styles.iconWrap}>
-            <Text>
+            <SlimText>
               <Entypo
                 name="location-pin"
                 color="white"
                 size={sizes.xlarge * 1.2}
               />
-            </Text>
+            </SlimText>
           </View>
-          <Text style={styles.resultText} numberOfLines={2}>
+          <SlimText style={styles.resultText} numberOfLines={2}>
             {item.description}
-          </Text>
+          </SlimText>
         </View>
       </TouchableHighlight>
     );

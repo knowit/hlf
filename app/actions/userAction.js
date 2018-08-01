@@ -39,9 +39,19 @@ export const checkOfflineStorage = () => {
   };
 };
 
-export const loginSuccessful = () => {
-  return {
-    type: LOGIN_SUCCESS
+export const loginSuccessful = accessToken => {
+  return async dispatch => {
+    axios
+      .get(`${ROOT_API_URL}/brukere/login`, {
+        headers: {
+          Authorization: "Bearer " + accessToken
+        }
+      })
+      .then(result => {
+        if (result.status === 200) {
+          dispatch({ type: LOGIN_SUCCESS, payload: result.data });
+        }
+      });
   };
 };
 

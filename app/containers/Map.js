@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 
 export default class Map extends Component {
   constructor(props) {
@@ -42,7 +42,13 @@ export default class Map extends Component {
           console.log(e.nativeEvent);
           this.props.onVenueSelect(e.nativeEvent.placeId);
         }}
-      />
+      >
+        <Marker
+          coordinate={this.state.selectedLocation}
+          title="TITLE!"
+          description="DESC!!"
+        />
+      </MapView>
     );
   }
 
