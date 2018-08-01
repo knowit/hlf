@@ -12,6 +12,7 @@ import ViewContainer from "../components/ViewContainer";
 import { connect } from "react-redux";
 import SlimText from "../components/SlimText";
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
+import ProfileImage from "../components/ProfileImage";
 
 class Profile extends Component {
   render() {
@@ -19,10 +20,7 @@ class Profile extends Component {
     return (
       <View heightAdjusting="flex" opaque={true} style={styles.container}>
         <View style={styles.header}>
-          <Image
-            source={{ uri: "https://" + user.user.imageUrl.substring(7) }}
-            style={styles.image}
-          />
+          <ProfileImage url={user.user.imageUrl} />
           <SlimText style={styles.name}>
             {user.user.fornavn + " " + user.user.etternavn}
           </SlimText>
@@ -60,11 +58,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     alignItems: "center"
   },
-  image: {
-    width: 45,
-    height: 45,
-    borderRadius: 10
-  },
+
   name: {
     marginLeft: COMPONENT_SPACING,
     fontSize: 18,

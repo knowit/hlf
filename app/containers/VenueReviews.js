@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet, TouchableHighlight } from "react-native";
+import { View, StyleSheet, TouchableHighlight, FlatList } from "react-native";
 import PropertyOverview from "../components/PropertyOverview";
 import Review from "./Review";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -16,6 +16,7 @@ class VenueReviews extends Component {
   constructor(props) {
     super(props);
     this.state = { showReviews: false };
+    this.nextId = 0;
   }
 
   render() {
@@ -74,16 +75,10 @@ class VenueReviews extends Component {
     }
 
     return (
-      <View>
-        {reviewsList.map(review => {
-          return (
-            <View key={review.id}>
-              <HorizontalRuler key />
-              <Review review={review} />
-            </View>
-          );
-        })}
-      </View>
+      <FlatList
+        data={reviewsList}
+        renderItem={({ item }) => <Review review={item} />}
+      />
     );
   }
 }

@@ -39,7 +39,6 @@ export default class Map extends Component {
           this.props.deselectVenue();
         }}
         onPoiClick={e => {
-          console.log(e.nativeEvent);
           this.props.onVenueSelect(e.nativeEvent.placeId);
         }}
       >

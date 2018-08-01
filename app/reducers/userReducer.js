@@ -22,7 +22,6 @@ export default (
         user: {}
       };
     case LOGIN_SUCCESS:
-      console.log("hei");
       return {
         isAuthenticated: true,
         hasCompletedInitialLoginAttempt: true,
