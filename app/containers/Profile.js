@@ -1,9 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableHighlight,
+  Text
+} from "react-native";
 import HorizontalRuler from "../components/HorizontalRuler";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ViewContainer from "../components/ViewContainer";
-import { AppButton } from "../components/AppButton";
 import { connect } from "react-redux";
 import SlimText from "../components/SlimText";
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
@@ -34,9 +39,11 @@ class Profile extends Component {
           style={{ padding: 0 }}
         />
         <HorizontalRuler />
-        <AppButton onPress={() => this.props.signout()}>
-          <MaterialCommunityIcons name="logout" /> Logg ut
-        </AppButton>
+        <TouchableHighlight onPress={() => this.props.signout()}>
+          <Text>
+            <MaterialCommunityIcons name="logout" /> Logg ut
+          </Text>
+        </TouchableHighlight>
       </View>
     );
   }

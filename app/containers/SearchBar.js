@@ -100,7 +100,7 @@ export default class SearchBar extends Component {
   handleSearch() {
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${
       this.state.searchPrompt
-    }&key=${API_KEY}&region=no`;
+    }&key=${API_KEY}&region=no&types=establishment`;
 
     axios
       .get(url)

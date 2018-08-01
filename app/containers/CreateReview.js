@@ -21,7 +21,6 @@ class CreateReview extends Component {
 
     this.onPropertySelect = this.onPropertySelect.bind(this);
     this.onReviewSubmit = this.onReviewSubmit.bind(this);
-    this.sendReview = this.sendReview.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +54,7 @@ class CreateReview extends Component {
   }
 
   onReviewSubmit(reviewValues) {
+    if (this.props.newReview.isSubmitting) return;
     const reviewBody = Object.assign(reviewValues, {
       sted: {
         placeId: this.props.selectedVenue.place_id
@@ -62,23 +62,6 @@ class CreateReview extends Component {
       type: this.state.currentProperty + "vurdering"
     });
     this.props.createReview(reviewBody);
-  }
-
-  sendReview() {
-    const { currentProperty, propertiesInput } = this.state;
-    const currentPropertyData = propertiesInput[currentProperty];
-    const { value } = currentPropertyData;
-    if (value === 0) return;
-    const body = {
-      sted: {
-        placeId: this.props.selectedVenue.place_id
-      },
-      type: currentPropertyData.name + "vurdering",
-      rangering: value === 1 ? true : false,
-      kommentar: currentPropertyData.comment
-    };
-
-    this.props.createReview(body);
   }
 
   onPropertySelect(propertyName) {

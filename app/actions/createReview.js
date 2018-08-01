@@ -35,7 +35,6 @@ export const fetchPreviousReviews = placeId => {
 };
 
 export const createReview = reviewBody => {
-  console.log(reviewBody);
   return async dispatch => {
     const token = await fetchAccessToken();
     dispatch({ type: CREATE_REVIEW_INIT });

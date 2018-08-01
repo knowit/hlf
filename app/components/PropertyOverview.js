@@ -2,7 +2,6 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import properties from "../settings/propertyConfig";
 import colors from "../settings/defaultStyles";
-import AppText from "./AppText";
 import PropertyReviewIcon from "./PropertyReviewIcon";
 import PropertyTitle from "./PropertyTitle";
 import SlimText from "./SlimText";
