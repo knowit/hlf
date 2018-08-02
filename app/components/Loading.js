@@ -1,8 +1,9 @@
 import React from "react";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
 import colors from "../settings/defaultStyles";
+import propTypes from "prop-types";
 
-export default ({ inline, style }) => {
+const Loading = ({ inline, style }) => {
   return (
     <View
       style={[
@@ -19,3 +20,10 @@ export default ({ inline, style }) => {
     </View>
   );
 };
+
+Loading.propTypes = {
+  inline: propTypes.bool,
+  style: propTypes.oneOfType([propTypes.array, propTypes.object])
+};
+
+export default Loading;

@@ -17,7 +17,7 @@ import ProfileImage from "../components/ProfileImage";
 class Profile extends Component {
   render() {
     const { user } = this.props;
-    const titleSize = 24;
+
     return (
       <View heightAdjusting="flex" opaque={true} style={styles.container}>
         <View style={styles.header}>
@@ -28,28 +28,6 @@ class Profile extends Component {
         </View>
 
         <HorizontalRuler verticalMargin={COMPONENT_SPACING} />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingLeft: COMPONENT_SPACING
-          }}
-        >
-          <MaterialCommunityIcons
-            name="comment-text-outline"
-            size={24}
-            color={colors.primaryTextColor}
-          />
-          <SlimText
-            style={{
-              fontSize: 24,
-              color: colors.primaryTextColor,
-              marginLeft: 15
-            }}
-          >
-            Dine vurderinger
-          </SlimText>
-        </View>
 
         <ViewContainer
           heightAdjusting="flex"

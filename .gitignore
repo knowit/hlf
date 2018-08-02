@@ -1,5 +1,6 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
-
+issues*
+.issues.txt.swp
 # expo
 app/.expo/
 

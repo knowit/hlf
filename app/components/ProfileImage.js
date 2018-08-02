@@ -1,10 +1,11 @@
 import React from "react";
 import { Image } from "react-native";
+import propTypes from "prop-types";
 
-export default ({ url }) => {
+const ProfileImage = ({ url }) => {
   return (
     <Image
-      source={{ uri: url.replace("https//", "https://") }}
+      source={{ uri: url.replace("https//", "https://") }} // : missing from the uri provided by api
       style={{
         width: 45,
         height: 45,
@@ -13,3 +14,9 @@ export default ({ url }) => {
     />
   );
 };
+
+ProfileImage.propTypes = {
+  url: propTypes.string.isRequired
+};
+
+export default ProfileImage;

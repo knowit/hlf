@@ -12,7 +12,6 @@ export default class Map extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <MapView
         provider="google"

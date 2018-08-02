@@ -1,8 +1,9 @@
 import React from "react";
 import { View } from "react-native";
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
+import propTypes from "prop-types";
 
-export default ({ verticalMargin, style }) => {
+const HorizontalBar = ({ verticalMargin, style }) => {
   return (
     <View
       style={[
@@ -17,3 +18,10 @@ export default ({ verticalMargin, style }) => {
     />
   );
 };
+
+HorizontalBar.propTypes = {
+  verticalMargin: propTypes.number,
+  style: propTypes.oneOfType([propTypes.array, propTypes.object])
+};
+
+export default HorizontalBar;

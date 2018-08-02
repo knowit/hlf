@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import properties from "../settings/propertyConfig";
-import colors, {
-  COMPONENT_SPACING,
-  BORDER_RADIUS
-} from "../settings/defaultStyles";
+import { COMPONENT_SPACING } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";

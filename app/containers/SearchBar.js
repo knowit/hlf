@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
 } from "react-native";
 import _ from "lodash";
 import axios from "axios";
@@ -145,7 +146,8 @@ const styles = StyleSheet.create({
     marginRight: COMPONENT_SPACING,
     flex: 1,
     color: colors.primaryTextColor,
-    fontSize: sizes.large
+    fontSize: sizes.large,
+    fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined
   },
   resultText: {
     color: colors.primaryTextColor,

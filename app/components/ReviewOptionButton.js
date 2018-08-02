@@ -1,13 +1,15 @@
 import React from "react";
 import { TouchableHighlight, StyleSheet, View } from "react-native";
-import colors, {
-  BORDER_RADIUS,
-  COMPONENT_SPACING
-} from "../settings/defaultStyles";
+import colors from "../settings/defaultStyles";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import SlimText from "./SlimText";
+import propTypes from "prop-types";
 
-export default ({ buttonValue, selectedValue, onOptionSelected }) => {
+const ReviewOptionButton = ({
+  buttonValue,
+  selectedValue,
+  onOptionSelected
+}) => {
   const isPositive = buttonValue;
   const isSelected = buttonValue === selectedValue;
 
@@ -50,6 +52,14 @@ export default ({ buttonValue, selectedValue, onOptionSelected }) => {
     </TouchableHighlight>
   );
 };
+
+ReviewOptionButton.propTypes = {
+  buttonValue: propTypes.bool.isRequired,
+  selectedValue: propTypes.bool.isRequired,
+  onOptionSelected: propTypes.func.isRequired
+};
+
+export default ReviewOptionButton;
 
 const styles = StyleSheet.create({
   wrap: {
