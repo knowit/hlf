@@ -51,6 +51,6 @@ class Navigation extends Component {
 }
 
 export default connect(
-  ({ userReducer }) => ({ ...userReducer }),
+  ({ user }) => ({ ...user }),
   { checkOfflineStorage, loginSuccessful, signout }
 )(Navigation);

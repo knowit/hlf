@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
 } from "react-native";
 import _ from "lodash";
 import axios from "axios";
@@ -14,9 +15,9 @@ import colors, {
   sizes
 } from "../settings/defaultStyles";
 import { API_KEY } from "../credentials";
-import AppText from "../components/AppText";
 import Entypo from "react-native-vector-icons/Entypo";
 import ViewContainer from "../components/ViewContainer";
+import SlimText from "../components/SlimText";
 
 export default class SearchBar extends Component {
   constructor(props) {
@@ -76,17 +77,17 @@ export default class SearchBar extends Component {
       >
         <View style={styles.row}>
           <View style={styles.iconWrap}>
-            <Text>
+            <SlimText>
               <Entypo
                 name="location-pin"
                 color="white"
                 size={sizes.xlarge * 1.2}
               />
-            </Text>
+            </SlimText>
           </View>
-          <Text style={styles.resultText} numberOfLines={2}>
+          <SlimText style={styles.resultText} numberOfLines={2}>
             {item.description}
-          </Text>
+          </SlimText>
         </View>
       </TouchableHighlight>
     );
@@ -100,7 +101,7 @@ export default class SearchBar extends Component {
   handleSearch() {
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${
       this.state.searchPrompt
-    }&key=${API_KEY}&region=no`;
+    }&key=${API_KEY}&region=no&types=establishment`;
 
     axios
       .get(url)
@@ -112,7 +113,7 @@ export default class SearchBar extends Component {
           })
         })
       )
-      .catch(req => console.log(req));
+      .catch(req => req);
   }
 }
 
@@ -145,7 +146,8 @@ const styles = StyleSheet.create({
     marginRight: COMPONENT_SPACING,
     flex: 1,
     color: colors.primaryTextColor,
-    fontSize: sizes.large
+    fontSize: sizes.large,
+    fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined
   },
   resultText: {
     color: colors.primaryTextColor,

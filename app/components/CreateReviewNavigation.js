@@ -2,8 +2,9 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import colors from "../settings/defaultStyles";
 import properties from "../settings/propertyConfig";
+import PropTypes from "prop-types";
 
-export default ({ currentProperty, onPropertySelect }) => {
+const CreateReviewNavigation = ({ currentProperty, onPropertySelect }) => {
   return (
     <View style={styles.container}>
       <View>
@@ -38,6 +39,13 @@ export default ({ currentProperty, onPropertySelect }) => {
     </View>
   );
 };
+
+CreateReviewNavigation.propTypes = {
+  currentProperty: PropTypes.string.isRequired,
+  onPropertySelect: PropTypes.func.isRequired
+};
+
+export default CreateReviewNavigation;
 
 const styles = StyleSheet.create({
   container: {

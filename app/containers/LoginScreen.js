@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 var credentials = require("../settings/authConfig");
 import Auth0 from "react-native-auth0";
 const auth0 = new Auth0(credentials);
@@ -13,9 +13,9 @@ export default ({ loginSuccessful }) => {
     })
     .then(credentials => {
       saveTokens(credentials);
-      loginSuccessful();
+      loginSuccessful(credentials.accessToken);
     })
-    .catch(error => console.log(error));
+    .catch(error => error);
   return <Loading />;
 };
 

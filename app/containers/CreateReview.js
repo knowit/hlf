@@ -1,77 +1,74 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import properties from "../settings/propertyConfig";
-import colors, {
-  COMPONENT_SPACING,
-  BORDER_RADIUS
-} from "../settings/defaultStyles";
+import { COMPONENT_SPACING } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import { ROOT_API_URL } from "../settings/endpoints";
-import axios from "axios";
+import { createReview, fetchPreviousReviews } from "../actions/";
+import { connect } from "react-redux";
+import Loading from "../components/Loading";
 
-export default class CreateReview extends Component {
+class CreateReview extends Component {
   constructor(props) {
     super(props);
-    const nextPropertyState = this.getInitialState();
     this.state = {
-      currentProperty: Object.keys(nextPropertyState)[0],
-      properties: nextPropertyState
+      currentProperty: properties[0].name
     };
-    this.onReviewAction = this.onReviewAction.bind(this);
+
     this.onPropertySelect = this.onPropertySelect.bind(this);
+    this.onReviewSubmit = this.onReviewSubmit.bind(this);
   }
+
+  componentDidMount() {
+    this.props.fetchPreviousReviews(this.props.selectedVenue.place_id);
+  }
+
   render() {
+    const { hasLoaded, propertyInput } = this.props.newReview;
+    if (!hasLoaded)
+      return <Loading inline={true} style={{ marginTop: COMPONENT_SPACING }} />;
+    const { currentProperty } = this.state;
+
+    const propertyData = properties.filter(
+      item => item.name === currentProperty
+    )[0];
+    const currentPropertyInput = propertyInput[currentProperty];
+
     return (
       <ViewContainer flex={true}>
         <CreateReviewNavigation
-          currentProperty={this.state.currentProperty}
+          currentProperty={currentProperty}
           onPropertySelect={this.onPropertySelect}
         />
         <ReviewProperty
-          currentProperty={this.state.properties[this.state.currentProperty]}
-          onReviewAction={this.onReviewAction}
+          currentProperty={Object.assign(propertyData, currentPropertyInput)}
+          onPropertyChange={this.onPropertyChange}
+          onReviewSubmit={this.onReviewSubmit}
         />
       </ViewContainer>
     );
   }
 
-  onReviewAction(actionType, newValue) {
-    const url = `${ROOT_API_URL}/vurderinger/${this.state.currentProperty.toLowerCase()}`;
-    const currentProperty = this.state.properties[this.state.currentProperty];
-
-    const reviewBody = {
+  onReviewSubmit(reviewValues) {
+    if (this.props.newReview.isSubmitting) return;
+    const reviewBody = Object.assign(reviewValues, {
       sted: {
         placeId: this.props.selectedVenue.place_id
       },
-
-      registrator: { id: 3 },
-      kommentar: actionType === "comment" ? newValue : currentProperty.comment,
-      rangering:
-        actionType === "value"
-          ? newValue === 1
-            ? true
-            : false
-          : currentProperty.value
-    };
-    console.log(reviewBody);
-    //axios.post(url, reviewBody);
+      type: this.state.currentProperty + "vurdering"
+    });
+    this.props.createReview(reviewBody);
   }
 
   onPropertySelect(propertyName) {
     this.setState({ currentProperty: propertyName });
   }
-
-  getInitialState() {
-    return properties.reduce((obj, property) => {
-      obj[property.name] = Object.assign(property, {
-        comment: "",
-        value: 0
-      });
-      return obj;
-    }, {});
-  }
 }
+
+export default connect(
+  ({ selectedVenue, newReview }) => ({ selectedVenue, newReview }),
+  { createReview, fetchPreviousReviews }
+)(CreateReview);
 
 const styles = StyleSheet.create({});

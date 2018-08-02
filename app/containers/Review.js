@@ -6,6 +6,9 @@ import { COMPONENT_SPACING, colors } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import SlimText from "../components/SlimText";
 import PropertyTitle from "../components/PropertyTitle";
+import ProfileImage from "../components/ProfileImage";
+import _ from "lodash";
+import HorizontalRuler from "../components/HorizontalRuler";
 
 export default class Review extends Component {
   constructor(props) {
@@ -16,15 +19,30 @@ export default class Review extends Component {
 
   render() {
     const { review } = this.props;
+    const { fornavn, etternavn, imageUrl } = review.registrator;
+
     return (
       <ViewContainer>
-        <SlimText style={{ fontSize: 16 }}>{review.date}</SlimText>
-        <SlimText style={{ marginBottom: 15, fontSize: 20 }}>
-          {review.name}
-        </SlimText>
-        {properties.map(property =>
-          this.renderProperty(property, review.properties[property.name])
-        )}
+        <HorizontalRuler style={{ marginBottom: COMPONENT_SPACING }} />
+        <View style={styles.headerWrap}>
+          <ProfileImage url={imageUrl} />
+          <View style={styles.nameWrap}>
+            <SlimText style={{ fontSize: 16 }}>{review.dato}</SlimText>
+            <SlimText style={{ marginBottom: 15, fontSize: 20 }}>
+              {fornavn + " " + etternavn}
+            </SlimText>
+          </View>
+        </View>
+        {Object.keys(review.vurderinger).map(key => {
+          const propertyReview = review.vurderinger[key];
+          const capitalKey = key.charAt(0).toUpperCase() + key.slice(1);
+
+          return this.renderProperty(
+            properties.filter(prop => prop.name === capitalKey)[0],
+            propertyReview
+          );
+        })}
+
         <TouchableHighlight onPress={() => this.toggleComments()}>
           <View style={[styles.row, styles.toggleComments]}>
             <SlimText style={{ fontSize: 20 }}>
@@ -44,18 +62,18 @@ export default class Review extends Component {
   }
 
   renderProperty(property, review) {
-    const { value } = review;
+    const { rangering } = review;
     return (
       <View key={property.name}>
         <View style={[styles.row, styles.property]}>
           <PropertyTitle property={property} size={22} style={{ flex: 1 }} />
           <MaterialIcons
-            name={value ? "thumb-up" : "thumb-down"}
-            color={value ? colors.positiveColor : colors.negativeColor}
+            name={rangering ? "thumb-up" : "thumb-down"}
+            color={rangering ? colors.positiveColor : colors.negativeColor}
             size={23}
           />
         </View>
-        {this.state.showComments && review.comment ? (
+        {this.state.showComments && review.kommentar ? (
           <SlimText
             style={{
               fontStyle: "italic",
@@ -63,7 +81,7 @@ export default class Review extends Component {
               marginBottom: COMPONENT_SPACING
             }}
           >
-            {review.comment}
+            {review.kommentar}
           </SlimText>
         ) : null}
       </View>
@@ -79,6 +97,15 @@ const styles = StyleSheet.create({
   comment: {
     fontStyle: "italic",
     width: "100%"
+  },
+  headerWrap: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  nameWrap: {
+    flex: 1,
+    marginLeft: COMPONENT_SPACING,
+    justifyContent: "center"
   },
   row: {
     flexDirection: "row",

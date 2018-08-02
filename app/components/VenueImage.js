@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  Image,
-  View,
-  TouchableHighlight,
-  Text,
-  StyleSheet
-} from "react-native";
+import { Image, View, TouchableHighlight, StyleSheet } from "react-native";
 import { API_KEY } from "../credentials";
 import { colors } from "../settings/defaultStyles";
-import AppText from "./AppText";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default ({ photoReference, onBackPress }) => {
@@ -22,11 +16,13 @@ export default ({ photoReference, onBackPress }) => {
       <Image style={styles.image} source={{ uri: photoUrl }} />
       <TouchableHighlight
         style={styles.backButton}
-        onPress={() => onBackPress()}
+        onPress={() => onBackPress("MainScreen")}
       >
-        <AppText type="primary" size="xlarge">
-          <Ionicons name="ios-arrow-back" />
-        </AppText>
+        <Ionicons
+          name="ios-arrow-back"
+          color={colors.primaryTextColor}
+          size={22}
+        />
       </TouchableHighlight>
     </View>
   );

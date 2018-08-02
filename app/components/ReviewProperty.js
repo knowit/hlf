@@ -4,8 +4,7 @@ import {
   View,
   TextInput,
   TouchableHighlight,
-  Modal,
-  Text
+  Platform
 } from "react-native";
 import SlimText from "./SlimText";
 import PropTypes from "prop-types";
@@ -17,11 +16,39 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 class ReviewProperty extends Component {
   constructor(props) {
     super(props);
-    this.state = { commentInput: "", modalVisible: true };
+    this.state = {
+      newComment: "",
+      submittedComment: "",
+      commentEdited: false
+    };
+    this.onReviewSubmit = this.onReviewSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const { comment } = this.props.currentProperty;
+    if (comment && comment.length > 0) {
+      this.setState({ newComment: comment });
+    }
+  }
+
+  componentDidUpdate(previousProps) {
+    const { comment } = this.props.currentProperty;
+    const propertyChanged =
+      previousProps.currentProperty.name !== this.props.currentProperty.name;
+    if (!propertyChanged) return;
+    if (comment && comment.length > 0 && this.state.newComment !== comment) {
+      this.setState({ newComment: comment });
+    } else {
+      this.setState({ newComment: "" });
+    }
   }
 
   render() {
-    const { currentProperty, onReviewAction } = this.props;
+    const commentSubmitted =
+      this.props.currentProperty.comment === this.state.submittedComment &&
+      this.state.submittedComment === this.state.newComment &&
+      this.state.newComment;
+    const { currentProperty } = this.props;
     const { value } = currentProperty;
     return (
       <View style={styles.container}>
@@ -34,9 +61,9 @@ class ReviewProperty extends Component {
           <SlimText style={styles.desc}>{currentProperty.description}</SlimText>
           <View style={styles.buttonRow}>
             <ReviewOptionButton
-              buttonValue={-1}
+              buttonValue={false}
               selectedValue={value}
-              onReviewAction={onReviewAction}
+              onOptionSelected={this.onReviewSubmit}
             />
             <MaterialIcons
               name="info-outline"
@@ -45,9 +72,9 @@ class ReviewProperty extends Component {
               style={styles.infoIcon}
             />
             <ReviewOptionButton
-              buttonValue={1}
+              buttonValue={true}
               selectedValue={value}
-              onReviewAction={onReviewAction}
+              onOptionSelected={this.onReviewSubmit}
             />
           </View>
         </View>
@@ -59,15 +86,19 @@ class ReviewProperty extends Component {
             placeholderTextColor={colors.secondaryTextColor}
             multiline={true}
             numberOfLines={3}
-            value={this.state.commentInput}
-            onChangeText={text => this.setState({ commentInput: text })}
+            value={this.state.newComment}
+            onChangeText={text =>
+              this.setState({ commentEdited: true, newComment: text })
+            }
           />
-          <TouchableHighlight
-            onPress={() => onReviewAction("comment", this.state.commentInput)}
-          >
+          <TouchableHighlight onPress={() => this.onReviewSubmit("comment")}>
             <MaterialIcons
-              name="chevron-right"
-              color={colors.secondaryTextColor}
+              name={commentSubmitted ? "done" : "chevron-right"}
+              color={
+                commentSubmitted
+                  ? colors.positiveColor
+                  : colors.secondaryTextColor
+              }
               size={55}
             />
           </TouchableHighlight>
@@ -75,11 +106,32 @@ class ReviewProperty extends Component {
       </View>
     );
   }
+
+  onReviewSubmit(source, newValue) {
+    const { commentEdited, newComment } = this.state;
+    const comment = commentEdited
+      ? newComment
+      : this.props.currentProperty.comment;
+    const value =
+      source === "value" ? newValue : this.props.currentProperty.value;
+    const body = {
+      kommentar: comment,
+      rangering: value === undefined ? null : value
+    };
+    if (commentEdited)
+      this.setState({ commentEdited: false, submittedComment: comment });
+    this.props.onReviewSubmit(body);
+  }
+
+  setPreviousCommentToInput() {
+    const { comment } = this.props.currentProperty;
+    if (comment && comment.length > 0) this.setState({ newComment: comment });
+  }
 }
 
 ReviewProperty.propTypes = {
   currentProperty: PropTypes.object.isRequired,
-  onReviewAction: PropTypes.func.isRequired
+  onReviewSubmit: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -115,7 +167,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     color: colors.primaryTextColor,
-    textAlignVertical: "top"
+    textAlignVertical: "top",
+    fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined
   },
   commentButton: {}
 });

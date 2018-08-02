@@ -2,17 +2,17 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import properties from "../settings/propertyConfig";
 import colors from "../settings/defaultStyles";
-import AppText from "./AppText";
 import PropertyReviewIcon from "./PropertyReviewIcon";
 import PropertyTitle from "./PropertyTitle";
 import SlimText from "./SlimText";
+import propTypes from "prop-types";
 
 const FONT_SIZE = 20;
-export default ({ reviewSummary }) => {
+const PropertyOverview = ({ reviewSummary }) => {
   return (
     <View>
       {properties.map(property =>
-        renderProperty(property, reviewSummary[propertyMap[property.name]])
+        renderProperty(property, reviewSummary[property.name + "vurderinger"])
       )}
     </View>
   );
@@ -78,12 +78,11 @@ const valueBar = (positive, negative) => {
   );
 };
 
-const propertyMap = {
-  Lydutjevning: "Lydutjevningvurderinger",
-  Informasjon: "Informasjonvurderinger",
-  Lydforhold: "Lydforholdvurderinger",
-  Teleslynge: "Teleslyngevurderinger"
+PropertyOverview.propTypes = {
+  reviewSummary: propTypes.object.isRequired
 };
+
+export default PropertyOverview;
 
 const styles = StyleSheet.create({
   property: {
