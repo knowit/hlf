@@ -17,6 +17,7 @@ import ProfileImage from "../components/ProfileImage";
 class Profile extends Component {
   render() {
     const { user } = this.props;
+    const titleSize = 24;
     return (
       <View heightAdjusting="flex" opaque={true} style={styles.container}>
         <View style={styles.header}>
@@ -27,9 +28,29 @@ class Profile extends Component {
         </View>
 
         <HorizontalRuler verticalMargin={COMPONENT_SPACING} />
-        <SlimText style={styles.reviewHeader}>
-          <MaterialCommunityIcons name="comment-text-outline" />Dine vurderinger
-        </SlimText>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            paddingLeft: COMPONENT_SPACING
+          }}
+        >
+          <MaterialCommunityIcons
+            name="comment-text-outline"
+            size={24}
+            color={colors.primaryTextColor}
+          />
+          <SlimText
+            style={{
+              fontSize: 24,
+              color: colors.primaryTextColor,
+              marginLeft: 15
+            }}
+          >
+            Dine vurderinger
+          </SlimText>
+        </View>
+
         <ViewContainer
           heightAdjusting="flex"
           scrollable={true}
@@ -37,10 +58,26 @@ class Profile extends Component {
           style={{ padding: 0 }}
         />
         <HorizontalRuler />
-        <TouchableHighlight onPress={() => this.props.signout()}>
-          <Text>
-            <MaterialCommunityIcons name="logout" /> Logg ut
-          </Text>
+        <TouchableHighlight
+          style={styles.signOut}
+          onPress={() => this.props.signout()}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialCommunityIcons
+              name="logout"
+              size={24}
+              color={colors.primaryTextColor}
+            />
+            <SlimText
+              style={{
+                fontSize: 24,
+                color: colors.primaryTextColor,
+                marginLeft: 15
+              }}
+            >
+              Logg ut
+            </SlimText>
+          </View>
         </TouchableHighlight>
       </View>
     );
@@ -67,6 +104,9 @@ const styles = StyleSheet.create({
   reviewHeader: {
     fontSize: 18,
     marginLeft: COMPONENT_SPACING
+  },
+  signOut: {
+    padding: COMPONENT_SPACING
   }
 });
 

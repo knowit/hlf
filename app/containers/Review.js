@@ -36,7 +36,6 @@ export default class Review extends Component {
         {Object.keys(review.vurderinger).map(key => {
           const propertyReview = review.vurderinger[key];
           const capitalKey = key.charAt(0).toUpperCase() + key.slice(1);
-          console.log("key", key);
 
           return this.renderProperty(
             properties.filter(prop => prop.name === capitalKey)[0],
@@ -62,27 +61,7 @@ export default class Review extends Component {
     );
   }
 
-  /* {properties.map(property =>
-          this.renderProperty(property, review.properties[property.name])
-        )}
-        <TouchableHighlight onPress={() => this.toggleComments()}>
-          <View style={[styles.row, styles.toggleComments]}>
-            <SlimText style={{ fontSize: 20 }}>
-              {!this.state.showComments
-                ? "Vis kommentarer"
-                : "Skjul kommentarer"}
-            </SlimText>
-            <MaterialIcons
-              name={this.state.showComments ? "expand-less" : "expand-more"}
-              size={32}
-              color={colors.primaryTextColor}
-            />
-          </View>
-        </TouchableHighlight>
-        */
-
   renderProperty(property, review) {
-    console.log("wtf", property);
     const { rangering } = review;
     return (
       <View key={property.name}>
