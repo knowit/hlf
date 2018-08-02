@@ -1,8 +1,12 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
-
+.issues.txt.swp
+issues.txt
 # expo
 app/.expo/
 
+
+
+.gitignore
 # dependencies
 app/node_modules
 
