@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, View, TouchableHighlight, StyleSheet } from "react-native";
-import { API_KEY } from "../credentials";
+import { API_KEY } from "../settings/credentials";
 import { colors } from "../settings/defaultStyles";
 
 import Ionicons from "react-native-vector-icons/Ionicons";

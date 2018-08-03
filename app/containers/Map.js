@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import MapView, { Marker } from "react-native-maps";
+import { Geolocation } from "react-native";
 import colors from "../settings/defaultStyles";
 
 export default class Map extends Component {
@@ -9,6 +10,12 @@ export default class Map extends Component {
     this.state = {
       markers: []
     };
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(({ coords }) =>
+      this.map.animateToCoordinate(coords)
+    );
   }
 
   render() {

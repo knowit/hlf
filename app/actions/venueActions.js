@@ -1,20 +1,13 @@
 export const VENUE_SELECTED = "VENUE_SELECTED";
 export const VENUE_DESELECTED = "VENUE_DESELECTED";
 
-import { API_KEY } from "../credentials";
+import { API_KEY } from "../settings/credentials";
 import axios from "axios";
 import _ from "lodash";
 import { ROOT_API_URL } from "../settings/endpoints";
 import { fetchAccessToken } from "./";
 
 export const fetchVenueData = placeId => {
-  const url = `${ROOT_API_URL}/steder/place/${placeId}/totalvurdering/0`;
-
-  //`${ROOT_API_URL}/steder/place/${placeId}/totalvurdering/0`;
-
-  //http://35.198.153.18:80/steder/place/ChIJFVLTKWduQUYRK4owC-eIqBg/totalvurdering/0
-  //http://35.198.153.18:80/steder/place/ChIJAAAAAAAAAAARK4owC-eIqBg/totalvurdering/0
-
   return async dispatch => {
     const token = await fetchAccessToken();
 

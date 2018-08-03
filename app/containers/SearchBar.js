@@ -14,7 +14,7 @@ import colors, {
   BORDER_RADIUS,
   sizes
 } from "../settings/defaultStyles";
-import { API_KEY } from "../credentials";
+import { API_KEY } from "../settings/credentials";
 import Entypo from "react-native-vector-icons/Entypo";
 import ViewContainer from "../components/ViewContainer";
 import SlimText from "../components/SlimText";
@@ -78,11 +78,7 @@ export default class SearchBar extends Component {
         <View style={styles.row}>
           <View style={styles.iconWrap}>
             <SlimText>
-              <Entypo
-                name="location-pin"
-                color="white"
-                size={sizes.xlarge * 1.2}
-              />
+              <Entypo name="location-pin" color="white" size={24} />
             </SlimText>
           </View>
           <SlimText style={styles.resultText} numberOfLines={2}>
@@ -138,7 +134,7 @@ const styles = StyleSheet.create({
     borderRightColor: colors.divider
   },
   icon: {
-    fontSize: sizes.xlarge * 1.2,
+    fontSize: 24,
     color: "white"
   },
   searchInput: {
@@ -146,12 +142,12 @@ const styles = StyleSheet.create({
     marginRight: COMPONENT_SPACING,
     flex: 1,
     color: colors.primaryTextColor,
-    fontSize: sizes.large,
+    fontSize: 18,
     fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined
   },
   resultText: {
     color: colors.primaryTextColor,
-    fontSize: sizes.large,
+    fontSize: 18,
     maxHeight: 60,
     marginLeft: COMPONENT_SPACING / 3 + 60
   }

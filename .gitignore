@@ -21,7 +21,7 @@ app/yarn-debug.log*
 app/yarn-error.log/*
 app/package-lock.json
 
-app/credentials.js
+app/settings/credentials.js
 
 app/app.json
 
