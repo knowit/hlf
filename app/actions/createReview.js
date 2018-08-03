@@ -2,6 +2,7 @@ import { fetchAccessToken } from ".";
 import axios from "axios";
 import { ROOT_API_URL } from "../settings/endpoints";
 import _ from "lodash";
+import { fetchVenueData } from "./venueActions";
 
 export const CREATE_REVIEW_INIT = "CREATE_REVIEW_INIT";
 export const CREATE_REVIEW_SUCCESS = "CREATE_REVIEW_SUCCESS";
@@ -45,9 +46,10 @@ export const createReview = reviewBody => {
           Authorization: "Bearer " + token
         }
       })
-      .then(response =>
-        dispatch({ type: CREATE_REVIEW_SUCCESS, payload: response.data })
-      )
+      .then(response => {
+        dispatch({ type: CREATE_REVIEW_SUCCESS, payload: response.data });
+        fetchVenueData(reviewBody.sted.placeId);
+      })
       .catch(error => error);
   };
 };

@@ -3,6 +3,7 @@ export const colors = {
   secondaryTextColor: "#A4A4A4",
   primaryBackgroundColor: "rgb(12,20,40)",
   secondaryBackgroundColor: "#383c5c",
+  tertiaryBackgroundColor: "#54536c",
   positiveColor: "#63B5F5",
   negativeColor: "#FF3D3D",
   transparentColor: "rgba(0,0,0,0)",
