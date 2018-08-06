@@ -59,7 +59,8 @@ public class BrukerServiceImpl implements BrukerService {
             bruker.setAuth0UserId(userInfo.get("user_id").toString());
             bruker.setFornavn(userInfo.get("given_name").toString());
             bruker.setEtternavn(userInfo.get("family_name").toString());
-            bruker.setImageUrl(userInfo.get("picture").toString());
+            String image = userInfo.get("picture").toString().replaceFirst("https//", "https://");
+            bruker.setImageUrl(image);
             return bruker;
 
         }
