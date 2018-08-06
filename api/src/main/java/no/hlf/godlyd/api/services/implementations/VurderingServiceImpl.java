@@ -76,7 +76,7 @@ public class VurderingServiceImpl implements VurderingService {
                 } else if (vurdering instanceof LydforholdVurdering) {
                     vurderinger.putPOJO("lydforhold", vurderingNode);
                 } else if (vurdering instanceof LydutjevningVurdering) {
-                    vurderinger.putPOJO("teleslynge", vurderingNode);
+                    vurderinger.putPOJO("lydutjevning", vurderingNode);
                 } else if (vurdering instanceof InformasjonVurdering) {
                     vurderinger.putPOJO("informasjon", vurderingNode);
                 }
