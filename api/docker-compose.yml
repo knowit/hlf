@@ -17,7 +17,6 @@ services:
     ports:
       - 5000:5432
     environment:
-    - POSTGRES_PASSWORD=hlf123
     - POSTGRES_USER=hlf
     - POSTGRES_DB=godlyd
     - PGDATA=/var/lib/postgresql/data/pgdata
