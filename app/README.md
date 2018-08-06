@@ -3,7 +3,7 @@ Mobilapplikasjonen utviklet med React Native.
 
 ## Forutsetninger 
 Prosjektet bygger på Native kode (ikke Expo), hvilket betyr at SDK-er må lastes ned på utviklings-PC.
-[Den offisielle dokumentasjonen](https://facebook.github.io/react-native/docs/getting-started) til React Native kan være behjelpelig med å komme igang med dette. Velg __Building Projects with Native Code__. Sett så __Development OS__ og __Target OS__ for videre instruksjoner.
+[Den offisielle dokumentasjonen](https://facebook.github.io/react-native/docs/getting-started) til React Native kan være behjelpelig med å komme i gang med dette. Velg __Building Projects with Native Code__. Sett så __Development OS__ og __Target OS__ for videre instruksjoner.
 
 ### _!!! Applikasjonen er i skrivende stund ikke testet på IOS !!!_
 
@@ -20,9 +20,9 @@ Prosjektet er avhengig av to secrets filer for å kjøre; settings/authConfig.js
 __authConfig.js__
 ```javascript
 module.exports = {
-  domain: [SETT INN AUTH0 DOMENE]
-  clientId: [SETT INN AUTH0 CLIENT ID]
-  audience: [SETT INN AUTH0 AUDIENCE]
+  domain: [SETT INN AUTH0 DOMENE],
+  clientId: [SETT INN AUTH0 CLIENT ID],
+  audience: [SETT INN AUTH0 AUDIENCE],
   scope: [SETT INN AUTH0 SCOPE]
 };
 ``` 
