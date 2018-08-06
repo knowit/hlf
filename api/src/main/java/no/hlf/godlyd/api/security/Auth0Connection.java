@@ -9,19 +9,27 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
+import org.springframework.beans.factory.annotation.Value;
 
 public class Auth0Connection {
 
-    private static final String tokenUrl = "https://hlf-godlyd.eu.auth0.com/oauth/token";
-    private static final String managementClientId = "DQ3EL0M3tDziTnbGyabj3TKyeJnXXkAh";
-    private static final String managementClientSecret = "NvBtZwlnfoHnwdY2NLF2yjyuxPf83Fw2FnY-RKBlwID7ReXLtLVOGVzOwrDiBBxM";
-    private static final String managementAudience = "https://hlf-godlyd.eu.auth0.com/api/v2/";
+
+    @Value(value = "${com.auth0.issuer}")
+    private String issuer;
+    @Value(value = "${com.auth0.management.clientId}")
+    private String managementClientId;
+    @Value(value = "${com.auth0.management.clientSecret}")
+    private String managementClientSecret;
+    @Value(value = "${com.auth0.management.apiAudience}")
+    private String managementAudience;
+    @Value(value = "${com.auth0.tokenUrl}")
+    private String tokenUrl;
 
     public Hashtable<String, Object> getUserProfile(String authorization){
 
         String userId = getUserInfo(authorization).get("sub").toString();
 
-        String url = "https://hlf-godlyd.eu.auth0.com/api/v2/users/"+userId;
+        String url = managementAudience+"users/"+userId;
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("authorization", "Bearer "+getManagementAPIToken());
         String jsonResponse = getRequest(url, headers);
@@ -30,7 +38,7 @@ public class Auth0Connection {
 
     private Hashtable<String, Object> getUserInfo(String authorization){
         String access_token = extractToken(authorization);
-        String url = "https://hlf-godlyd.eu.auth0.com/userinfo";
+        String url = issuer+"userinfo";
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Authorization", "Bearer "+access_token);
         String req = getRequest(url, headers);

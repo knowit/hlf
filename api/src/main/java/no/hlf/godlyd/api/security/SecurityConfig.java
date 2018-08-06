@@ -15,9 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value(value = "${auth0.apiAudience}")
+    @Value(value = "${com.auth0.apiAudience}")
     private String apiAudience;
-    @Value(value = "${auth0.issuer}")
+    @Value(value = "${com.auth0.issuer}")
     private String issuer;
 
 
