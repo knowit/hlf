@@ -48,18 +48,12 @@ til å bli kryptert etter hvert)
 Om dette skal funke må ip-adressen din være autorisert for tilgang til databasen. Om du sitter på kontoret kan dette gjøres ved å
 legge til 213.236.148.83 (knowit) under autorisasjon i consolen. Dette kan legges til for databaseinstansen,
 MEN skal ikke være der når prosjektet skal i produksjon, så husk å slett den.
-2. Skaff en access token til Google Cloud Platform, dette kan gjøres på to måter:
-    - Installer Google Cloud SDK, og start SDK shell
-    - Kjør gcloud init, autentiser og konfigurer prosjektet.
-    - Kjør gcloud auth print-access-token
-
-    ELLER
-
-    - Gå inn på konsollen til Google Cloud Platform, og kjør Google Cloud shell
-    - Kjør gcloud auth print-access-token
+2. Skaff en access token til Google Cloud Platform, dette kan gjøres slik:
+    - Gå inn på konsollen til Google Cloud Platform gjennom nettleseren din, og kjør Google Cloud shell
+    - Kjør kommandoen 'gcloud auth print-access-token'
 
 3. Lag en tekstfil inne i hlf/api og kall den 'gc_auth.txt'. Lim inn access tokenet, og pass på at den kun står på én linje.
-4. Fra mappen hlf/api, kjør kommandoen    python build.py
+4. Fra mappen hlf/api, kjør kommandoen    'python build.py'
 
   NB: Dersom build.py gir følgende feil,
   File "build.py", line 33, in <module>
