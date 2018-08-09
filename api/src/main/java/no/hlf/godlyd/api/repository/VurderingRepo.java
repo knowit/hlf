@@ -13,30 +13,23 @@ import java.util.List;
 @Repository
 public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.registrator.id = ?1")
     List<Vurdering> findByRegistrator(Integer brukerid);
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.id = ?1")
     List<Vurdering> findByStedId(Integer id);
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 ORDER BY v.dato DESC")
-    List<Vurdering> findByPlaceId(String placeid);
+    List<Vurdering> findByStedPlaceId(String placeId);
 
     @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 ORDER BY v.dato DESC")
     Page<Vurdering> findByPlaceIdPage(String placeid, Pageable pagable);
 
 
-    @Query("SELECT v FROM LydforholdVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findLydforholdByPlaceId(String placeId);
+    List<Vurdering> findLydforholdByStedPlaceId(String placeId);
 
-    @Query("SELECT v FROM LydutjevningVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findLydutjevningByPlaceId(String placeId);
+    List<Vurdering> findLydutjevningByStedPlaceId(String placeId);
 
-    @Query("SELECT v FROM InformasjonVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findInformasjonByPlaceId(String placeId);
+    List<Vurdering> findInformasjonByStedPlaceId(String placeId);
 
-    @Query("SELECT v FROM TeleslyngeVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findTeleslyngeByPlaceId(String placeId);
+    List<Vurdering> findTeleslyngeByStedPlaceId(String placeId);
 
 
     @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.registrator.id = ?2")
@@ -44,6 +37,7 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
 
     @Query(value = "SELECT v.registrator.id FROM Vurdering v WHERE v.sted.id = ?1 GROUP BY v.registrator.id")
     List<Integer> findRegistratorsByStedId(Integer stedId);
+
 
     boolean existsById(Integer id);
 

@@ -44,7 +44,7 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public List<Vurdering> getAllVurderingerByPlaceId(String placeId) {
-        return vurderingRepo.findByPlaceId(placeId);}
+        return vurderingRepo.findByStedPlaceId(placeId);}
 
     @Override
     public ArrayNode getVurderingerByPlaceId(String placeId, Pageable pagable) {
@@ -106,10 +106,10 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public List<Vurdering> getVurderingerByTypeAndPlaceId(String vurderingstype, String placeId){
         switch (vurderingstype){
-            case "teleslynge":  return vurderingRepo.findTeleslyngeByPlaceId(placeId);
-            case "lydforhold":  return vurderingRepo.findLydforholdByPlaceId(placeId);
-            case "lydutjevning": return vurderingRepo.findLydutjevningByPlaceId(placeId);
-            case "informasjon": return vurderingRepo.findInformasjonByPlaceId(placeId);
+            case "teleslynge":  return vurderingRepo.findTeleslyngeByStedPlaceId(placeId);
+            case "lydforhold":  return vurderingRepo.findLydforholdByStedPlaceId(placeId);
+            case "lydutjevning": return vurderingRepo.findLydutjevningByStedPlaceId(placeId);
+            case "informasjon": return vurderingRepo.findInformasjonByStedPlaceId(placeId);
             default: return Collections.emptyList();
         }
     }
