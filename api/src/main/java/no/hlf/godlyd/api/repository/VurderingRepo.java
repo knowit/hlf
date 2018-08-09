@@ -32,11 +32,9 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
     List<Vurdering> findTeleslyngeByStedPlaceId(String placeId);
 
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.registrator.id = ?2")
-    List<Vurdering> findByPlaceIdAndRegistrator(String placeId, Integer brukerId);
+    List<Vurdering> findByStedPlaceIdAndRegistratorId(String placeId, Integer registratorId);
 
-    @Query(value = "SELECT v.registrator.id FROM Vurdering v WHERE v.sted.id = ?1 GROUP BY v.registrator.id")
-    List<Integer> findRegistratorsByStedId(Integer stedId);
+    List<Integer> findRegistratorIdByStedId(Integer stedId);
 
 
     boolean existsById(Integer id);

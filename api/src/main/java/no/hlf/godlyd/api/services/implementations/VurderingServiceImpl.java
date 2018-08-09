@@ -6,13 +6,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
-import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -117,7 +115,7 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
-        return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
+        return vurderingRepo.findByStedPlaceIdAndRegistratorId(placeId, brukerId);
     }
 
     @Override
@@ -161,7 +159,7 @@ public class VurderingServiceImpl implements VurderingService {
     public List<Integer> getRegistratorsByPlaceId(String placeId){
         if (stedService.existsByPlaceId(placeId)){
             Integer stedId = stedService.getStedFromPlaceId(placeId).getId();
-            return vurderingRepo.findRegistratorsByStedId(stedId);
+            return vurderingRepo.findRegistratorIdByStedId(stedId);
         } else{
             return Collections.emptyList();
         }
