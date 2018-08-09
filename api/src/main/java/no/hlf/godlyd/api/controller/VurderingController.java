@@ -9,6 +9,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -35,8 +37,19 @@ public class VurderingController {
     }
 
     @GetMapping("/all/place/{placeId}")
-    public List<Vurdering> getAllVurderingByPlaceId(@PathVariable(value = "placeId") String placeId){
-        return vurderingService.getAllVurderingerByPlaceId(placeId);
+    public List<Vurdering> getAllVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
+                                                      @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date dato;
+
+        try {
+            dato = format.parse(datoString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return vurderingService.getAllVurderingerByPlaceId(placeId);
+        }
+        
+        return vurderingService.getAllVurderingerByPlaceIdNewerThan(placeId, dato);
     }
 
     @GetMapping("/place/{placeId}") //pagination
@@ -48,14 +61,14 @@ public class VurderingController {
     @GetMapping("/type/{vurderingstype}/place/{placeId}")
     public List<Vurdering> getAllVurderingerByTypeAndPlaceId(
             @PathVariable(value = "placeId") String placeId,
-            @PathVariable(value = "vurderingstype") String vurderingstype){
+            @PathVariable(value = "vurderingstype") String vurderingstype) {
         return vurderingService.getVurderingerByTypeAndPlaceId(vurderingstype, placeId);
     }
 
     @GetMapping("/place/{placeId}/bruker")
     public List<Vurdering> getVurderingerByPlaceIdAndBrukerId(
             @PathVariable(value = "placeId") String placeId,
-            @RequestHeader("Authorization") String auth){
+            @RequestHeader("Authorization") String auth) {
         return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth);
     }
 

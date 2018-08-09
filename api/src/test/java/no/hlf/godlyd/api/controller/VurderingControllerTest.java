@@ -5,7 +5,6 @@ import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
-import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ public class VurderingControllerTest {
         when(vurderingService.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw"))
                 .thenReturn(vurderinger);
 
-        List<Vurdering> found = vurderingController.getAllVurderingByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
+        List<Vurdering> found = vurderingController.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
         assertEquals(vurderinger.get(0), found.get(0));
     }
 }

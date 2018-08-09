@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -18,6 +19,8 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
     List<Vurdering> findByStedId(Integer id);
 
     List<Vurdering> findByStedPlaceId(String placeId);
+
+    List<Vurdering> findByStedPlaceIdAndDatoGreaterThan(String placeId, Date dato);
 
     @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 ORDER BY v.dato DESC")
     Page<Vurdering> findByPlaceIdPage(String placeid, Pageable pagable);

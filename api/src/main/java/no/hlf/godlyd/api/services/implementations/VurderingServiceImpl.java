@@ -42,7 +42,13 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public List<Vurdering> getAllVurderingerByPlaceId(String placeId) {
-        return vurderingRepo.findByStedPlaceId(placeId);}
+        return vurderingRepo.findByStedPlaceId(placeId);
+    }
+
+    @Override
+    public List<Vurdering> getAllVurderingerByPlaceIdNewerThan(String placeId, Date dato) {
+        return vurderingRepo.findByStedPlaceIdAndDatoGreaterThan(placeId, dato);
+    }
 
     @Override
     public ArrayNode getVurderingerByPlaceId(String placeId, Pageable pagable) {
