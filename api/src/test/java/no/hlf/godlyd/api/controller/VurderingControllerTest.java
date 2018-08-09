@@ -47,10 +47,13 @@ public class VurderingControllerTest {
     // TEST CASES
     @Test
     public void testGetVurderingerFromPlaceId() {
-        when(vurderingService.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw"))
+        String placeId = "ChIJmeCJ639uQUYRc3OrOTekBZw";
+        String dato = "1970-01-01";
+
+        when(vurderingService.getAllVurderingerByPlaceId(placeId))
                 .thenReturn(vurderinger);
 
-        List<Vurdering> found = vurderingController.getAllVurderingerByPlaceId("ChIJmeCJ639uQUYRc3OrOTekBZw");
+        List<Vurdering> found = vurderingController.getAllVurderingerByPlaceId(placeId, dato);
         assertEquals(vurderinger.get(0), found.get(0));
     }
 }

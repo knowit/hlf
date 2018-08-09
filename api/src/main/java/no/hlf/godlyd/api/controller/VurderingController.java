@@ -39,6 +39,13 @@ public class VurderingController {
     @GetMapping("/all/place/{placeId}")
     public List<Vurdering> getAllVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
                                                       @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString) {
+        /*
+         Get all reviews ('vurderinger') for a given placeId.
+         If a parsable 'Dato' header is included,
+         only return reviews newer than this date.
+         Else, return all reviews.
+         */
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date dato;
 
@@ -48,7 +55,7 @@ public class VurderingController {
             e.printStackTrace();
             return vurderingService.getAllVurderingerByPlaceId(placeId);
         }
-        
+
         return vurderingService.getAllVurderingerByPlaceIdNewerThan(placeId, dato);
     }
 
