@@ -65,3 +65,11 @@ MEN skal ikke være der når prosjektet skal i produksjon, så husk å slett den
 Dersom det er ønskelig å bruke den lokale databasen på din egen pc, finn ip-adressen din og legg inn den i stedet for ip-adressen
 til databaseinstansen. Husk her å endre din egen postgres konfigurasjon til å godta tilkobling fra alle ip adresser
 ([https://stackoverflow.com/questions/3278379/how-to-configure-postgresql-to-accept-all-incoming-connections](url)).
+
+
+### Hvordan oppdatere secrets
+1. Gå inn på Google Cloud Platform og åpne prosjektet. Åpne Cloud shell.
+2. Kjør 'echo -n "{\"auth0ClientSecret\":\"{SECRET}\",\"auth0ManagementClientSecret\":\"{SECRET}\",\"datasourcePassword\":\"{SECRET}\"}" | base64' og kopier responsen.
+3. Kjør 'curl -s -X POST "https://cloudkms.googleapis.com/v1/projects/godlydpatruljen/locations/global/keyRings/storage/cryptoKeys/mainKey:encrypt" -d "{\"plaintext\":\"{KOPIERT_TEKST}\"}" -H "Authorization:Bearer $(gcloud auth print-access-token)" -H "Content-Type:application/json"'.
+4. Du vil få en respons av typen json. Kopier innholdet i feltet "ciphertext" og lim inn i en fil kalt secrets.encrypted.txt.
+5. Gå inn på Google Cloud Storage og slett filen med samme navn og last den opp på nytt.
