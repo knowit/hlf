@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,11 +43,17 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public List<Vurdering> getAllVurderingerByPlaceId(String placeId) {
-        return vurderingRepo.findByStedPlaceId(placeId);}
+        return vurderingRepo.findByStedPlaceId(placeId);
+    }
 
     @Override
-    public ArrayNode getVurderingerByPlaceId(String placeId, Pageable pagable) {
-        List<Vurdering> vurderingerInPage = vurderingRepo.findByPlaceIdPage(placeId, pagable).getContent();
+    public List<Vurdering> getAllVurderingerByPlaceIdNewerThan(String placeId, LocalDate dato) {
+        return vurderingRepo.findByStedPlaceIdAndDatoGreaterThan(placeId, dato);
+    }
+
+    @Override
+    public ArrayNode getVurderingerByPlaceId(String placeId, LocalDate dato, Pageable pagable) {
+        List<Vurdering> vurderingerInPage = vurderingRepo.findByPlaceIdPage(placeId, dato, pagable).getContent();
         List<List<Vurdering>> vurderingsliste = new ArrayList<>();
 
         for (Vurdering vurdering : vurderingerInPage) {

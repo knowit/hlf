@@ -3,12 +3,16 @@ package no.hlf.godlyd.api.controller;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.VurderingService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -35,27 +39,31 @@ public class VurderingController {
     }
 
     @GetMapping("/all/place/{placeId}")
-    public List<Vurdering> getAllVurderingByPlaceId(@PathVariable(value = "placeId") String placeId){
-        return vurderingService.getAllVurderingerByPlaceId(placeId);
+    public List<Vurdering> getAllVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
+                                                      @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString) {
+        LocalDate dato = LocalDate.parse(datoString);
+        return vurderingService.getAllVurderingerByPlaceIdNewerThan(placeId, dato);
     }
 
     @GetMapping("/place/{placeId}") //pagination
     public ArrayNode getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
+                                             @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
                                              @PageableDefault(value=40, page = 0) Pageable pagable) {
-        return vurderingService.getVurderingerByPlaceId(placeId, pagable);
+        LocalDate dato = LocalDate.parse(datoString);
+        return vurderingService.getVurderingerByPlaceId(placeId, dato, pagable);
     }
 
     @GetMapping("/type/{vurderingstype}/place/{placeId}")
     public List<Vurdering> getAllVurderingerByTypeAndPlaceId(
             @PathVariable(value = "placeId") String placeId,
-            @PathVariable(value = "vurderingstype") String vurderingstype){
+            @PathVariable(value = "vurderingstype") String vurderingstype) {
         return vurderingService.getVurderingerByTypeAndPlaceId(vurderingstype, placeId);
     }
 
     @GetMapping("/place/{placeId}/bruker")
     public List<Vurdering> getVurderingerByPlaceIdAndBrukerId(
             @PathVariable(value = "placeId") String placeId,
-            @RequestHeader("Authorization") String auth){
+            @RequestHeader("Authorization") String auth) {
         return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth);
     }
 
