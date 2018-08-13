@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +19,9 @@ public interface VurderingService {
 
     List<Vurdering> getAllVurderingerByPlaceId(String placeId);
 
-    List<Vurdering> getAllVurderingerByPlaceIdNewerThan(String placeId, Date dato);
+    List<Vurdering> getAllVurderingerByPlaceIdNewerThan(String placeId, LocalDate dato);
 
-    ArrayNode getVurderingerByPlaceId(String placeId, Pageable pagable);
+    ArrayNode getVurderingerByPlaceId(String placeId, LocalDate dato, Pageable pagable);
 
     Vurdering getVurderingFromId(Integer id);
 

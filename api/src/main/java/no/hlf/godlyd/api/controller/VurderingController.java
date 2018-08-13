@@ -3,6 +3,7 @@ package no.hlf.godlyd.api.controller;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.VurderingService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -39,30 +41,16 @@ public class VurderingController {
     @GetMapping("/all/place/{placeId}")
     public List<Vurdering> getAllVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
                                                       @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString) {
-        /*
-         Get all reviews ('vurderinger') for a given placeId.
-         If a parsable 'Dato' header is included,
-         only return reviews newer than this date.
-         Else, return all reviews.
-         */
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date dato;
-
-        try {
-            dato = format.parse(datoString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return vurderingService.getAllVurderingerByPlaceId(placeId);
-        }
-
+        LocalDate dato = LocalDate.parse(datoString);
         return vurderingService.getAllVurderingerByPlaceIdNewerThan(placeId, dato);
     }
 
     @GetMapping("/place/{placeId}") //pagination
     public ArrayNode getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
+                                             @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
                                              @PageableDefault(value=40, page = 0) Pageable pagable) {
-        return vurderingService.getVurderingerByPlaceId(placeId, pagable);
+        LocalDate dato = LocalDate.parse(datoString);
+        return vurderingService.getVurderingerByPlaceId(placeId, dato, pagable);
     }
 
     @GetMapping("/type/{vurderingstype}/place/{placeId}")
