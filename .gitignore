@@ -4,7 +4,8 @@ issues.txt
 # expo
 app/.expo/
 
-
+# IntelliJ
+.idea/
 
 .gitignore
 # dependencies
@@ -22,6 +23,9 @@ app/yarn-error.log/*
 app/package-lock.json
 
 app/settings/credentials.js
+app/credentials.js
+lydpatruljen.csr
+lydpatruljen.key
 
 app/app.json
 
