@@ -12,9 +12,13 @@ export const checkOfflineStorage = () => {
     dispatch({ type: LOGIN_INIT });
     AsyncStorage.getItem("access_token")
       .then(storedValue => {
+
         if (!storedValue) {
           dispatch({ type: LOGIN_FAILED });
         } else {
+
+            console.log("storage value: ", storedValue);
+
           axios
             .get(`${ROOT_API_URL}/brukere/login`, {
               headers: {
@@ -22,19 +26,20 @@ export const checkOfflineStorage = () => {
               }
             })
             .then(result => {
-              if (result.status === 200) {
-                dispatch({ type: LOGIN_SUCCESS, payload: result.data });
+
+                if (result.status === 200) {
+                  dispatch({ type: LOGIN_SUCCESS, payload: result.data });
               } else {
-                dispatch({ type: LOGIN_FAILED });
+                  dispatch({ type: LOGIN_FAILED });
               }
             })
-            .catch(value => {
-              dispatch({ type: LOGIN_FAILED });
+            .catch(() => {
+                dispatch({ type: LOGIN_FAILED });
             });
         }
       })
-      .catch(value => {
-        dispatch({ type: LOGIN_FAILED });
+      .catch(() => {
+          dispatch({ type: LOGIN_FAILED });
       });
   };
 };

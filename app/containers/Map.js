@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { Geolocation } from "react-native";
+import { Geolocation, View } from "react-native";
 import colors from "../settings/defaultStyles";
 
 export default class Map extends Component {
@@ -8,8 +8,14 @@ export default class Map extends Component {
     super(props);
     this.nextId = 0;
     this.state = {
-      markers: []
+      markers: [],
+      flex: 0,
     };
+  }
+
+  componentWillMount() {
+      //Hack to ensure the showsMyLocationButton is shown initially. Idea is to force a repaint
+      setTimeout(()=>this.setState({ flex: 1}), 500);
   }
 
   componentDidMount() {
@@ -20,41 +26,42 @@ export default class Map extends Component {
 
   render() {
     return (
-      <MapView
-        provider="google"
-        ref={map => (this.map = map)}
-        style={{
-          flex: 1
-        }}
-        zoomEnabled={true}
-        scrollEnabled={true}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        showsCompass={true}
-        showsPointsOfInterest={true}
-        initialRegion={{
-          latitude: 59.916634,
-          longitude: 10.756853,
-          latitudeDelta: 0.003,
-          longitudeDelta: 0.003
-        }}
-        onPress={e => {
-          this.props.deselectVenue();
-        }}
-        onPoiClick={e => {
-          this.props.onVenueSelect(e.nativeEvent.placeId);
-        }}
-      >
-        {this.state.markers.map(coordinates => {
-          return (
-            <Marker
-              coordinate={coordinates}
-              key={this.nextId++}
-              pinColor={colors.primaryBackgroundColor}
-            />
-          );
-        })}
-      </MapView>
+        <MapView
+            provider="google"
+            ref={map => (this.map = map)}
+            style={{
+                flex: this.state.flex
+            }}
+            zoomEnabled={true}
+            scrollEnabled={true}
+            cacheEnabled={false}
+            showsUserLocation={true}
+            showsMyLocationButton={true}
+            showsCompass={true}
+            showsPointsOfInterest={true}
+            initialRegion={{
+                latitude: 59.916634,
+                longitude: 10.756853,
+                latitudeDelta: 0.003,
+                longitudeDelta: 0.003
+            }}
+            onPress={e => {
+                this.props.deselectVenue();
+            }}
+            onPoiClick={e => {
+                this.props.onVenueSelect(e.nativeEvent.placeId);
+            }}
+        >
+            {this.state.markers.map(coordinates => {
+                return (
+                    <Marker
+                        coordinate={coordinates}
+                        key={this.nextId++}
+                        pinColor={colors.primaryBackgroundColor}
+                    />
+                );
+            })}
+        </MapView>
     );
   }
 
