@@ -6,17 +6,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
-import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,11 +43,17 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public List<Vurdering> getAllVurderingerByPlaceId(String placeId) {
-        return vurderingRepo.findByPlaceId(placeId);}
+        return vurderingRepo.findByStedPlaceId(placeId);
+    }
 
     @Override
-    public ArrayNode getVurderingerByPlaceId(String placeId, Pageable pagable) {
-        List<Vurdering> vurderingerInPage = vurderingRepo.findByPlaceIdPage(placeId, pagable).getContent();
+    public List<Vurdering> getAllVurderingerByPlaceIdNewerThan(String placeId, LocalDate dato) {
+        return vurderingRepo.findByStedPlaceIdAndDatoGreaterThan(placeId, dato);
+    }
+
+    @Override
+    public ArrayNode getVurderingerByPlaceId(String placeId, LocalDate dato, Pageable pagable) {
+        List<Vurdering> vurderingerInPage = vurderingRepo.findByPlaceIdPage(placeId, dato, pagable).getContent();
         List<List<Vurdering>> vurderingsliste = new ArrayList<>();
 
         for (Vurdering vurdering : vurderingerInPage) {
@@ -106,10 +111,10 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public List<Vurdering> getVurderingerByTypeAndPlaceId(String vurderingstype, String placeId){
         switch (vurderingstype){
-            case "teleslynge":  return vurderingRepo.findTeleslyngeByPlaceId(placeId);
-            case "lydforhold":  return vurderingRepo.findLydforholdByPlaceId(placeId);
-            case "lydutjevning": return vurderingRepo.findLydutjevningByPlaceId(placeId);
-            case "informasjon": return vurderingRepo.findInformasjonByPlaceId(placeId);
+            case "teleslynge":  return vurderingRepo.findTeleslyngeByStedPlaceId(placeId);
+            case "lydforhold":  return vurderingRepo.findLydforholdByStedPlaceId(placeId);
+            case "lydutjevning": return vurderingRepo.findLydutjevningByStedPlaceId(placeId);
+            case "informasjon": return vurderingRepo.findInformasjonByStedPlaceId(placeId);
             default: return Collections.emptyList();
         }
     }
@@ -117,7 +122,7 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
-        return vurderingRepo.findByPlaceIdAndRegistrator(placeId, brukerId);
+        return vurderingRepo.findByStedPlaceIdAndRegistratorId(placeId, brukerId);
     }
 
     @Override
@@ -161,7 +166,7 @@ public class VurderingServiceImpl implements VurderingService {
     public List<Integer> getRegistratorsByPlaceId(String placeId){
         if (stedService.existsByPlaceId(placeId)){
             Integer stedId = stedService.getStedFromPlaceId(placeId).getId();
-            return vurderingRepo.findRegistratorsByStedId(stedId);
+            return vurderingRepo.findRegistratorIdByStedId(stedId);
         } else{
             return Collections.emptyList();
         }

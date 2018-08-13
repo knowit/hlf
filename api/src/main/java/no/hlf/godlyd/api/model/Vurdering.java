@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -36,9 +37,7 @@ public abstract class Vurdering implements Serializable {
     private Bruker registrator;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    @LastModifiedDate
-    private Date dato;
+    private LocalDate dato;
 
     private String kommentar;
 
@@ -70,11 +69,11 @@ public abstract class Vurdering implements Serializable {
         this.registrator = registrator;
     }
 
-    public Date getDato() {
+    public LocalDate getDato() {
         return dato;
     }
 
-    public void setDato(Date dato) { this.dato = dato; }
+    public void setDato(LocalDate dato) { this.dato = dato; }
 
     public String getKommentar() { return kommentar; }
 

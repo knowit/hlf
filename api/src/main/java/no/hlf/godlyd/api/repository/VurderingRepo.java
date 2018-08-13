@@ -8,42 +8,38 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.registrator.id = ?1")
     List<Vurdering> findByRegistrator(Integer brukerid);
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.id = ?1")
     List<Vurdering> findByStedId(Integer id);
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 ORDER BY v.dato DESC")
-    List<Vurdering> findByPlaceId(String placeid);
+    List<Vurdering> findByStedPlaceId(String placeId);
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 ORDER BY v.dato DESC")
-    Page<Vurdering> findByPlaceIdPage(String placeid, Pageable pagable);
+    List<Vurdering> findByStedPlaceIdAndDatoGreaterThan(String placeId, LocalDate dato);
 
-
-    @Query("SELECT v FROM LydforholdVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findLydforholdByPlaceId(String placeId);
-
-    @Query("SELECT v FROM LydutjevningVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findLydutjevningByPlaceId(String placeId);
-
-    @Query("SELECT v FROM InformasjonVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findInformasjonByPlaceId(String placeId);
-
-    @Query("SELECT v FROM TeleslyngeVurdering v WHERE v.sted.placeId = ?1")
-    List<Vurdering> findTeleslyngeByPlaceId(String placeId);
+    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.dato > ?2 ORDER BY v.dato DESC")
+    Page<Vurdering> findByPlaceIdPage(String placeid, LocalDate dato, Pageable pagable);
 
 
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.registrator.id = ?2")
-    List<Vurdering> findByPlaceIdAndRegistrator(String placeId, Integer brukerId);
+    List<Vurdering> findLydforholdByStedPlaceId(String placeId);
 
-    @Query(value = "SELECT v.registrator.id FROM Vurdering v WHERE v.sted.id = ?1 GROUP BY v.registrator.id")
-    List<Integer> findRegistratorsByStedId(Integer stedId);
+    List<Vurdering> findLydutjevningByStedPlaceId(String placeId);
+
+    List<Vurdering> findInformasjonByStedPlaceId(String placeId);
+
+    List<Vurdering> findTeleslyngeByStedPlaceId(String placeId);
+
+
+    List<Vurdering> findByStedPlaceIdAndRegistratorId(String placeId, Integer registratorId);
+
+    List<Integer> findRegistratorIdByStedId(Integer stedId);
+
 
     boolean existsById(Integer id);
 
