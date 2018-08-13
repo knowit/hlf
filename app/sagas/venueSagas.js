@@ -1,20 +1,16 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import VenueService from '../api/VenueService';
+import * as actions from '../actions';
 
-import {
-    VENUE_SELECTED,
-    VENUE_DESELECTED
-} from "../actions/actionTypes";
-
-// worker Saga: will be fired on ACCOUNT_FETCH_REQUESTED actions
-function* fetchVenueData(action, placeId) {
+// worker Saga: will be fired on ACCOUNT_FETCH_REQUESTED actionsOld
+function* fetchVenueData(placeId) {
     try {
 
         const venueData = yield call(VenueService.fetchGooglePlaceObject(placeId));
         const reviews = yield call(VenueService.fetchVenueData(placeId));
 
         yield put({
-            type: VENUE_SELECTED,
+            type: actions.VENUE_SELECTED,
             payload: Object.assign(venueData, { reviews: reviews })
         });
 
@@ -23,21 +19,22 @@ function* fetchVenueData(action, placeId) {
     }
 }
 
-function* deselectVenue(action) {
-    yield({ type: action });
+function* deselectVenue() {
+    try {
+        yield({ type: actions.VENUE_DESELECTED });
+    } catch(e) {
+
+    }
 }
 
 /*
     Starts fetchVenueData on each dispatched 'VENUE_FETCH_REQUESTED' action.
     Allows concurrent fetches of venue.
  */
-function* selectVenueSaga(placeId) {
-    yield takeEvery("VENUE_FETCH_REQUESTED", fetchVenueData, placeId);
+export function* selectVenueSaga(placeId) {
+    yield takeEvery(actions.VENUE_INFORMATION_REQUESTED, fetchVenueData, placeId);
 }
 
-function* deselectVenueSaga() {
-    yield takeEvery("VENUE_DESELECT_REQUESTED", deselectVenue);
+export function* deselectVenueSaga() {
+    yield takeEvery(actions.VENUE_DESELECT_REQUESTED, deselectVenue);
 }
-
-export default selectVenueSaga();
-export default deselectVenueSaga();

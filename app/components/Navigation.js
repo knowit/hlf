@@ -5,22 +5,33 @@ import VenueDetails from "../containers/VenueDetails";
 import Profile from "../containers/Profile";
 import { connect } from "react-redux";
 import Loading from "./Loading";
-import { checkOfflineStorage, loginSuccessful, signout } from "../actions/";
+import { auth0Success, accountInformationRequested, signOut } from "../actions/";
+
 import LoginScreen from "../containers/LoginScreen";
 
 class Navigation extends Component {
   componentWillMount() {
-    this.props.checkOfflineStorage();
+      console.log("Inside componentWillMount ");
+      this.props.accountInformationRequested();
   }
   render() {
     const {
-      isAuthenticated,
-      hasCompletedInitialLoginAttempt,
-      loginSuccessful
+        auth0Success,
+        accountInformationRequested,
+        isAuthenticated,
+        hasCompletedInitialLoginAttempt,
     } = this.props;
-    if (!hasCompletedInitialLoginAttempt) return <Loading />;
-    if (!isAuthenticated)
-      return <LoginScreen loginSuccessful={loginSuccessful} />;
+
+    if (!hasCompletedInitialLoginAttempt) {
+        console.log("!hasCompletedInitialLoginAttempt");
+        return <Loading />;
+    }
+    if (!isAuthenticated) {
+        console.log("!isAuthenticated");
+        return <LoginScreen auth0Success={auth0Success} />;
+    }
+
+    console.log("hasCompletedInitialLoginAttempt && isAuthenticated");
 
     const Stack = createStackNavigator(
       {
@@ -52,5 +63,5 @@ class Navigation extends Component {
 
 export default connect(
   ({ user }) => ({ ...user }),
-  { checkOfflineStorage, loginSuccessful, signout }
+  { accountInformationRequested, auth0Success, signOut }
 )(Navigation);

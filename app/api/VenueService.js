@@ -1,10 +1,10 @@
 import authenticated from './authenticated';
-import {fetchAccessToken} from "../actions";
+import {fetchAccessToken} from "../actionsOld";
 import axios from "axios";
 import {API_KEY} from "../settings/credentials";
 import _ from "lodash";
 import {ROOT_API_URL} from "../settings/endpoints";
-import {VENUE_SELECTED} from "../actions/venueActions";
+import {VENUE_SELECTED} from "../actionsOld/venueActions";
 
 export default {
 

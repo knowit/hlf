@@ -1,11 +1,12 @@
 import React from "react";
-var credentials = require("../settings/authConfig");
+const credentials = require("../settings/authConfig");
 import Auth0 from "react-native-auth0";
 const auth0 = new Auth0(credentials);
 import { AsyncStorage } from "react-native";
 import Loading from "../components/Loading";
 
-export default ({ loginSuccessful }) => {
+export default ({ auth0Success }) => {
+  console.log("LoginScreen created");
   auth0.webAuth
     .authorize({
       scope: credentials.scope,
@@ -13,7 +14,7 @@ export default ({ loginSuccessful }) => {
     })
     .then(credentials => {
       saveTokens(credentials);
-      loginSuccessful(credentials.accessToken);
+      auth0Success();
     })
     .catch(error => console.log("error: ", error));
   return <Loading />;

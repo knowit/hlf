@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import SearchBar from "../containers/SearchBar";
 import Map from "./Map";
 import VenueMapOverlay from "../components/VenueMapOverlay";
-import { fetchVenueData, deselectVenue } from "../actions";
+import { fetchVenueData, deselectVenue } from "../actionsOld";
 
 class MainScreen extends Component {
   constructor(props) {

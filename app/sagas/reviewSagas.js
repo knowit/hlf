@@ -1,46 +1,35 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import ReviewService from '../api/ReviewService';
-import {
-    FETCH_REVIEWS_INIT,
-    FETCH_REVIEWS_SUCCESS,
-    CREATE_REVIEW_INIT,
-    CREATE_REVIEW_SUCCESS,
-    FETCH_PREVIOUS_INIT,
-    FETCH_PREVIOUS_SUCCESS,
-    FETCH_PREVIOUS_FAILED,
-    SIGN_OUT
-} from "../actions/actionTypes";
+import * as actions from '../actions';
 
 function* fetchReviews(action, placeId) {
     try {
-        yield put ({ type: FETCH_REVIEWS_INIT });
-        const response = yield call (ReviewService.fetchReviews(placeId));
+        yield put ({ type: actions.FETCH_REVIEWS_INIT });
+        const response = yield call (ReviewService.fetchReviews, placeId);
 
         if(response.status === 200) {
-            yield put({ type: FETCH_REVIEWS_SUCCESS, payload: response });
+            yield put({ type: actions.FETCH_REVIEWS_SUCCESS, payload: response });
         }
     } catch(e) {
         if(e.status === 401) {
-            yield put({ type: SIGN_OUT });
+            yield put({ type: actions.SIGN_OUT });
         } else {
-            yield put({ type: FETCH_REVIEWS_SUCCESS, payload: [] });
+            yield put({ type: actions.FETCH_REVIEWS_SUCCESS, payload: [] });
         }
     }
 }
 
 function* fetchMyPreviousReview(action, placeId) {
     try {
-        put({ type: FETCH_PREVIOUS_INIT });
-        const response = yield (ReviewService.fetchMyPreviousReviews(placeId));
-        yield put({ type: FETCH_PREVIOUS_SUCCESS, data: response })
+        put({ type: actions.FETCH_PREVIOUS_INIT });
+        const response = yield call (ReviewService.fetchMyPreviousReviews, placeId);
+        yield put({ type: actions.FETCH_PREVIOUS_SUCCESS, data: response })
     } catch(e) {
-        put({ type: FETCH_PREVIOUS_FAILED })
+        put({ type: actions.FETCH_PREVIOUS_FAILED })
     }
 }
 
-function* fetchReviewByPlaceId(placeId) {
-    yield takeEvery("PLACE_REVIEWS_REQUESTED", fetchReviews(placeId));
+export function* fetchReviewByPlaceId(placeId) {
+    yield takeEvery(actions.PLACE_REVIEWS_REQUESTED, fetchReviews, placeId);
 }
 
-
-export default fetchReviewByPlaceId();
