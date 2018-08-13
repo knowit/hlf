@@ -17,6 +17,9 @@ public class BrukerServiceImpl implements BrukerService {
     @Autowired
     BrukerRepo brukerRepo;
 
+    @Autowired
+    Auth0Connection con;
+
     public Bruker getBrukerFromId(Integer id){
         return brukerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Bruker", "id", id));
@@ -54,7 +57,6 @@ public class BrukerServiceImpl implements BrukerService {
     private Bruker getCredentials(String authorization){
         try{
             Bruker bruker = new Bruker();
-            Auth0Connection con = new Auth0Connection();
             Hashtable<String, Object> userInfo = con.getUserProfile(authorization);
             bruker.setAuth0UserId(userInfo.get("user_id").toString());
             bruker.setFornavn(userInfo.get("given_name").toString());
@@ -62,7 +64,6 @@ public class BrukerServiceImpl implements BrukerService {
             String image = userInfo.get("picture").toString().replaceFirst("https//", "https://");
             bruker.setImageUrl(image);
             return bruker;
-
         }
         catch (Exception e){
 

@@ -9,21 +9,28 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
-import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+@Service
 public class Auth0Connection {
 
-
-    @Value(value = "${com.auth0.issuer}")
+    @Value(value="${com.auth0.issuer}")
     private String issuer;
-    @Value(value = "${com.auth0.management.clientId}")
+
+    @Value("${com.auth0.management.clientId}")
     private String managementClientId;
-    @Value(value = "${com.auth0.management.clientSecret}")
+
+    @Value("${com.auth0.management.clientSecret}")
     private String managementClientSecret;
-    @Value(value = "${com.auth0.management.apiAudience}")
+
+    @Value("${com.auth0.management.apiAudience}")
     private String managementAudience;
-    @Value(value = "${com.auth0.tokenUrl}")
+
+    @Value("${com.auth0.tokenUrl}")
     private String tokenUrl;
+
 
     public Hashtable<String, Object> getUserProfile(String authorization){
 
@@ -46,6 +53,7 @@ public class Auth0Connection {
     }
 
     private String getManagementAPIToken(){
+
         Hashtable<String, String> headers = new Hashtable<>();
         headers.put("Content-Type", "application/json");
         String res = postRequest(
@@ -57,6 +65,7 @@ public class Auth0Connection {
                         "\"audience\":\""+managementAudience+"\"," +
                         "\"grant_type\":\"client_credentials\"" +
                         "}");
+
 
         return getJsonField(res, "access_token").toString();
     }
