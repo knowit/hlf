@@ -5,30 +5,35 @@ import VenueDetails from "../containers/VenueDetails";
 import Profile from "../containers/Profile";
 import { connect } from "react-redux";
 import Loading from "./Loading";
-import { auth0Success, accountInformationRequested, signOut } from "../actions/";
+import { auth0Success, accessTokenInit, signOut } from "../actions/";
 
 import LoginScreen from "../containers/LoginScreen";
 
 class Navigation extends Component {
   componentWillMount() {
       console.log("Inside componentWillMount ");
-      this.props.accountInformationRequested();
+      this.props.checkAsyncStorageForAccessToken();
   }
   render() {
     const {
-        auth0Success,
-        accountInformationRequested,
         isAuthenticated,
         hasCompletedInitialLoginAttempt,
+        pending,
     } = this.props;
 
-    if (!hasCompletedInitialLoginAttempt) {
-        console.log("!hasCompletedInitialLoginAttempt");
-        return <Loading />;
-    }
+      if (!hasCompletedInitialLoginAttempt) {
+          console.log("!hasCompletedInitialLoginAttempt");
+          return <Loading />;
+      }
+
+      if (pending) {
+          console.log("pending");
+          return <Loading />;
+      }
+
     if (!isAuthenticated) {
         console.log("!isAuthenticated");
-        return <LoginScreen auth0Success={auth0Success} />;
+        return <LoginScreen auth0Success={this.props.auth0Success} />;
     }
 
     console.log("hasCompletedInitialLoginAttempt && isAuthenticated");
@@ -53,7 +58,7 @@ class Navigation extends Component {
       },
       {
         contentComponent: props => (
-          <Profile {...props} signout={this.props.signout} />
+          <Profile {...props} signout={this.props.signOut} />
         )
       }
     );
@@ -61,7 +66,27 @@ class Navigation extends Component {
   }
 }
 
-export default connect(
-  ({ user }) => ({ ...user }),
-  { accountInformationRequested, auth0Success, signOut }
-)(Navigation);
+const mapStateToProps = state => ({
+   user: state.user.user,
+   isAuthenticated: state.user.isAuthenticated,
+   pending: state.user.pending,
+   hasCompletedInitialLoginAttempt: state.user.hasCompletedInitialLoginAttempt
+});
+
+const mapDispatchToProps = dispatch => ({
+
+    checkAsyncStorageForAccessToken: () => {
+      dispatch(accessTokenInit());
+    },
+
+    auth0Success: () => {
+        dispatch(auth0Success());
+    },
+
+    signOut: () => {
+        dispatch(signOut());
+    },
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation);

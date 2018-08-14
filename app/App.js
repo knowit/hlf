@@ -6,12 +6,12 @@ import createSagaMiddleware from 'redux-saga';
 import { Provider } from "react-redux";
 
 //import rootSaga from './sagas/rootSaga';
-import { fetchAccountInformationSaga } from './sagas/accountSagas';
+import rootSaga from './sagas/rootSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
 
-sagaMiddleware.run(fetchAccountInformationSaga);
+sagaMiddleware.run(rootSaga);
 
 export default class App extends Component {
   render() {
