@@ -6,6 +6,7 @@ app/.expo/
 
 # IntelliJ
 .idea/
+*.iml
 
 .gitignore
 # dependencies
