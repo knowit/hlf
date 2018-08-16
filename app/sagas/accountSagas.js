@@ -35,6 +35,6 @@ function* fetchAccountInformation() {
     Starts fetchUser on each dispatched 'ACCOUNT_INFORMATION_REQUESTED' action.
     Allows concurrent fetches of user.
  */
-export function* watchAccountInformationRequests() {
-    yield takeEvery(ACCOUNT_INFORMATION_REQUESTED, fetchAccountInformation);
-}
+export const watchAccountInformationRequests = [
+    takeEvery(ACCOUNT_INFORMATION_REQUESTED, fetchAccountInformation),
+];

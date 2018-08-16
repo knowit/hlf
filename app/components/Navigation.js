@@ -10,77 +10,81 @@ import { auth0Success, accessTokenInit, signOut } from "../actions/";
 import LoginScreen from "../containers/LoginScreen";
 
 class Navigation extends Component {
-  componentWillMount() {
-      console.log("Inside componentWillMount ");
-      this.props.checkAsyncStorageForAccessToken();
-  }
-  render() {
-    const {
-        isAuthenticated,
-        hasCompletedInitialLoginAttempt,
-        pending,
-    } = this.props;
-
-      if (!hasCompletedInitialLoginAttempt) {
-          console.log("!hasCompletedInitialLoginAttempt");
-          return <Loading />;
-      }
-
-      if (pending) {
-          console.log("pending");
-          return <Loading />;
-      }
-
-    if (!isAuthenticated) {
-        console.log("!isAuthenticated");
-        return <LoginScreen auth0Success={this.props.auth0Success} />;
+    componentWillMount() {
+        console.log("Inside componentWillMount ");
+        this.props.checkAsyncStorageForAccessToken();
     }
+    render() {
+        const {
+            isAuthenticated,
+            hasCompletedInitialLoginAttempt,
+            pending,
+        } = this.props;
 
-    console.log("hasCompletedInitialLoginAttempt && isAuthenticated");
+        console.log("isAuthenticated: ", isAuthenticated);
+        console.log("hasCompletedInitialLoginAttempt: ", hasCompletedInitialLoginAttempt);
+        console.log("pending: ", pending);
 
-    const Stack = createStackNavigator(
-      {
-        MainScreen: {
-          screen: MainScreen
-        },
-        Details: {
-          screen: VenueDetails
+        if (!hasCompletedInitialLoginAttempt) {
+            console.log("!hasCompletedInitialLoginAttempt");
+            return <Loading />;
         }
-      },
-      {
-        headerMode: "none"
-      }
-    );
 
-    const Drawer = createDrawerNavigator(
-      {
-        Stack: Stack
-      },
-      {
-        contentComponent: props => (
-          <Profile {...props} signout={this.props.signOut} />
-        )
-      }
-    );
-    return <Drawer />;
-  }
+        if (pending) {
+            console.log("pending");
+            return <Loading />;
+        }
+
+        if (!isAuthenticated) {
+            console.log("!isAuthenticated");
+            return <LoginScreen auth0Success={this.props.auth0Success} />;
+        }
+
+        console.log("hasCompletedInitialLoginAttempt && isAuthenticated");
+
+        const Stack = createStackNavigator(
+            {
+                MainScreen: {
+                    screen: MainScreen
+                },
+                Details: {
+                    screen: VenueDetails
+                }
+            },
+            {
+                headerMode: "none"
+            }
+        );
+
+        const Drawer = createDrawerNavigator(
+            {
+                Stack: Stack
+            },
+            {
+                contentComponent: props => (
+                    <Profile {...props} signout={this.props.signOut} />
+                )
+            }
+        );
+        return <Drawer />;
+    }
 }
 
 const mapStateToProps = state => ({
-   user: state.user.user,
-   isAuthenticated: state.user.isAuthenticated,
-   pending: state.user.pending,
-   hasCompletedInitialLoginAttempt: state.user.hasCompletedInitialLoginAttempt
+    user: state.user.user,
+    isAuthenticated: state.user.isAuthenticated,
+    pending: state.user.pending,
+    hasCompletedInitialLoginAttempt: state.user.hasCompletedInitialLoginAttempt
 });
 
 const mapDispatchToProps = dispatch => ({
 
     checkAsyncStorageForAccessToken: () => {
-      dispatch(accessTokenInit());
+        dispatch(accessTokenInit());
     },
 
-    auth0Success: () => {
-        dispatch(auth0Success());
+    auth0Success: (credentials) => {
+        dispatch(auth0Success(credentials));
     },
 
     signOut: () => {

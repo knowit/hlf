@@ -37,7 +37,7 @@ function* watchFetchMyPreviousReviewsRequests(action, placeId) {
     }
 }
 
-export function* watchReviewByPlaceIdRequests(placeId) {
-    yield takeEvery(PLACE_REVIEWS_REQUESTED, fetchReviews, placeId);
-}
 
+export const watchReviewSagas = [
+  takeEvery(PLACE_REVIEWS_REQUESTED, fetchReviews),
+];

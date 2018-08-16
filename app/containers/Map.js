@@ -19,6 +19,7 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
+      console.log("geolocation: ", navigator.geolocation);
     navigator.geolocation.getCurrentPosition(({ coords }) =>
       this.map.animateToCoordinate(coords)
     );

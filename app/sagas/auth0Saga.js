@@ -1,6 +1,7 @@
 import { call, fork, put, takeEvery } from 'redux-saga/effects';
 import { AUTH0_SUCCESS, ACCOUNT_INFORMATION_REQUESTED } from "../actions/actionTypes";
 import { AsyncStorage } from "react-native";
+import UserService from "../api/UserService";
 
 /*const saveTokens = credentials => {
     AsyncStorage.setItem("access_token", credentials.accessToken);
@@ -11,16 +12,16 @@ import { AsyncStorage } from "react-native";
 console.log("inside auth0 saga");
 
 function* auth0(action) {
-    console.log("inside auth0 worker");
-    const credentials = action.payload;
-    console.log("credentials: ", credentials);
-   /* yield call(AsyncStorage.setItem, ["access_token", credentials.accessToken]);
-    yield call(AsyncStorage.setItem, ["id_token", credentials.idToken]);
-    yield call(AsyncStorage.setItem, ["refresh_token", credentials.refreshToken]);*/
+    console.log("inside auth0 worker, action: ", action);
 
-    yield put({ type: ACCOUNT_INFORMATION_REQUESTED });
+    if(action.payload) {
+        const credentials = action.payload;
+        console.log("credentials: ", credentials);
+        yield call(UserService.setTokens, credentials);
+        yield put({ type: ACCOUNT_INFORMATION_REQUESTED });
+    }
 }
 
-export function* watchAuth0Requests() {
-    yield takeEvery(AUTH0_SUCCESS, auth0);
-}
+export const watchAuth0Requests = [
+    takeEvery(AUTH0_SUCCESS, auth0),
+];

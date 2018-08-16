@@ -121,9 +121,9 @@ export function fetchPreviousReviews() {
     }
 }
 
-export function venueSelected() {
+export function fetchVenueData() {
     return {
-        type: actions.VENUE_SELECTED
+        type: actions.FETCH_VENUE_DATA
     }
 }
 

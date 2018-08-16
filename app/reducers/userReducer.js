@@ -24,7 +24,7 @@ export default (
     switch (action.type) {
         case ACCOUNT_INFORMATION_REQUESTED:
             return {
-                isAuthenticated: false,
+                isAuthenticated: true,
                 hasCompletedInitialLoginAttempt: true,
                 user: {},
                 pending: true,
@@ -38,8 +38,8 @@ export default (
             };
         case ACCESS_TOKEN_INIT:
             return {
-                isAuthenticated: true,
-                hasCompletedInitialLoginAttempt: true,
+                isAuthenticated: false,
+                hasCompletedInitialLoginAttempt: false,
                 token: null,
                 pending: true,
             };
@@ -49,7 +49,7 @@ export default (
                 hasCompletedInitialLoginAttempt: true,
                 token: action.payload,
                 user: {},
-                pending: false,
+                pending: true,
             };
         case ACCESS_TOKEN_FAILED:
             return {
@@ -64,18 +64,6 @@ export default (
                 hasCompletedInitialLoginAttempt: true,
                 credentials: action.payload,
                 pending: true,
-            };
-        case LOGIN_INIT:
-            return {
-                isAuthenticated: false,
-                hasCompletedInitialLoginAttempt: false,
-                user: {}
-            };
-        case LOGIN_FAILED:
-            return {
-                isAuthenticated: false,
-                hasCompletedInitialLoginAttempt: true,
-                user: {}
             };
         case LOGIN_SUCCESS:
             return {

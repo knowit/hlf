@@ -31,10 +31,7 @@ function* deselectVenue() {
     Starts fetchVenueData on each dispatched 'VENUE_FETCH_REQUESTED' action.
     Allows concurrent fetches of venue.
  */
-export function* selectVenueSaga(placeId) {
-    yield takeEvery(VENUE_INFORMATION_REQUESTED, fetchVenueData, placeId);
-}
-
-export function* deselectVenueSaga() {
-    yield takeEvery(VENUE_DESELECT_REQUESTED, deselectVenue);
-}
+export const watchVenueSagas = [
+    takeEvery(VENUE_INFORMATION_REQUESTED, fetchVenueData),
+    takeEvery(VENUE_DESELECT_REQUESTED, deselectVenue),
+];

@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import SearchBar from "../containers/SearchBar";
 import Map from "./Map";
 import VenueMapOverlay from "../components/VenueMapOverlay";
-import { fetchVenueData, deselectVenue } from "../actionsOld";
+import { fetchVenueData, venueDeselected } from "../actions";
+
 
 class MainScreen extends Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class MainScreen extends Component {
       <View style={styles.overallViewContainer}>
         <Map
           ref={map => (this.map = map)}
-          onVenueSelect={this.props.fetchVenueData}
+          onVenueSelect={this.props.selectVenue}
           deselectVenue={this.props.deselectVenue}
         />
         {this.props.selectedVenue ? (
@@ -49,7 +50,7 @@ class MainScreen extends Component {
         <View style={styles.searchBar}>
           <SearchBar
             onMenuPress={() => this.props.navigation.openDrawer()}
-            onVenueSelect={this.props.fetchVenueData}
+            onVenueSelect={this.props.selectVenue}
             style={styles.searchBar}
             deselectVenue={this.props.deselectVenue}
           />
@@ -60,10 +61,21 @@ class MainScreen extends Component {
 }
 
 const mapStateToProps = ({ selectedVenue }) => ({ selectedVenue });
+const mapDispatchToProps = dispatch => ({
+
+    selectVenue() {
+      dispatch(fetchVenueData());
+    },
+
+    deselectVenue() {
+      dispatch(venueDeselected());
+    }
+
+});
 
 export default connect(
   mapStateToProps,
-  { fetchVenueData, deselectVenue }
+  mapDispatchToProps,
 )(MainScreen);
 
 const styles = StyleSheet.create({
