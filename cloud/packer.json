@@ -2,27 +2,10 @@
   "builders": [
     {
       "type": "googlecompute",
-      "account_file": "credentials.json",
-      "source_image_family": "ubuntu-1604-xenial",
+      "source_image": "ubuntu-1604-xenial-v20180814",
       "ssh_username": "godlyd",
       "project_id": "godlydpatruljen",
       "zone": "europe-west3-a"
-    }
-  ],
-
-  "provisioners": [
-    {
-      "type": "file",
-      "source": "../certify/nginx.conf",
-      "destination": "/tmp/nginx.conf"
-    },
-    {
-      "type": "shell",
-      "execute_command": "echo 'packer' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'",
-      "scripts": [
-        "../certify/nginx.sh",
-        "../certify/certbot.sh"
-      ]
     }
   ]
 }
