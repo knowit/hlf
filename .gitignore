@@ -13,6 +13,8 @@ app/.expo/
 app/node_modules
 
 # misc
+tmp/
+
 app/.env.local
 app/.env.development.local
 app/.env.test.local
