@@ -43,6 +43,8 @@ class VenueDetails extends Component {
   }
 }
 
-export default connect(({ selectedVenue }) => ({ selectedVenue }))(
-  VenueDetails
-);
+const mapStateToProps = state => ({
+    selectedVenue: state.selectedVenue,
+});
+
+export default connect(mapStateToProps)(VenueDetails);

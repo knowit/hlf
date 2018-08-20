@@ -2,11 +2,19 @@ import React, { Component } from "react";
 import Navigation from "./components/Navigation";
 import reducers from "./reducers";
 import { createStore, applyMiddleware } from "redux";
+import createSagaMiddleware from 'redux-saga';
 import { Provider } from "react-redux";
-import reduxThunk from "redux-thunk";
+import { composeWithDevTools } from 'redux-devtools-extension'
 
-const createMiddlewareStore = applyMiddleware(reduxThunk)(createStore);
-const store = createMiddlewareStore(reducers);
+//import rootSaga from './sagas/rootSaga';
+import rootSaga from './sagas/rootSaga';
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(reducers, composeWithDevTools(
+    applyMiddleware(sagaMiddleware)
+));
+
+sagaMiddleware.run(rootSaga);
 
 export default class App extends Component {
   render() {

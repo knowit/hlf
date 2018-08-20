@@ -1,7 +1,7 @@
 import {
   FETCH_REVIEWS_INIT,
   FETCH_REVIEWS_SUCCESS
-} from "../actions/reviewListActions";
+} from "../actions/actionTypes";
 
 export default (
   state = { reviewsList: [], hasLoaded: false, isLoading: false },
