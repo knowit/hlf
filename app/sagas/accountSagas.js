@@ -11,7 +11,7 @@ import UserService from '../api/UserService';
 function* fetchAccountInformation() {
     try {
 
-        const token = yield call(UserService.checkOfflineStorage);
+        const token = yield call(UserService.getTokenFromStorage);
         const result = yield call(UserService.getAccountInformation, token);
 
         if(result.status === 200) {

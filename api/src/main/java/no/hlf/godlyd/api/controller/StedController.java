@@ -37,7 +37,7 @@ public class StedController {
 
     @GetMapping("/place/{placeId}")
     public Sted getStedByPlaceId(@PathVariable(value = "placeId") String placeId){
-        return stedService.updateSted(placeId);
+        return stedService.getStedFromPlaceId(placeId);
     }
 
     // GOOGLE API

@@ -1,5 +1,5 @@
 import http from './http';
-import {AsyncStorage} from "react-native";
+import { AsyncStorage } from "react-native";
 
 export default {
 
@@ -8,20 +8,15 @@ export default {
     },
 
     async setTokens(credentials) {
-        await AsyncStorage.multiSet(
-            ['access_token', credentials.accessToken],
-            ['id_token', credentials.idToken],
-            ['refresh_token', credentials.refreshToken]);
-
-        return true;
-    },
-
-    async checkOfflineStorage() {
-        return await AsyncStorage.getItem("access_token");
+        return await AsyncStorage.multiSet([
+            ["access_token", credentials.accessToken],
+            ["id_token", credentials.idToken],
+            ["refresh_token", credentials.refreshToken]
+        ]);
     },
 
     async getRefreshToken() {
-      return await AsyncStorage.getItem('refresh_token');
+      return await AsyncStorage.getItem("refresh_token");
     },
 
     async getAccountInformation(token) {

@@ -9,7 +9,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -21,6 +24,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = GodLydApplication.class)
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class StedControllerTest {
 
     private Sted sted;
@@ -51,7 +55,7 @@ public class StedControllerTest {
         when(stedService.getStedFromPlaceId(sted.getPlaceId())).thenReturn(sted);
 
         Sted found = stedController.getStedByPlaceId(sted.getPlaceId());
-        assertEquals(sted, found);
+        assertEquals(sted.getId(), found.getId());
     }
 
 }

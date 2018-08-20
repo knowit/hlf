@@ -34,8 +34,8 @@ public class VurderingRepoTest {
     // TEST CASES
     @Test
     public void testVurderingFindByRegistrator(){
-        List<Vurdering> found1 = vurderingRepo.findByRegistrator(1);
-        List<Vurdering> found2 = vurderingRepo.findByRegistrator(3);
+        List<Vurdering> found1 = vurderingRepo.findByRegistratorId(1);
+        List<Vurdering> found2 = vurderingRepo.findByRegistratorId(3);
 
         assertTrue(found1.get(0) instanceof TeleslyngeVurdering);
         assertTrue(found2.get(0) instanceof LydforholdVurdering);
