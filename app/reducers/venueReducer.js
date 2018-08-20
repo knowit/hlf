@@ -1,4 +1,4 @@
-import { VENUE_SELECTED, VENUE_DESELECTED } from "../actionsOld";
+import { VENUE_SELECTED, VENUE_DESELECTED } from "../actions/actionTypes";
 
 export default (state = null, action) => {
   switch (action.type) {

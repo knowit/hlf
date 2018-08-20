@@ -5,8 +5,6 @@ import {
     ACCESS_TOKEN_SUCCESS,
     ACCESS_TOKEN_FAILED,
     AUTH0_SUCCESS,
-    LOGIN_INIT,
-    LOGIN_FAILED,
     LOGIN_SUCCESS,
     SIGN_OUT,
 } from "../actions/actionTypes";

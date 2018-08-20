@@ -3,32 +3,25 @@ import {AsyncStorage} from "react-native";
 
 export default {
 
-    getTokenFromStorage() {
-      return new Promise((resolve, reject) => {
-          AsyncStorage.getItem("access_token").then(token => {
-              resolve(token);
-          }, error => {
-              reject(error);
-          });
-      });
+    async getTokenFromStorage() {
+        return await AsyncStorage.getItem("access_token");
     },
 
-    setTokens(credentials) {
-        return new Promise((resolve, reject) => {
-            Promise.all([
-                AsyncStorage.setItem("access_token", credentials.accessToken),
-                AsyncStorage.setItem("id_token", credentials.idToken),
-                AsyncStorage.setItem("refresh_token", credentials.refreshToken),
-            ]).then(() => {
-                resolve();
-            }, error => {
-                reject(error);
-            });
-        });
+    async setTokens(credentials) {
+        await AsyncStorage.multiSet(
+            ['access_token', credentials.accessToken],
+            ['id_token', credentials.idToken],
+            ['refresh_token', credentials.refreshToken]);
+
+        return true;
     },
 
     async checkOfflineStorage() {
         return await AsyncStorage.getItem("access_token");
+    },
+
+    async getRefreshToken() {
+      return await AsyncStorage.getItem('refresh_token');
     },
 
     async getAccountInformation(token) {

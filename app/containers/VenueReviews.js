@@ -83,7 +83,17 @@ class VenueReviews extends Component {
   }
 }
 
-export default connect(({ reviewList }) => ({ reviewList}), { placeReviewsRequested })
+const mapStateToProps = state => ({
+   reviewList: state.reviewList
+});
+
+const mapDispatchToProps = dispatch => ({
+   fetchReviews(placeId) {
+     dispatch(placeReviewsRequested(placeId));
+   }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(VenueReviews);
 
 const styles = StyleSheet.create({
   showReviewArrow: {

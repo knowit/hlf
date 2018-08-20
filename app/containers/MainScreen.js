@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import SearchBar from "../containers/SearchBar";
 import Map from "./Map";
 import VenueMapOverlay from "../components/VenueMapOverlay";
-import { fetchVenueData, venueDeselected } from "../actions";
+import { requestVenueInformation, venueDeselected } from "../actions";
 
 
 class MainScreen extends Component {
@@ -63,8 +63,8 @@ class MainScreen extends Component {
 const mapStateToProps = ({ selectedVenue }) => ({ selectedVenue });
 const mapDispatchToProps = dispatch => ({
 
-    selectVenue() {
-      dispatch(fetchVenueData());
+    selectVenue(newVenue) {
+      dispatch(requestVenueInformation(newVenue));
     },
 
     deselectVenue() {

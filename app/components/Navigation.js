@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 import MainScreen from "../containers/MainScreen";
-import VenueDetails from "../containers/VenueDetails";
+import { default as VenueDetails } from "../containers/VenueDetails";
 import Profile from "../containers/Profile";
 import { connect } from "react-redux";
 import Loading from "./Loading";

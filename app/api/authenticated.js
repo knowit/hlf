@@ -9,7 +9,8 @@ let authenticated = axios.create({
 
 authenticated.interceptors.request.use(
     async (config) => {
-        config.headers.authorization = await AsyncStorage.getItem('access_token');
+        const token = await AsyncStorage.getItem('access_token');
+        config.headers.authorization = "Bearer " + token;
         return config;
     }, error => Promise.reject(error));
 

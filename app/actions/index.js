@@ -1,22 +1,8 @@
-import axios from "axios";
-import {ROOT_API_URL} from "../settings/endpoints";
 import * as actions from './actionTypes';
-
-export function auth0Init() {
-    return {
-        type: actions.AUTH0_INIT
-    }
-}
 
 export function auth0Success(credentials) {
     return {
         type: actions.AUTH0_SUCCESS, payload: credentials
-    }
-}
-
-export function auth0Failed() {
-    return {
-        type: actions.AUTH0_FAILED
     }
 }
 
@@ -26,104 +12,22 @@ export function accessTokenInit() {
     }
 }
 
-export function accessTokenSuccess() {
-    return {
-        type: actions.ACCESS_TOKEN_SUCCESS
-    }
-}
-
-export function accessTokenFailed() {
-    return {
-        type: actions.ACCESS_TOKEN_FAILED
-    }
-}
-
-
-
-export function accountInformationRequested() {
-
-    console.log("account information requested!");
-
-    return {
-        type: actions.ACCOUNT_INFORMATION_REQUESTED
-    }
-}
-
-export function loginInit() {
-    return {
-        type: actions.LOGIN_INIT
-    }
-}
-
-export function loginSuccess() {
-    return {
-        type: actions.LOGIN_SUCCESS
-    }
-}
-
-export function loginFailed() {
-    return {
-        type: actions.LOGIN_FAILED
-    }
-}
-
 export function signOut() {
     return {
         type: actions.SIGN_OUT
     }
 }
 
-export function fetchReviewsInit() {
+export function fetchPreviousRequested() {
     return {
-        type: actions.FETCH_REVIEWS_INIT
+        type: actions.FETCH_PREVIOUS_REQUESTED,
     }
 }
 
-export function fetchReviewsSuccess() {
+export function requestVenueInformation(venue) {
     return {
-        type: actions.FETCH_REVIEWS_SUCCESS
-    }
-}
-
-export function createReviewInit() {
-    return {
-        type: actions.CREATE_REVIEW_INIT
-    }
-}
-
-export function createReviewSuccess() {
-    return {
-        type: actions.CREATE_REVIEW_SUCCESS
-    }
-}
-
-export function fetchPreviousInit() {
-    return {
-        type: actions.FETCH_PREVIOUS_INIT
-    }
-}
-
-export function fetchPreviousSuccess() {
-    return {
-        type: actions.FETCH_PREVIOUS_SUCCESS
-    }
-}
-
-export function fetchPreviousFailed() {
-    return {
-        type: actions.FETCH_PREVIOUS_FAILED
-    }
-}
-
-export function fetchPreviousReviews() {
-    return {
-        type: actions.FETCH_PREVIOUS
-    }
-}
-
-export function fetchVenueData() {
-    return {
-        type: actions.FETCH_VENUE_DATA
+        type: actions.VENUE_INFORMATION_REQUESTED,
+        payload: venue,
     }
 }
 
@@ -133,9 +37,10 @@ export function venueDeselected() {
     }
 }
 
-export function placeReviewsRequested() {
+export function placeReviewsRequested(placeId) {
     return {
-        type: actions.PLACE_REVIEWS_REQUESTED
+        type: actions.PLACE_REVIEWS_REQUESTED,
+        payload: placeId
     }
 }
 
@@ -143,27 +48,5 @@ export function createReview(reviewBody) {
     return {
         type: actions.CREATE_REVIEW,
         payload: reviewBody
-    }
-}
-
-export const loginSuccessful = accessToken => {
-    return async dispatch => {
-        axios
-            .get(`${ROOT_API_URL}/brukere/login`, {
-                headers: {
-                    Authorization: "Bearer " + accessToken
-                }
-            })
-            .then(result => {
-                if (result.status === 200) {
-                    dispatch({ type: actions.LOGIN_SUCCESS, payload: result.data });
-                }
-            });
-    };
-};
-
-export function checkOfflineStorage() {
-    return {
-        type: actions.CHECK_OFFLINE_STORAGE
     }
 }
