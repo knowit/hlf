@@ -5,7 +5,7 @@ import { COMPONENT_SPACING } from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import { createReview, fetchPreviousReviews } from "../actions/";
+import { createReview as createReviewAction, fetchPreviousRequested as fetchPreviousReviewsAction } from "../actions/";
 import { connect } from "react-redux";
 import Loading from "../components/Loading";
 
@@ -66,9 +66,23 @@ class CreateReview extends Component {
   }
 }
 
-export default connect(
-  ({ selectedVenue, newReview }) => ({ selectedVenue, newReview }),
-  { createReview, fetchPreviousReviews }
-)(CreateReview);
+const mapStateToProps = state => ({
+   selectedVenue: state.selectedVenue,
+   newReview: state.newReview
+});
+
+const mapDispatchToProps = dispatch => ({
+
+    createReview(reviewBody) {
+      dispatch(createReviewAction(reviewBody));
+    },
+
+    fetchPreviousReviews(placeId) {
+      dispatch(fetchPreviousReviewsAction(placeId));
+    }
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateReview);
 
 const styles = StyleSheet.create({});

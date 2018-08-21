@@ -105,7 +105,7 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public List<Vurdering> getVurderingerByBruker(String authorization) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
-        return vurderingRepo.findByRegistrator(brukerId);
+        return vurderingRepo.findByRegistratorId(brukerId);
     }
 
     @Override

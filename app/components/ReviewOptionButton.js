@@ -55,7 +55,7 @@ const ReviewOptionButton = ({
 
 ReviewOptionButton.propTypes = {
   buttonValue: propTypes.bool.isRequired,
-  selectedValue: propTypes.bool.isRequired,
+  selectedValue: propTypes.bool,
   onOptionSelected: propTypes.func.isRequired
 };
 

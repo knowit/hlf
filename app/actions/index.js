@@ -1,10 +1,52 @@
-export * from "./venueActions";
-export * from "./userAction";
-export * from "./reviewListActions";
-export * from "./createReview";
+import * as actions from './actionTypes';
 
-import { AsyncStorage } from "react-native";
+export function auth0Success(credentials) {
+    return {
+        type: actions.AUTH0_SUCCESS, payload: credentials
+    }
+}
 
-export const fetchAccessToken = async () => {
-  return AsyncStorage.getItem("access_token").then(result => result);
-};
+export function accessTokenInit() {
+    return {
+        type: actions.ACCESS_TOKEN_INIT
+    }
+}
+
+export function signOut() {
+    return {
+        type: actions.SIGN_OUT
+    }
+}
+
+export function fetchPreviousRequested() {
+    return {
+        type: actions.FETCH_PREVIOUS_REQUESTED,
+    }
+}
+
+export function requestVenueInformation(venue) {
+    return {
+        type: actions.VENUE_INFORMATION_REQUESTED,
+        payload: venue,
+    }
+}
+
+export function venueDeselected() {
+    return {
+        type: actions.VENUE_DESELECTED
+    }
+}
+
+export function placeReviewsRequested(placeId) {
+    return {
+        type: actions.PLACE_REVIEWS_REQUESTED,
+        payload: placeId
+    }
+}
+
+export function createReview(reviewBody) {
+    return {
+        type: actions.CREATE_REVIEW,
+        payload: reviewBody
+    }
+}

@@ -13,8 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +27,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = GodLydApplication.class)
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class VurderingControllerTest {
 
     private List<Vurdering> vurderinger;
@@ -50,7 +54,7 @@ public class VurderingControllerTest {
         String placeId = "ChIJmeCJ639uQUYRc3OrOTekBZw";
         String dato = "1970-01-01";
 
-        when(vurderingService.getAllVurderingerByPlaceId(placeId))
+        when(vurderingService.getAllVurderingerByPlaceIdNewerThan(placeId, LocalDate.parse(dato)))
                 .thenReturn(vurderinger);
 
         List<Vurdering> found = vurderingController.getAllVurderingerByPlaceId(placeId, dato);
