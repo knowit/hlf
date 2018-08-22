@@ -49,9 +49,10 @@ export default CreateReviewNavigation;
 
 const styles = StyleSheet.create({
   container: {
+    padding: 10,
     marginVertical: 20,
     flexDirection: "row",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   icons: {
     flexDirection: "row",
@@ -59,13 +60,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    zIndex: 1
+    zIndex: 1,
   },
   icon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "white",
+    //backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,

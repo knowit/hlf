@@ -20,7 +20,7 @@ export default ({ onScreenChange, currentScreen }) => {
   return (
     <View style={styles.container}>
       {screens.map(screen => {
-        isSelected = screen.name === currentScreen;
+        const isSelected = screen.name === currentScreen;
         return (
           <TouchableHighlight
             onPress={() => onScreenChange(screen.name)}

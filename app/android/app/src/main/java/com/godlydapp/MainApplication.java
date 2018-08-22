@@ -3,12 +3,15 @@ package com.godlydapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.auth0.react.A0Auth0Package;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.airbnb.android.react.maps.MapsPackage; 
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,8 +27,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new A0Auth0Package(),
-          new MapsPackage()
+            new VectorIconsPackage(),
+            new RNSensitiveInfoPackage(),
+            new MapsPackage(),
+            new A0Auth0Package()
       );
     }
 

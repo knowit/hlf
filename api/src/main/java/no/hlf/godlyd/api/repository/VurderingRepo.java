@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
 
-    List<Vurdering> findByRegistrator(Integer brukerid);
+    List<Vurdering> findByRegistratorId(Integer brukerid);
 
     List<Vurdering> findByStedId(Integer id);
 
