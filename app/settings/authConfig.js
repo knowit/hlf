@@ -1,6 +1,6 @@
 module.exports = {
-    domain: "hlf-godlyd.eu.auth0.com",
-    clientId: "3pAWoFhOFgb5o9hS121EVFT7Hwwvsa7p",
-    audience: "test-brukerinnlogging.hlf-godlyd.no",
+    domain: "godlydpatruljen.eu.auth0.com",
+    clientId: "e0smYR6JB35rNEaCAZw5vE3EHzd4mPCa",
+    audience: "https://dev.api.godlydpatruljen.no/",
     scope: "openid profile offline_access"
 };

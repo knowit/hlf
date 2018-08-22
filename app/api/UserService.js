@@ -1,5 +1,7 @@
 import http from './http';
 import { AsyncStorage } from "react-native";
+import axios from 'axios';
+const credentials = require("../settings/authConfig");
 
 export default {
 
@@ -24,4 +26,18 @@ export default {
             authorization: 'Bearer ' + token,
             }});
     },
+
+    async signOut() {
+        const auth0 = axios.get('https://' + credentials.domain + '/v2/logout');
+        const asyncStorage = AsyncStorage.multiRemove([
+           'access_token',
+           'id_token',
+           'refresh_token'
+        ]);
+
+        await auth0;
+        await asyncStorage;
+
+        return true;
+    }
 }

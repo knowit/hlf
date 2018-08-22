@@ -2,7 +2,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import {
     ACCESS_TOKEN_INIT,
     ACCESS_TOKEN_FAILED,
-    ACCOUNT_INFORMATION_REQUESTED
+    ACCOUNT_INFORMATION_REQUESTED, SIGN_OUT
 } from "../actions/actionTypes";
 import UserService from "../api/UserService";
 
@@ -16,6 +16,11 @@ function* accessTokenRequestWorker() {
     }
 }
 
+function* signOut() {
+    yield call(UserService.signOut);
+}
+
 export const watchAccessTokenRequests = [
     takeEvery(ACCESS_TOKEN_INIT, accessTokenRequestWorker),
+    takeEvery(SIGN_OUT, signOut),
 ];

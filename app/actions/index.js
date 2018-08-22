@@ -18,9 +18,10 @@ export function signOut() {
     }
 }
 
-export function fetchPreviousRequested() {
+export function fetchPreviousRequested(placeId) {
     return {
         type: actions.FETCH_PREVIOUS_REQUESTED,
+        payload: placeId
     }
 }
 

@@ -20,6 +20,7 @@ export default (
     action
 ) => {
     switch (action.type) {
+
         case ACCOUNT_INFORMATION_REQUESTED:
             return {
                 isAuthenticated: true,
@@ -27,6 +28,7 @@ export default (
                 user: {},
                 pending: true,
             };
+
         case ACCOUNT_INFORMATION_FAILED:
             return {
                 isAuthenticated: false,
@@ -34,6 +36,7 @@ export default (
                 error: action.payload,
                 pending: false,
             };
+
         case ACCESS_TOKEN_INIT:
             return {
                 isAuthenticated: false,
@@ -41,6 +44,7 @@ export default (
                 token: null,
                 pending: true,
             };
+
         case ACCESS_TOKEN_SUCCESS:
             return {
                 isAuthenticated: false,
@@ -49,6 +53,7 @@ export default (
                 user: {},
                 pending: true,
             };
+
         case ACCESS_TOKEN_FAILED:
             return {
                 isAuthenticated: false,
@@ -56,6 +61,7 @@ export default (
                 error: action.payload,
                 pending: false,
             };
+
         case AUTH0_SUCCESS:
             return {
                 isAuthenticated: true,
@@ -63,6 +69,7 @@ export default (
                 credentials: action.payload,
                 pending: true,
             };
+
         case LOGIN_SUCCESS:
             return {
                 isAuthenticated: true,
@@ -70,12 +77,14 @@ export default (
                 user: action.payload,
                 pending: false
             };
+
         case SIGN_OUT:
             return {
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
                 user: {}
             };
+
         default:
             return state;
     }

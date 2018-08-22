@@ -10,6 +10,8 @@ import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class VurderingServiceImpl implements VurderingService {
     private StedService stedService;
     @Autowired
     private BrukerService brukerService;
+
+    private static final Logger logger = LoggerFactory.getLogger(VurderingServiceImpl.class);
 
     // Methods:
     @Override
@@ -122,6 +126,7 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
+        logger.info("placeId: " + placeId  + ", brukerId: " + brukerId);
         return vurderingRepo.findByStedPlaceIdAndRegistratorId(placeId, brukerId);
     }
 
@@ -132,6 +137,8 @@ public class VurderingServiceImpl implements VurderingService {
         if (sted != null){
             sted.addVurdering(vurdering);
         }
+
+        vurdering.setDato(LocalDate.now());
         return vurderingRepo.save(vurdering);
     }
 
@@ -142,6 +149,7 @@ public class VurderingServiceImpl implements VurderingService {
         if(vurdering.getRegistrator().getId().equals(brukerId)){
             vurdering.setKommentar(endring.getKommentar());
             vurdering.setRangering(endring.isRangering());
+            vurdering.setDato(LocalDate.now());
             return vurderingRepo.save(vurdering);
         } else{
             throw new AccessDeniedException("alter", "vurdering", "id", id);
