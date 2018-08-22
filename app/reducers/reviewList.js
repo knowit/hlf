@@ -12,9 +12,13 @@ export default (
     action
 ) => {
     switch (action.type) {
+
         case FETCH_REVIEWS_INIT:
+
             return { reviewsList: [], hasLoaded: false, isLoading: true };
+
         case FETCH_REVIEWS_SUCCESS:
+
             return {
                 reviewsList: action.payload.map(item => {
                     const element = { ...item };
@@ -24,6 +28,7 @@ export default (
                 hasLoaded: true,
                 isLoading: false
             };
+
         default:
             return state;
     }

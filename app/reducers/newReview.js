@@ -2,7 +2,6 @@ import properties from "../settings/propertyConfig";
 import {
     FETCH_REVIEWS_SUCCESS,
     FETCH_PREVIOUS_SUCCESS,
-    VENUE_SELECTED,
     CREATE_REVIEW_SUCCESS,
     CREATE_REVIEW_INIT
 } from "../actions/actionTypes";
@@ -29,28 +28,16 @@ export default (
 
     switch (action.type) {
 
-/*        case VENUE_SELECTED:
-            return {
-                //propertyInput: defaultState(),
-                //hasLoaded: false,
-                //isSubmitting: false
-            };*/
-
         case FETCH_PREVIOUS_SUCCESS:
-
-            console.log("INSIDE newReviewReducer - FETCH_PREVIOUS_SUCCESS - action: ", action);
 
             action.payload.forEach(review => {
                 if(review.type) {
-                    console.log("review.type!");
                     data[review.type.replace("vurdering", "")] = {
                       comment: review.kommentar,
                       value: review.rangering
                     };
                 }
             });
-
-            console.log("INSIDE newReviewReducer - FETCH_PREVIOUS_SUCCESS - data: ", data);
 
             return { propertyInput: data, hasLoaded: true, isSubmitting: false };
 
@@ -64,13 +51,15 @@ export default (
                     value: review.rangering
                 };
             }
+
             return { propertyInput: data, hasLoaded: true, isSubmitting: false };
 
         case CREATE_REVIEW_INIT:
+
             return { ...state, isSubmitting: true };
 
         case CREATE_REVIEW_SUCCESS:
-            console.log("CREATE_REVIEW_SUCCESS - action.payload: ", action.payload);
+
             const { kommentar, rangering, type } = action.payload;
             const nextState = { comment: kommentar, value: rangering };
             const propertyInputs = {

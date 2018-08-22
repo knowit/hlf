@@ -11,8 +11,7 @@ import LoginScreen from "../containers/LoginScreen";
 
 class Navigation extends Component {
     componentWillMount() {
-        console.log("Inside componentWillMount ");
-        this.props.checkAsyncStorageForAccessToken();
+        this.props.accessTokenInit();
     }
     render() {
         const {
@@ -21,26 +20,19 @@ class Navigation extends Component {
             pending,
         } = this.props;
 
+        console.log("this.props: ", this.props);
+        console.log("user: ", this.props.user);
+        console.log("pending: ", pending);
         console.log("isAuthenticated: ", isAuthenticated);
         console.log("hasCompletedInitialLoginAttempt: ", hasCompletedInitialLoginAttempt);
-        console.log("pending: ", pending);
 
-        if (!hasCompletedInitialLoginAttempt) {
-            console.log("!hasCompletedInitialLoginAttempt");
-            return <Loading />;
-        }
-
-        if (pending) {
-            console.log("pending");
+        if (!hasCompletedInitialLoginAttempt || pending) {
             return <Loading />;
         }
 
         if (!isAuthenticated) {
-            console.log("!isAuthenticated");
             return <LoginScreen auth0Success={this.props.auth0Success} />;
         }
-
-        console.log("hasCompletedInitialLoginAttempt && isAuthenticated");
 
         const Stack = createStackNavigator(
             {
@@ -70,27 +62,7 @@ class Navigation extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    user: state.user.user,
-    isAuthenticated: state.user.isAuthenticated,
-    pending: state.user.pending,
-    hasCompletedInitialLoginAttempt: state.user.hasCompletedInitialLoginAttempt
-});
-
-const mapDispatchToProps = dispatch => ({
-
-    checkAsyncStorageForAccessToken: () => {
-        dispatch(accessTokenInit());
-    },
-
-    auth0Success: (credentials) => {
-        dispatch(auth0Success(credentials));
-    },
-
-    signOut: () => {
-        dispatch(signOut());
-    },
-
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
+export default connect(
+    ({ user }) => ({ ...user }),
+    { accessTokenInit, auth0Success, signOut }
+)(Navigation);

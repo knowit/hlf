@@ -17,24 +17,16 @@ import {
 
 function* fetchReviewsByPlaceId(action) {
 
-    console.log("inside reviews saga fetchReviewsByPlaceId worker - action: ", action);
-
     try {
         const placeId = action.payload;
         yield put ({ type: FETCH_REVIEWS_INIT });
         const response = yield call(ReviewService.fetchReviews, placeId);
 
-        console.log("saga-response: ", response);
-
         if(response.status === 200) {
-            console.log("dispatching success");
             yield put.resolve({ type: FETCH_REVIEWS_SUCCESS, payload: response.data });
-            console.log("dispatched successfully");
         }
 
     } catch(e) {
-
-        console.log("error: ", e);
 
         if(e.status === 401) {
             yield put({ type: SIGN_OUT });
@@ -46,13 +38,10 @@ function* fetchReviewsByPlaceId(action) {
 
 function* fetchMyPreviousReviewsByPlaceId(action) {
 
-    console.log("inside reviews saga fetchMyPreviousReviewsByPlaceId worker - action: ", action);
-
     try {
         put({ type: FETCH_PREVIOUS_INIT });
         const placeId = action.payload;
         const response = yield call (ReviewService.fetchMyPreviousReviews, placeId);
-        console.log("saga-response: ", response);
         yield put({ type: FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
         put({ type: FETCH_PREVIOUS_FAILED })
@@ -60,8 +49,6 @@ function* fetchMyPreviousReviewsByPlaceId(action) {
 }
 
 function* createReview(action) {
-
-    console.log("inside createReview - action: ", action);
 
     try {
         put({ type: CREATE_REVIEW_INIT });
@@ -71,7 +58,7 @@ function* createReview(action) {
         yield put({ type: CREATE_REVIEW_SUCCESS, payload: review });
         yield put({ type: VENUE_INFORMATION_REQUESTED, payload: reviewBody.sted.placeId});
     } catch (e) {
-        console.log("error creating review: ", e);
+        // Todo: handle create review error
     }
 }
 
