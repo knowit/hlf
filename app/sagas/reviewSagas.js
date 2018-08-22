@@ -17,7 +17,7 @@ import {
 
 function* fetchReviewsByPlaceId(action) {
 
-    console.log("inside reviews saga worker - action: ", action);
+    console.log("inside reviews saga fetchReviewsByPlaceId worker - action: ", action);
 
     try {
         const placeId = action.payload;
@@ -45,12 +45,15 @@ function* fetchReviewsByPlaceId(action) {
 }
 
 function* fetchMyPreviousReviewsByPlaceId(action) {
+
+    console.log("inside reviews saga fetchMyPreviousReviewsByPlaceId worker - action: ", action);
+
     try {
         put({ type: FETCH_PREVIOUS_INIT });
         const placeId = action.payload;
         const response = yield call (ReviewService.fetchMyPreviousReviews, placeId);
         console.log("saga-response: ", response);
-        yield put({ type: FETCH_PREVIOUS_SUCCESS, data: response })
+        yield put({ type: FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
         put({ type: FETCH_PREVIOUS_FAILED })
     }

@@ -24,33 +24,42 @@ export default (
     },
     action
 ) => {
-    const data = defaultState();
+
+    let data = defaultState();
 
     switch (action.type) {
 
-        case VENUE_SELECTED:
+/*        case VENUE_SELECTED:
             return {
-                propertyInput: defaultState(),
-                hasLoaded: false,
-                isSubmitting: false
-            };
+                //propertyInput: defaultState(),
+                //hasLoaded: false,
+                //isSubmitting: false
+            };*/
 
         case FETCH_PREVIOUS_SUCCESS:
-            for (let reviewId in action.payload) {
-                const review = action.payload[reviewId];
 
-                if(review.type) data[review.type.review.type.replace("vurdering", "")] = {
-                    comment: review.kommentar,
-                    value: review.rangering
-                };
-            }
+            console.log("INSIDE newReviewReducer - FETCH_PREVIOUS_SUCCESS - action: ", action);
+
+            action.payload.forEach(review => {
+                if(review.type) {
+                    console.log("review.type!");
+                    data[review.type.replace("vurdering", "")] = {
+                      comment: review.kommentar,
+                      value: review.rangering
+                    };
+                }
+            });
+
+            console.log("INSIDE newReviewReducer - FETCH_PREVIOUS_SUCCESS - data: ", data);
+
             return { propertyInput: data, hasLoaded: true, isSubmitting: false };
 
         case FETCH_REVIEWS_SUCCESS:
+
             for (let reviewId in action.payload) {
                 const review = action.payload[reviewId];
 
-                if(review.type) data[review.type.review.type.replace("vurdering", "")] = {
+                if(review.type) data[review.type.replace("vurdering", "")] = {
                     comment: review.kommentar,
                     value: review.rangering
                 };

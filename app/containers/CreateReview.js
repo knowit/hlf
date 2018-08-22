@@ -21,6 +21,7 @@ class CreateReview extends Component {
   }
 
   componentDidMount() {
+      console.log("CreateReview.componentDidMount - this.props.selectedVenue: ", this.props.selectedVenue);
     this.props.fetchPreviousReviews(this.props.selectedVenue.place_id);
   }
 

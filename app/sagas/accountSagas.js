@@ -14,13 +14,19 @@ function* fetchAccountInformation() {
         const token = yield call(UserService.getTokenFromStorage);
         const result = yield call(UserService.getAccountInformation, token);
 
+        console.log("inside accountSagaWorker - token: ", token);
+        console.log("inside accountSagaWorker - result: ", result);
+
         if(result.status === 200) {
+            console.log("inside accountSagaWorker - result.status === 200 ");
             yield put({ type: LOGIN_SUCCESS, payload: result.data });
         } else {
+            console.log("inside accountSagaWorker - result.status != 200: ");
             yield put({ type: ACCOUNT_INFORMATION_FAILED });
         }
 
     } catch(e) {
+        console.log("inside accountSagaWorker - catched exception: ", e.message);
         yield put({ type: ACCOUNT_INFORMATION_FAILED });
     }
 }
