@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +33,12 @@ public class Auth0Connection {
     @Value("${com.auth0.tokenUrl}")
     private String tokenUrl;
 
+    private Logger logger = LoggerFactory.getLogger(Auth0Connection.class);
+
 
     public Hashtable<String, Object> getUserProfile(String authorization){
+
+        logger.info("Inside getUserProfile - with authorization = " + authorization);
 
         String userId = getUserInfo(authorization).get("sub").toString();
 
