@@ -1,7 +1,7 @@
 import {
-    FETCH_REVIEWS_INIT,
-    FETCH_REVIEWS_SUCCESS
-} from "../actions/actionTypes";
+    ON_FETCH_REVIEWS_INIT,
+    ON_FETCH_REVIEWS_SUCCESS
+} from "../actions/reviews";
 
 export default (
     state = {
@@ -13,11 +13,11 @@ export default (
 ) => {
     switch (action.type) {
 
-        case FETCH_REVIEWS_INIT:
+        case ON_FETCH_REVIEWS_INIT:
 
             return { reviewsList: [], hasLoaded: false, isLoading: true };
 
-        case FETCH_REVIEWS_SUCCESS:
+        case ON_FETCH_REVIEWS_SUCCESS:
 
             return {
                 reviewsList: action.payload.map(item => {

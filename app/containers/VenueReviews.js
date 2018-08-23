@@ -9,7 +9,7 @@ import VenueContactInfo from "../components/VenueContactInfo";
 import HorizontalRuler from "../components/HorizontalRuler";
 import {connect} from "react-redux";
 import Loading from "../components/Loading";
-import {placeReviewsRequested} from "../actions";
+import { onPlaceReviewsRequested } from "../actions/reviews";
 import SlimText from "../components/SlimText";
 
 class VenueReviews extends Component {
@@ -83,10 +83,7 @@ class VenueReviews extends Component {
     }
 }
 
-export default connect(
-    ({reviewList}) => ({reviewList}),
-    {placeReviewsRequested}
-)(VenueReviews);
+export default connect(({reviewList}) => ({reviewList}), { onPlaceReviewsRequested })(VenueReviews);
 
 const styles = StyleSheet.create({
     showReviewArrow: {

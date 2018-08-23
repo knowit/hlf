@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import VenueService from '../api/VenueService';
-import { VENUE_SELECTED, VENUE_INFORMATION_REQUESTED } from "../actions/actionTypes";
+import { ON_VENUE_SELECTED, ON_VENUE_INFORMATION_REQUESTED } from "../actions/venue";
 
 // worker Saga: will be fired on ACCOUNT_FETCH_REQUESTED actionsOld
 function* fetchVenueData(action) {
@@ -10,7 +10,10 @@ function* fetchVenueData(action) {
         const reviews = yield call(VenueService.fetchReviews, placeId);
 
         const payload = Object.assign(venueData, { reviews: reviews});
-        yield put({ type: VENUE_SELECTED, payload });
+
+        console.log("inside fetchVenueData - result: ", payload);
+
+        yield put({ type: ON_VENUE_SELECTED, payload });
     } catch(e) {
         // Todo: handle fetch venue data error
     }
@@ -21,5 +24,5 @@ function* fetchVenueData(action) {
     Allows concurrent fetches of venue.
  */
 export const watchVenueSagas = [
-    takeEvery(VENUE_INFORMATION_REQUESTED, fetchVenueData),
+    takeEvery(ON_VENUE_INFORMATION_REQUESTED, fetchVenueData),
 ];

@@ -5,9 +5,11 @@ import {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import {createReview, fetchPreviousRequested} from "../actions/";
+import { onCreateReview, onFetchPreviousRequested } from "../actions/reviews";
 import {connect} from "react-redux";
 import Loading from "../components/Loading";
+import {onOpenPropertyInformationModal} from "../actions/propertiesModal";
+import PropertyInformationModal from "../components/PropertyInformationModal";
 
 class CreateReview extends Component {
     constructor(props) {
@@ -22,11 +24,13 @@ class CreateReview extends Component {
 
     componentDidMount() {
         console.log("CreateReview.componentDidMount - this.props.selectedVenue: ", this.props.selectedVenue);
-        this.props.fetchPreviousRequested(this.props.selectedVenue.place_id);
+        this.props.onFetchPreviousRequested(this.props.selectedVenue.place_id);
     }
 
     render() {
+
         const {hasLoaded, propertyInput} = this.props.newReview;
+
         if (!hasLoaded)
             return <Loading inline={true} style={{marginTop: COMPONENT_SPACING}}/>;
         const {currentProperty} = this.state;
@@ -38,6 +42,7 @@ class CreateReview extends Component {
 
         return (
             <ViewContainer flex={true}>
+                <PropertyInformationModal />
                 <CreateReviewNavigation
                     currentProperty={currentProperty}
                     onPropertySelect={this.onPropertySelect}
@@ -46,6 +51,7 @@ class CreateReview extends Component {
                     currentProperty={Object.assign(propertyData, currentPropertyInput)}
                     onPropertyChange={this.onPropertyChange}
                     onReviewSubmit={this.onReviewSubmit}
+                    onInfoButtonClicked={this.props.onOpenPropertyInformationModal}
                 />
             </ViewContainer>
         );
@@ -59,7 +65,7 @@ class CreateReview extends Component {
             },
             type: this.state.currentProperty + "vurdering"
         });
-        this.props.createReview(reviewBody);
+        this.props.onCreateReview(reviewBody);
     }
 
     onPropertySelect(propertyName) {
@@ -68,8 +74,8 @@ class CreateReview extends Component {
 }
 
 export default connect(
-    ({selectedVenue, newReview}) => ({selectedVenue, newReview}),
-    {createReview, fetchPreviousRequested}
+    ({ selectedVenue, newReview, propertiesInformation }) => ({ selectedVenue, newReview, propertiesInformation }),
+    { onCreateReview, onFetchPreviousRequested, onOpenPropertyInformationModal}
 )(CreateReview);
 
 const styles = StyleSheet.create({});

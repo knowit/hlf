@@ -1,20 +1,7 @@
 import React, { Component } from "react";
 import Navigation from "./components/Navigation";
-import reducers from "./reducers";
-import { createStore, applyMiddleware } from "redux";
-import createSagaMiddleware from 'redux-saga';
 import { Provider } from "react-redux";
-import { composeWithDevTools } from 'redux-devtools-extension'
-
-//import rootSaga from './sagas/rootSaga';
-import rootSaga from './sagas/rootSaga';
-
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(reducers, composeWithDevTools(
-    applyMiddleware(sagaMiddleware)
-));
-
-sagaMiddleware.run(rootSaga);
+import store from './store';
 
 export default class App extends Component {
   render() {

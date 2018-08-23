@@ -1,10 +1,10 @@
 import properties from "../settings/propertyConfig";
 import {
-    FETCH_REVIEWS_SUCCESS,
-    FETCH_PREVIOUS_SUCCESS,
-    CREATE_REVIEW_SUCCESS,
-    CREATE_REVIEW_INIT
-} from "../actions/actionTypes";
+    ON_FETCH_REVIEWS_SUCCESS,
+    ON_FETCH_PREVIOUS_SUCCESS,
+    ON_CREATE_REVIEW_SUCCESS,
+    ON_CREATE_REVIEW_INIT
+} from "../actions/reviews";
 
 const defaultState = () =>
     properties.reduce((obj, property) => {
@@ -28,7 +28,7 @@ export default (
 
     switch (action.type) {
 
-        case FETCH_PREVIOUS_SUCCESS:
+        case ON_FETCH_PREVIOUS_SUCCESS:
 
             action.payload.forEach(review => {
                 if(review.type) {
@@ -41,7 +41,7 @@ export default (
 
             return { propertyInput: data, hasLoaded: true, isSubmitting: false };
 
-        case FETCH_REVIEWS_SUCCESS:
+        case ON_FETCH_REVIEWS_SUCCESS:
 
             for (let reviewId in action.payload) {
                 const review = action.payload[reviewId];
@@ -54,11 +54,11 @@ export default (
 
             return { propertyInput: data, hasLoaded: true, isSubmitting: false };
 
-        case CREATE_REVIEW_INIT:
+        case ON_CREATE_REVIEW_INIT:
 
             return { ...state, isSubmitting: true };
 
-        case CREATE_REVIEW_SUCCESS:
+        case ON_CREATE_REVIEW_SUCCESS:
 
             const { kommentar, rangering, type } = action.payload;
             const nextState = { comment: kommentar, value: rangering };

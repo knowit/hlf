@@ -65,12 +65,17 @@ class ReviewProperty extends Component {
               selectedValue={value}
               onOptionSelected={this.onReviewSubmit}
             />
-            <MaterialIcons
-              name="info-outline"
-              size={30}
-              color={colors.primaryTextColor}
-              style={styles.infoIcon}
-            />
+              <TouchableHighlight
+                  onPress={() => {
+                      this.props.onInfoButtonClicked(currentProperty)
+                  }}>
+                  <MaterialIcons
+                      name="info-outline"
+                      size={30}
+                      color={colors.primaryTextColor}
+                      style={styles.infoIcon}
+                  />
+              </TouchableHighlight>
             <ReviewOptionButton
               buttonValue={true}
               selectedValue={value}
@@ -131,7 +136,8 @@ class ReviewProperty extends Component {
 
 ReviewProperty.propTypes = {
   currentProperty: PropTypes.object.isRequired,
-  onReviewSubmit: PropTypes.func.isRequired
+  onReviewSubmit: PropTypes.func.isRequired,
+  onInfoButtonClicked: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
