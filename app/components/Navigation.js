@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 import MainScreen from "../containers/MainScreen";
+import ModalScreen from '../containers/ModalScreen';
 import { default as VenueDetails } from "../containers/VenueDetails";
 import Profile from "../containers/Profile";
 import { connect } from "react-redux";
 import Loading from "./Loading";
-import { auth0Success, accessTokenInit, signOut } from "../actions/";
+import { onAuth0Success, onAccessTokenInit, onSignOut } from "../actions/account";
 
 import LoginScreen from "../containers/LoginScreen";
 
 class Navigation extends Component {
     componentWillMount() {
-        this.props.accessTokenInit();
+        this.props.onAccessTokenInit();
     }
     render() {
         const {
@@ -31,11 +32,14 @@ class Navigation extends Component {
         }
 
         if (!isAuthenticated) {
-            return <LoginScreen auth0Success={this.props.auth0Success} />;
+            return <LoginScreen auth0Success={this.props.onAuth0Success} />;
         }
 
         const Stack = createStackNavigator(
             {
+                ModalScreen: {
+                    screen: ModalScreen
+                },
                 MainScreen: {
                     screen: MainScreen
                 },
@@ -54,7 +58,7 @@ class Navigation extends Component {
             },
             {
                 contentComponent: props => (
-                    <Profile {...props} signout={this.props.signOut} />
+                    <Profile {...props} signout={this.props.onSignOut} />
                 )
             }
         );
@@ -64,5 +68,5 @@ class Navigation extends Component {
 
 export default connect(
     ({ user }) => ({ ...user }),
-    { accessTokenInit, auth0Success, signOut }
+    { onAccessTokenInit, onAuth0Success, onSignOut }
 )(Navigation);

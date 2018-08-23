@@ -5,7 +5,7 @@ import {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import {createReview, fetchPreviousRequested} from "../actions/";
+import { onCreateReview, onFetchPreviousRequested } from "../actions/reviews";
 import {connect} from "react-redux";
 import Loading from "../components/Loading";
 
@@ -22,7 +22,7 @@ class CreateReview extends Component {
 
     componentDidMount() {
         console.log("CreateReview.componentDidMount - this.props.selectedVenue: ", this.props.selectedVenue);
-        this.props.fetchPreviousRequested(this.props.selectedVenue.place_id);
+        this.props.onFetchPreviousRequested(this.props.selectedVenue.place_id);
     }
 
     render() {
@@ -59,7 +59,7 @@ class CreateReview extends Component {
             },
             type: this.state.currentProperty + "vurdering"
         });
-        this.props.createReview(reviewBody);
+        this.props.onCreateReview(reviewBody);
     }
 
     onPropertySelect(propertyName) {
@@ -68,8 +68,8 @@ class CreateReview extends Component {
 }
 
 export default connect(
-    ({selectedVenue, newReview}) => ({selectedVenue, newReview}),
-    {createReview, fetchPreviousRequested}
+    ({ selectedVenue, newReview }) => ({ selectedVenue, newReview }),
+    { onCreateReview, onFetchPreviousRequested}
 )(CreateReview);
 
 const styles = StyleSheet.create({});
