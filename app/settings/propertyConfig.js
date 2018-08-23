@@ -9,7 +9,7 @@ const properties = [
     iconName: "insert-emoticon",
     description: "Kan du føre samtale i rommet?",
     longDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec accumsan nisl id nisl gravida, vel aliquet dui pulvinar. Pellentesque tincidunt et justo non blandit. Ut a turpis sapien. Mauris risus erat, dignissim ut sagittis sed, imperdiet cursus justo. Sed iaculis urna nulla, in aliquet lacus luctus suscipit. Aenean magna mi, sollicitudin ut felis id, dignissim pretium leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum semper dapibus ligula et vulputate. Cras sed aliquam magna. Curabitur sapien nulla, bibendum in aliquet sit amet, facilisis sed diam."
+      "Vurder om det er gode forhold for å ha en samtale. Hvordan er akustikken? Er det støy fra andre som snakker, ventilasjonsanlegg ol? Utdyp gjerne hvilke(t) rom i bygningen du har besøkt. \n\n Skriv gjerne utfyllende kommentar ved å trykke på knappen «kommenter»."
   },
   {
     name: "Lydutjevning",
@@ -17,7 +17,7 @@ const properties = [
     description: "Finnes det mikrofon og høytalere?",
     iconName: "volume-up",
     longDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec accumsan nisl id nisl gravida, vel aliquet dui pulvinar. Pellentesque tincidunt et justo non blandit. Ut a turpis sapien. Mauris risus erat, dignissim ut sagittis sed, imperdiet cursus justo. Sed iaculis urna nulla, in aliquet lacus luctus suscipit. Aenean magna mi, sollicitudin ut felis id, dignissim pretium leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum semper dapibus ligula et vulputate. Cras sed aliquam magna. Curabitur sapien nulla, bibendum in aliquet sit amet, facilisis sed diam."
+      "Et lydutjevningsanlegg skal ved hjelp av mikrofon og høyttalere gi god lyd til alle. Fungerer anlegget? Er lyden og det som sies lett å oppfatte? Er det mange nok mikrofoner til at samtaler i grupper fungerer? Hvor mange mikrofoner har anlegget? Utdyp gjerne hvilke(t) rom i bygningen du har besøkt.\n\n Skriv gjerne utfyllende kommentar ved å trykke på knappen «kommenter»."
   },
   {
     name: "Teleslynge",
@@ -25,7 +25,7 @@ const properties = [
     iconName: "hearing",
     description: "Er det teleslynge om virker?",
     longDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec accumsan nisl id nisl gravida, vel aliquet dui pulvinar. Pellentesque tincidunt et justo non blandit. Ut a turpis sapien. Mauris risus erat, dignissim ut sagittis sed, imperdiet cursus justo. Sed iaculis urna nulla, in aliquet lacus luctus suscipit. Aenean magna mi, sollicitudin ut felis id, dignissim pretium leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum semper dapibus ligula et vulputate. Cras sed aliquam magna. Curabitur sapien nulla, bibendum in aliquet sit amet, facilisis sed diam."
+    "Teleslynge er et trådløst lydoverføringsanlegg for høreapparatbrukere. Er det ulyder på slyngen? Er lyden sterk/svak? Er slyngen fastmontert eller må du ha en slynge rundt halsen? Hvordan er i så fall systemet for å få tak i denne halsslyngen? Utdyp gjerne hvilke(t) rom du har besøkt, og hvordan teleslyngen fungerer for hvert enkelt rom.\n\n Skriv gjerne utfyllende kommentar ved å trykke på knappen «kommenter»."
   },
   {
     name: "Informasjon",
@@ -33,7 +33,7 @@ const properties = [
     description: "Er det informasjon på stedet om lydutstyr?",
     iconName: "info-outline",
     longDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec accumsan nisl id nisl gravida, vel aliquet dui pulvinar. Pellentesque tincidunt et justo non blandit. Ut a turpis sapien. Mauris risus erat, dignissim ut sagittis sed, imperdiet cursus justo. Sed iaculis urna nulla, in aliquet lacus luctus suscipit. Aenean magna mi, sollicitudin ut felis id, dignissim pretium leo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum semper dapibus ligula et vulputate. Cras sed aliquam magna. Curabitur sapien nulla, bibendum in aliquet sit amet, facilisis sed diam."
+    "Utenfor eller i rom som har teleslynge er det plikt til å informere om dette. Kan du finne informasjon om at det er teleslynge? Finnes det informasjon om hvordan man kan få en halsslynge? Er det informasjon om at du må sitte bestemte steder i salen for å få god lyd? Utdyp gjerne hvilke(t) rom i bygningen du har besøkt. \n\n Skriv gjerne utfyllende kommentar ved å trykke på knappen «kommenter»."
   }
 ];
 

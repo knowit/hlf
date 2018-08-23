@@ -1,53 +1,43 @@
 import React, { Component } from 'react';
-import {Modal, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {Modal, Platform, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import properties from "../settings/propertyConfig";
+import SlimText from "../components/SlimText";
+import PropTypes from "prop-types";
+import {colors } from "../settings/defaultStyles";
+import PropertyTitle from "../components/PropertyTitle";
+import PropertyInformationModal from '../components/PropertyInformationModal';
+import { connect } from 'react-redux';
+import {onOpenPropertyInformationModal } from "../actions/propertiesModal";
 
-export default class ModalScreen extends Component {
-    state = {
-        modalVisible: false,
-    };
+class ModalScreen extends Component {
 
-    setModalVisible(visible) {
-        this.setState({ modalVisible: visible });
+    constructor(props) {
+        super(props);
     }
 
     render() {
         return (
           <View style={{ marginTop: 22 }}>
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={this.state.modalVisible}
-                onRequestClose={() => {
-                    alert('Modal has been closed.');
-                }}>
-                <View>
-                    <View style={styles.modal}>
-                        <Text>Hello World!</Text>
-                        <TouchableHighlight
-                            onPress={() => {
-                                this.setModalVisible(!this.state.modalVisible);
-                            }}>
-                            <Text>Hide Modal</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            </Modal>
+              <PropertyInformationModal />
+              {properties.map((property, index) => {
+                  return (
+                      <TouchableHighlight
+                          key={index}
+                          onPress={() => {
+                              console.log("pressing... property: ", property);
+                              this.props.onOpenPropertyInformationModal(property)
+                          }}>
+                          <Text>{ property.name }</Text>
+                      </TouchableHighlight>
+                  );
+              })}
 
-              <TouchableHighlight
-                onPress={() => {
-                    this.setModalVisible(true);
-                }}>
-                  <Text>Show Modal</Text>
-              </TouchableHighlight>
           </View>
         );
     }
-}
+};
 
-const styles = StyleSheet.create({
-    modal: {
-        backgroundColor: "skyblue",
-        alignItems: "center",
-        flex: 1
-    }
-});
+export default connect(
+    ({ propertyInformationModal }) => ({ ...propertyInformationModal }),
+    { onOpenPropertyInformationModal }
+)(ModalScreen);

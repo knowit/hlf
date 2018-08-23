@@ -10,6 +10,9 @@ function* fetchVenueData(action) {
         const reviews = yield call(VenueService.fetchReviews, placeId);
 
         const payload = Object.assign(venueData, { reviews: reviews});
+
+        console.log("inside fetchVenueData - result: ", payload);
+
         yield put({ type: ON_VENUE_SELECTED, payload });
     } catch(e) {
         // Todo: handle fetch venue data error

@@ -7,7 +7,6 @@ import {
     ON_FETCH_REVIEWS_INIT,
     ON_FETCH_REVIEWS_SUCCESS,
     ON_FETCH_REVIEWS_FAILED,
-    ON_SIGN_OUT,
     ON_PLACE_REVIEWS_REQUESTED,
     ON_FETCH_PREVIOUS_REQUESTED,
     ON_FETCH_PREVIOUS_FAILED,
@@ -18,6 +17,10 @@ import {
 import {
     ON_VENUE_INFORMATION_REQUESTED
 } from '../actions/venue';
+
+import {
+    ON_SIGN_OUT
+} from '../actions/account';
 
 function* fetchReviewsByPlaceId(action) {
 
