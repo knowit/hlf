@@ -1,13 +1,13 @@
 import {
-    ACCOUNT_INFORMATION_REQUESTED,
-    ACCOUNT_INFORMATION_FAILED,
-    ACCESS_TOKEN_INIT,
-    ACCESS_TOKEN_SUCCESS,
-    ACCESS_TOKEN_FAILED,
-    AUTH0_SUCCESS,
-    LOGIN_SUCCESS,
-    SIGN_OUT,
-} from "../actions/actionTypes";
+    ON_ACCOUNT_INFORMATION_REQUESTED,
+    ON_ACCOUNT_INFORMATION_FAILED,
+    ON_ACCESS_TOKEN_INIT,
+    ON_ACCESS_TOKEN_SUCCESS,
+    ON_ACCESS_TOKEN_FAILED,
+    ON_AUTH0_SUCCESS,
+    ON_LOGIN_SUCCESS,
+    ON_SIGN_OUT,
+} from "../actions/account";
 
 export default (
     state = {
@@ -20,28 +20,32 @@ export default (
     action
 ) => {
     switch (action.type) {
-        case ACCOUNT_INFORMATION_REQUESTED:
+
+        case ON_ACCOUNT_INFORMATION_REQUESTED:
             return {
                 isAuthenticated: true,
                 hasCompletedInitialLoginAttempt: true,
                 user: {},
                 pending: true,
             };
-        case ACCOUNT_INFORMATION_FAILED:
+
+        case ON_ACCOUNT_INFORMATION_FAILED:
             return {
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
                 error: action.payload,
                 pending: false,
             };
-        case ACCESS_TOKEN_INIT:
+
+        case ON_ACCESS_TOKEN_INIT:
             return {
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: false,
                 token: null,
                 pending: true,
             };
-        case ACCESS_TOKEN_SUCCESS:
+
+        case ON_ACCESS_TOKEN_SUCCESS:
             return {
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
@@ -49,33 +53,38 @@ export default (
                 user: {},
                 pending: true,
             };
-        case ACCESS_TOKEN_FAILED:
+
+        case ON_ACCESS_TOKEN_FAILED:
             return {
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
                 error: action.payload,
                 pending: false,
             };
-        case AUTH0_SUCCESS:
+
+        case ON_AUTH0_SUCCESS:
             return {
                 isAuthenticated: true,
                 hasCompletedInitialLoginAttempt: true,
                 credentials: action.payload,
                 pending: true,
             };
-        case LOGIN_SUCCESS:
+
+        case ON_LOGIN_SUCCESS:
             return {
                 isAuthenticated: true,
                 hasCompletedInitialLoginAttempt: true,
                 user: action.payload,
                 pending: false
             };
-        case SIGN_OUT:
+
+        case ON_SIGN_OUT:
             return {
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
                 user: {}
             };
+
         default:
             return state;
     }

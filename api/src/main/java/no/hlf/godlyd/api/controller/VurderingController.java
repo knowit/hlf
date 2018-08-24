@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.apache.tomcat.jni.Local;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +23,8 @@ public class VurderingController {
 
     @Autowired
     VurderingService vurderingService;
+
+    private static final Logger logger = LoggerFactory.getLogger(VurderingController.class);
 
     @GetMapping()
     public Map<String, List<Vurdering>> getAllVurderinger(){
@@ -64,6 +68,7 @@ public class VurderingController {
     public List<Vurdering> getVurderingerByPlaceIdAndBrukerId(
             @PathVariable(value = "placeId") String placeId,
             @RequestHeader("Authorization") String auth) {
+        logger.info("inside VurderingsController.getVurderingerByPlaceIdAndBrukerId - placeId: " + placeId + ", auth: " + auth);
         return vurderingService.getVurderingerByPlaceIdAndBruker(placeId, auth);
     }
 

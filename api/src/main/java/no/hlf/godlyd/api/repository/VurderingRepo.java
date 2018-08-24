@@ -35,7 +35,6 @@ public interface VurderingRepo extends CrudRepository<Vurdering, Integer> {
 
     List<Vurdering> findTeleslyngeByStedPlaceId(String placeId);
 
-
     List<Vurdering> findByStedPlaceIdAndRegistratorId(String placeId, Integer registratorId);
 
     List<Integer> findRegistratorIdByStedId(Integer stedId);

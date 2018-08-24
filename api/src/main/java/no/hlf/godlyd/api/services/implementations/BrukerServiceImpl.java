@@ -5,6 +5,8 @@ import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.repository.BrukerRepo;
 import no.hlf.godlyd.api.security.Auth0Connection;
 import no.hlf.godlyd.api.services.BrukerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class BrukerServiceImpl implements BrukerService {
     @Autowired
     Auth0Connection con;
 
+    private static final Logger logger = LoggerFactory.getLogger(BrukerServiceImpl.class);
+
     public Bruker getBrukerFromId(Integer id){
         return brukerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Bruker", "id", id));
@@ -30,6 +34,7 @@ public class BrukerServiceImpl implements BrukerService {
         if (bruker != null){
             return bruker;
         } else {
+            logger.info("Inside getBrukerFromAuth0UserId - did not find user");
             throw new ResourceNotFoundException("Bruker", "auth0UserId", auth0UserId);
         }
     }
@@ -66,7 +71,7 @@ public class BrukerServiceImpl implements BrukerService {
             return bruker;
         }
         catch (Exception e){
-
+            logger.error("Inside getCredentials - catched exception: " + e);
         }
         return null;
     }

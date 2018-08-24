@@ -1,21 +1,43 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import {
-    ACCESS_TOKEN_INIT,
-    ACCESS_TOKEN_FAILED,
-    ACCOUNT_INFORMATION_REQUESTED
-} from "../actions/actionTypes";
+    ON_ACCESS_TOKEN_INIT,
+    ON_ACCESS_TOKEN_FAILED,
+    ON_ACCOUNT_INFORMATION_REQUESTED,
+    ON_SIGN_OUT
+} from "../actions/account";
+
+import { AsyncStorage } from 'react-native';
+
 import UserService from "../api/UserService";
 
 function* accessTokenRequestWorker() {
-    const token = yield call(UserService.getTokenFromStorage);
 
-    if(token) {
-        yield put({ type: ACCOUNT_INFORMATION_REQUESTED, payload: token });
-    } else {
-        yield put({ type: ACCESS_TOKEN_FAILED });
+    try {
+
+        const token = yield call(AsyncStorage.getItem, "access_token");
+
+        if(token) {
+            yield put({ type: ON_ACCOUNT_INFORMATION_REQUESTED, payload: token });
+        } else {
+            yield put({ type: ON_ACCESS_TOKEN_FAILED });
+        }
+
+    } catch(e) {
+
+        console.log("error: ", e);
+
+    }
+}
+
+function* signOut() {
+    try {
+        yield call(UserService.signOut);
+    } catch(e) {
+        console.log("bleh");
     }
 }
 
 export const watchAccessTokenRequests = [
-    takeEvery(ACCESS_TOKEN_INIT, accessTokenRequestWorker),
+    takeEvery(ON_ACCESS_TOKEN_INIT, accessTokenRequestWorker),
+    takeEvery(ON_SIGN_OUT, signOut),
 ];
