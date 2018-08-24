@@ -35,11 +35,14 @@ function* fetchReviewsByPlaceId(action) {
 
     } catch(e) {
 
-        if(e.status === 401) {
+        if(e.response && e.response.status === 401) {
             yield put({ type: ON_SIGN_OUT });
+        } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
+            // Todo: handle timeout error
         } else {
             yield put({ type: ON_FETCH_REVIEWS_FAILED });
         }
+
     }
 }
 
@@ -51,7 +54,14 @@ function* fetchMyPreviousReviewsByPlaceId(action) {
         const response = yield call (ReviewService.fetchMyPreviousReviews, placeId);
         yield put({ type: ON_FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
-        put({ type: ON_FETCH_PREVIOUS_FAILED })
+
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
+            // Todo: handle timeout error
+        } else {
+            put({ type: ON_FETCH_PREVIOUS_FAILED })
+        }
     }
 }
 
@@ -65,7 +75,15 @@ function* createReview(action) {
         yield put({ type: ON_CREATE_REVIEW_SUCCESS, payload: review });
         yield put({ type: ON_VENUE_INFORMATION_REQUESTED, payload: reviewBody.sted.placeId});
     } catch (e) {
-        // Todo: handle create review error
+
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
+            // Todo: handle timeout error
+        } else {
+            // Todo: handle create review error
+            //put({ type: ON_CREATE_REVIEW_FAILED })
+        }
     }
 }
 

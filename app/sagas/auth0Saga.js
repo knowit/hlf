@@ -3,9 +3,13 @@ import { ON_AUTH0_SUCCESS, ON_ACCOUNT_INFORMATION_REQUESTED } from "../actions/a
 import UserService from "../api/UserService";
 
 function* auth0(action) {
-    const credentials = action.payload;
-    yield call(UserService.setTokens, credentials);
-    yield put({ type: ON_ACCOUNT_INFORMATION_REQUESTED });
+    try {
+        const credentials = action.payload;
+        yield call(UserService.setTokens, credentials);
+        yield put({ type: ON_ACCOUNT_INFORMATION_REQUESTED });
+    } catch(e) {
+        console.log("auth0 bleh");
+    }
 }
 
 export const watchAuth0Requests = [
