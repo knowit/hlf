@@ -1,6 +1,6 @@
 #### DATA SOURCES ####
 data "google_compute_image" "server_image" {
-  name = "packer-1531395416"
+  name = "packer-1535115003"
   project = "godlydpatruljen"
 }
 
@@ -11,7 +11,7 @@ data "google_compute_global_address" "hlf-address" {
 
 #### MODULES ####
 module "develop" {
-  source = "../../tf_config"
+  source = "../../tf_config/"
 
   ## Add variables that can be changed
   env = "dev"

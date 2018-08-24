@@ -1,12 +1,13 @@
+---
 spec:
-containers:
-    - image: eu.gcr.io/godlydpatruljen/server
-        name: godlydpatruljen
-            securityContext:
-                  privileged: false
-                  stdin: false
-                  tty: false
-                  volumeMounts: []
-                  restartPolicy: Always
-                  volumes: []
-
+  containers:
+    -
+      image: eu.gcr.io/godlydpatruljen/server-hlf-dev
+      name: godlydpatruljen
+      securityContext:
+        privileged: false
+        restartPolicy: Always
+        stdin: false
+        tty: false
+        volumeMounts: []
+        volumes: []

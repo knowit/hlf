@@ -4,14 +4,24 @@ issues.txt
 # expo
 app/.expo/
 
+
 # IntelliJ
 .idea/
+*.iml
 
 .gitignore
 # dependencies
 app/node_modules
 
+
+# Python
+venv/
+env/
+
+
 # misc
+tmp/
+
 app/.env.local
 app/.env.development.local
 app/.env.test.local
@@ -29,12 +39,10 @@ lydpatruljen.key
 
 app/app.json
 
-cloud/.terraform
-cloud/credentials.json
-cloud/creds.json
-cloud/.terraform
-cloud/terraform.tfstate
-cloud/terraform.tfstate.backup
-creds/*
+
+# Terraform
+**/.terraform/**
+**/*.tfstate
+**/*.tfstate.backup
 
 .vscode

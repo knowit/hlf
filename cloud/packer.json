@@ -2,8 +2,7 @@
   "builders": [
     {
       "type": "googlecompute",
-      "account_file": "credentials.json",
-      "source_image_family": "cos-stable",
+      "source_image_family": "ubuntu-1604-lts",
       "ssh_username": "godlyd",
       "project_id": "godlydpatruljen",
       "zone": "europe-west3-a"
