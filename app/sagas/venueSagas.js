@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import VenueService from '../api/VenueService';
 import { ON_VENUE_SELECTED, ON_VENUE_INFORMATION_REQUESTED } from "../actions/venue";
+import {ON_SIGN_OUT} from "../actions/account";
 
 // worker Saga: will be fired on ACCOUNT_FETCH_REQUESTED actionsOld
 function* fetchVenueData(action) {
@@ -15,7 +16,15 @@ function* fetchVenueData(action) {
 
         yield put({ type: ON_VENUE_SELECTED, payload });
     } catch(e) {
-        // Todo: handle fetch venue data error
+
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else if((e.response && e.response.status === 408) || (e.code && e.code === 'ECONNABORTED') )  {
+            // Todo: handle timeout error
+        } else {
+            // Todo: handle fetch venue data error
+            //put({ type: ON_FETCH_VENUE_DATA_FAILED })
+        }
     }
 }
 

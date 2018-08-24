@@ -46,7 +46,7 @@ class VenueReviews extends Component {
         return (
             <TouchableHighlight
                 onPress={() => {
-                    this.props.placeReviewsRequested(this.props.selectedVenue.place_id);
+                    this.props.onPlaceReviewsRequested(this.props.selectedVenue.place_id);
                     this.setState({showReviews: true});
                 }}
                 style={styles.showReviewArrow}
