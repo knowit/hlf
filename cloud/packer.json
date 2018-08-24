@@ -2,7 +2,7 @@
   "builders": [
     {
       "type": "googlecompute",
-      "source_image": "ubuntu-1604-xenial-v20180814",
+      "source_image_family": "ubuntu-1604-lts",
       "ssh_username": "godlyd",
       "project_id": "godlydpatruljen",
       "zone": "europe-west3-a"

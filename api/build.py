@@ -78,9 +78,6 @@ plaintext = base64.b64decode(crypto_response['plaintext'].encode(ENCODING))
 
 docker_client = docker.from_env()
 build_args = json.loads(plaintext, encoding=ENCODING)
-# for key, value in build_args.items():
-#     del build_args[key]
-#     build_args[str.upper(key)] = value
 
 docker_client.images.build(
     path=API_FOLDER,
