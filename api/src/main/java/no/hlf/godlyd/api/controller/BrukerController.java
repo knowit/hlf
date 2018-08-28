@@ -4,6 +4,7 @@ import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.security.Auth0Connection;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

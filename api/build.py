@@ -79,6 +79,11 @@ plaintext = base64.b64decode(crypto_response['plaintext'].encode(ENCODING))
 docker_client = docker.from_env()
 build_args = json.loads(plaintext, encoding=ENCODING)
 
+# Make keys upper case (to match Dockerfile ARGs)
+for k, v in build_args.items():
+    del build_args[k]
+    build_args[str.upper(k)] = v
+
 docker_client.images.build(
     path=API_FOLDER,
     buildargs=build_args,
@@ -86,5 +91,9 @@ docker_client.images.build(
     nocache=True
 )
 
-maven_install_command = 'mvn install dockerfile:build -Dmaven.test.skip=true'
+maven_install_command = ' '.join([
+    'mvn install dockerfile:build',
+    '-Dmaven.test.skip=true',
+    # '-Dspring.profiles.active=dev'
+])
 os.system(maven_install_command)

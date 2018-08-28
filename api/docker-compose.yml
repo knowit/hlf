@@ -1,22 +1,32 @@
-version: '3'
+version: '3.5'
 services:
   api:
     image: lydpatruljen/godlyd:latest
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
+#    depends_on:
+#    - db
+    networks:
+      godlydnett:
+        ipv4_address: 172.12.17.10
     logging:
       driver: gcplogs
-  db:
-    image: postgres:9.6
-    logging:
-      driver: gcplogs
-    volumes:
-      - /var/lib/postgresql/data
-    ports:
-      - 5000:5432
-    environment:
-    - POSTGRES_USER=hlf
-    - POSTGRES_DB=godlyd
-    - PGDATA=/var/lib/postgresql/data/pgdata
+
+#  db:
+#    image: postgres:9.6
+#    volumes:
+#      - /var/lib/postgresql/data
+#    ports:
+#      - 5000:5432
+#    environment:
+#      - POSTGRES_USER=hlf
+#      - POSTGRES_DB=godlyd
+#      - PGDATA=/var/lib/postgresql/data/pgdata
+#    logging:
+#      driver: gcplogs
+
+networks:
+  godlydnett:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.12.17.0/24
