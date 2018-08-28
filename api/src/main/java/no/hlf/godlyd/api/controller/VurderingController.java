@@ -8,12 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -37,9 +36,12 @@ public class VurderingController {
     }
 
     @GetMapping("/bruker")
-    public List<Vurdering> getVurderingerByBruker(
-            @RequestHeader("Authorization") String auth){
-        return vurderingService.getVurderingerByBruker(auth);
+    public ArrayNode getVurderingerByBruker(@RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
+                                            @RequestHeader("Authorization") String auth,
+                                            @PageableDefault(value = 40, page = 0, direction = Sort.Direction.ASC, sort = "dato") Pageable pageable){
+        logger.info("pageable.size = " + pageable.getPageSize() + ", pageable.page = " + pageable.getPageNumber());
+        LocalDate dato = LocalDate.parse(datoString);
+        return vurderingService.getVurderingerByBruker(auth, dato, pageable);
     }
 
     @GetMapping("/all/place/{placeId}")
@@ -53,6 +55,8 @@ public class VurderingController {
     public ArrayNode getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
                                              @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
                                              @PageableDefault(value=40, page = 0) Pageable pagable) {
+
+        logger.info("Pageable.value = " + pagable.getPageSize() + "\t Pageable.page = " + pagable.getPageNumber());
         LocalDate dato = LocalDate.parse(datoString);
         return vurderingService.getVurderingerByPlaceId(placeId, dato, pagable);
     }

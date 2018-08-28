@@ -7,8 +7,8 @@ const ProfileImage = ({ url }) => {
     <Image
       source={{ uri: url.replace("https//", "https://") }} // : missing from the uri provided by api
       style={{
-        width: 45,
-        height: 45,
+        width: 65,
+        height: 65,
         borderRadius: 10
       }}
     />

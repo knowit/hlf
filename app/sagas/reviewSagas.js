@@ -11,7 +11,7 @@ import {
     ON_FETCH_PREVIOUS_REQUESTED,
     ON_FETCH_PREVIOUS_FAILED,
     ON_FETCH_PREVIOUS_SUCCESS,
-    ON_FETCH_PREVIOUS_INIT,
+    ON_FETCH_PREVIOUS_INIT, ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT, ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS,
 } from "../actions/reviews";
 
 import {
@@ -87,8 +87,29 @@ function* createReview(action) {
     }
 }
 
+function* fetchPreviousReviewsByUserInit(action) {
+
+    console.log("inside fetchPreviousReviewsByUserInit()");
+
+    try {
+        const reviews = yield call(ReviewService.fetchPreviousReviewsByUser, action.payload);
+        yield put({ type: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS, payload: reviews});
+    } catch(e) {
+
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
+            // Todo: handle timeout error
+        } else {
+            // Todo: handle fetchPreviousReviewsByUser error
+            console.log(e);
+        }
+    }
+}
+
 export const watchReviewSagas = [
   takeEvery(ON_PLACE_REVIEWS_REQUESTED, fetchReviewsByPlaceId),
   takeEvery(ON_FETCH_PREVIOUS_REQUESTED, fetchMyPreviousReviewsByPlaceId),
   takeEvery(ON_CREATE_REVIEW, createReview),
+  takeEvery(ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT, fetchPreviousReviewsByUserInit),
 ];

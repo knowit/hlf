@@ -2,9 +2,7 @@ import React, {Component} from "react";
 import {
     StyleSheet,
     View,
-    Image,
     TouchableHighlight,
-    Text
 } from "react-native";
 import HorizontalRuler from "../components/HorizontalRuler";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -13,21 +11,41 @@ import {connect} from "react-redux";
 import SlimText from "../components/SlimText";
 import colors, {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ProfileImage from "../components/ProfileImage";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import ReviewList from "../components/ReviewList";
 
 class Profile extends Component {
     render() {
         const {user} = this.props;
 
+        console.log("user: ", user);
+
+        const reviewHeading = "Dine vurderinger";
+
         return (
             <View heightAdjusting="flex" opaque={true} style={styles.container}>
                 <View style={styles.header}>
-                    <ProfileImage url={user.user.imageUrl}/>
+                    <ProfileImage url={user.user.imageUrl} />
                     <SlimText style={styles.name}>
                         {user.user.fornavn + " " + user.user.etternavn}
                     </SlimText>
                 </View>
 
                 <HorizontalRuler verticalMargin={COMPONENT_SPACING}/>
+
+                <View>
+                    <View style={styles.reviews}>
+                        <MaterialIcons
+                            name="comment"
+                            color={colors.primaryTextColor}
+                            size={25}
+                        />
+                        <SlimText style={styles.reviewsHeading}>
+                            { reviewHeading }
+                        </SlimText>
+                    </View>
+                    <ReviewList/>
+                </View>
 
                 <ViewContainer
                     heightAdjusting="flex"
@@ -38,7 +56,7 @@ class Profile extends Component {
                 <HorizontalRuler/>
                 <TouchableHighlight
                     style={styles.signOut}
-                    onPress={() => this.props.signout()}
+                    onPress={() => this.props.onSignOut()}
                 >
                     <View style={{flexDirection: "row", alignItems: "center"}}>
                         <MaterialCommunityIcons
@@ -48,7 +66,7 @@ class Profile extends Component {
                         />
                         <SlimText
                             style={{
-                                fontSize: 24,
+                                fontSize: 18,
                                 color: colors.primaryTextColor,
                                 marginLeft: 15
                             }}
@@ -68,19 +86,30 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primaryBackgroundColor
     },
     header: {
-        flexDirection: "row",
         padding: COMPONENT_SPACING,
         paddingBottom: 0,
-        alignItems: "center"
     },
 
     name: {
-        marginLeft: COMPONENT_SPACING,
-        fontSize: 18,
+        paddingTop: 20,
+        fontSize: 22,
         fontWeight: "400"
     },
+
+    reviews: {
+        padding: COMPONENT_SPACING,
+        flexDirection: "row"
+    },
+
+    reviewsHeading: {
+        paddingLeft: 12,
+        paddingTop: -5,
+        fontSize: 22,
+        fontWeight: "400"
+    },
+
     reviewHeader: {
-        fontSize: 18,
+        fontSize: 22,
         marginLeft: COMPONENT_SPACING
     },
     signOut: {

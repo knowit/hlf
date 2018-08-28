@@ -9,6 +9,11 @@ export const ON_FETCH_PREVIOUS_INIT = "ON_FETCH_PREVIOUS_INIT";
 export const ON_FETCH_PREVIOUS_SUCCESS = "ON_FETCH_PREVIOUS_SUCCESS";
 export const ON_FETCH_PREVIOUS_FAILED = "ON_FETCH_PREVIOUS_FAILED";
 export const ON_PLACE_REVIEWS_REQUESTED = "ON_PLACE_REVIEWS_REQUESTED";
+export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT = "ON_FETCH_PREVIOUS_REVIEWS_BY_USER_ID_INIT";
+export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS = "ON_FETCH_PREVIOUS_REVIEWS_BY_USER_ID_SUCCESS";
+export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED = "ON_FETCH_PREVIOUS_REVIEWS_BY_USER_ID_FAILEd";
+export const ON_SHOW_REVIEW_DELETION_MODAL = "ON_SHOW_REVIEW_DELETION_MODAL";
+export const ON_HIDE_REVIEW_DELETION_MODAL = "ON_HIDE_REVIEW_DELETION_MODAL";
 
 export function onCreateReview(reviewBody) {
     return {
@@ -30,4 +35,27 @@ export function onPlaceReviewsRequested(placeId) {
         payload: placeId
     }
 }
+
+export function onFetchReviewsByUser(payload) {
+    return {
+        type: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT,
+        payload: payload
+    }
+}
+
+export function onShowReviewDeletionModal(id) {
+    return {
+        type: ON_SHOW_REVIEW_DELETION_MODAL,
+        payload: id
+    }
+}
+
+export function onHideReviewDeletionModal(shouldDelete) {
+    return {
+        type: ON_HIDE_REVIEW_DELETION_MODAL,
+        payload: shouldDelete
+    }
+}
+
+
 

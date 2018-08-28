@@ -30,6 +30,7 @@ public class BrukerServiceImpl implements BrukerService {
     }
 
     public Bruker getBrukerFromAuth0UserId(String auth0UserId){
+        logger.info("auth0UserId: " + auth0UserId);
         Bruker bruker = brukerRepo.findByAuth0UserId(auth0UserId);
         if (bruker != null){
             return bruker;

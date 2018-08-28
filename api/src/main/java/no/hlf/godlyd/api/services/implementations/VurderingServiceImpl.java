@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
+import no.hlf.godlyd.api.repository.StedInformasjonRepo;
 import no.hlf.godlyd.api.repository.VurderingRepo;
 import no.hlf.godlyd.api.services.BrukerService;
 import no.hlf.godlyd.api.services.StedService;
@@ -13,7 +14,10 @@ import no.hlf.godlyd.api.services.VurderingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +34,8 @@ public class VurderingServiceImpl implements VurderingService {
     private StedService stedService;
     @Autowired
     private BrukerService brukerService;
+    @Autowired
+    private StedInformasjonRepo stedInformasjonRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(VurderingServiceImpl.class);
 
@@ -57,47 +63,7 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public ArrayNode getVurderingerByPlaceId(String placeId, LocalDate dato, Pageable pagable) {
-        List<Vurdering> vurderingerInPage = vurderingRepo.findByPlaceIdPage(placeId, dato, pagable).getContent();
-        List<List<Vurdering>> vurderingsliste = new ArrayList<>();
-
-        for (Vurdering vurdering : vurderingerInPage) {
-            List<Vurdering> sammeVurdering = vurderingerInPage.stream()
-                    .filter(v -> v.getDato().equals(vurdering.getDato()) && v.getRegistrator().equals(vurdering.getRegistrator()))
-                    .collect(Collectors.toList());
-            if (!vurderingsliste.contains(sammeVurdering)) {
-                vurderingsliste.add(sammeVurdering);
-            }
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode ferdigJSON = mapper.createArrayNode();
-
-        for (List<Vurdering> list : vurderingsliste) {
-            ObjectNode vurderinger = mapper.createObjectNode();
-
-            for (Vurdering vurdering : list) {
-                ObjectNode vurderingNode = mapper.createObjectNode()
-                        .put("kommentar", vurdering.getKommentar())
-                        .put("rangering", vurdering.isRangering());
-
-                if (vurdering instanceof TeleslyngeVurdering) {
-                    vurderinger.putPOJO("teleslynge", vurderingNode);
-                } else if (vurdering instanceof LydforholdVurdering) {
-                    vurderinger.putPOJO("lydforhold", vurderingNode);
-                } else if (vurdering instanceof LydutjevningVurdering) {
-                    vurderinger.putPOJO("lydutjevning", vurderingNode);
-                } else if (vurdering instanceof InformasjonVurdering) {
-                    vurderinger.putPOJO("informasjon", vurderingNode);
-                }
-            }
-
-            ObjectNode objectNode = mapper.createObjectNode()
-                    .putPOJO("dato", list.get(0).getDato())
-                    .putPOJO("registrator", list.get(0).getRegistrator())
-                    .putPOJO("vurderinger", vurderinger);
-            ferdigJSON.add(objectNode);
-        }
-        return ferdigJSON;
+        return opprettJson(vurderingRepo.findByPlaceIdPage(placeId, dato, pagable).getContent());
     }
 
     @Override
@@ -107,9 +73,9 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(String authorization) throws ResourceNotFoundException {
+    public ArrayNode getVurderingerByBruker(String authorization, LocalDate dato, Pageable pageable) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
-        return vurderingRepo.findByRegistratorId(brukerId);
+        return opprettJson(vurderingRepo.findByRegistratorId(brukerId, pageable).getContent());
     }
 
     @Override
@@ -202,5 +168,52 @@ public class VurderingServiceImpl implements VurderingService {
         return vurderinger.stream()
                     .filter(vurdering -> vurderingsklasse.isInstance(vurdering))
                     .collect(Collectors.toList());
+    }
+
+    private ArrayNode opprettJson(List<Vurdering> vurderingerInPage) {
+        List<List<Vurdering>> vurderingsliste = new ArrayList<>();
+
+        for (Vurdering vurdering : vurderingerInPage) {
+            List<Vurdering> sammeVurdering = vurderingerInPage.stream()
+                    .filter(v -> v.getDato().equals(vurdering.getDato()) &&
+                            v.getRegistrator().equals(vurdering.getRegistrator()) &&
+                            v.getSted().equals(vurdering.getSted()))
+                    .collect(Collectors.toList());
+            if (!vurderingsliste.contains(sammeVurdering)) {
+                vurderingsliste.add(sammeVurdering);
+            }
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode ferdigJSON = mapper.createArrayNode();
+
+        for (List<Vurdering> list : vurderingsliste) {
+            ObjectNode vurderinger = mapper.createObjectNode();
+
+            for (Vurdering vurdering : list) {
+                ObjectNode vurderingNode = mapper.createObjectNode()
+                        .put("kommentar", vurdering.getKommentar())
+                        .put("rangering", vurdering.isRangering());
+
+                if (vurdering instanceof TeleslyngeVurdering) {
+                    vurderinger.putPOJO("teleslynge", vurderingNode);
+                } else if (vurdering instanceof LydforholdVurdering) {
+                    vurderinger.putPOJO("lydforhold", vurderingNode);
+                } else if (vurdering instanceof LydutjevningVurdering) {
+                    vurderinger.putPOJO("lydutjevning", vurderingNode);
+                } else if (vurdering instanceof InformasjonVurdering) {
+                    vurderinger.putPOJO("informasjon", vurderingNode);
+                }
+            }
+
+            ObjectNode objectNode = mapper.createObjectNode()
+                    .putPOJO("id", list.get(0).getId())
+                    .putPOJO("dato", list.get(0).getDato())
+                    .putPOJO("registrator", list.get(0).getRegistrator())
+                    .putPOJO("sted", stedInformasjonRepo.findByPlaceId(list.get(0).getSted().getPlaceId()))
+                    .putPOJO("vurderinger", vurderinger);
+            ferdigJSON.add(objectNode);
+        }
+        return ferdigJSON;
     }
 }

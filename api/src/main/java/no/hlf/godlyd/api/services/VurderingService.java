@@ -25,7 +25,7 @@ public interface VurderingService {
 
     Vurdering getVurderingFromId(Integer id);
 
-    List<Vurdering> getVurderingerByBruker(String authorization);
+    ArrayNode getVurderingerByBruker(String authorization, LocalDate datoStreng, Pageable pageable);
 
     List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization);
 
