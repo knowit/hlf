@@ -41,8 +41,7 @@ app/app.json
 
 
 # Terraform
-**/.terraform/**
-**/*.tfstate
-**/*.tfstate.backup
+cloud/environment/**/.terraform/*
+cloud/environment/**/*.tfstate*
 
 .vscode

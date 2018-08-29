@@ -12,7 +12,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "../certify/nginx.conf",
+      "source": "packer_files/nginx.conf",
       "destination": "/tmp/nginx.conf"
     },
     {
@@ -21,10 +21,15 @@
       "destination": "/tmp/docker-compose.yml"
     },
     {
+      "type": "file",
+      "source": "{{user `gcpcreds`}}",
+      "destination": "/tmp/terraform@godlydpatruljen.json"
+    },
+    {
       "type": "shell",
       "scripts": [
-        "packer_scripts/install_packages.sh",
-        "packer_scripts/configure_packages.sh"
+        "packer_files/install_packages.sh",
+        "packer_files/configure_packages.sh"
       ]
     }
   ]

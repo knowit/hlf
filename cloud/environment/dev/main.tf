@@ -1,6 +1,6 @@
 #### DATA SOURCES ####
 data "google_compute_image" "server_image" {
-  name = "packer-1535465799"
+  name = "packer-1535543846"
   project = "godlydpatruljen"
 }
 

@@ -1,14 +1,14 @@
 version: '3.5'
 services:
   api:
-    image: lydpatruljen/godlyd:latest
+    image: eu.gcr.io/godlydpatruljen/server-hlf-dev:latest
 #    depends_on:
 #    - db
     networks:
       godlydnett:
         ipv4_address: 172.12.17.10
-    logging:
-      driver: gcplogs
+#    logging:
+#      driver: gcplogs
 
 #  db:
 #    image: postgres:9.6
