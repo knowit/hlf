@@ -7,8 +7,11 @@ services:
     networks:
       godlydnett:
         ipv4_address: 172.12.17.10
-#    logging:
-#      driver: gcplogs
+
+###################################################
+# If deploying locally, uncomment this 'db' block #
+# as well as 'depends_on: - db' under 'api'       #
+###################################################
 
 #  db:
 #    image: postgres:9.6
