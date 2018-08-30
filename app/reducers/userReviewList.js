@@ -11,11 +11,15 @@ export default (
         reviews: [],
         hasLoaded: false,
         isLoading: false,
-        hasMore: true,
         count: 0,
-        pageable: {
-            pageSize: 5,
-            pageNumber: 0,
+        metadata: {
+            first: true,
+            last: false,
+            number: 0,
+            numberOfElements: -1,
+            size: 10,
+            totalElements: -1,
+            totalPages: -1
         },
         showReviewDeletionModal: false,
         reviewToBeDeleted: null,
@@ -28,54 +32,31 @@ export default (
             console.log("inside userReviewList: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT");
 
             return {
-                reviews: state.reviews,
+                ...state,
                 hasLoaded: false,
                 isLoading: true,
-                hasMore: state.hasMore,
-                count: state.count,
-                pageable: {
-                    pageSize: state.pageable.pageSize,
-                    pageNumber: state.pageable.pageNumber
-                },
-                showReviewDeletionModal: false,
-                reviewToBeDeleted: null,
             };
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS:
             console.log("inside userReviewList: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS: action.payload: ", action.payload);
 
-            const updatedReviews = [...state.reviews, ...action.payload];
-            const updatedPageNumber = state.pageable.pageNumber + 1;
-            const hasMore = (action.payload.length >= state.pageable.pageSize);
+            const metaData = action.payload.metadata;
+            const updatedReviews = [...state.reviews, ...action.payload.reviews];
 
             return {
+                ...state,
                 reviews: updatedReviews,
                 hasLoaded: true,
                 isLoading: false,
-                hasMore: hasMore,
-                count: updatedReviews.length,
-                pageable: {
-                    pageSize: state.pageable.pageSize,
-                    pageNumber: updatedPageNumber
-                },
-                showReviewDeletionModal: false,
-                reviewToBeDeleted: null,
+                metaData: metaData,
             };
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED:
             console.log("inside userReviewList: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED");
             return {
-                reviews: state.reviews,
+                ...state,
                 hasLoaded: false,
                 isLoading: false,
-                hasMore: false,
-                count: state.count,
-                pageable: {
-                    pageSize: state.pageable.pageSize,
-                    pageNumber: state.pageable.pageNumber
-                },
-                showReviewDeletionModal: false,
-                reviewToBeDeleted: null,
             };
 
         case ON_SHOW_REVIEW_DELETION_MODAL:

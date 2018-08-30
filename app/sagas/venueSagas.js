@@ -24,6 +24,7 @@ function* fetchVenueData(action) {
         } else {
             // Todo: handle fetch venue data error
             //put({ type: ON_FETCH_VENUE_DATA_FAILED })
+            console.log("error: ", e.message);
         }
     }
 }

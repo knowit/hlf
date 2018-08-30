@@ -59,11 +59,14 @@ class CreateReview extends Component {
 
     onReviewSubmit(reviewValues) {
         if (this.props.newReview.isSubmitting) return;
+
+        console.log("sted: ", this.props.selectedVenue);
+
         const reviewBody = Object.assign(reviewValues, {
             sted: {
                 placeId: this.props.selectedVenue.place_id
             },
-            type: this.state.currentProperty + "vurdering"
+            vurderingsType: this.state.currentProperty
         });
         this.props.onCreateReview(reviewBody);
     }

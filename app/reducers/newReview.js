@@ -31,8 +31,8 @@ export default (
         case ON_FETCH_PREVIOUS_SUCCESS:
 
             action.payload.forEach(review => {
-                if(review.type) {
-                    data[review.type.replace("vurdering", "")] = {
+                if(review.vurderingsType) {
+                    data[review.vurderingsType] = {
                       comment: review.kommentar,
                       value: review.rangering
                     };
@@ -46,7 +46,7 @@ export default (
             for (let reviewId in action.payload) {
                 const review = action.payload[reviewId];
 
-                if(review.type) data[review.type.replace("vurdering", "")] = {
+                if(review.vurderingsType) data[review.vurderingsType] = {
                     comment: review.kommentar,
                     value: review.rangering
                 };
@@ -60,12 +60,19 @@ export default (
 
         case ON_CREATE_REVIEW_SUCCESS:
 
-            const { kommentar, rangering, type } = action.payload;
+            console.log("action.payload: ", action.payload);
+
+            const { kommentar, rangering, vurderingsType } = action.payload;
+
             const nextState = { comment: kommentar, value: rangering };
+
             const propertyInputs = {
                 ...state.propertyInput,
-                [type.replace("vurdering", "")]: nextState
             };
+
+            propertyInputs[vurderingsType] = nextState;
+
+            console.log("propertyInputs: ", propertyInputs);
 
             return { ...state, propertyInput: propertyInputs, isSubmitting: false, hasLoaded: true };
 

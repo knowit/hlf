@@ -15,15 +15,12 @@ import ReviewDeletionModal from './ReviewDeletionModal';
     constructor(props) {
         super(props);
 
-        const { onFetchReviewsByUser, error, hasMore, isLoading } = this.props;
+        const { onFetchReviewsByUser, error, metadata, isLoading } = this.props;
         const reviewDurabilityInMonths = 3;
 
         this.state = {
             showDeletionModal: false,
-            pageable: {
-                pageSize: 10,
-                pageNumber: 0,
-            },
+            pageable: { size: metadata.size, number: metadata.number },
             date: moment().subtract(reviewDurabilityInMonths, 'months').format('YYYY-MM-DD')
         };
 
@@ -33,7 +30,7 @@ import ReviewDeletionModal from './ReviewDeletionModal';
             // * there's an error
             // * it's already loading
             // * there's nothing left to load
-            if(error || isLoading || !hasMore) return;
+            if(error || isLoading || metaData.last) return;
 
             const innerHeight = window.innerHeight;
             const scrollTop = document.documentElement.scrollTop;
@@ -89,7 +86,7 @@ import ReviewDeletionModal from './ReviewDeletionModal';
          return (
              <View>
                  <ReviewDeletionModal
-                     title={(reviewToBeDeleted) ? reviewToBeDeleted.sted.navn : ""}
+                     title={(reviewToBeDeleted) ? reviewToBeDeleted.sted.name : ""}
                      modalVisible={showReviewDeletionModal}
                      onHideModal={onHideReviewDeletionModal} />
                  <FlatList

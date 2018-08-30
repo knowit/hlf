@@ -20,7 +20,7 @@ export default class ReviewListItem extends React.PureComponent {
 
         return (
             <View style={styles.reviewListLine}>
-                <Text style={styles.reviewText}>{ review.sted.navn }</Text>
+                <Text style={styles.reviewText}>{ review.sted.name }</Text>
                 <TouchableHighlight
                     onPress={this._onPress}>
                     <MaterialCommunityIcons
