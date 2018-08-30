@@ -10,8 +10,8 @@ public class Vurderingsstatistikk {
 
     // Konstruktøren tar inn en liste bestående av én type vurdering (lydforhold, teleslynge, osv...)
     public Vurderingsstatistikk(List<Vurdering> vurderinger){
-        this.positive = (int) vurderinger.stream().filter(v -> v.isRangering()).count();
-        this.negative = (int) vurderinger.stream().filter(v -> !v.isRangering()).count();
+        this.positive = (int) vurderinger.stream().filter(Vurdering::getRangering).count();
+        this.negative = (int) vurderinger.stream().filter(v -> !v.getRangering()).count();
     }
 
     // Getters and setters

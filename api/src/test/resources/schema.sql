@@ -21,6 +21,7 @@ CREATE TABLE sted (
     primary key (id)
 );
 
+CREATE TYPE vurderings_type as ENUM ('Informasjon', 'Teleslynge', 'Lydutjevning', 'Lydforhold');
 
 DROP TABLE IF EXISTS vurdering;
 
@@ -30,31 +31,12 @@ CREATE TABLE vurdering(
     kommentar character varying(255),
     registrator integer,
     sted integer,
+    vurderings_type vurderings_type,
+    rangering boolean,
     primary key (id),
     foreign key (sted) references sted(id),
     foreign key(registrator) references bruker(id)
 );
-
-
-DROP TABLE IF EXISTS lydforholdvurdering;
-
-CREATE TABLE lydforholdvurdering(
-    rangering boolean NOT NULL,
-    id integer NOT NULL,
-    primary key (id),
-    foreign key(id) references vurdering(id)
-);
-
-
-DROP TABLE IF EXISTS teleslyngevurdering;
-
-CREATE TABLE teleslyngevurdering (
-    rangering boolean NOT NULL,
-    id integer NOT NULL,
-    primary key (id),
-    foreign key(id) references vurdering(id)
-);
-
 
 --
 -- PostgreSQL database dump complete

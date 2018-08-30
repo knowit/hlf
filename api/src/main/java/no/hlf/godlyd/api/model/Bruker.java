@@ -1,13 +1,10 @@
 package no.hlf.godlyd.api.model;
 
 import com.fasterxml.jackson.annotation.*;
-import no.hlf.godlyd.api.Views;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "bruker")

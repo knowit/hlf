@@ -1,4 +1,8 @@
 package no.hlf.godlyd.api.model;
 
-public class VurderingsType {
+public enum VurderingsType {
+    Informasjon,
+    Lydforhold,
+    Lydutjevning,
+    Teleslynge,
 }

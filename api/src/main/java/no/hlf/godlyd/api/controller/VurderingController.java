@@ -1,12 +1,11 @@
 package no.hlf.godlyd.api.controller;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.VurderingService;
-import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -36,9 +35,9 @@ public class VurderingController {
     }
 
     @GetMapping("/bruker")
-    public ArrayNode getVurderingerByBruker(@RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
-                                            @RequestHeader("Authorization") String auth,
-                                            @PageableDefault(value = 40, page = 0, direction = Sort.Direction.ASC, sort = "dato") Pageable pageable){
+    public Page<Vurdering> getVurderingerByBruker(@RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
+                                                  @RequestHeader("Authorization") String auth,
+                                                  @PageableDefault(direction = Sort.Direction.DESC, sort = "dato") Pageable pageable){
         logger.info("pageable.size = " + pageable.getPageSize() + ", pageable.page = " + pageable.getPageNumber());
         LocalDate dato = LocalDate.parse(datoString);
         return vurderingService.getVurderingerByBruker(auth, dato, pageable);
@@ -52,20 +51,13 @@ public class VurderingController {
     }
 
     @GetMapping("/place/{placeId}") //pagination
-    public ArrayNode getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
-                                             @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
-                                             @PageableDefault(value=40, page = 0) Pageable pagable) {
+    public Page<Vurdering> getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
+                                                   @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
+                                                   @PageableDefault(value=40, page = 0) Pageable pagable) {
 
         logger.info("Pageable.value = " + pagable.getPageSize() + "\t Pageable.page = " + pagable.getPageNumber());
         LocalDate dato = LocalDate.parse(datoString);
         return vurderingService.getVurderingerByPlaceId(placeId, dato, pagable);
-    }
-
-    @GetMapping("/type/{vurderingstype}/place/{placeId}")
-    public List<Vurdering> getAllVurderingerByTypeAndPlaceId(
-            @PathVariable(value = "placeId") String placeId,
-            @PathVariable(value = "vurderingstype") String vurderingstype) {
-        return vurderingService.getVurderingerByTypeAndPlaceId(vurderingstype, placeId);
     }
 
     @GetMapping("/place/{placeId}/bruker")
