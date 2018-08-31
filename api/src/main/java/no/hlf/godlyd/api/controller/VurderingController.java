@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,6 @@ public class VurderingController {
     public Page<Vurdering> getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
                                                    @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
                                                    @PageableDefault(value=40, page = 0) Pageable pagable) {
-
         logger.info("Pageable.value = " + pagable.getPageSize() + "\t Pageable.page = " + pagable.getPageNumber());
         LocalDate dato = LocalDate.parse(datoString);
         return vurderingService.getVurderingerByPlaceId(placeId, dato, pagable);
@@ -84,6 +84,15 @@ public class VurderingController {
     public ResponseEntity<?> deleteVurdering(
             @PathVariable(value = "id") Integer id,
             @RequestHeader("Authorization") String auth){
-        return vurderingService.deleteVurdering(id, auth);
+        Vurdering vurdering = vurderingService.deleteVurdering(id, auth);
+        return new ResponseEntity<>(vurdering, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/byPlaceId/{placeId}")
+    public ResponseEntity<?> deleteVurderingByPlaceIdAndRegistratorId(
+            @PathVariable(value = "placeId") String placeId,
+            @RequestHeader("Authorization") String auth) {
+        List<Vurdering> vurderinger = vurderingService.deleteVurderingerByPlaceIdAndRegistrator(placeId, auth);
+        return new ResponseEntity<>(vurderinger, HttpStatus.OK);
     }
 }

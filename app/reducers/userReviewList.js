@@ -1,4 +1,5 @@
 import {
+    ON_DELETE_REVIEWS_BY_PLACE_ID, ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED, ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS,
     ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED,
     ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT,
     ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS,
@@ -26,10 +27,10 @@ export default (
     },
     action
 ) => {
+    console.log(action);
     switch (action.type) {
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT:
-            console.log("inside userReviewList: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT");
 
             return {
                 ...state,
@@ -38,9 +39,7 @@ export default (
             };
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS:
-            console.log("inside userReviewList: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS: action.payload: ", action.payload);
             const metadata = action.payload.metaData;
-            console.log("metadata: ", metadata);
             const reviews = [...state.reviews];
 
             action.payload.reviews.forEach(review => {
@@ -69,8 +68,6 @@ export default (
                 }
             });
 
-            console.log("updatedReviews: ", reviews);
-
             return {
                 ...state,
                 reviews: reviews,
@@ -80,7 +77,6 @@ export default (
             };
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED:
-            console.log("inside userReviewList: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED");
             return {
                 ...state,
                 hasLoaded: false,
@@ -89,17 +85,30 @@ export default (
 
         case ON_SHOW_REVIEW_DELETION_MODAL:
 
-            console.log("inside userReviewList: ON_SHOW_REVIEW_DELETION_MODAL - action: ", action);
-
             const id = action.payload;
             const reviewToBeDeleted = state.reviews.find(review => review.sted.id === id);
-
-            console.log("reviewToBeDeleted: ", reviewToBeDeleted);
 
             return { ...state, showReviewDeletionModal: true, reviewToBeDeleted: reviewToBeDeleted };
 
         case ON_HIDE_REVIEW_DELETION_MODAL:
             return { ...state, showReviewDeletionModal: false, reviewToBeDeleted: null, };
+
+        case ON_DELETE_REVIEWS_BY_PLACE_ID:
+            return {...state};
+
+        case ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS:
+            const placeId = action.payload;
+            const updatedReviews = [...state.reviews];
+            const index = updatedReviews.findIndex(review => review.placeId === placeId);
+            updatedReviews.splice(index, 1);
+
+            return {
+                ...state,
+                reviews: updatedReviews
+            };
+
+        case ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED:
+            return {...state};
 
         default:
             return state;
