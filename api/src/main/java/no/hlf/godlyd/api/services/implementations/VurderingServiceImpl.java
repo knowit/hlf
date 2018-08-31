@@ -81,7 +81,8 @@ public class VurderingServiceImpl implements VurderingService {
         vurdering.setRegistrator(bruker);
 
         Optional<Vurdering> optionalVurdering = vurderingRepo.findByStedPlaceIdAndRegistratorId(vurdering.getSted().getPlaceId(), bruker.getId())
-                .stream().filter(v -> v.getDato().equals(LocalDate.now())).findFirst();
+                .stream()
+                .findFirst();
 
         if(optionalVurdering.isPresent()) {
             return updateVurdering(optionalVurdering.get().getId(), vurdering, authorization);
