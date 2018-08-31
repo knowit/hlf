@@ -3,6 +3,7 @@ package no.hlf.godlyd.api.model;
 import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,29 +11,21 @@ import java.util.Date;
 import java.time.LocalDate;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "vurdering")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @JsonIgnoreProperties(value = "dato", allowGetters = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = TeleslyngeVurdering.class, name = "Teleslyngevurdering"),
-        @JsonSubTypes.Type(value = LydforholdVurdering.class, name = "Lydforholdvurdering"),
-        @JsonSubTypes.Type(value = LydutjevningVurdering.class, name = "Lydutjevningvurdering"),
-        @JsonSubTypes.Type(value = InformasjonVurdering.class, name = "Informasjonvurdering")
-})
-public abstract class Vurdering implements Serializable {
+public class Vurdering implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "sted")
     private Sted sted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "registrator")
     private Bruker registrator;
 
@@ -41,16 +34,20 @@ public abstract class Vurdering implements Serializable {
 
     private String kommentar;
 
-    protected Vurdering(Sted sted, Bruker registrator, String kommentar) {
+    @Enumerated(EnumType.STRING)
+    private VurderingsType vurderingsType;
+
+    private boolean rangering;
+
+    public Vurdering(Sted sted, Bruker registrator, String kommentar, VurderingsType vurderingsType, boolean rangering) {
         this.sted = sted;
         this.registrator = registrator;
         this.kommentar = kommentar;
+        this.vurderingsType = vurderingsType;
+        this.rangering = rangering;
     }
 
-    protected Vurdering(){}
-
-    public abstract boolean isRangering();
-    public abstract void setRangering(boolean rangering);
+    private Vurdering(){}
 
     //Getters and setters
     public Integer getId() { return id; }
@@ -78,4 +75,20 @@ public abstract class Vurdering implements Serializable {
     public String getKommentar() { return kommentar; }
 
     public void setKommentar(String kommentar) { this.kommentar = kommentar; }
+
+    public VurderingsType getVurderingsType() {
+        return vurderingsType;
+    }
+
+    public void setVurderingsType(VurderingsType vurderingsType) {
+        this.vurderingsType = vurderingsType;
+    }
+
+    public boolean getRangering() {
+        return rangering;
+    }
+
+    public void setRangering(boolean rangering) {
+        this.rangering = rangering;
+    }
 }

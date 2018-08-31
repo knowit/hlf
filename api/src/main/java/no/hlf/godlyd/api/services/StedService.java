@@ -14,6 +14,8 @@ public interface StedService {
 
     Sted getStedFromPlaceId(String placeId);
 
-    Sted updateSted(String placeId);
+    Sted updateSted(Sted s);
+
+    Sted opprettSted(Sted s);
 
 }

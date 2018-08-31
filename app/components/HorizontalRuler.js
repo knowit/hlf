@@ -10,7 +10,7 @@ const HorizontalBar = ({ verticalMargin, style }) => {
         {
           borderBottomColor: colors.secondaryTextColor,
           borderBottomWidth: 1,
-          marginHorizontal: COMPONENT_SPACING * -1,
+          marginHorizontal: 1 * -1,
           marginVertical: verticalMargin
         },
         style

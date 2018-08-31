@@ -4,6 +4,8 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.services.StedService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ public class StedServiceImpl implements StedService {
 
     @Autowired
     private StedRepo stedRepo;
+
+    private static final Logger logger = LoggerFactory.getLogger(StedServiceImpl.class);
 
     // Methods:
     @Override
@@ -41,12 +45,18 @@ public class StedServiceImpl implements StedService {
     }
 
     @Override
-    public Sted updateSted(String placeId){
-        Sted sted = stedRepo.findByPlaceId(placeId);
+    public Sted updateSted(Sted s){
+        Sted sted = stedRepo.findByPlaceId(s.getPlaceId());
+
         if(sted == null){
-            sted = new Sted(placeId);
+            sted = new Sted(s.getPlaceId());
             stedRepo.save(sted);
         }
+
         return sted;
+    }
+
+    public Sted opprettSted(Sted s) {
+        return stedRepo.save(s);
     }
 }

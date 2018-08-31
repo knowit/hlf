@@ -1,8 +1,6 @@
 package no.hlf.godlyd.api.services.implementations;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import no.hlf.godlyd.api.Vurderingsstatistikk;
 import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.*;
@@ -13,6 +11,7 @@ import no.hlf.godlyd.api.services.VurderingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,24 +24,20 @@ import java.util.stream.Collectors;
 public class VurderingServiceImpl implements VurderingService {
 
     @Autowired
-    private VurderingRepo vurderingRepo;
+    VurderingRepo vurderingRepo;
+
     @Autowired
-    private StedService stedService;
+    StedService stedService;
+
     @Autowired
-    private BrukerService brukerService;
+    BrukerService brukerService;
 
     private static final Logger logger = LoggerFactory.getLogger(VurderingServiceImpl.class);
 
-    // Methods:
     @Override
     public Map<String, List<Vurdering>> getAllVurderinger() {
         List<Vurdering> alleVurderinger= (List<Vurdering>)vurderingRepo.findAll();
         return sorterVurderinger(alleVurderinger);
-    }
-
-    @Override
-    public List<Vurdering> getVurderingerByStedId(Integer id) {
-        return vurderingRepo.findByStedId(id);
     }
 
     @Override
@@ -56,48 +51,8 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public ArrayNode getVurderingerByPlaceId(String placeId, LocalDate dato, Pageable pagable) {
-        List<Vurdering> vurderingerInPage = vurderingRepo.findByPlaceIdPage(placeId, dato, pagable).getContent();
-        List<List<Vurdering>> vurderingsliste = new ArrayList<>();
-
-        for (Vurdering vurdering : vurderingerInPage) {
-            List<Vurdering> sammeVurdering = vurderingerInPage.stream()
-                    .filter(v -> v.getDato().equals(vurdering.getDato()) && v.getRegistrator().equals(vurdering.getRegistrator()))
-                    .collect(Collectors.toList());
-            if (!vurderingsliste.contains(sammeVurdering)) {
-                vurderingsliste.add(sammeVurdering);
-            }
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode ferdigJSON = mapper.createArrayNode();
-
-        for (List<Vurdering> list : vurderingsliste) {
-            ObjectNode vurderinger = mapper.createObjectNode();
-
-            for (Vurdering vurdering : list) {
-                ObjectNode vurderingNode = mapper.createObjectNode()
-                        .put("kommentar", vurdering.getKommentar())
-                        .put("rangering", vurdering.isRangering());
-
-                if (vurdering instanceof TeleslyngeVurdering) {
-                    vurderinger.putPOJO("teleslynge", vurderingNode);
-                } else if (vurdering instanceof LydforholdVurdering) {
-                    vurderinger.putPOJO("lydforhold", vurderingNode);
-                } else if (vurdering instanceof LydutjevningVurdering) {
-                    vurderinger.putPOJO("lydutjevning", vurderingNode);
-                } else if (vurdering instanceof InformasjonVurdering) {
-                    vurderinger.putPOJO("informasjon", vurderingNode);
-                }
-            }
-
-            ObjectNode objectNode = mapper.createObjectNode()
-                    .putPOJO("dato", list.get(0).getDato())
-                    .putPOJO("registrator", list.get(0).getRegistrator())
-                    .putPOJO("vurderinger", vurderinger);
-            ferdigJSON.add(objectNode);
-        }
-        return ferdigJSON;
+    public Page<Vurdering> getVurderingerByPlaceId(String placeId, LocalDate dato, Pageable pagable) {
+        return vurderingRepo.findByPlaceIdPage(placeId, dato, pagable);
     }
 
     @Override
@@ -107,20 +62,9 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public List<Vurdering> getVurderingerByBruker(String authorization) throws ResourceNotFoundException {
+    public Page<Vurdering> getVurderingerByBruker(String authorization, LocalDate dato, Pageable pageable) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
-        return vurderingRepo.findByRegistratorId(brukerId);
-    }
-
-    @Override
-    public List<Vurdering> getVurderingerByTypeAndPlaceId(String vurderingstype, String placeId){
-        switch (vurderingstype){
-            case "teleslynge":  return vurderingRepo.findTeleslyngeByStedPlaceId(placeId);
-            case "lydforhold":  return vurderingRepo.findLydforholdByStedPlaceId(placeId);
-            case "lydutjevning": return vurderingRepo.findLydutjevningByStedPlaceId(placeId);
-            case "informasjon": return vurderingRepo.findInformasjonByStedPlaceId(placeId);
-            default: return Collections.emptyList();
-        }
+        return vurderingRepo.findByRegistratorId(brukerId, pageable);
     }
 
     @Override
@@ -132,8 +76,18 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public Vurdering createVurdering(Vurdering vurdering, String authorization) {
-        vurdering.setRegistrator(brukerService.updateBruker(authorization));
-        Sted sted = stedService.updateSted(vurdering.getSted().getPlaceId());
+
+        Bruker bruker = brukerService.updateBruker(authorization);
+        vurdering.setRegistrator(bruker);
+
+        Optional<Vurdering> optionalVurdering = vurderingRepo.findByStedPlaceIdAndRegistratorId(vurdering.getSted().getPlaceId(), bruker.getId())
+                .stream().filter(v -> v.getDato().equals(LocalDate.now())).findFirst();
+
+        if(optionalVurdering.isPresent()) {
+            return updateVurdering(optionalVurdering.get().getId(), vurdering, authorization);
+        }
+
+        Sted sted = stedService.updateSted(vurdering.getSted());
         if (sted != null){
             sted.addVurdering(vurdering);
         }
@@ -148,7 +102,7 @@ public class VurderingServiceImpl implements VurderingService {
         Vurdering vurdering = getVurderingFromId(id);
         if(vurdering.getRegistrator().getId().equals(brukerId)){
             vurdering.setKommentar(endring.getKommentar());
-            vurdering.setRangering(endring.isRangering());
+            vurdering.setRangering(endring.getRangering());
             vurdering.setDato(LocalDate.now());
             return vurderingRepo.save(vurdering);
         } else{
@@ -180,16 +134,30 @@ public class VurderingServiceImpl implements VurderingService {
         }
     }
 
-    // Sorterer vurderinger inn i: teleslynge-, lydforhold-, lydutjevning- og informasjonsvurderinger.
     @Override
     public Map<String, List<Vurdering>> sorterVurderinger(List<Vurdering> vurderinger){
 
-        List<Vurdering> teleslyngeVurderinger = isInstanceOf(vurderinger, TeleslyngeVurdering.class);
-        List<Vurdering> lydforholdVurderinger = isInstanceOf(vurderinger, LydforholdVurdering.class);
-        List<Vurdering> lydutjevningVurderinger = isInstanceOf(vurderinger, LydutjevningVurdering.class);
-        List<Vurdering> informasjonVurderinger = isInstanceOf(vurderinger, InformasjonVurdering.class);
+        List<Vurdering> teleslyngeVurderinger = vurderinger
+                .stream()
+                .filter(vurdering -> vurdering.getVurderingsType().equals(VurderingsType.Teleslynge))
+                .collect(Collectors.toList());
 
-        Map<String,List<Vurdering>> map =new HashMap();
+        List<Vurdering> lydforholdVurderinger = vurderinger
+                .stream()
+                .filter(vurdering -> vurdering.getVurderingsType().equals(VurderingsType.Lydforhold))
+                .collect(Collectors.toList());
+
+        List<Vurdering> lydutjevningVurderinger = vurderinger
+                .stream()
+                .filter(vurdering -> vurdering.getVurderingsType().equals(VurderingsType.Lydutjevning))
+                .collect(Collectors.toList());
+
+        List<Vurdering> informasjonVurderinger = vurderinger
+                .stream()
+                .filter(vurdering -> vurdering.getVurderingsType().equals(VurderingsType.Informasjon))
+                .collect(Collectors.toList());
+
+        Map<String,List<Vurdering>> map = new HashMap();
         map.put("Teleslyngevurderinger",teleslyngeVurderinger);
         map.put("Lydforholdvurderinger",lydforholdVurderinger);
         map.put("Lydutjevningvurderinger", lydutjevningVurderinger);
@@ -198,9 +166,20 @@ public class VurderingServiceImpl implements VurderingService {
         return map;
     }
 
-    private List<Vurdering> isInstanceOf(List<Vurdering> vurderinger, Class<? extends Vurdering> vurderingsklasse) {
-        return vurderinger.stream()
-                    .filter(vurdering -> vurderingsklasse.isInstance(vurdering))
-                    .collect(Collectors.toList());
+    @Override
+    public Map<String, Object> getTotalVurderingStatistikk(String placeId) {
+
+        Map<String, Object> statistikk = new HashMap<>();
+        List<Vurdering> vurderinger = getAllVurderingerByPlaceId(placeId);
+        Map<String, List<Vurdering>> sorterteVurderinger = sorterVurderinger(vurderinger);
+
+        statistikk.put("Totalt antall vurderinger", vurderinger.size());
+        statistikk.put("Teleslyngevurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Teleslyngevurderinger")));
+        statistikk.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
+        statistikk.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
+        statistikk.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
+        statistikk.put("Antall vurderere", getRegistratorsByPlaceId(placeId).size());
+
+        return statistikk;
     }
 }

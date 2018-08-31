@@ -3,7 +3,7 @@ const credentials = require("../settings/authConfig");
 
 let auth0 = axios.create({
     baseURL: 'https://' + credentials.domain,
-    timeout: 1000,
+    timeout: 10000,
 });
 
 export default auth0;

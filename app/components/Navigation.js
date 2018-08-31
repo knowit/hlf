@@ -30,12 +30,8 @@ class Navigation extends Component {
 
         const Stack = createStackNavigator(
             {
-                MainScreen: {
-                    screen: MainScreen
-                },
-                Details: {
-                    screen: VenueDetails
-                }
+                MainScreen: { screen: MainScreen },
+                Details: { screen: VenueDetails }
             },
             {
                 headerMode: "none"
@@ -48,7 +44,7 @@ class Navigation extends Component {
             },
             {
                 contentComponent: props => (
-                    <Profile {...props} signout={this.props.onSignOut} />
+                    <Profile {...props} onSignOut={this.props.onSignOut} />
                 )
             }
         );

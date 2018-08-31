@@ -3,10 +3,13 @@ package no.hlf.godlyd.api.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.hlf.godlyd.api.Vurderingsstatistikk;
+import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.model.Vurdering;
 import no.hlf.godlyd.api.services.StedService;
 import no.hlf.godlyd.api.services.VurderingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +27,8 @@ public class StedController {
     StedService stedService;
     @Autowired
     VurderingService vurderingService;
+
+    private static final Logger logger = LoggerFactory.getLogger(StedController.class);
 
     @GetMapping()
     public List<Sted> getAllSteder(){
@@ -52,36 +57,33 @@ public class StedController {
         String result = restTemplate.getForObject(uri, String.class, placeId, API_KEY);
         JsonNode jsonNode = (new ObjectMapper()).readTree(result);
 
-        Sted sted = stedService.updateSted(placeId);
+        if(! stedService.existsByPlaceId(placeId)) stedService.opprettSted(new Sted(placeId));
 
+        Sted sted = stedService.getStedFromPlaceId(placeId);
         Map<String, Object> map = new HashMap<>();
         map.put("Google Places API", jsonNode);
         map.put("Sted", sted);
+
         return map;
     }
 
     @GetMapping("/place/{placeId}/totalvurdering/{google}")
     public Map<String, Object> getTotalvurderingForSted(@PathVariable(value = "placeId") String placeId,
                                                         @PathVariable(value = "google") boolean googleinfo) throws IOException {
-        Map<String, Object> map = new HashMap<>();
+
+        if(! stedService.existsByPlaceId(placeId)) stedService.opprettSted(new Sted(placeId));
+
+        Map<String, Object> map = vurderingService.getTotalVurderingStatistikk(placeId);
+
         if (googleinfo) {
             map = getStedInfoByPlaceId(placeId);
         } else {
-            map.put("Sted", stedService.updateSted(placeId));
+            map.put("Sted", stedService.getStedFromPlaceId(placeId));
         }
 
-        if (stedService.existsByPlaceId(placeId)){
-            List<Vurdering> vurderinger = vurderingService.getAllVurderingerByPlaceId(placeId);
-            Map<String, List<Vurdering>> sorterteVurderinger = vurderingService.sorterVurderinger(vurderinger);
-
-
-            map.put("Totalt antall vurderinger", vurderinger.size());
-            map.put("Teleslyngevurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Teleslyngevurderinger")));
-            map.put("Lydforholdvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydforholdvurderinger")));
-            map.put("Lydutjevningvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Lydutjevningvurderinger")));
-            map.put("Informasjonvurderinger", new Vurderingsstatistikk(sorterteVurderinger.get("Informasjonvurderinger")));
-            map.put("Antall vurderere", vurderingService.getRegistratorsByPlaceId(placeId).size());
-        }
+        vurderingService
+                .getTotalVurderingStatistikk(placeId)
+                .forEach((map::put));
 
         return map;
     }

@@ -5,7 +5,7 @@ import {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import { onCreateReview, onFetchPreviousRequested } from "../actions/reviews";
+import { onCreateReview, onDestroyReviewValue, onFetchPreviousRequested } from "../actions/reviews";
 import {connect} from "react-redux";
 import Loading from "../components/Loading";
 import {onOpenPropertyInformationModal} from "../actions/propertiesModal";
@@ -59,11 +59,23 @@ class CreateReview extends Component {
 
     onReviewSubmit(reviewValues) {
         if (this.props.newReview.isSubmitting) return;
+
+        const { propertyInput } = this.props.newReview;
+        const { currentProperty } = this.state;
+        const currentPropertyInput = propertyInput[currentProperty];
+
+        if(currentPropertyInput.value === reviewValues.value) {
+            // delete current review-value
+            this.props.onDestroyReviewValue(currentPropertyInput)
+        }
+
+        console.log("sted: ", this.props.selectedVenue);
+
         const reviewBody = Object.assign(reviewValues, {
             sted: {
                 placeId: this.props.selectedVenue.place_id
             },
-            type: this.state.currentProperty + "vurdering"
+            vurderingsType: this.state.currentProperty
         });
         this.props.onCreateReview(reviewBody);
     }
@@ -75,7 +87,7 @@ class CreateReview extends Component {
 
 export default connect(
     ({ selectedVenue, newReview, propertiesInformation }) => ({ selectedVenue, newReview, propertiesInformation }),
-    { onCreateReview, onFetchPreviousRequested, onOpenPropertyInformationModal}
+    { onCreateReview, onDestroyReviewValue, onFetchPreviousRequested, onOpenPropertyInformationModal}
 )(CreateReview);
 
 const styles = StyleSheet.create({});
