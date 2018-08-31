@@ -17,6 +17,9 @@ export const ON_HIDE_REVIEW_DELETION_MODAL = "ON_HIDE_REVIEW_DELETION_MODAL";
 export const ON_DESTROY_REVIEW_VALUE = "ON_DESTROY_REVIEW_VALUE";
 export const ON_DESTROY_REVIEW_VALUE_SUCCESS = "ON_DESTROY_REVIEW_VALUE_SUCCESS";
 export const ON_DESTROY_REVIEW_VALUE_FAILED = "ON_DESTROY_REVIEW_VALUE_FAILED";
+export const ON_DELETE_REVIEWS_BY_PLACE_ID = "ON_DELETE_REVIEWS_BY_PLACE_ID";
+export const ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS = "ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS";
+export const ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED = "ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED";
 
 export function onCreateReview(reviewBody) {
     return {
@@ -53,10 +56,9 @@ export function onShowReviewDeletionModal(id) {
     }
 }
 
-export function onHideReviewDeletionModal(shouldDelete) {
+export function onHideReviewDeletionModal() {
     return {
         type: ON_HIDE_REVIEW_DELETION_MODAL,
-        payload: shouldDelete
     }
 }
 
@@ -64,5 +66,12 @@ export function onDestroyReviewValue(reviewId) {
     return {
         type: ON_DESTROY_REVIEW_VALUE,
         payload: reviewId
+    }
+}
+
+export function onDeleteReviewsByPlaceId(placeId) {
+    return {
+        type: ON_DELETE_REVIEWS_BY_PLACE_ID,
+        payload: placeId
     }
 }
