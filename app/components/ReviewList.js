@@ -15,12 +15,10 @@ import ReviewDeletionModal from './ReviewDeletionModal';
     constructor(props) {
         super(props);
 
-        const { onFetchReviewsByUser, error, metadata, isLoading } = this.props;
+        const { onFetchReviewsByUser, error, isLoading } = this.props;
         const reviewDurabilityInMonths = 3;
 
         this.state = {
-            showDeletionModal: false,
-            pageable: { size: metadata.size, number: metadata.number },
             date: moment().subtract(reviewDurabilityInMonths, 'months').format('YYYY-MM-DD')
         };
 
@@ -39,16 +37,35 @@ import ReviewDeletionModal from './ReviewDeletionModal';
             // Checks if the page has scrolled to the bottom
             if(innerHeight + scrollTop === offsetHeight) {
                 console.log("innerHeight + scrollTop === offsetHeight");
-                onFetchReviewsByUser({ pageable: this.state.pageable, date: this.state.date });
+                const pageable = {
+                    size: this.props.metadata.size,
+                    number: this.props.metadata.number,
+                };
+                onFetchReviewsByUser({ pageable: pageable, date: this.state.date });
             }
         };
     }
 
     componentWillMount() {
-        this.props.onFetchReviewsByUser({ pageable: this.state.pageable, date: this.state.date });
+        console.log("componentWillMount");
+        this._fetchReviews();
     }
 
-     _keyExtractor = (item, index) => item.id.toString();
+    componentWillUpdate() {
+        console.log("componentWillUpdate");
+    }
+
+    _fetchReviews() {
+        if(this.props.metadata.number <= this.props.metadata.totalNumber) {
+            return;
+        }
+
+        const size = this.props.metadata.size;
+        const number = this.props.metadata.number + 1;
+        this.props.onFetchReviewsByUser({ pageable: { size, number }, date: this.state.date });
+    }
+
+     _keyExtractor = (item, index) => item.sted.id.toString();
 
      _onPressItem = (id) => {
 
@@ -65,7 +82,7 @@ import ReviewDeletionModal from './ReviewDeletionModal';
 
      _renderItem = ({ item }) => (
          <ReviewListItem
-             id={item.id}
+             id={item.sted.id}
              onPressItem={this._onPressItem}
              review={item}
          />
@@ -73,6 +90,7 @@ import ReviewDeletionModal from './ReviewDeletionModal';
 
      _handleLoadMore = () => {
          console.log("handleLoadMore!");
+         this._fetchReviews();
      };
 
      render() {
@@ -90,6 +108,7 @@ import ReviewDeletionModal from './ReviewDeletionModal';
                      modalVisible={showReviewDeletionModal}
                      onHideModal={onHideReviewDeletionModal} />
                  <FlatList
+                     style={styles.reviewList}
                      data={reviews}
                      keyExtractor={this._keyExtractor}
                      renderItem={this._renderItem}
@@ -101,7 +120,9 @@ import ReviewDeletionModal from './ReviewDeletionModal';
 }
 
 const styles = StyleSheet.create({
-
+    reviewList: {
+        height: 300
+    }
 });
 
 

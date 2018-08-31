@@ -1,20 +1,12 @@
 import authenticated from './authenticated';
 import VenueService from './VenueService';
-import _ from "lodash";
 
 export default {
 
     async fetchMyPreviousReviews(placeId) {
         console.log("found placeId - fetching reviews by place and user - placeId: ", placeId);
         const response = await authenticated.get(`/vurderinger/place/${placeId}/bruker`);
-        const grouped = _.groupBy(response.data, "type");
-        const groupWithOnlyMaxId = _.map(grouped, type => {
-            return type.reduce((a, b) => {
-                return a.id > b.id ? a : b;
-            });
-        });
-
-        return groupWithOnlyMaxId;
+        return response.data;
     },
 
     async fetchReviews(placeId) {
@@ -22,9 +14,7 @@ export default {
     },
 
     async createReview(reviewBody) {
-
         console.log("reviewBody: ", reviewBody);
-
         return await authenticated.post('/vurderinger', reviewBody);
     },
 

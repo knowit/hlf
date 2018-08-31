@@ -29,12 +29,12 @@ export default (
     switch (action.type) {
 
         case ON_FETCH_PREVIOUS_SUCCESS:
-
+            console.log(action.payload);
             action.payload.forEach(review => {
                 if(review.vurderingsType) {
                     data[review.vurderingsType] = {
                       comment: review.kommentar,
-                      value: review.rangering
+                      value: review.rangering,
                     };
                 }
             });

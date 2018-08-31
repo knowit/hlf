@@ -20,6 +20,7 @@ function* fetchAccountInformation() {
             console.log("result: ", result);
             yield put({ type: ON_LOGIN_SUCCESS, payload: result.data });
         } else {
+            console.log("could not fetch account information: ", result);
             yield put({ type: ON_ACCOUNT_INFORMATION_FAILED });
         }
 
@@ -28,7 +29,9 @@ function* fetchAccountInformation() {
             yield put({ type: ON_SIGN_OUT });
         } else if((e.response && e.response.status === 408) || (e.code && e.code === 'ECONNABORTED')) {
             // Todo - handle timeout error
+            console.log("ECONNABORTED");
         } else {
+            console.log("error fetching account information: ", e.message);
             yield put({ type: ON_ACCOUNT_INFORMATION_FAILED });
         }
     }

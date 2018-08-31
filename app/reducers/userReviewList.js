@@ -17,7 +17,7 @@ export default (
             last: false,
             number: 0,
             numberOfElements: -1,
-            size: 10,
+            size: 5,
             totalElements: -1,
             totalPages: -1
         },
@@ -39,16 +39,44 @@ export default (
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS:
             console.log("inside userReviewList: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS: action.payload: ", action.payload);
+            const metadata = action.payload.metaData;
+            console.log("metadata: ", metadata);
+            const reviews = [...state.reviews];
 
-            const metaData = action.payload.metadata;
-            const updatedReviews = [...state.reviews, ...action.payload.reviews];
+            action.payload.reviews.forEach(review => {
+                let foundReview;
+                if(foundReview = reviews.find(r => r.sted.id === review.sted.id)) {
+                    foundReview.vurderinger.push({
+                        dato: review.dato,
+                        rangering: review.rangering,
+                        vurderingsType: review.vurderingsType,
+                        kommentar: review.kommentar
+                    });
+                } else {
+                    reviews.push({
+                        placeId: review.sted.placeId,
+                        sted: review.sted,
+                        registrator: review.registrator,
+                        vurderinger: [
+                            {
+                                dato: review.dato,
+                                rangering: review.rangering,
+                                vurderingsType: review.vurderingsType,
+                                kommentar: review.kommentar
+                            }
+                        ]
+                    });
+                }
+            });
+
+            console.log("updatedReviews: ", reviews);
 
             return {
                 ...state,
-                reviews: updatedReviews,
+                reviews: reviews,
                 hasLoaded: true,
                 isLoading: false,
-                metaData: metaData,
+                metadata: metadata,
             };
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED:
@@ -64,7 +92,7 @@ export default (
             console.log("inside userReviewList: ON_SHOW_REVIEW_DELETION_MODAL - action: ", action);
 
             const id = action.payload;
-            const reviewToBeDeleted = state.reviews.find(review => review.id === id);
+            const reviewToBeDeleted = state.reviews.find(review => review.sted.id === id);
 
             console.log("reviewToBeDeleted: ", reviewToBeDeleted);
 

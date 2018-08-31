@@ -14,6 +14,9 @@ export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS = "ON_FETCH_PREVIOUS_REVI
 export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED = "ON_FETCH_PREVIOUS_REVIEWS_BY_USER_ID_FAILEd";
 export const ON_SHOW_REVIEW_DELETION_MODAL = "ON_SHOW_REVIEW_DELETION_MODAL";
 export const ON_HIDE_REVIEW_DELETION_MODAL = "ON_HIDE_REVIEW_DELETION_MODAL";
+export const ON_DESTROY_REVIEW_VALUE = "ON_DESTROY_REVIEW_VALUE";
+export const ON_DESTROY_REVIEW_VALUE_SUCCESS = "ON_DESTROY_REVIEW_VALUE_SUCCESS";
+export const ON_DESTROY_REVIEW_VALUE_FAILED = "ON_DESTROY_REVIEW_VALUE_FAILED";
 
 export function onCreateReview(reviewBody) {
     return {
@@ -57,5 +60,9 @@ export function onHideReviewDeletionModal(shouldDelete) {
     }
 }
 
-
-
+export function onDestroyReviewValue(reviewId) {
+    return {
+        type: ON_DESTROY_REVIEW_VALUE,
+        payload: reviewId
+    }
+}

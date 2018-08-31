@@ -52,6 +52,7 @@ function* fetchMyPreviousReviewsByPlaceId(action) {
         put({ type: ON_FETCH_PREVIOUS_INIT });
         const placeId = action.payload;
         const response = yield call (ReviewService.fetchMyPreviousReviews, placeId);
+        console.log("response2: ", response);
         yield put({ type: ON_FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
 
