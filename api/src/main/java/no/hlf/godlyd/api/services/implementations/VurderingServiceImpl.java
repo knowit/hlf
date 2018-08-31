@@ -1,8 +1,5 @@
 package no.hlf.godlyd.api.services.implementations;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.hlf.godlyd.api.Vurderingsstatistikk;
 import no.hlf.godlyd.api.exception.AccessDeniedException;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
@@ -79,7 +76,17 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public Vurdering createVurdering(Vurdering vurdering, String authorization) {
-        vurdering.setRegistrator(brukerService.updateBruker(authorization));
+
+        Bruker bruker = brukerService.updateBruker(authorization);
+        vurdering.setRegistrator(bruker);
+
+        Optional<Vurdering> optionalVurdering = vurderingRepo.findByStedPlaceIdAndRegistratorId(vurdering.getSted().getPlaceId(), bruker.getId())
+                .stream().filter(v -> v.getDato().equals(LocalDate.now())).findFirst();
+
+        if(optionalVurdering.isPresent()) {
+            return updateVurdering(optionalVurdering.get().getId(), vurdering, authorization);
+        }
+
         Sted sted = stedService.updateSted(vurdering.getSted());
         if (sted != null){
             sted.addVurdering(vurdering);

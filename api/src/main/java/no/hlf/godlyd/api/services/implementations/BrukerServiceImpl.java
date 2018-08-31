@@ -41,11 +41,13 @@ public class BrukerServiceImpl implements BrukerService {
     }
 
     public Bruker updateBruker(String authorization){
+        logger.info("inside updateBruker");
         Bruker bruker = getCredentials(authorization);
         Bruker b;
         try{
             b = getBrukerFromAuth0UserId(bruker.getAuth0UserId());
         } catch(ResourceNotFoundException e){
+            logger.info("inside updateBruker - catched exception: " + e.getMessage());
             b = new Bruker();
             b.setAuth0UserId(bruker.getAuth0UserId());
         }
@@ -53,6 +55,7 @@ public class BrukerServiceImpl implements BrukerService {
         b.setEtternavn(bruker.getEtternavn());
         b.setImageUrl(bruker.getImageUrl());
         brukerRepo.save(b);
+        logger.info("inside updateBruker returning bruker: " + b.toString());
         return b;
     }
 
@@ -60,21 +63,15 @@ public class BrukerServiceImpl implements BrukerService {
         return brukerRepo.findAll();
     }
 
-    private Bruker getCredentials(String authorization){
-        try{
-            Bruker bruker = new Bruker();
-            Hashtable<String, Object> userInfo = con.getUserProfile(authorization);
-            bruker.setAuth0UserId(userInfo.get("user_id").toString());
-            bruker.setFornavn(userInfo.get("given_name").toString());
-            bruker.setEtternavn(userInfo.get("family_name").toString());
-            String image = userInfo.get("picture").toString().replaceFirst("https//", "https://");
-            bruker.setImageUrl(image);
-            return bruker;
-        }
-        catch (Exception e){
-            logger.error("Inside getCredentials - catched exception: " + e);
-        }
-        return null;
+    private Bruker getCredentials(String authorization) {
+        Bruker bruker = new Bruker();
+        Hashtable<String, Object> userInfo = con.getUserProfile(authorization);
+        bruker.setAuth0UserId(userInfo.get("user_id").toString());
+        bruker.setFornavn(userInfo.get("given_name").toString());
+        bruker.setEtternavn(userInfo.get("family_name").toString());
+        String image = userInfo.get("picture").toString().replaceFirst("https//", "https://");
+        bruker.setImageUrl(image);
+        return bruker;
     }
 
 }
