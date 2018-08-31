@@ -111,17 +111,24 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public ResponseEntity<?> deleteVurdering(Integer id, String authorization) {
+    public Vurdering deleteVurdering(Integer id, String authorization) {
         Integer brukerid = brukerService.updateBruker(authorization).getId();
         Vurdering vurdering = vurderingRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vurdering", "id", id));
 
-        if(vurdering.getRegistrator().getId().equals(brukerid)){
+        if(vurdering.getRegistrator().getId().equals(brukerid)) {
             vurderingRepo.delete(vurdering);
-            return ResponseEntity.ok().build();
-        } else{
-            throw new AccessDeniedException("delete", "Vurdering", "id", id);
+            return vurdering;
         }
+
+        throw new AccessDeniedException("delete", "Vurdering", "id", id);
+    }
+
+    public List<Vurdering> deleteVurderingerByPlaceIdAndRegistrator(String placeId, String authorization) {
+        Integer brukerid = brukerService.updateBruker(authorization).getId();
+        List<Vurdering> vurderinger = vurderingRepo.findByStedPlaceIdAndRegistratorId(placeId, brukerid);
+        vurderinger.forEach(vurderingRepo::delete);
+        return vurderinger;
     }
 
     @Override
