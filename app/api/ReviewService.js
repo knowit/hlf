@@ -6,18 +6,49 @@ const END_POINT = "/vurderinger/";
 export default {
 
     async fetchMyPreviousReviews(placeId) {
-        console.log("found placeId - fetching reviews by place and user - placeId: ", placeId);
         const response = await authenticated.get(END_POINT + `place/${placeId}/bruker`);
         return response.data;
     },
 
     async fetchReviews(placeId) {
-        return await authenticated.get(END_POINT + `place/${placeId}`);
+        const response = await authenticated.get(END_POINT + `place/${placeId}`);
+        const registrators = {};
+        const reviews = response.data.content;
+
+        reviews
+            .filter(review => review.registrator.id)
+            .map(review => review.registrator)
+            .forEach(registrator => registrators[registrator.id] = registrator);
+
+        const metaData = {
+            first: response.data.first,
+            last: response.data.last,
+            number: response.data.number,
+            numberOfElements: response.data.numberOfElements,
+            size: response.data.size,
+            totalElements: response.data.totalElements,
+            totalPages: response.data.totalPages
+        };
+
+        reviews
+            .filter(review => !review.registrator.id)
+            .forEach(review => review.registrator = registrators[review.registrator]);
+
+        const result = { reviews, metaData };
+
+        return result;
     },
 
     async createReview(reviewBody) {
-        console.log("reviewBody: ", reviewBody);
         return await authenticated.post(END_POINT, reviewBody);
+    },
+
+    async updateReview(review) {
+      return await authenticated.put(END_POINT + review.id, review);
+    },
+
+    async removeValueFromReview(review) {
+      return await authenticated.delete(END_POINT + review.id + '/rangering');
     },
 
     async fetchPreviousReviewsByUser(payload) {
@@ -49,6 +80,13 @@ export default {
             .map(review => review.sted)
             .forEach(place => places[place.id] = place);
 
+        const registrators = {};
+
+        reviews
+            .filter(review => review.registrator.id)
+            .map(review => review.registrator)
+            .forEach(registrator => registrators[registrator.id] = registrator);
+
         const promises = Object.values(places).map(place => VenueService.fetchGooglePlaceObject(place.placeId));
         const googleInfo = await Promise.all(promises);
 
@@ -61,8 +99,11 @@ export default {
             .filter(review => !review.sted.id)
             .forEach(review => review.sted = places[review.sted]);
 
+        reviews
+            .filter(review => !review.registrator.id)
+            .forEach(review => review.registrator = registrators[review.reigstrator]);
+
         const result = { reviews, metaData };
-        console.log("result: ", result);
 
         return result;
     },

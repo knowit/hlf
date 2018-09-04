@@ -6,6 +6,9 @@ import {
     ON_HIDE_REVIEW_DELETION_MODAL,
     ON_SHOW_REVIEW_DELETION_MODAL,
 } from "../actions/reviews";
+import {deserialize} from "../deserializer/ReviewDeserializer";
+
+
 
 export default (
     state = {
@@ -27,7 +30,6 @@ export default (
     },
     action
 ) => {
-    console.log(action);
     switch (action.type) {
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT:
@@ -45,24 +47,14 @@ export default (
             action.payload.reviews.forEach(review => {
                 let foundReview;
                 if(foundReview = reviews.find(r => r.sted.id === review.sted.id)) {
-                    foundReview.vurderinger.push({
-                        dato: review.dato,
-                        rangering: review.rangering,
-                        vurderingsType: review.vurderingsType,
-                        kommentar: review.kommentar
-                    });
+                    foundReview.vurderinger.push(deserialize(review));
                 } else {
                     reviews.push({
                         placeId: review.sted.placeId,
                         sted: review.sted,
                         registrator: review.registrator,
                         vurderinger: [
-                            {
-                                dato: review.dato,
-                                rangering: review.rangering,
-                                vurderingsType: review.vurderingsType,
-                                kommentar: review.kommentar
-                            }
+                            deserialize(review)
                         ]
                     });
                 }

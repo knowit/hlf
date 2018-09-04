@@ -33,7 +33,6 @@ function* signOut() {
     try {
         yield call(UserService.signOut);
     } catch(e) {
-        console.log("bleh");
     }
 }
 

@@ -24,7 +24,6 @@ class ModalScreen extends Component {
                       <TouchableHighlight
                           key={index}
                           onPress={() => {
-                              console.log("pressing... property: ", property);
                               this.props.onOpenPropertyInformationModal(property)
                           }}>
                           <Text>{ property.name }</Text>

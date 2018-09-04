@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import MapView, {Marker} from "react-native-maps";
-import {Geolocation, View} from "react-native";
+import {Geolocation} from "react-native";
 import colors from "../settings/defaultStyles";
 
 export default class Map extends Component {
@@ -9,17 +9,16 @@ export default class Map extends Component {
         this.nextId = 0;
         this.state = {
             markers: [],
-            flex: 0,
+            flex: 1,
         };
     }
 
     componentWillMount() {
         //Hack to ensure the showsMyLocationButton is shown initially. Idea is to force a repaint
-        setTimeout(() => this.setState({flex: 1}), 500);
+        //setTimeout(() => this.setState({flex: 1}), 500);
     }
 
     componentDidMount() {
-        console.log("geolocation: ", navigator.geolocation);
         navigator.geolocation.getCurrentPosition(({coords}) =>
             this.map.animateToCoordinate(coords)
         );
@@ -40,6 +39,9 @@ export default class Map extends Component {
                 showsMyLocationButton={true}
                 showsCompass={true}
                 showsPointsOfInterest={true}
+                showsTraffic={false}
+                showsIndoors={false}
+
                 initialRegion={{
                     latitude: 59.916634,
                     longitude: 10.756853,

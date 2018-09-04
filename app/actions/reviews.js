@@ -15,11 +15,12 @@ export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED = "ON_FETCH_PREVIOUS_REVIE
 export const ON_SHOW_REVIEW_DELETION_MODAL = "ON_SHOW_REVIEW_DELETION_MODAL";
 export const ON_HIDE_REVIEW_DELETION_MODAL = "ON_HIDE_REVIEW_DELETION_MODAL";
 export const ON_DESTROY_REVIEW_VALUE = "ON_DESTROY_REVIEW_VALUE";
-export const ON_DESTROY_REVIEW_VALUE_SUCCESS = "ON_DESTROY_REVIEW_VALUE_SUCCESS";
-export const ON_DESTROY_REVIEW_VALUE_FAILED = "ON_DESTROY_REVIEW_VALUE_FAILED";
 export const ON_DELETE_REVIEWS_BY_PLACE_ID = "ON_DELETE_REVIEWS_BY_PLACE_ID";
 export const ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS = "ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS";
 export const ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED = "ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED";
+export const ON_UPDATE_REVIEW = "ON_UPDATE_REVIEW_VALUE";
+export const ON_UPDATE_REVIEW_SUCCESS = "ON_UPDATE_REVIEW_SUCCESS";
+export const ON_UPDATE_REVIEW_FAILED = "ON_UPDATE_REVIEW_FAILED";
 
 export function onCreateReview(reviewBody) {
     return {
@@ -62,16 +63,16 @@ export function onHideReviewDeletionModal() {
     }
 }
 
-export function onDestroyReviewValue(reviewId) {
-    return {
-        type: ON_DESTROY_REVIEW_VALUE,
-        payload: reviewId
-    }
-}
-
 export function onDeleteReviewsByPlaceId(placeId) {
     return {
         type: ON_DELETE_REVIEWS_BY_PLACE_ID,
         payload: placeId
+    }
+}
+
+export function onUpdateReview(review) {
+    return {
+        type: ON_UPDATE_REVIEW,
+        payload: review,
     }
 }

@@ -41,7 +41,7 @@ public class VurderingControllerTest {
         Bruker bruker = new Bruker(); bruker.setAuth0UserId("userid5");
 
         this.vurderinger = Stream.of(new Vurdering(new Sted("ChIJmeCJ639uQUYRc3OrOTekBZw"),
-                bruker, "Bra teleslynge", VurderingsType.Teleslynge, true))
+                bruker, "Bra teleslynge", VurderingsType.Teleslynge, Rangering.OPP))
                 .collect(Collectors.toList()) ;
     }
 

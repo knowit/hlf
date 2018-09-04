@@ -14,7 +14,6 @@ ENV AUTH0_DOMAIN="godlydpatruljen.eu.auth0.com" AUTH0_ISSUER="https://godlydpatr
 ENV AUTH0_CLIENT_ID="e0smYR6JB35rNEaCAZw5vE3EHzd4mPCa" AUTH0_AUDIENCE="https://dev.api.godlydpatruljen.no/"
 ENV AUTH0_MANAGEMENT_CLIENT_ID="FVB9lZLmvR8KqezPEwMvZQ4VgyLut7nM" AUTH0_MANAGEMENT_AUDIENCE="https://godlydpatruljen.eu.auth0.com/api/v2/"
 
-
 # Add a volume pointing to /tmp
 VOLUME /tmp
 

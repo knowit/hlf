@@ -14,7 +14,13 @@ import {
     ON_FETCH_PREVIOUS_INIT,
     ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT,
     ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS,
-    ON_DELETE_REVIEWS_BY_PLACE_ID, ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS, ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED,
+    ON_DELETE_REVIEWS_BY_PLACE_ID,
+    ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS,
+    ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED,
+    ON_UPDATE_REVIEW,
+    ON_UPDATE_REVIEW_FAILED,
+    ON_UPDATE_REVIEW_SUCCESS,
+    ON_DESTROY_REVIEW_VALUE,
 } from "../actions/reviews";
 
 import {
@@ -31,21 +37,11 @@ function* fetchReviewsByPlaceId(action) {
         const placeId = action.payload;
         yield put ({ type: ON_FETCH_REVIEWS_INIT });
         const response = yield call(ReviewService.fetchReviews, placeId);
-
-        if(response.status === 200) {
-            yield put.resolve({ type: ON_FETCH_REVIEWS_SUCCESS, payload: response.data });
-        }
+        yield put.resolve({ type: ON_FETCH_REVIEWS_SUCCESS, payload: response });
 
     } catch(e) {
-
-        if(e.response && e.response.status === 401) {
-            yield put({ type: ON_SIGN_OUT });
-        } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
-            // Todo: handle timeout error
-        } else {
-            yield put({ type: ON_FETCH_REVIEWS_FAILED });
-        }
-
+        console.error(e);
+        yield put({ type: ON_FETCH_REVIEWS_FAILED });
     }
 }
 
@@ -55,7 +51,6 @@ function* fetchMyPreviousReviewsByPlaceId(action) {
         put({ type: ON_FETCH_PREVIOUS_INIT });
         const placeId = action.payload;
         const response = yield call (ReviewService.fetchMyPreviousReviews, placeId);
-        console.log("response2: ", response);
         yield put({ type: ON_FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
 
@@ -112,7 +107,6 @@ function* deleteReviewsByPlaceId(action) {
     try {
         const placeId = action.payload;
         const deleted = yield call(ReviewService.deleteReviewsByPlaceId, placeId);
-        console.log("deleted: ", deleted);
         yield put({ type: ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS, payload: placeId });
     } catch(e) {
         if(e.response && e.response.status === 401) {
@@ -121,11 +115,44 @@ function* deleteReviewsByPlaceId(action) {
             // Todo: handle timeout error
             console.log("ECONNABORTED");
         } else {
-            // Todo: handle fetchPreviousReviewsByUser error
             console.log(e);
         }
 
         yield put({ type: ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED });
+    }
+}
+
+function* updateReview(action) {
+    try {
+        const review = action.payload;
+        const updated = yield call(ReviewService.updateReview, review);
+        yield put({ type: ON_UPDATE_REVIEW_SUCCESS, payload: updated.data });
+    } catch(e) {
+
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else {
+            console.log(e);
+        }
+
+        yield put({ type: ON_UPDATE_REVIEW_FAILED });
+    }
+}
+
+function* removeValueFromReview(action) {
+    try {
+        const review = action.payload;
+        yield call(ReviewService.removeValueFromReview, review);
+        yield put({ type: ON_UPDATE_REVIEW_SUCCESS, payload: review });
+    } catch(e) {
+
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else {
+            console.log(e);
+        }
+
+        yield put({ type: ON_UPDATE_REVIEW_FAILED });
     }
 }
 
@@ -134,5 +161,7 @@ export const watchReviewSagas = [
   takeEvery(ON_FETCH_PREVIOUS_REQUESTED, fetchMyPreviousReviewsByPlaceId),
   takeEvery(ON_CREATE_REVIEW, createReview),
   takeEvery(ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT, fetchPreviousReviewsByUserInit),
-  takeEvery(ON_DELETE_REVIEWS_BY_PLACE_ID, deleteReviewsByPlaceId)
+  takeEvery(ON_DELETE_REVIEWS_BY_PLACE_ID, deleteReviewsByPlaceId),
+  takeEvery(ON_UPDATE_REVIEW, updateReview),
+  takeEvery(ON_DESTROY_REVIEW_VALUE, removeValueFromReview),
 ];

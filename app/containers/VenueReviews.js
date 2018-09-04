@@ -21,7 +21,6 @@ class VenueReviews extends Component {
 
     render() {
         const {selectedVenue} = this.props;
-
         return (
             <View>
                 <VenueContactInfo
@@ -60,6 +59,8 @@ class VenueReviews extends Component {
         );
     }
 
+    _keyExtractor = (item) => item.id.toString();
+
     renderReviewList() {
         const {reviewsList, isLoading} = this.props.reviewList;
 
@@ -76,6 +77,7 @@ class VenueReviews extends Component {
 
         return (
             <FlatList
+                keyExtractor={this._keyExtractor}
                 data={reviewsList}
                 renderItem={({item}) => <Review review={item}/>}
             />

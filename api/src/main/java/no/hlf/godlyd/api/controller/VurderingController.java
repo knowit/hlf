@@ -70,14 +70,23 @@ public class VurderingController {
 
     @PostMapping
     public Vurdering createVurdering(@RequestBody Vurdering vurdering, @RequestHeader("Authorization") String authorization) {
+        logger.info("creating vurdering: " + vurdering.toString());
         return vurderingService.createVurdering(vurdering, authorization);
     }
 
     @PutMapping("/{id}")
     public Vurdering updateVurdering(@PathVariable(value = "id") Integer id,
                                      @RequestBody Vurdering endring,
-                                     @RequestHeader("Authorization") String authorization){
+                                     @RequestHeader("Authorization") String authorization) {
+        logger.info("vurdering.getRangering() = " + endring.getRangering());
         return vurderingService.updateVurdering(id, endring, authorization);
+    }
+
+    @DeleteMapping("/{id}/rangering")
+    public ResponseEntity<?> removeRangeringFromVurdering(@PathVariable(value = "id") Integer id,
+                                                  @RequestHeader("Authorization") String authorization) {
+        vurderingService.removeRangeringFromVurdering(id, authorization);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

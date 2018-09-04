@@ -33,7 +33,6 @@ public class Sted implements Serializable{
         this.placeId = placeId;
     }
 
-
     public void addVurdering(Vurdering vurdering){
         this.vurderinger.add(vurdering);
         vurdering.setSted(this);

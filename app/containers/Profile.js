@@ -17,9 +17,6 @@ import ReviewList from "../components/ReviewList";
 class Profile extends Component {
     render() {
         const {user} = this.props;
-
-        console.log("user: ", user);
-
         const reviewHeading = "Dine vurderinger";
 
         return (

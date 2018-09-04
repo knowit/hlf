@@ -1,5 +1,6 @@
 package no.hlf.godlyd.api;
 
+import no.hlf.godlyd.api.model.Rangering;
 import no.hlf.godlyd.api.model.Vurdering;
 import java.util.List;
 
@@ -10,8 +11,8 @@ public class Vurderingsstatistikk {
 
     // Konstruktøren tar inn en liste bestående av én type vurdering (lydforhold, teleslynge, osv...)
     public Vurderingsstatistikk(List<Vurdering> vurderinger){
-        this.positive = (int) vurderinger.stream().filter(Vurdering::getRangering).count();
-        this.negative = (int) vurderinger.stream().filter(v -> !v.getRangering()).count();
+        this.positive = (int) vurderinger.stream().filter(vurdering -> vurdering.getRangering().equals(Rangering.OPP)).count();
+        this.negative = (int) vurderinger.stream().filter(vurdering -> vurdering.getRangering().equals(Rangering.NED)).count();
     }
 
     // Getters and setters
