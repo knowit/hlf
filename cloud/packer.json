@@ -1,4 +1,11 @@
 {
+  "variables": {
+    "gcpcreds_location": null,
+    "gcpcreds_filename": null,
+    "datasource_user": null,
+    "datasource_password": null
+  },
+
   "builders": [
     {
       "type": "googlecompute",
@@ -11,6 +18,17 @@
 
   "provisioners": [
     {
+      "type": "shell",
+      "script": "packer_files/write_to_bashrc.sh",
+      "environment_vars": [
+        "GCPCREDS_FILENAME={{user `gcpcreds_filename`}}",
+        "DATASOURCE_USER={{user `datasource_user`}}",
+        "DATASOURCE_PASSWORD={{user `datasource_password`}}",
+        "DATASOURCE_IP={{user `datasource_ip`}}",
+        "DATASOURCE_PORT={{user `datasource_port`}}"
+      ]
+    },
+    {
       "type": "file",
       "source": "packer_files/nginx.conf",
       "destination": "/tmp/nginx.conf"
@@ -22,14 +40,17 @@
     },
     {
       "type": "file",
-      "source": "{{user `gcpcreds`}}",
-      "destination": "/tmp/terraform@godlydpatruljen.json"
+      "source": "{{user `gcpcreds_location`}}/{{user `gcpcreds_filename`}}",
+      "destination": "/tmp/{{user `gcpcreds_filename`}}"
     },
     {
       "type": "shell",
       "scripts": [
         "packer_files/install_packages.sh",
         "packer_files/configure_packages.sh"
+      ],
+      "environment_vars": [
+        "GCPCREDS_FILENAME={{user `gcpcreds_filename`}}"
       ]
     }
   ]

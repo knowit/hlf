@@ -43,7 +43,8 @@ Google's own documentation for this pushing to this register can be found [here]
 1. Spin up the infrastructure with Terraform.
 1. Build the Docker image by following the guide in _/hlf/api/doc.md_.
 1. Push the latest Docker image to GCP by running `python push_docker_image.py`.
-1. Make the server start the Docker container by running `gcloud compute ssh godlyd@server-hlf-dev --command="sudo docker-compose up -d"`
+1. Make the server start the Docker container by running `gcloud compute ssh godlyd@server-hlf-dev --command="sudo docker-compose up -d"`.  
+   The API should be up and running (with `/healthcheck` returing 200 OK) after 30-60 seconds.
 
 ## Security
 ### SSL Certificates
