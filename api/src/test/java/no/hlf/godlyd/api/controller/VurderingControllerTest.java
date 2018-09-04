@@ -1,10 +1,7 @@
 package no.hlf.godlyd.api.controller;
 
 import no.hlf.godlyd.api.GodLydApplication;
-import no.hlf.godlyd.api.model.Bruker;
-import no.hlf.godlyd.api.model.Sted;
-import no.hlf.godlyd.api.model.TeleslyngeVurdering;
-import no.hlf.godlyd.api.model.Vurdering;
+import no.hlf.godlyd.api.model.*;
 import no.hlf.godlyd.api.services.VurderingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,8 +40,8 @@ public class VurderingControllerTest {
         MockitoAnnotations.initMocks(this);
         Bruker bruker = new Bruker(); bruker.setAuth0UserId("userid5");
 
-        this.vurderinger = Stream.of(new TeleslyngeVurdering(new Sted("ChIJmeCJ639uQUYRc3OrOTekBZw"),
-                bruker, "Bra teleslynge", true))
+        this.vurderinger = Stream.of(new Vurdering(new Sted("ChIJmeCJ639uQUYRc3OrOTekBZw"),
+                bruker, "Bra teleslynge", VurderingsType.Teleslynge, true))
                 .collect(Collectors.toList()) ;
     }
 

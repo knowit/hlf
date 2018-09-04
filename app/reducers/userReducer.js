@@ -82,6 +82,7 @@ export default (
             return {
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
+                pending: false,
                 user: {}
             };
 

@@ -1,8 +1,9 @@
 package no.hlf.godlyd.api.controller;
 
 import no.hlf.godlyd.api.model.Bruker;
-import no.hlf.godlyd.api.security.Auth0Connection;
 import no.hlf.godlyd.api.services.BrukerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,7 @@ public class BrukerController {
     @Autowired
     private BrukerService brukerService;
 
-    @Autowired
-    private Auth0Connection con;
+    private static final Logger logger = LoggerFactory.getLogger(BrukerController.class);
 
     @GetMapping
     public List<Bruker> getAllBrukere(){
@@ -37,8 +37,11 @@ public class BrukerController {
     }
 
     @GetMapping("/login")
-    public Bruker loginBruker(@RequestHeader("Authorization")String auth){
-        return brukerService.updateBruker(auth);
+    public Bruker loginBruker(@RequestHeader("Authorization")String auth) {
+        logger.info("inside loginBruker 1/2");
+        Bruker bruker = brukerService.updateBruker(auth);
+        logger.info("inside loginBruker 2/2");
+        return bruker;
     }
 
 }

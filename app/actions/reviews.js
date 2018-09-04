@@ -9,6 +9,17 @@ export const ON_FETCH_PREVIOUS_INIT = "ON_FETCH_PREVIOUS_INIT";
 export const ON_FETCH_PREVIOUS_SUCCESS = "ON_FETCH_PREVIOUS_SUCCESS";
 export const ON_FETCH_PREVIOUS_FAILED = "ON_FETCH_PREVIOUS_FAILED";
 export const ON_PLACE_REVIEWS_REQUESTED = "ON_PLACE_REVIEWS_REQUESTED";
+export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT = "ON_FETCH_PREVIOUS_REVIEWS_BY_USER_ID_INIT";
+export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS = "ON_FETCH_PREVIOUS_REVIEWS_BY_USER_ID_SUCCESS";
+export const ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED = "ON_FETCH_PREVIOUS_REVIEWS_BY_USER_ID_FAILEd";
+export const ON_SHOW_REVIEW_DELETION_MODAL = "ON_SHOW_REVIEW_DELETION_MODAL";
+export const ON_HIDE_REVIEW_DELETION_MODAL = "ON_HIDE_REVIEW_DELETION_MODAL";
+export const ON_DESTROY_REVIEW_VALUE = "ON_DESTROY_REVIEW_VALUE";
+export const ON_DESTROY_REVIEW_VALUE_SUCCESS = "ON_DESTROY_REVIEW_VALUE_SUCCESS";
+export const ON_DESTROY_REVIEW_VALUE_FAILED = "ON_DESTROY_REVIEW_VALUE_FAILED";
+export const ON_DELETE_REVIEWS_BY_PLACE_ID = "ON_DELETE_REVIEWS_BY_PLACE_ID";
+export const ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS = "ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS";
+export const ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED = "ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED";
 
 export function onCreateReview(reviewBody) {
     return {
@@ -31,3 +42,36 @@ export function onPlaceReviewsRequested(placeId) {
     }
 }
 
+export function onFetchReviewsByUser(payload) {
+    return {
+        type: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT,
+        payload: payload
+    }
+}
+
+export function onShowReviewDeletionModal(id) {
+    return {
+        type: ON_SHOW_REVIEW_DELETION_MODAL,
+        payload: id
+    }
+}
+
+export function onHideReviewDeletionModal() {
+    return {
+        type: ON_HIDE_REVIEW_DELETION_MODAL,
+    }
+}
+
+export function onDestroyReviewValue(reviewId) {
+    return {
+        type: ON_DESTROY_REVIEW_VALUE,
+        payload: reviewId
+    }
+}
+
+export function onDeleteReviewsByPlaceId(placeId) {
+    return {
+        type: ON_DELETE_REVIEWS_BY_PLACE_ID,
+        payload: placeId
+    }
+}

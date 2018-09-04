@@ -1,9 +1,8 @@
 package no.hlf.godlyd.api.repository;
 
 import no.hlf.godlyd.api.GodLydApplication;
-import no.hlf.godlyd.api.model.LydforholdVurdering;
-import no.hlf.godlyd.api.model.TeleslyngeVurdering;
 import no.hlf.godlyd.api.model.Vurdering;
+import no.hlf.godlyd.api.model.VurderingsType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = GodLydApplication.class)
 @ExtendWith(SpringExtension.class)
@@ -27,8 +25,8 @@ public class VurderingRepoTest {
     /* USED FOR TESTING:
      id |    dato    |     kommentar     | registrator | sted
     ----+------------+-------------------+-------------+------
-      1 | 17/12/2018 | Bra teleslynge    |           1 |    1       (teleslynge_vurdering)
-      2 | 21/05/2018 | Dårlig lydforhold |           3 |    5       (lydforhold_vurdering)
+      1 | 17/12/2018 | Bra teleslynge    |           1 |    1       (informasjon_vurdering)
+      2 | 21/05/2018 | Dårlig lydforhold |           3 |    5       (teleslynge_vurdering)
      */
 
     // TEST CASES
@@ -37,8 +35,8 @@ public class VurderingRepoTest {
         List<Vurdering> found1 = vurderingRepo.findByRegistratorId(1);
         List<Vurdering> found2 = vurderingRepo.findByRegistratorId(3);
 
-        assertTrue(found1.get(0) instanceof TeleslyngeVurdering);
-        assertTrue(found2.get(0) instanceof LydforholdVurdering);
+        assertEquals(found1.get(0).getVurderingsType(), VurderingsType.Informasjon);
+        assertEquals(found2.get(0).getVurderingsType(), VurderingsType.Teleslynge);
 
         assertEquals(1, found1.size());
         assertEquals(1, found2.size());
@@ -51,8 +49,8 @@ public class VurderingRepoTest {
         List<Vurdering> found1 = vurderingRepo.findByStedId(1);
         List<Vurdering> found2 = vurderingRepo.findByStedId(5);
 
-        assertTrue(found1.get(0) instanceof TeleslyngeVurdering);
-        assertTrue(found2.get(0) instanceof LydforholdVurdering);
+        assertEquals(found1.get(0).getVurderingsType(), VurderingsType.Informasjon);
+        assertEquals(found2.get(0).getVurderingsType(), VurderingsType.Teleslynge);
 
         assertEquals(1, found1.size());
         assertEquals(1, found2.size());

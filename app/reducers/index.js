@@ -4,6 +4,7 @@ import user from "./userReducer";
 import reviewList from "./reviewList";
 import newReview from "./newReview";
 import propertiesInformation from "./propertiesInformationReducer";
+import userReviewList from './userReviewList';
 
 export default combineReducers({
     selectedVenue,
@@ -11,4 +12,5 @@ export default combineReducers({
     reviewList,
     newReview,
     propertiesInformation,
+    userReviewList,
 });

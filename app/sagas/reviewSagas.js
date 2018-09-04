@@ -12,6 +12,9 @@ import {
     ON_FETCH_PREVIOUS_FAILED,
     ON_FETCH_PREVIOUS_SUCCESS,
     ON_FETCH_PREVIOUS_INIT,
+    ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT,
+    ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS,
+    ON_DELETE_REVIEWS_BY_PLACE_ID, ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS, ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED,
 } from "../actions/reviews";
 
 import {
@@ -52,6 +55,7 @@ function* fetchMyPreviousReviewsByPlaceId(action) {
         put({ type: ON_FETCH_PREVIOUS_INIT });
         const placeId = action.payload;
         const response = yield call (ReviewService.fetchMyPreviousReviews, placeId);
+        console.log("response2: ", response);
         yield put({ type: ON_FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
 
@@ -87,8 +91,48 @@ function* createReview(action) {
     }
 }
 
+function* fetchPreviousReviewsByUserInit(action) {
+    try {
+        const reviews = yield call(ReviewService.fetchPreviousReviewsByUser, action.payload);
+        yield put({ type: ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS, payload: reviews});
+    } catch(e) {
+
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
+            // Todo: handle timeout error
+        } else {
+            // Todo: handle fetchPreviousReviewsByUser error
+            console.log(e);
+        }
+    }
+}
+
+function* deleteReviewsByPlaceId(action) {
+    try {
+        const placeId = action.payload;
+        const deleted = yield call(ReviewService.deleteReviewsByPlaceId, placeId);
+        console.log("deleted: ", deleted);
+        yield put({ type: ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS, payload: placeId });
+    } catch(e) {
+        if(e.response && e.response.status === 401) {
+            yield put({ type: ON_SIGN_OUT });
+        } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
+            // Todo: handle timeout error
+            console.log("ECONNABORTED");
+        } else {
+            // Todo: handle fetchPreviousReviewsByUser error
+            console.log(e);
+        }
+
+        yield put({ type: ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED });
+    }
+}
+
 export const watchReviewSagas = [
   takeEvery(ON_PLACE_REVIEWS_REQUESTED, fetchReviewsByPlaceId),
   takeEvery(ON_FETCH_PREVIOUS_REQUESTED, fetchMyPreviousReviewsByPlaceId),
   takeEvery(ON_CREATE_REVIEW, createReview),
+  takeEvery(ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT, fetchPreviousReviewsByUserInit),
+  takeEvery(ON_DELETE_REVIEWS_BY_PLACE_ID, deleteReviewsByPlaceId)
 ];
