@@ -10,7 +10,7 @@ const ReviewOptionButton = ({
   selectedValue,
   onOptionSelected
 }) => {
-  const isPositive = buttonValue;
+  const isPositive = buttonValue > 0;
   const isSelected = buttonValue === selectedValue;
 
   const color =
@@ -24,9 +24,9 @@ const ReviewOptionButton = ({
   return (
     <TouchableHighlight
       onPress={() =>
-        onOptionSelected("value", !isSelected ? buttonValue : undefined)
+        onOptionSelected("value", !isSelected ? buttonValue : 0)
       }
-      style={{ flex: 1 }}
+      style={{ flex: 1, borderRadius: 10 }}
     >
       <View
         style={[
@@ -54,8 +54,8 @@ const ReviewOptionButton = ({
 };
 
 ReviewOptionButton.propTypes = {
-  buttonValue: propTypes.bool.isRequired,
-  selectedValue: propTypes.bool,
+  buttonValue: propTypes.number.isRequired,
+  selectedValue: propTypes.number,
   onOptionSelected: propTypes.func.isRequired
 };
 

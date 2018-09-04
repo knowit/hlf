@@ -3,8 +3,10 @@ import {
     ON_FETCH_REVIEWS_SUCCESS,
     ON_FETCH_PREVIOUS_SUCCESS,
     ON_CREATE_REVIEW_SUCCESS,
-    ON_CREATE_REVIEW_INIT
+    ON_CREATE_REVIEW_INIT, ON_UPDATE_REVIEW_SUCCESS
 } from "../actions/reviews";
+
+import { deserialize } from "../deserializer/ReviewDeserializer";
 
 const defaultState = () =>
     properties.reduce((obj, property) => {
@@ -23,20 +25,16 @@ export default (
     },
     action
 ) => {
-
     let data = defaultState();
+    let vurderingsType = "";
+    let review = {};
+    let propertyInputs = {};
 
     switch (action.type) {
 
         case ON_FETCH_PREVIOUS_SUCCESS:
-            console.log(action.payload);
             action.payload.forEach(review => {
-                if(review.vurderingsType) {
-                    data[review.vurderingsType] = {
-                      comment: review.kommentar,
-                      value: review.rangering,
-                    };
-                }
+                if(review.vurderingsType) data[review.vurderingsType] = deserialize(review);
             });
 
             return { propertyInput: data, hasLoaded: true, isSubmitting: false };
@@ -46,10 +44,7 @@ export default (
             for (let reviewId in action.payload) {
                 const review = action.payload[reviewId];
 
-                if(review.vurderingsType) data[review.vurderingsType] = {
-                    comment: review.kommentar,
-                    value: review.rangering
-                };
+                if(review.vurderingsType) data[review.vurderingsType] = deserialize(review);
             }
 
             return { propertyInput: data, hasLoaded: true, isSubmitting: false };
@@ -59,24 +54,29 @@ export default (
             return { ...state, isSubmitting: true };
 
         case ON_CREATE_REVIEW_SUCCESS:
+            vurderingsType = action.payload.vurderingsType;
+            review = deserialize(action.payload);
 
-            console.log("action.payload: ", action.payload);
-
-            const { kommentar, rangering, vurderingsType } = action.payload;
-
-            const nextState = { comment: kommentar, value: rangering };
-
-            const propertyInputs = {
+            propertyInputs = {
                 ...state.propertyInput,
             };
 
-            propertyInputs[vurderingsType] = nextState;
+            propertyInputs[vurderingsType] = review;
 
-            console.log("propertyInputs: ", propertyInputs);
+            return { ...state, propertyInput: propertyInputs, isSubmitting: false, hasLoaded: true };
 
+        case ON_UPDATE_REVIEW_SUCCESS:
+            vurderingsType = action.payload.vurderingsType;
+            review = deserialize(action.payload);
+            propertyInputs = {
+                ...state.propertyInput,
+            };
+            propertyInputs[vurderingsType] = review;
+            
             return { ...state, propertyInput: propertyInputs, isSubmitting: false, hasLoaded: true };
 
         default:
             return state;
     }
 };
+

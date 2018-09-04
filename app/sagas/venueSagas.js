@@ -12,8 +12,6 @@ function* fetchVenueData(action) {
 
         const payload = Object.assign(venueData, { reviews: reviews});
 
-        console.log("inside fetchVenueData - result: ", payload);
-
         yield put({ type: ON_VENUE_SELECTED, payload });
     } catch(e) {
 

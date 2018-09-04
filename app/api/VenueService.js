@@ -16,18 +16,14 @@ export default {
             "place_id"
         ]);
 
-        console.log("google response: ", response);
-
         if (googleObject.photos)
             googleObject.photos = googleObject.photos.slice(0, 1);
 
-        console.log("found google object: ", googleObject);
         return googleObject;
     },
 
     async fetchReviews(placeId) {
         const response = await authenticated.get(`/steder/place/${placeId}/totalvurdering/0`);
-        console.log("found reviews: ", response.data);
         return response.data;
     },
 

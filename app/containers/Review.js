@@ -32,12 +32,11 @@ export default class Review extends Component {
                         </SlimText>
                     </View>
                 </View>
-                {Object.keys(review.vurderinger).map(key => {
-                    const propertyReview = review.vurderinger[key];
-                    const capitalKey = key.charAt(0).toUpperCase() + key.slice(1);
 
+                {Object.values(review.vurderinger).map(value => {
+                    const propertyReview = value;
                     return this.renderProperty(
-                        properties.filter(prop => prop.name === capitalKey)[0],
+                        properties.filter(prop => prop.name === value.type)[0],
                         propertyReview
                     );
                 })}
@@ -61,18 +60,18 @@ export default class Review extends Component {
     }
 
     renderProperty(property, review) {
-        const {rangering} = review;
+        const {value} = review;
         return (
             <View key={property.name}>
                 <View style={[styles.row, styles.property]}>
                     <PropertyTitle property={property} size={22} style={{flex: 1}}/>
                     <MaterialIcons
-                        name={rangering ? "thumb-up" : "thumb-down"}
-                        color={rangering ? colors.positiveColor : colors.negativeColor}
+                        name={value ? "thumb-up" : "thumb-down"}
+                        color={value ? colors.positiveColor : colors.negativeColor}
                         size={23}
                     />
                 </View>
-                {this.state.showComments && review.kommentar ? (
+                {this.state.showComments && review.comment ? (
                     <SlimText
                         style={{
                             fontStyle: "italic",
@@ -80,7 +79,7 @@ export default class Review extends Component {
                             marginBottom: COMPONENT_SPACING
                         }}
                     >
-                        {review.kommentar}
+                        {review.comment}
                     </SlimText>
                 ) : null}
             </View>

@@ -16,11 +16,8 @@ function* fetchAccountInformation() {
         const result = yield call(UserService.getAccountInformation, token);
 
         if(result.status === 200) {
-            console.log("token: ", token);
-            console.log("result: ", result);
             yield put({ type: ON_LOGIN_SUCCESS, payload: result.data });
         } else {
-            console.log("could not fetch account information: ", result);
             yield put({ type: ON_ACCOUNT_INFORMATION_FAILED });
         }
 

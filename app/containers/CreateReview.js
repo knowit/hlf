@@ -5,7 +5,7 @@ import {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import { onCreateReview, onDestroyReviewValue, onFetchPreviousRequested } from "../actions/reviews";
+import { onCreateReview, onFetchPreviousRequested, onUpdateReview } from "../actions/reviews";
 import {connect} from "react-redux";
 import Loading from "../components/Loading";
 import {onOpenPropertyInformationModal} from "../actions/propertiesModal";
@@ -23,7 +23,6 @@ class CreateReview extends Component {
     }
 
     componentDidMount() {
-        console.log("CreateReview.componentDidMount - this.props.selectedVenue: ", this.props.selectedVenue);
         this.props.onFetchPreviousRequested(this.props.selectedVenue.place_id);
     }
 
@@ -57,27 +56,37 @@ class CreateReview extends Component {
         );
     }
 
+    convertReviewIntegerValueToEnum(review) {
+        if( review === 0 ) return "INGEN";
+        if( review === -1) return "NED";
+        return "OPP";
+    }
+
     onReviewSubmit(reviewValues) {
-        if (this.props.newReview.isSubmitting) return;
 
-        const { propertyInput } = this.props.newReview;
+        const { newReview, onUpdateReview, selectedVenue, onCreateReview } = this.props;
+
+        if ( newReview.isSubmitting) return;
+
         const { currentProperty } = this.state;
-        const currentPropertyInput = propertyInput[currentProperty];
+        const currentPropertyInput = newReview.propertyInput[currentProperty];
 
-        if(currentPropertyInput.value === reviewValues.value) {
-            // delete current review-value
-            this.props.onDestroyReviewValue(currentPropertyInput)
+        const review = {
+            rangering: this.convertReviewIntegerValueToEnum(reviewValues.rangering),
+            kommentar: reviewValues.kommentar,
+            sted: {
+                placeId: selectedVenue.place_id,
+            },
+            vurderingsType: currentProperty,
+        };
+
+        if(reviewValues.rangeringHasChanged) {
+            review.id = currentPropertyInput.id;
+            onUpdateReview(review);
+            return;
         }
 
-        console.log("sted: ", this.props.selectedVenue);
-
-        const reviewBody = Object.assign(reviewValues, {
-            sted: {
-                placeId: this.props.selectedVenue.place_id
-            },
-            vurderingsType: this.state.currentProperty
-        });
-        this.props.onCreateReview(reviewBody);
+        onCreateReview(review);
     }
 
     onPropertySelect(propertyName) {
@@ -87,7 +96,7 @@ class CreateReview extends Component {
 
 export default connect(
     ({ selectedVenue, newReview, propertiesInformation }) => ({ selectedVenue, newReview, propertiesInformation }),
-    { onCreateReview, onDestroyReviewValue, onFetchPreviousRequested, onOpenPropertyInformationModal}
+    { onCreateReview, onFetchPreviousRequested, onOpenPropertyInformationModal, onUpdateReview }
 )(CreateReview);
 
 const styles = StyleSheet.create({});

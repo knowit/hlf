@@ -61,7 +61,7 @@ class ReviewProperty extends Component {
           <SlimText style={styles.desc}>{currentProperty.description}</SlimText>
           <View style={styles.buttonRow}>
             <ReviewOptionButton
-              buttonValue={false}
+              buttonValue={-1}
               selectedValue={value}
               onOptionSelected={this.onReviewSubmit}
             />
@@ -77,7 +77,7 @@ class ReviewProperty extends Component {
                   />
               </TouchableHighlight>
             <ReviewOptionButton
-              buttonValue={true}
+              buttonValue={1}
               selectedValue={value}
               onOptionSelected={this.onReviewSubmit}
             />
@@ -119,9 +119,11 @@ class ReviewProperty extends Component {
       : this.props.currentProperty.comment;
     const value =
       source === "value" ? newValue : this.props.currentProperty.value;
+    const rangeringHasChanged = this.props.currentProperty.value && this.props.currentProperty.value !== newValue;
     const body = {
       kommentar: comment,
-      rangering: value === undefined ? null : value
+      rangering: value === undefined ? null : value,
+      rangeringHasChanged: rangeringHasChanged,
     };
     if (commentEdited)
       this.setState({ commentEdited: false, submittedComment: comment });
