@@ -32,7 +32,7 @@ CREATE TABLE vurdering(
     registrator integer,
     sted integer,
     vurderings_type vurderings_type,
-    rangering boolean,
+    rangering smallint,
     primary key (id),
     foreign key (sted) references sted(id),
     foreign key(registrator) references bruker(id)

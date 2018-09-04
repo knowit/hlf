@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -77,11 +76,15 @@ public class VurderingServiceImpl implements VurderingService {
     @Override
     public Vurdering createVurdering(Vurdering vurdering, String authorization) {
 
+        logger.info("createVurdering: " + vurdering.toString());
+
         Bruker bruker = brukerService.updateBruker(authorization);
         vurdering.setRegistrator(bruker);
+        VurderingsType vurderingsType = vurdering.getVurderingsType();
 
         Optional<Vurdering> optionalVurdering = vurderingRepo.findByStedPlaceIdAndRegistratorId(vurdering.getSted().getPlaceId(), bruker.getId())
                 .stream()
+                .filter(v -> v.getVurderingsType().equals(vurderingsType))
                 .findFirst();
 
         if(optionalVurdering.isPresent()) {
@@ -94,7 +97,9 @@ public class VurderingServiceImpl implements VurderingService {
         }
 
         vurdering.setDato(LocalDate.now());
-        return vurderingRepo.save(vurdering);
+        vurdering = vurderingRepo.save(vurdering);
+        logger.info("vurdering has been created: " + vurdering.toString());
+        return vurdering;
     }
 
     @Override
@@ -102,6 +107,7 @@ public class VurderingServiceImpl implements VurderingService {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
         Vurdering vurdering = getVurderingFromId(id);
         if(vurdering.getRegistrator().getId().equals(brukerId)){
+            vurdering.setRangering(endring.getRangering());
             vurdering.setKommentar(endring.getKommentar());
             vurdering.setRangering(endring.getRangering());
             vurdering.setDato(LocalDate.now());
@@ -109,6 +115,12 @@ public class VurderingServiceImpl implements VurderingService {
         } else{
             throw new AccessDeniedException("alter", "vurdering", "id", id);
         }
+    }
+
+    @Override
+    public Vurdering removeRangeringFromVurdering(Integer vurderingId, String authorization) {
+        Vurdering vurdering = vurderingRepo.findById(vurderingId).orElseThrow(() ->  new ResourceNotFoundException("Vurdering", "id", vurderingId));
+        return vurderingRepo.save(vurdering);
     }
 
     @Override

@@ -38,4 +38,6 @@ public interface VurderingService {
     List<Integer> getRegistratorsByPlaceId(String placeId);
 
     Map<String, Object> getTotalVurderingStatistikk(String placeId);
+
+    Vurdering removeRangeringFromVurdering(Integer vurderingId, String authorization);
 }

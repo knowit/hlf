@@ -1,13 +1,10 @@
 package no.hlf.godlyd.api.model;
 
 import com.fasterxml.jackson.annotation.*;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -15,6 +12,7 @@ import java.time.LocalDate;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @JsonIgnoreProperties(value = "dato", allowGetters = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Vurdering implements Serializable {
 
     @Id
@@ -37,9 +35,11 @@ public class Vurdering implements Serializable {
     @Enumerated(EnumType.STRING)
     private VurderingsType vurderingsType;
 
-    private boolean rangering;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(columnDefinition = "smallint")
+    private Rangering rangering;
 
-    public Vurdering(Sted sted, Bruker registrator, String kommentar, VurderingsType vurderingsType, boolean rangering) {
+    public Vurdering(Sted sted, Bruker registrator, String kommentar, VurderingsType vurderingsType, Rangering rangering) {
         this.sted = sted;
         this.registrator = registrator;
         this.kommentar = kommentar;
@@ -84,11 +84,20 @@ public class Vurdering implements Serializable {
         this.vurderingsType = vurderingsType;
     }
 
-    public boolean getRangering() {
+    public Rangering getRangering() {
         return rangering;
     }
 
-    public void setRangering(boolean rangering) {
+    public void setRangering(Rangering rangering) {
         this.rangering = rangering;
+    }
+
+    @Override
+    public String toString() {
+        return "Vurdering{" +
+                ", kommentar='" + kommentar + '\'' +
+                ", vurderingsType=" + vurderingsType +
+                ", rangering=" + rangering +
+                '}';
     }
 }
