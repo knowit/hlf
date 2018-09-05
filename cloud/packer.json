@@ -23,9 +23,7 @@
       "environment_vars": [
         "GCPCREDS_FILENAME={{user `gcpcreds_filename`}}",
         "DATASOURCE_USER={{user `datasource_user`}}",
-        "DATASOURCE_PASSWORD={{user `datasource_password`}}",
-        "DATASOURCE_IP={{user `datasource_ip`}}",
-        "DATASOURCE_PORT={{user `datasource_port`}}"
+        "DATASOURCE_PASSWORD={{user `datasource_password`}}"
       ]
     },
     {

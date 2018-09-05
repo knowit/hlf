@@ -8,11 +8,21 @@ ARG DATASOURCEPASSWORD
 ARG AUTH0CLIENTSECRET
 ARG AUTH0MANAGEMENTCLIENTSECRET
 
-ENV DATASOURCE_PASSWORD=$DATASOURCEPASSWORD AUTH0_CLIENT_SECRET=$AUTH0CLIENTSECRET AUTH0_MANAGEMENT_CLIENT_SECRET=$AUTH0MANAGEMENTCLIENTSECRET
-ENV DATASOURCE_USER="hlf" POSTGRES_DB="godlyd"
-ENV AUTH0_DOMAIN="godlydpatruljen.eu.auth0.com" AUTH0_ISSUER="https://godlydpatruljen.eu.auth0.com/" AUTH0_TOKEN_URL="https://godlydpatruljen.eu.auth0.com/oauth/token"
-ENV AUTH0_CLIENT_ID="e0smYR6JB35rNEaCAZw5vE3EHzd4mPCa" AUTH0_AUDIENCE="https://dev.api.godlydpatruljen.no/"
-ENV AUTH0_MANAGEMENT_CLIENT_ID="FVB9lZLmvR8KqezPEwMvZQ4VgyLut7nM" AUTH0_MANAGEMENT_AUDIENCE="https://godlydpatruljen.eu.auth0.com/api/v2/"
+ENV POSTGRES_DB                     "godlyd"
+ENV DATASOURCE_USER                 "hlf"
+ENV DATASOURCE_PASSWORD             $DATASOURCEPASSWORD
+
+ENV AUTH0_DOMAIN                    "godlydpatruljen.eu.auth0.com"
+ENV AUTH0_ISSUER                    "https://godlydpatruljen.eu.auth0.com/"
+ENV AUTH0_TOKEN_URL                 "https://godlydpatruljen.eu.auth0.com/oauth/token"
+
+ENV AUTH0_AUDIENCE                  "https://dev.api.godlydpatruljen.no/"
+ENV AUTH0_CLIENT_ID                 "e0smYR6JB35rNEaCAZw5vE3EHzd4mPCa"
+ENV AUTH0_CLIENT_SECRET             $AUTH0CLIENTSECRET
+
+ENV AUTH0_MANAGEMENT_AUDIENCE       "https://godlydpatruljen.eu.auth0.com/api/v2/"
+ENV AUTH0_MANAGEMENT_CLIENT_ID      "FVB9lZLmvR8KqezPEwMvZQ4VgyLut7nM"
+ENV AUTH0_MANAGEMENT_CLIENT_SECRET  $AUTH0MANAGEMENTCLIENTSECRET
 
 # Add a volume pointing to /tmp
 VOLUME /tmp

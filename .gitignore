@@ -19,6 +19,10 @@ venv/
 env/
 
 
+# Security
+cloud/packer_files/packer_vars.json
+
+
 # misc
 tmp/
 
