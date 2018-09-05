@@ -10,37 +10,42 @@ export default {
         return response.data;
     },
 
-    async fetchReviews(placeId) {
-        const response = await authenticated.get(END_POINT + `place/${placeId}`);
-        const registrators = {};
+    async fetchReviews(payload) {
+        const placeId = payload.placeId;
+        const date = payload.date;
+        const { number, size } = payload.pageable;
+        const response = await authenticated.get(END_POINT + `place/${placeId}?page=${number}&size=${size}`, {'Dato': date});
         const reviews = response.data.content;
+        const places = {};
+        const registrators = {};
+
+        reviews
+            .filter(review => review.sted.id)
+            .map(review => review.sted)
+            .forEach(place => places[place.id] = place);
+
+        reviews
+            .filter(review => !review.sted.id)
+            .forEach(review => review.sted = places[review.sted]);
 
         reviews
             .filter(review => review.registrator.id)
             .map(review => review.registrator)
             .forEach(registrator => registrators[registrator.id] = registrator);
 
-        const metaData = {
-            first: response.data.first,
-            last: response.data.last,
-            number: response.data.number,
-            numberOfElements: response.data.numberOfElements,
-            size: response.data.size,
-            totalElements: response.data.totalElements,
-            totalPages: response.data.totalPages
-        };
-
         reviews
             .filter(review => !review.registrator.id)
             .forEach(review => review.registrator = registrators[review.registrator]);
 
-        const result = { reviews, metaData };
-
-        return result;
+        return { reviews, metaData: response.data };
     },
 
     async createReview(reviewBody) {
-        return await authenticated.post(END_POINT, reviewBody);
+        const response = await authenticated.post(END_POINT, reviewBody);
+        const review = response.data;
+        const googleInfo = await VenueService.fetchGooglePlaceObject(review.sted.placeId);
+        review.sted.name = googleInfo.name;
+        return review;
     },
 
     async updateReview(review) {
@@ -57,22 +62,10 @@ export default {
         const date = payload.date;
 
         const response = await authenticated.get(END_POINT + `bruker?page=${number}&size=${size}`, {'Dato': date});
-
-        const metaData = {
-            first: response.data.first,
-            last: response.data.last,
-            number: response.data.number,
-            numberOfElements: response.data.numberOfElements,
-            size: response.data.size,
-            totalElements: response.data.totalElements,
-            totalPages: response.data.totalPages
-        };
-
+        const reviews = [...response.data.content];
 
         // Duplicates of review.sted and review.registrator is not delivered as an object. It is only delivered as a
         // reference to the objects id. We want it to be included in all reviews so to fix it:
-
-        const reviews = [...response.data.content];
         const places = {};
 
         reviews
@@ -103,9 +96,7 @@ export default {
             .filter(review => !review.registrator.id)
             .forEach(review => review.registrator = registrators[review.reigstrator]);
 
-        const result = { reviews, metaData };
-
-        return result;
+        return { reviews, metaData: response.data };
     },
 
     // Delete all of the Reviews of a User connected to the Place

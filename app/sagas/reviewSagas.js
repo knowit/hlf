@@ -4,7 +4,6 @@ import {
     ON_CREATE_REVIEW,
     ON_CREATE_REVIEW_INIT,
     ON_CREATE_REVIEW_SUCCESS,
-    ON_FETCH_REVIEWS_INIT,
     ON_FETCH_REVIEWS_SUCCESS,
     ON_FETCH_REVIEWS_FAILED,
     ON_PLACE_REVIEWS_REQUESTED,
@@ -34,9 +33,7 @@ import {
 function* fetchReviewsByPlaceId(action) {
 
     try {
-        const placeId = action.payload;
-        yield put ({ type: ON_FETCH_REVIEWS_INIT });
-        const response = yield call(ReviewService.fetchReviews, placeId);
+        const response = yield call(ReviewService.fetchReviews, action.payload);
         yield put.resolve({ type: ON_FETCH_REVIEWS_SUCCESS, payload: response });
 
     } catch(e) {
@@ -69,8 +66,7 @@ function* createReview(action) {
     try {
         put({ type: ON_CREATE_REVIEW_INIT });
         const reviewBody = action.payload;
-        const response = yield call(ReviewService.createReview, reviewBody);
-        const review = response.data;
+        const review = yield call(ReviewService.createReview, reviewBody);
         yield put({ type: ON_CREATE_REVIEW_SUCCESS, payload: review });
         yield put({ type: ON_VENUE_INFORMATION_REQUESTED, payload: reviewBody.sted.placeId});
     } catch (e) {

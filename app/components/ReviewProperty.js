@@ -19,9 +19,11 @@ class ReviewProperty extends Component {
     this.state = {
       newComment: "",
       submittedComment: "",
-      commentEdited: false
+      commentEdited: false,
+      commentInputHeight: 60
     };
     this.onReviewSubmit = this.onReviewSubmit.bind(this);
+    this.commentInputRef = React.createRef();
   }
 
   componentDidMount() {
@@ -85,15 +87,19 @@ class ReviewProperty extends Component {
         </View>
         <View style={styles.lower}>
           <TextInput
+            ref={this.commentInputRef}
             placeholder="Skriv en kommentar..."
             style={styles.commentInput}
             underlineColorAndroid={colors.transparentColor}
             placeholderTextColor={colors.secondaryTextColor}
             multiline={true}
             numberOfLines={3}
+            maxHeight={this.state.commentInputHeight}
+            minHeight={this.state.commentInputHeight}
             value={this.state.newComment}
+            onFocus={this.handleCommentInputFocus}
             onChangeText={text =>
-              this.setState({ commentEdited: true, newComment: text })
+              this.setState({ commentEdited: true, newComment: text, commentInputHeight: 60 })
             }
           />
           <TouchableHighlight onPress={() => this.onReviewSubmit("comment")}>
@@ -111,6 +117,15 @@ class ReviewProperty extends Component {
       </View>
     );
   }
+
+  handleCommentInputFocus = () => {
+    const isFocused = this.commentInputRef.current.isFocused();
+    if(isFocused) {
+        this.setState({ commentInputHeight: 120 });
+    } else {
+        this.setState({ commentInputHeight: 60 });
+    }
+  };
 
   onReviewSubmit(source, newValue) {
     const { commentEdited, newComment } = this.state;
@@ -173,7 +188,7 @@ const styles = StyleSheet.create({
   commentInput: {
     fontSize: 20,
     flex: 1,
-    padding: 10,
+    padding: 0,
     color: colors.primaryTextColor,
     textAlignVertical: "top",
     fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined

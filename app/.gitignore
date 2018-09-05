@@ -22,6 +22,11 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+# CocoaPods
+ios/Podfile.lock
+ios/Pods
+ios/*.xcworkspace
+
 # Android/IntelliJ
 #
 build/
@@ -29,6 +34,9 @@ build/
 .gradle
 local.properties
 *.iml
+
+# iOS
+ios/Pods
 
 # node.js
 #
