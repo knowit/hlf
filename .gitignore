@@ -21,6 +21,7 @@ env/
 
 # Security
 cloud/packer_files/packer_vars.json
+api/.env
 
 
 # misc

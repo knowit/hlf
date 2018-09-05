@@ -1,9 +1,7 @@
 {
   "variables": {
     "gcpcreds_location": null,
-    "gcpcreds_filename": null,
-    "datasource_user": null,
-    "datasource_password": null
+    "gcpcreds_filename": null
   },
 
   "builders": [
@@ -21,9 +19,7 @@
       "type": "shell",
       "script": "packer_files/write_to_bashrc.sh",
       "environment_vars": [
-        "GCPCREDS_FILENAME={{user `gcpcreds_filename`}}",
-        "DATASOURCE_USER={{user `datasource_user`}}",
-        "DATASOURCE_PASSWORD={{user `datasource_password`}}"
+        "GCPCREDS_FILENAME={{user `gcpcreds_filename`}}"
       ]
     },
     {
@@ -35,6 +31,11 @@
       "type": "file",
       "source": "../api/docker-compose.yml",
       "destination": "/tmp/docker-compose.yml"
+    },
+    {
+      "type": "file",
+      "source": "../api/.env",
+      "destination": "/tmp/.env"
     },
     {
       "type": "file",

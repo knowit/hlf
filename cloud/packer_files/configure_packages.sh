@@ -3,6 +3,7 @@
 # Move files uploaded by Packer
 sudo mv /tmp/nginx.conf /etc/nginx/
 sudo mv /tmp/docker-compose.yml ~/
+sudo mv /tmp/.env ~/
 sudo mkdir ~/.gc
 sudo mv /tmp/$GCPCREDS_FILENAME ~/.gc/
 

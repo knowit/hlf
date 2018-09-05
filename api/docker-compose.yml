@@ -4,6 +4,8 @@ services:
     image: eu.gcr.io/godlydpatruljen/server-hlf-dev:latest
 #    depends_on:
 #    - db
+    env_file:
+      - ./.env
     networks:
       godlydnett:
         ipv4_address: 172.12.17.10
