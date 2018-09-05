@@ -11,12 +11,18 @@ import {connect} from "react-redux";
 import Loading from "../components/Loading";
 import { onPlaceReviewsRequested } from "../actions/reviews";
 import SlimText from "../components/SlimText";
+import moment from "moment";
 
 class VenueReviews extends Component {
     constructor(props) {
         super(props);
         this.state = {showReviews: false};
         this.nextId = 0;
+
+        const reviewDurabilityInMonths = 3;
+        this.state = {
+            date: moment().subtract(reviewDurabilityInMonths, 'months').format('YYYY-MM-DD')
+        };
     }
 
     render() {
@@ -45,7 +51,8 @@ class VenueReviews extends Component {
         return (
             <TouchableHighlight
                 onPress={() => {
-                    this.props.onPlaceReviewsRequested(this.props.selectedVenue.place_id);
+                    //this.props.onPlaceReviewsRequested(this.props.selectedVenue.place_id);
+                    this._fetchReviews();
                     this.setState({showReviews: true});
                 }}
                 style={styles.showReviewArrow}
@@ -59,10 +66,26 @@ class VenueReviews extends Component {
         );
     }
 
+    _fetchReviews = () => {
+        if(this.props.metadata.last) {
+            return;
+        }
+
+        const size = this.props.metadata.size;
+        const number = this.props.metadata.number + 1;
+        const payload = {
+            placeId: this.props.selectedVenue.place_id,
+            pageable: { size, number },
+            date: this.state.date
+        };
+
+        this.props.onPlaceReviewsRequested(payload);
+    };
+
     _keyExtractor = (item) => item.id.toString();
 
     renderReviewList() {
-        const {reviewsList, isLoading} = this.props.reviewList;
+        const {reviewsList, isLoading} = this.props;
 
         if (isLoading) {
             return <Loading inline={true}/>;
@@ -78,6 +101,8 @@ class VenueReviews extends Component {
         return (
             <FlatList
                 keyExtractor={this._keyExtractor}
+                onEndReached={this._fetchReviews}
+                onEndTreshold={1}
                 data={reviewsList}
                 renderItem={({item}) => <Review review={item}/>}
             />
@@ -85,11 +110,11 @@ class VenueReviews extends Component {
     }
 }
 
-export default connect(({reviewList}) => ({reviewList}), { onPlaceReviewsRequested })(VenueReviews);
+export default connect(({reviewList}) => ({ ...reviewList}), { onPlaceReviewsRequested })(VenueReviews);
 
 const styles = StyleSheet.create({
     showReviewArrow: {
         width: "100%",
         alignItems: "center"
-    }
+    },
 });

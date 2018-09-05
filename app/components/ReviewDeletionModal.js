@@ -6,7 +6,9 @@ import CancelButton from "./CancelButton";
 
 export default class ReviewDeletionModal extends Modal {
 
-    _onCancel = () => this.props.onHideModal(false);
+    _onCancel = () => {
+        this.props.onHideModal(false)
+    };
     _onConfirm = () => this.props.onHideModal(true);
 
     render() {
@@ -16,6 +18,9 @@ export default class ReviewDeletionModal extends Modal {
             <Modal
                 animationType="slide"
                 transparent={true}
+                onRequestClose={() => {
+                    this._onCancel();
+                }}
                 visible={modalVisible}>
                 <View style={ styles.modalOuter }>
                     <View style={ styles.modalInner }>

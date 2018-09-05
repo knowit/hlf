@@ -1,4 +1,5 @@
 import {
+    ON_CREATE_REVIEW_SUCCESS,
     ON_DELETE_REVIEWS_BY_PLACE_ID, ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED, ON_DELETE_REVIEWS_BY_PLACE_ID_SUCCESS,
     ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED,
     ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT,
@@ -7,8 +8,6 @@ import {
     ON_SHOW_REVIEW_DELETION_MODAL,
 } from "../actions/reviews";
 import {deserialize} from "../deserializer/ReviewDeserializer";
-
-
 
 export default (
     state = {
@@ -19,7 +18,7 @@ export default (
         metadata: {
             first: true,
             last: false,
-            number: 0,
+            number: -1,
             numberOfElements: -1,
             size: 5,
             totalElements: -1,
@@ -30,6 +29,8 @@ export default (
     },
     action
 ) => {
+    const reviews = [...state.reviews];
+
     switch (action.type) {
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_INIT:
@@ -42,7 +43,6 @@ export default (
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_SUCCESS:
             const metadata = action.payload.metaData;
-            const reviews = [...state.reviews];
 
             action.payload.reviews.forEach(review => {
                 let foundReview;
@@ -66,6 +66,30 @@ export default (
                 hasLoaded: true,
                 isLoading: false,
                 metadata: metadata,
+            };
+
+        case ON_CREATE_REVIEW_SUCCESS:
+            const review = action.payload;
+
+            let foundReview;
+            if(foundReview = reviews.find(r => r.sted.id === review.sted.id)) {
+                foundReview.vurderinger.push(deserialize(review));
+            } else {
+                reviews.push({
+                    placeId: review.sted.placeId,
+                    sted: review.sted,
+                    registrator: review.registrator,
+                    vurderinger: [
+                        deserialize(review)
+                    ]
+                });
+            }
+
+            return {
+                ...state,
+                reviews: reviews,
+                hasLoaded: true,
+                isLoading: false,
             };
 
         case ON_FETCH_PREVIOUS_REVIEWS_BY_USER_FAILED:

@@ -2,6 +2,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import VenueService from '../api/VenueService';
 import { ON_VENUE_SELECTED, ON_VENUE_INFORMATION_REQUESTED } from "../actions/venue";
 import {ON_SIGN_OUT} from "../actions/account";
+import {ON_FETCH_REVIEWS_INIT} from "../actions/reviews";
 
 // worker Saga: will be fired on ACCOUNT_FETCH_REQUESTED actionsOld
 function* fetchVenueData(action) {
@@ -11,7 +12,7 @@ function* fetchVenueData(action) {
         const reviews = yield call(VenueService.fetchReviews, placeId);
 
         const payload = Object.assign(venueData, { reviews: reviews});
-
+        yield put ({ type: ON_FETCH_REVIEWS_INIT });
         yield put({ type: ON_VENUE_SELECTED, payload });
     } catch(e) {
 

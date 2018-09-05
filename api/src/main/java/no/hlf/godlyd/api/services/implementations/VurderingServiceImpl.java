@@ -50,8 +50,8 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public Page<Vurdering> getVurderingerByPlaceId(String placeId, LocalDate dato, Pageable pagable) {
-        return vurderingRepo.findByPlaceIdPage(placeId, dato, pagable);
+    public Page<Vurdering> getVurderingerByPlaceId(String placeId, Pageable pagable) {
+        return vurderingRepo.findByStedPlaceId(placeId, pagable);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     @Override
-    public Page<Vurdering> getVurderingerByBruker(String authorization, LocalDate dato, Pageable pageable) throws ResourceNotFoundException {
+    public Page<Vurdering> getVurderingerByBruker(String authorization, Pageable pageable) throws ResourceNotFoundException {
         Integer brukerId = brukerService.updateBruker(authorization).getId();
         return vurderingRepo.findByRegistratorId(brukerId, pageable);
     }

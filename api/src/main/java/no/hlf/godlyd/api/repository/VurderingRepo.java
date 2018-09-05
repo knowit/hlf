@@ -19,15 +19,13 @@ public interface VurderingRepo extends PagingAndSortingRepository<Vurdering, Int
     //Page<Vurdering> findByRegistratorIdPage(Integer registrationId, LocalDate dato, Pageable pageable);
 
     Page<Vurdering> findByRegistratorId(Integer registratorId, Pageable pageable);
+    Page<Vurdering> findByStedPlaceId(String placeId, Pageable pageable);
 
     List<Vurdering> findByStedId(Integer id);
 
     List<Vurdering> findByStedPlaceId(String placeId);
 
     List<Vurdering> findByStedPlaceIdAndDatoGreaterThan(String placeId, LocalDate dato);
-
-    @Query(value = "SELECT v FROM Vurdering v WHERE v.sted.placeId = ?1 AND v.dato > ?2 ORDER BY v.dato DESC")
-    Page<Vurdering> findByPlaceIdPage(String placeid, LocalDate dato, Pageable pagable);
 
     List<Vurdering> findLydforholdByStedPlaceId(String placeId);
 

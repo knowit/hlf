@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import colors, { COMPONENT_SPACING } from "../settings/defaultStyles";
 import PropTypes from "prop-types";
 
@@ -9,9 +10,10 @@ const ViewContainer = ({
   style,
   opaque,
   padding,
-  scrollable
+  scrollable,
+  keyboardAware,
 }) => {
-  const Component = scrollable ? ScrollView : View;
+  const Component = scrollable ? keyboardAware ? KeyboardAwareScrollView : ScrollView : View;
   return (
     <Component
       style={[

@@ -9,13 +9,13 @@ export default class Map extends Component {
         this.nextId = 0;
         this.state = {
             markers: [],
-            flex: 1,
+            flex: 0,
         };
     }
 
     componentWillMount() {
         //Hack to ensure the showsMyLocationButton is shown initially. Idea is to force a repaint
-        //setTimeout(() => this.setState({flex: 1}), 500);
+        setTimeout(() => this.setState({flex: 1}), 500);
     }
 
     componentDidMount() {
@@ -33,6 +33,7 @@ export default class Map extends Component {
                     flex: this.state.flex
                 }}
                 zoomEnabled={true}
+                zoomControlEnabled={true}
                 scrollEnabled={true}
                 cacheEnabled={false}
                 showsUserLocation={true}
