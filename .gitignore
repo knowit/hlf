@@ -44,9 +44,11 @@ lydpatruljen.key
 
 app/app.json
 
+.vscode
+
 
 # Terraform
-cloud/environment/**/.terraform/*
-cloud/environment/**/*.tfstate*
+**/.terraform/*
+*.tfstate
+*.tfstate.*
 
-.vscode
