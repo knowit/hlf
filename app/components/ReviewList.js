@@ -2,7 +2,7 @@ import React from "react";
 import {
     StyleSheet,
     FlatList,
-    View,
+    View, Modal,
 } from "react-native";
 import ReviewListItem from "./ReviewListItem";
 import { connect } from 'react-redux';
@@ -73,6 +73,7 @@ import ReviewDeletionModal from './ReviewDeletionModal';
                  <ReviewDeletionModal
                      title={(reviewToBeDeleted) ? reviewToBeDeleted.sted.name : ""}
                      modalVisible={showReviewDeletionModal}
+                     onRequestClose={this._handleModalClose}
                      onHideModal={this._handleModalClose} />
                  <FlatList
                      style={styles.reviewList}

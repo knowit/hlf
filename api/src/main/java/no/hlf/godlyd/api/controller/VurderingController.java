@@ -40,8 +40,7 @@ public class VurderingController {
                                                   @RequestHeader("Authorization") String auth,
                                                   @PageableDefault(direction = Sort.Direction.DESC, sort = "dato") Pageable pageable){
         logger.info("pageable.size = " + pageable.getPageSize() + ", pageable.page = " + pageable.getPageNumber());
-        LocalDate dato = LocalDate.parse(datoString);
-        return vurderingService.getVurderingerByBruker(auth, dato, pageable);
+        return vurderingService.getVurderingerByBruker(auth, pageable);
     }
 
     @GetMapping("/all/place/{placeId}")
@@ -54,10 +53,9 @@ public class VurderingController {
     @GetMapping("/place/{placeId}") //pagination
     public Page<Vurdering> getVurderingerByPlaceId(@PathVariable(value = "placeId") String placeId,
                                                    @RequestHeader(value = "Dato", defaultValue = "1970-01-01") String datoString,
-                                                   @PageableDefault(value=40, page = 0) Pageable pagable) {
-        logger.info("Pageable.value = " + pagable.getPageSize() + "\t Pageable.page = " + pagable.getPageNumber());
-        LocalDate dato = LocalDate.parse(datoString);
-        return vurderingService.getVurderingerByPlaceId(placeId, dato, pagable);
+                                                   @PageableDefault(direction = Sort.Direction.DESC, sort="dato") Pageable pageable) {
+        logger.info("Pageable.size = " + pageable.getPageSize() + "\t Pageable.page = " + pageable.getPageNumber());
+        return vurderingService.getVurderingerByPlaceId(placeId, pageable);
     }
 
     @GetMapping("/place/{placeId}/bruker")

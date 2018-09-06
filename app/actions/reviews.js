@@ -36,10 +36,10 @@ export function onFetchPreviousRequested(placeId) {
     }
 }
 
-export function onPlaceReviewsRequested(placeId) {
+export function onPlaceReviewsRequested(payload) {
     return {
         type: ON_PLACE_REVIEWS_REQUESTED,
-        payload: placeId
+        payload: payload
     }
 }
 

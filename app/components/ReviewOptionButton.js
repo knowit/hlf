@@ -14,7 +14,7 @@ const ReviewOptionButton = ({
   const isSelected = buttonValue === selectedValue;
 
   const color =
-    selectedValue === undefined
+    selectedValue === null
       ? colors.primaryTextColor
       : buttonValue !== selectedValue
         ? colors.secondaryTextColor

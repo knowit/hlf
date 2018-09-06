@@ -22,23 +22,24 @@ class VenueDetails extends Component {
         ? selectedVenue.photos[0].photo_reference
         : null;
     return (
-      <ViewContainer opaque={true} scrollable={true} flex={true} padding={0}>
-        <VenueImage
-          photoReference={photoReference}
-          onBackPress={this.props.navigation.navigate}
-        />
-        <VenueMenu
-          onScreenChange={newScreen =>
-            this.setState({ currentScreen: newScreen })
-          }
-          currentScreen={this.state.currentScreen}
-        />
-        {this.state.currentScreen == REVIEW_SCREEN ? (
-          <VenueReviews selectedVenue={selectedVenue} />
-        ) : (
-          <CreateReview selectedVenue={selectedVenue} />
-        )}
-      </ViewContainer>
+            <ViewContainer opaque={true} scrollable={true} keyboardAware={true} flex={true} padding={0}>
+                <VenueImage
+                    photoReference={photoReference}
+                    onBackPress={this.props.navigation.navigate}
+                />
+                <VenueMenu
+                    onScreenChange={newScreen =>
+                        this.setState({currentScreen: newScreen})
+                    }
+                    currentScreen={this.state.currentScreen}
+                />
+                {this.state.currentScreen == REVIEW_SCREEN ? (
+                    <VenueReviews selectedVenue={selectedVenue}/>
+                ) : (
+                    <CreateReview selectedVenue={selectedVenue}/>
+                )}
+            </ViewContainer>
+
     );
   }
 }

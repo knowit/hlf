@@ -4,29 +4,31 @@ import {
 } from "../actions/reviews";
 import { deserialize } from "../deserializer/ReviewDeserializer";
 
-export default (
-    state = {
-        reviewsList: [],
-        hasLoaded: false,
-        isLoading: false,
-        count: 0,
-        metadata: {
-            first: true,
-            last: false,
-            number: 0,
-            numberOfElements: -1,
-            size: 5,
-            totalElements: -1,
-            totalPages: -1
-        },
+const defaultState = {
+    reviewsList: [],
+    hasLoaded: false,
+    isLoading: false,
+    count: 0,
+    metadata: {
+        first: true,
+        last: false,
+        number: -1,
+        numberOfElements: -1,
+        size: 10,
+        totalElements: -1,
+        totalPages: -1
     },
+};
+
+export default (
+    state = {...defaultState},
     action
 ) => {
     switch (action.type) {
 
         case ON_FETCH_REVIEWS_INIT:
 
-            return { reviewsList: [], hasLoaded: false, isLoading: true };
+            return { ...defaultState };
 
         case ON_FETCH_REVIEWS_SUCCESS:
 
@@ -34,12 +36,18 @@ export default (
             const reviews = [...state.reviewsList];
 
             action.payload.reviews.forEach(review => {
+                const id = review.sted.placeId + '-' + review.registrator.id;
+                console.log(id);
+
                 let foundReview;
-                if(foundReview = reviews.find(r => r.registrator.id === review.registrator.id)) {
-                    foundReview.vurderinger.push(deserialize(review));
+                if(foundReview = reviews.find(r => r.id == id)) {
+                    let vurdering = deserialize(review);
+                    if(! foundReview.vurderinger.find(v => v.key === vurdering.key)) {
+                        foundReview.vurderinger.push(vurdering);
+                    }
                 } else {
                     reviews.push({
-                        id: review.sted.placeId + review.registrator.id,
+                        id: id,
                         placeId: review.sted.placeId,
                         sted: review.sted,
                         registrator: review.registrator,
@@ -49,6 +57,7 @@ export default (
             });
 
             return {
+                ...state,
                 reviewsList: reviews,
                 hasLoaded: true,
                 isLoading: false,
