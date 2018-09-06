@@ -84,13 +84,25 @@ def decrypt_secret_text(secret_text):
 
 def build_docker_image(plaintext_extra_args=None):
 
+    # Build .jar-file of the API
+    maven_install_command = ' '.join([
+        'mvn install dockerfile:build',
+        '-Dmaven.test.skip=true',
+        # '-Dspring.profiles.active=dev'
+    ])
+    os.system(maven_install_command)
+
+    # Get local Docker client
     docker_client = docker.from_env()
+    # Set standard build arguments for this project
     build_args_dict = {
         'path': API_FOLDER,
         'tag': DOCKER_TAG,
         'nocache': True
     }
 
+    # Check if extra build arguments are present,
+    # and if so, use them
     if plaintext_extra_args:
         extra_args = json.loads(plaintext_extra_args, encoding=ENCODING)
 
@@ -102,26 +114,23 @@ def build_docker_image(plaintext_extra_args=None):
         # Add extra build arguments to the dictionary
         build_args_dict['buildargs'] = extra_args
 
+    # Build Docker image
     docker_client.images.build(**build_args_dict)
 
-    maven_install_command = ' '.join([
-        'mvn install dockerfile:build',
-        '-Dmaven.test.skip=true',
-        # '-Dspring.profiles.active=dev'
-    ])
-    os.system(maven_install_command)
+
+def run(with_extra_build_args=False):
+    if with_extra_build_args:
+        secret_text = get_secret_text()
+        plaintext = decrypt_secret_text(secret_text)
+        build_docker_image(plaintext)
+    else:
+        build_docker_image()
 
 
 if __name__ == '__main__':
-    # Only build EITHER with OR without extra build arguments (plaintext).
-    # If building with extra arguments, uncomment the next three lines,
-    # and comment out the last line.
+    # Only build EITHER with OR without extra build arguments (plaintext),
+    # using secrets from Google Cloud.
 
-    # secret_text = get_secret_text()
-    # plaintext = decrypt_secret_text(secret_text)
-    # build_docker_image(plaintext)
-
-    # Don't use secrets from Google Cloud,
-    # but get them from '.env'-file instead
-    # ('.env' is injected via 'docker-compose up')
-    build_docker_image()
+    # Default is without.
+    # To change this, run with 'with_extra_build_args=True'.
+    run()

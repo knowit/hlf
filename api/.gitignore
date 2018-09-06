@@ -30,3 +30,6 @@ gc_auth.txt
 
 ### Logg ###
 godlyd_logg.file
+godlyd_logg.file.*
+godlyd.log
+godlyd.log.*
