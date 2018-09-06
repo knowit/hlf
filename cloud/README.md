@@ -11,7 +11,7 @@ The compute engine is built on an image created by Packer, based on Google's Con
 ## Setup
 ### Authorization
 It is recommended that a GCP service account is created with the required permissions, and that a key (`.json`-file) is created and downloaded for said service account.  
-It is possible to create service account with `Owner` status.
+It is possible to create service accounts with `Owner` status.
 
 After such a key has been downloaded, set the environment variable `GOOGLE_APPLICATION_CREDENTIALS` to the key's path. This will allow `gcloud` commands to access the proper resources.
 
