@@ -1,3 +1,10 @@
+terraform {
+  backend "gcs" {
+    bucket = "eu.artifacts.godlydpatruljen.appspot.com"
+    prefix = "terraform/state/dev"
+  }
+}
+
 #### DATA SOURCES ####
 data "google_compute_image" "server_image" {
   name = "packer-1536148141"
