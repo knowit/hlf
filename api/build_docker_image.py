@@ -2,7 +2,7 @@ import base64
 import docker
 import json
 import os
-from sys import exit, stderr
+from sys import argv, exit, stderr
 import googleapiclient.discovery
 from google.cloud import storage
 
@@ -131,6 +131,6 @@ if __name__ == '__main__':
     # Only build EITHER with OR without extra build arguments (plaintext),
     # using secrets from Google Cloud.
 
-    # Default is without.
-    # To change this, run with 'with_extra_build_args=True'.
-    run()
+    with_gcs_build_args = len(argv) > 1 and '--gcs-build-args' in argv[1:]
+    
+    run(with_gcs_build_args)
