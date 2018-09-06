@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {StyleSheet} from "react-native";
+import {Modal, StyleSheet} from "react-native";
 import properties from "../settings/propertyConfig";
 import {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
@@ -41,7 +41,7 @@ class CreateReview extends Component {
 
         return (
             <ViewContainer flex={true}>
-                <PropertyInformationModal />
+                <PropertyInformationModal onRequestClose={() => {}} />
                 <CreateReviewNavigation
                     currentProperty={currentProperty}
                     onPropertySelect={this.onPropertySelect}

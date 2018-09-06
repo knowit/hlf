@@ -20,6 +20,9 @@ class PropertyInformationModal extends Modal {
                 animationType="slide"
                 transparent={false}
                 style={{ flex: 1}}
+                onRequestClose={() => {
+                    onClosePropertyInformationModal()
+                }}
                 visible={modalVisible}>
                 <View style={{ marginTop: 22 }}>
                     <View style={ styles.modal }>
