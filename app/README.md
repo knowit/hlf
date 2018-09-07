@@ -78,10 +78,10 @@ NSString *googleMapsApiKey = @"DIN_API_KEY_HER";
 5. I XCode sin meny trykk på "godlydapp" for å få opp informasjon om prosjektet. Pass på at Signing Team er satt til "Hlf Hørselshemmedes Landsforbund". 
 
 6. Generer Sertifikater med Xcode: 
-  1. Xcode Preferences > Account > Manage Certificates (Generer både Development og Production/Distribution Sertifikater) 
-  2. Gå tilbake til nettleser der du var logget inn på Apple Utvikler konto. 
-  3. Velg "Certificates, IDs & Profiles" fra menyen til venstre. 
-  4. Se under "Certificates -> Development / Production" om dine sertifikater finnes der. 
+  * Xcode Preferences > Account > Manage Certificates (Generer både Development og Production/Distribution Sertifikater) 
+  * Gå tilbake til nettleser der du var logget inn på Apple Utvikler konto. 
+  * Velg "Certificates, IDs & Profiles" fra menyen til venstre. 
+  * Se under "Certificates -> Development / Production" om dine sertifikater finnes der. 
 
 7. Gå tilbake til Xcode og velg at bygging av app mot en generisk ios enhet. Trykk så på Product > Archive
 8. Etter at applikasjonen har blitt bygget kan man laste den opp til App Store Connect ved å trykke på den blå knappen. 
