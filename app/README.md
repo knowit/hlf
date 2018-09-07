@@ -17,25 +17,7 @@ Opprett secrets ( se neste punkt )
 
 ## Secrets
 
-### React-Native kode: 
-
-Prosjektet er avhengig av to secrets filer for å kjøre; settings/authConfig.js & app/credentials.js
-__authConfig.js__
-```javascript
-module.exports = {
-  domain: [SETT INN AUTH0 DOMENE],
-  clientId: [SETT INN AUTH0 CLIENT ID],
-  audience: [SETT INN AUTH0 AUDIENCE],
-  scope: [SETT INN AUTH0 SCOPE]
-};
-``` 
-
-__credentials.js__
-```javascript
-export const API_KEY = [google maps api key ]
-```
-
-### android kode:
+### Android kode:
 
 __android/secrets.properties__
 ```properties
@@ -57,6 +39,23 @@ __Key.m__
 NSString *googleMapsApiKey = @"google maps api key";
 ``` 
 
+### React-Native kode: 
+
+Prosjektet er avhengig av to secrets filer for å kjøre; settings/authConfig.js & app/credentials.js
+__authConfig.js__
+```javascript
+module.exports = {
+  domain: [SETT INN AUTH0 DOMENE],
+  clientId: [SETT INN AUTH0 CLIENT ID],
+  audience: [SETT INN AUTH0 AUDIENCE],
+  scope: [SETT INN AUTH0 SCOPE]
+};
+``` 
+
+__credentials.js__
+```javascript
+export const API_KEY = [google maps api key ]
+```
 Google Maps api key hentes fra Google Cloud Console
 
 ## Kjør i utviklingsmiljø
