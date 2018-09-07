@@ -10,6 +10,5 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
-extern NSString *googleMapsApiKey;
 
 @end
