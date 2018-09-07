@@ -16,6 +16,9 @@ Opprett secrets ( se neste punkt )
 ```
 
 ## Secrets
+
+### React-Native kode: 
+
 Prosjektet er avhengig av to secrets filer for å kjøre; settings/authConfig.js & app/credentials.js
 __authConfig.js__
 ```javascript
@@ -31,6 +34,29 @@ __credentials.js__
 ```javascript
 export const API_KEY = [google maps api key ]
 ```
+
+### android kode:
+
+__android/secrets.properties__
+```properties
+googleMapsApiKey="DIN_API_KEY_HER"
+```
+
+### iOS kode: 
+
+ios/godlydapp/Key.h og ios/godlydapp/Key.m
+
+__Key.h__
+```objective-c
+@interface Key
+extern NSString *googleMapsApiKey;
+@end
+``` 
+__Key.m__
+```objective-c
+NSString *googleMapsApiKey = @"DIN_API_KEY_HER";
+``` 
+
 Google Maps api key hentes fra Google Cloud Console
 
 ## Kjør i utviklingsmiljø
@@ -59,33 +85,18 @@ cd android
 
 1. Logg inn på Apple Utvikler Konto og sørg for at du har satt riktig app som kontekst. 
 2. Pass på at XCode er logget inn med samme utvikler konto. 
-3. Åpne /hlf/app/ios/godlydapp.xcodeworkspace i XCode
-4. Pass på at secrets filer finnes: 
+3. Åpne /hlf/app/ios/godlydapp.xcodeworkspace i XCod
+4. I XCode sin meny trykk på "godlydapp" for å få opp informasjon om prosjektet. Pass på at Signing Team er satt til "Hlf Hørselshemmedes Landsforbund". 
 
-/hlf/app/ios/godlydapp/Key.h og /hlf/app/ios/godlydapp/Key.m
-
-__Key.h__
-```objective-c
-@interface Key
-extern NSString *googleMapsApiKey;
-@end
-``` 
-__Key.m__
-```objective-c
-NSString *googleMapsApiKey = @"DIN_API_KEY_HER";
-``` 
-
-5. I XCode sin meny trykk på "godlydapp" for å få opp informasjon om prosjektet. Pass på at Signing Team er satt til "Hlf Hørselshemmedes Landsforbund". 
-
-6. Generer Sertifikater med Xcode: 
+5. Generer Sertifikater med Xcode: 
   * Xcode Preferences > Account > Manage Certificates (Generer både Development og Production/Distribution Sertifikater) 
   * Gå tilbake til nettleser der du var logget inn på Apple Utvikler konto. 
   * Velg "Certificates, IDs & Profiles" fra menyen til venstre. 
   * Se under "Certificates -> Development / Production" om dine sertifikater finnes der. 
 
-7. Gå tilbake til Xcode og velg at bygging av app mot en generisk ios enhet. Trykk så på Product > Archive
-8. Etter at applikasjonen har blitt bygget kan man laste den opp til App Store Connect ved å trykke på den blå knappen. 
-9. Applikajsonen vil etterhvert da havne på https://appstoreconnect.apple.com/
+6. Gå tilbake til Xcode og velg at bygging av app mot en generisk ios enhet. Trykk så på Product > Archive
+7. Etter at applikasjonen har blitt bygget kan man laste den opp til App Store Connect ved å trykke på den blå knappen. 
+8. Applikajsonen vil etterhvert da havne på https://appstoreconnect.apple.com/
 
 ## Todos
 * Se issues
