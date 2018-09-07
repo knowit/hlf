@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.godlydapp">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.godlydapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove" />
 
     <application
             android:name=".MainApplication"
@@ -38,6 +40,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/googleMapsApiKey">
         </meta-data>
+
     </application>
 
 </manifest>

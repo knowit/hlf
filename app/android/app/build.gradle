@@ -72,9 +72,9 @@ import com.android.build.OutputFile
  * ]
  */
 
-def apikeyPropertiesFile = rootProject.file('secrets.properties');
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+def secretsPropertyFile = rootProject.file('secrets.properties');
+def secretProperties = new Properties()
+secretProperties.load(new FileInputStream(secretsPropertyFile))
 
 project.ext.react = [
     entryFile: "index.js"
@@ -98,19 +98,29 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
         applicationId "com.godlydapp"
-        minSdkVersion 16
-        targetSdkVersion 22
+        minSdkVersion 26
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
-        resValue 'string', 'googleMapsApiKey', apikeyProperties['googleMapsApiKey']
+        resValue 'string', 'googleMapsApiKey', secretProperties['googleMapsApiKey']
+    }
+    signingConfigs {
+        release {
+            if(secretProperties['releaseStoreFile']) {
+                storeFile file(secretProperties['releaseStoreFile'])
+                storePassword secretProperties['releaseStorePassword']
+                keyAlias secretProperties['releaseKeyAlias']
+                keyPassword secretProperties['releaseKeyPassword']
+            }
+        }
     }
     splits {
         abi {
@@ -121,13 +131,10 @@ android {
         }
     }
     buildTypes {
-        //debug {
-        //    resValue 'string', "google_maps_api_key", HLF_GOOGLE_MAPS_KEY
-        //}
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            //resValue 'string', "google_maps_api_key", HLF_GOOGLE_MAPS_KEY
+            signingConfig signingConfigs.release
         }
     }
 

@@ -35,6 +35,7 @@ build/
 local.properties
 *.iml
 android/secrets.properties
+android/godlydapp-release-key.keystore
 
 # iOS
 ios/Pods
