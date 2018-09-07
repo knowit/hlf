@@ -55,6 +55,38 @@ cd android
 ```
 .apk (to ulike versjoner for ARM og x86) vil legge seg i app/android/app/build/outputs/apk/release
 
+#### iOS
+
+1. Logg inn på Apple Utvikler Konto og sørg for at du har satt riktig app som kontekst. 
+2. Pass på at XCode er logget inn med samme utvikler konto. 
+3. Åpne /hlf/app/ios/godlydapp.xcodeworkspace i XCode
+4. Pass på at secrets filer finnes: 
+
+/hlf/app/ios/godlydapp/Key.h og /hlf/app/ios/godlydapp/Key.m
+
+__Key.h__
+```objective-c
+@interface Key
+extern NSString *googleMapsApiKey;
+@end
+``` 
+__Key.m__
+```objective-c
+NSString *googleMapsApiKey = @"DIN_API_KEY_HER";
+``` 
+
+5. I XCode sin meny trykk på "godlydapp" for å få opp informasjon om prosjektet. Pass på at Signing Team er satt til "Hlf Hørselshemmedes Landsforbund". 
+
+6. Generer Sertifikater med Xcode: 
+  1. Xcode Preferences > Account > Manage Certificates (Generer både Development og Production/Distribution Sertifikater) 
+  2. Gå tilbake til nettleser der du var logget inn på Apple Utvikler konto. 
+  3. Velg "Certificates, IDs & Profiles" fra menyen til venstre. 
+  4. Se under "Certificates -> Development / Production" om dine sertifikater finnes der. 
+
+7. Gå tilbake til Xcode og velg at bygging av app mot en generisk ios enhet. Trykk så på Product > Archive
+8. Etter at applikasjonen har blitt bygget kan man laste den opp til App Store Connect ved å trykke på den blå knappen. 
+9. Applikajsonen vil etterhvert da havne på https://appstoreconnect.apple.com/
+
 ## Todos
 * Se issues
 * Lage tester 
