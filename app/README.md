@@ -39,7 +39,7 @@ export const API_KEY = [google maps api key ]
 
 __android/secrets.properties__
 ```properties
-googleMapsApiKey="DIN_API_KEY_HER"
+googleMapsApiKey="google maps api key"
 ```
 
 ### iOS kode: 
@@ -54,7 +54,7 @@ extern NSString *googleMapsApiKey;
 ``` 
 __Key.m__
 ```objective-c
-NSString *googleMapsApiKey = @"DIN_API_KEY_HER";
+NSString *googleMapsApiKey = @"google maps api key";
 ``` 
 
 Google Maps api key hentes fra Google Cloud Console
