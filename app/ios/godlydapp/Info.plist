@@ -45,6 +45,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Appen trenger tilgang til telefonens lokasjon for å vise kart.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Appen trenger tilgang til telefonens lokasjon for å vise kart.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
