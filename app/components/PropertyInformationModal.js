@@ -24,7 +24,7 @@ class PropertyInformationModal extends Modal {
                     onClosePropertyInformationModal()
                 }}
                 visible={modalVisible}>
-                <View style={{ marginTop: 22 }}>
+                <View style={{ marginTop: 0 }}>
                     <View style={ styles.modal }>
                         <View style={styles.modalHeader}>
                             <PropertyTitle
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         margin: 25,
+        marginTop: 50,
 
     },
 
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     },
 
     closeButton: {
-        fontSize: 34,
+        fontSize: 25,
         justifyContent: "flex-end",
         alignContent: "flex-end",
         fontFamily:

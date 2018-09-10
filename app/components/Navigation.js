@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 import MainScreen from "../containers/MainScreen";
 import { default as VenueDetails } from "../containers/VenueDetails";
-import Profile from "../containers/Profile";
+import Profile from "../containers/SidebarNavigation";
 import { connect } from "react-redux";
 import Loading from "./Loading";
-import { onAuth0Success, onAccessTokenInit, onSignOut } from "../actions/account";
+import { onAuth0Success, onAccessTokenInit, onLoginViewRequested, onSignOut } from "../actions/account";
 
 import LoginScreen from "../containers/LoginScreen";
 
@@ -15,7 +15,7 @@ class Navigation extends Component {
     }
     render() {
         const {
-            isAuthenticated,
+            showLoginScreen,
             hasCompletedInitialLoginAttempt,
             pending,
         } = this.props;
@@ -24,7 +24,7 @@ class Navigation extends Component {
             return <Loading />;
         }
 
-        if (!isAuthenticated) {
+        if (showLoginScreen) {
             return <LoginScreen auth0Success={this.props.onAuth0Success} />;
         }
 
@@ -44,7 +44,7 @@ class Navigation extends Component {
             },
             {
                 contentComponent: props => (
-                    <Profile {...props} onSignOut={this.props.onSignOut} />
+                    <Profile {...props} onLoginButtonClicked={this.props.onLoginViewRequested} onSignOut={this.props.onSignOut} />
                 )
             }
         );
@@ -54,5 +54,5 @@ class Navigation extends Component {
 
 export default connect(
     ({ user }) => ({ ...user }),
-    { onAccessTokenInit, onAuth0Success, onSignOut }
+    { onAccessTokenInit, onAuth0Success, onLoginViewRequested, onSignOut }
 )(Navigation);

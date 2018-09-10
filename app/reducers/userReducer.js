@@ -7,6 +7,7 @@ import {
     ON_AUTH0_SUCCESS,
     ON_LOGIN_SUCCESS,
     ON_SIGN_OUT,
+    ON_LOGIN_VIEW_REQUESTED,
 } from "../actions/account";
 
 export default (
@@ -23,7 +24,7 @@ export default (
 
         case ON_ACCOUNT_INFORMATION_REQUESTED:
             return {
-                isAuthenticated: true,
+                isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
                 user: {},
                 pending: true,
@@ -64,7 +65,7 @@ export default (
 
         case ON_AUTH0_SUCCESS:
             return {
-                isAuthenticated: true,
+                isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
                 credentials: action.payload,
                 pending: true,
@@ -84,6 +85,15 @@ export default (
                 hasCompletedInitialLoginAttempt: true,
                 pending: false,
                 user: {}
+            };
+
+        case ON_LOGIN_VIEW_REQUESTED:
+            return {
+                isAuthenticated: false,
+                hasCompletedInitialLoginAttempt: true,
+                pending: false,
+                user: {},
+                showLoginScreen: true,
             };
 
         default:
