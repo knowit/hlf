@@ -1,39 +1,9 @@
 import argparse
-import base64
+import gc_cryption
+import gc_path
 import gc_storage
 import ntpath
 import sys
-
-
-_ENCODING = 'ascii'
-
-
-def get_file_text(file_path):
-    with open(file_path, 'rb') as secret_file:
-        plaintext = secret_file.read()
-    return plaintext
-
-
-def encrypt_secret(secret_path,
-                   project_name,
-                   keyring_name,
-                   key_name
-                   ):
-    crypto_keys = gc_storage.get_crypto_keys(project_name, keyring_name)
-    key_long_name = gc_storage.get_key_long_name(project_name, keyring_name, key_name)
-
-    plaintext = get_file_text(secret_path)
-
-    encryption_request = crypto_keys.encrypt(
-        name=key_long_name,
-        body={
-            'plaintext': base64.b64encode(plaintext).decode(_ENCODING)
-        }
-    )
-    encryption_response = encryption_request.execute()
-    ciphertext = base64.b64decode(encryption_response['ciphertext'].encode(_ENCODING))
-
-    return ciphertext
 
 
 def upload_secret(secret_path,
@@ -44,8 +14,10 @@ def upload_secret(secret_path,
                   *args, **kwargs
                   ):
     file_name = ntpath.basename(secret_path)
-    destination_file_name = 'secrets/{}.encrypted'.format(file_name)
-    ciphertext = encrypt_secret(
+    destination_file_name = 'secrets/{}'.format(
+        gc_path.set_extension(file_name)
+    )
+    ciphertext = gc_cryption.encrypt_secret(
         secret_path,
         project_name,
         keyring_name,
@@ -71,7 +43,7 @@ def upload_secret(secret_path,
     blob.upload_from_string(ciphertext)
 
 
-def main():
+def _get_argparser():
     argparser = argparse.ArgumentParser()
     argparser.set_defaults(method=upload_secret)
 
@@ -101,8 +73,12 @@ def main():
         help='Overwrite the stored file if it exists.'
     )
 
-    args = argparser.parse_args()
+    return argparser
 
+
+def main():
+    argparser = _get_argparser()
+    args = argparser.parse_args()
     args.method(**vars(args))
 
 
