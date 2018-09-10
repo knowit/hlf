@@ -43,9 +43,9 @@ def upload_secret(secret_path,
     blob.upload_from_string(ciphertext)
 
 
-def _get_argparser():
+def _get_argparser(start_function):
     argparser = argparse.ArgumentParser()
-    argparser.set_defaults(method=upload_secret)
+    argparser.set_defaults(method=start_function)
 
     argparser.add_argument(
         'secret_path',
@@ -77,7 +77,7 @@ def _get_argparser():
 
 
 def main():
-    argparser = _get_argparser()
+    argparser = _get_argparser(start_function=upload_secret)
     args = argparser.parse_args()
     args.method(**vars(args))
 

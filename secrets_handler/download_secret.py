@@ -41,9 +41,9 @@ def download_secret(secret_name,
         print(plaintext)
 
 
-def _get_argparser():
+def _get_argparser(start_function):
     argparser = argparse.ArgumentParser()
-    argparser.set_defaults(method=download_secret)
+    argparser.set_defaults(method=start_function)
 
     argparser.add_argument(
         'secret_name',
@@ -76,7 +76,7 @@ def _get_argparser():
 
 
 def main():
-    argparser = _get_argparser()
+    argparser = _get_argparser(start_function=download_secret)
     args = argparser.parse_args()
     args.method(**vars(args))
 
