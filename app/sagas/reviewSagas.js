@@ -23,7 +23,7 @@ import {
 } from "../actions/reviews";
 
 import {
-    ON_VENUE_INFORMATION_REQUESTED
+    ON_VENUE_REVIEWS_REQUESTED
 } from '../actions/venue';
 
 import {
@@ -68,7 +68,7 @@ function* createReview(action) {
         const reviewBody = action.payload;
         const review = yield call(ReviewService.createReview, reviewBody);
         yield put({ type: ON_CREATE_REVIEW_SUCCESS, payload: review });
-        yield put({ type: ON_VENUE_INFORMATION_REQUESTED, payload: reviewBody.sted.placeId});
+        yield put({ type: ON_VENUE_REVIEWS_REQUESTED, payload: reviewBody.sted.placeId});
     } catch (e) {
 
         if(e.response && e.response.status === 401) {
