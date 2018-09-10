@@ -9,6 +9,9 @@ import { connect } from 'react-redux';
 import { onFetchReviewsByUser, onShowReviewDeletionModal, onHideReviewDeletionModal, onDeleteReviewsByPlaceId } from "../actions/reviews";
 import moment from 'moment';
 import ReviewDeletionModal from './ReviewDeletionModal';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import colors, {COMPONENT_SPACING} from "../settings/defaultStyles";
+import SlimText from "./SlimText";
 
  class ReviewList extends React.PureComponent {
 
@@ -67,14 +70,26 @@ import ReviewDeletionModal from './ReviewDeletionModal';
      render() {
 
          const { showReviewDeletionModal, reviews, reviewToBeDeleted } = this.props;
+         const reviewHeading = "Dine vurderinger";
 
          return (
+
              <View>
                  <ReviewDeletionModal
                      title={(reviewToBeDeleted) ? reviewToBeDeleted.sted.name : ""}
                      modalVisible={showReviewDeletionModal}
                      onRequestClose={this._handleModalClose}
                      onHideModal={this._handleModalClose} />
+                 <View style={styles.reviews}>
+                     <MaterialIcons
+                         name="comment"
+                         color={colors.primaryTextColor}
+                         size={25}
+                     />
+                     <SlimText style={styles.reviewsHeading}>
+                         { reviewHeading }
+                     </SlimText>
+                 </View>
                  <FlatList
                      style={styles.reviewList}
                      data={reviews}
@@ -90,7 +105,21 @@ import ReviewDeletionModal from './ReviewDeletionModal';
 const styles = StyleSheet.create({
     reviewList: {
         height: 300
-    }
+    },
+    reviews: {
+        padding: COMPONENT_SPACING,
+        flexDirection: "row"
+    },
+    reviewsHeading: {
+        paddingLeft: 12,
+        paddingTop: -5,
+        fontSize: 22,
+        fontWeight: "400"
+    },
+    reviewHeader: {
+        fontSize: 22,
+        marginLeft: COMPONENT_SPACING
+    },
 });
 
 

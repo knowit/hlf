@@ -16,9 +16,11 @@ export default {
     },
 
     async getAccountInformation(token) {
-        return await http.get('/brukere/login', { headers: {
-            authorization: 'Bearer ' + token,
-            }});
+        return await http.get('/brukere/login', {
+            headers: {
+                authorization: 'Bearer ' + token,
+            }
+        });
     },
 
     async signOut() {

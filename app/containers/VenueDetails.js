@@ -5,6 +5,7 @@ import VenueImage from "../components/VenueImage";
 import VenueMenu from "../components/VenueMenu";
 import ViewContainer from "../components/ViewContainer";
 import { connect } from "react-redux";
+import {onVenueScreenChange} from "../actions/venue";
 
 export const REVIEW_SCREEN = "Anmeldelser";
 export const NEW_REVIEW_SCREEN = "Din vurdering";
@@ -12,14 +13,16 @@ export const NEW_REVIEW_SCREEN = "Din vurdering";
 class VenueDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentScreen: REVIEW_SCREEN };
   }
   render() {
-    const { selectedVenue } = this.props;
+    const { selectedVenue, onVenueScreenChange } = this.props;
+
+    const venue = selectedVenue.venue;
+    const currentScreen = selectedVenue.screen;
 
     const photoReference =
-      selectedVenue.photos && selectedVenue.photos.length > 0
-        ? selectedVenue.photos[0].photo_reference
+        venue.photos && venue.photos.length > 0
+        ? venue.photos[0].photo_reference
         : null;
     return (
             <ViewContainer opaque={true} scrollable={true} keyboardAware={true} flex={true} padding={0}>
@@ -28,26 +31,18 @@ class VenueDetails extends Component {
                     onBackPress={this.props.navigation.navigate}
                 />
                 <VenueMenu
-                    onScreenChange={newScreen =>
-                        this.setState({currentScreen: newScreen})
-                    }
-                    currentScreen={this.state.currentScreen}
+                    onScreenChange={newScreen => onVenueScreenChange(newScreen)}
+                    currentScreen={currentScreen}
                 />
-                {this.state.currentScreen == REVIEW_SCREEN ? (
-                    <VenueReviews selectedVenue={selectedVenue}/>
+                {currentScreen == REVIEW_SCREEN ? (
+                    <VenueReviews selectedVenue={venue}/>
                 ) : (
-                    <CreateReview selectedVenue={selectedVenue}/>
+                    <CreateReview selectedVenue={venue}/>
                 )}
             </ViewContainer>
-
     );
   }
 }
 
-const mapStateToProps = state => ({
-    selectedVenue: state.selectedVenue,
-});
-
-export default connect(mapStateToProps)(VenueDetails);
-
-
+export default connect(({selectedVenue}) => ({ selectedVenue}),
+    { onVenueScreenChange })(VenueDetails);
