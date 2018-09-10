@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 import MainScreen from "../containers/MainScreen";
 import { default as VenueDetails } from "../containers/VenueDetails";
-import Profile from "../containers/SidebarNavigation";
+import SidebarNavigation from "../containers/SidebarNavigation";
 import { connect } from "react-redux";
 import Loading from "./Loading";
-import { onAuth0Success, onAccessTokenInit, onLoginViewRequested, onSignOut, onAuth0Cancelled } from "../actions/account";
+import {
+    onAuth0Success,
+    onAccessTokenInit,
+    onLoginViewRequested,
+    onSignOut,
+    onAuth0Cancelled
+} from "../actions/account";
 
 import LoginScreen from "../containers/LoginScreen";
 
@@ -47,7 +53,11 @@ class Navigation extends Component {
             },
             {
                 contentComponent: props => (
-                    <Profile {...props} onLoginButtonClicked={this.props.onLoginViewRequested} onSignOut={this.props.onSignOut} />
+                    <SidebarNavigation
+                        {...props}
+                        onLoginButtonClicked={this.props.onLoginViewRequested}
+                        onSignOut={this.props.onSignOut}
+                    />
                 )
             }
         );

@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {StyleSheet} from "react-native";
 import properties from "../settings/propertyConfig";
 import {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
@@ -77,32 +76,41 @@ class CreateReview extends Component {
     }
 
     onReviewSubmit(reviewValues) {
-        const { newReview, onUpdateReview, selectedVenue, onCreateReview, user, onCreateReviewUnauthenticated } = this.props;
-        if(user.isAuthenticated) {
-            if ( newReview.isSubmitting) return;
+        const {
+            newReview,
+            onUpdateReview,
+            selectedVenue,
+            onCreateReview,
+            user,
+            onCreateReviewUnauthenticated
+        } = this.props;
 
-            const { currentProperty } = this.state;
-            const currentPropertyInput = newReview.propertyInput[currentProperty];
-
-            const review = {
-                rangering: this.convertReviewIntegerValueToEnum(reviewValues.rangering),
-                kommentar: reviewValues.kommentar,
-                sted: {
-                    placeId: selectedVenue.venue.place_id,
-                },
-                vurderingsType: currentProperty,
-            };
-
-            if(reviewValues.rangeringHasChanged) {
-                review.id = currentPropertyInput.id;
-                onUpdateReview(review);
-                return;
-            }
-
-            onCreateReview(review);
-        } else {
+        if( ! user.isAuthenticated) {
             onCreateReviewUnauthenticated();
+            return;
         }
+
+        if ( newReview.isSubmitting) return;
+
+        const { currentProperty } = this.state;
+        const currentPropertyInput = newReview.propertyInput[currentProperty];
+
+        const review = {
+            rangering: this.convertReviewIntegerValueToEnum(reviewValues.rangering),
+            kommentar: reviewValues.kommentar,
+            sted: {
+                placeId: selectedVenue.venue.place_id,
+            },
+            vurderingsType: currentProperty,
+        };
+
+        if(reviewValues.rangeringHasChanged) {
+            review.id = currentPropertyInput.id;
+            onUpdateReview(review);
+            return;
+        }
+
+        onCreateReview(review);
     }
 
     onPropertySelect(propertyName) {
@@ -114,5 +122,3 @@ export default connect(
     ({ selectedVenue, newReview, propertiesInformation, user }) => ({ selectedVenue, newReview, propertiesInformation, user }),
     { onCreateReview, onFetchPreviousRequested, onOpenPropertyInformationModal, onUpdateReview, onAuth0Success, onCreateReviewUnauthenticated, onAuth0Cancelled }
 )(CreateReview);
-
-const styles = StyleSheet.create({});

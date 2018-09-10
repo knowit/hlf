@@ -42,7 +42,6 @@ export default {
     },
 
     async createReview(reviewBody) {
-        console.log("reviewBody: ", reviewBody);
         const response = await authenticated.post(END_POINT, reviewBody);
         const review = response.data;
         const googleInfo = await VenueService.fetchGooglePlaceObject(review.sted.placeId);
