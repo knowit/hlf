@@ -127,6 +127,7 @@ function* updateReview(action) {
         const review = action.payload;
         const updated = yield call(ReviewService.updateReview, review);
         yield put({ type: ON_UPDATE_REVIEW_SUCCESS, payload: updated.data });
+        yield put({ type: ON_VENUE_REVIEWS_REQUESTED, payload: review.sted.placeId});
     } catch(e) {
 
         if(e.response && e.response.status === 401) {

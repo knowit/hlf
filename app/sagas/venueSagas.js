@@ -1,6 +1,11 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import VenueService from '../api/VenueService';
-import {ON_VENUE_SELECTED, ON_VENUE_INFORMATION_REQUESTED, ON_VENUE_REVIEWS_REQUESTED} from "../actions/venue";
+import {
+    ON_VENUE_SELECTED,
+    ON_VENUE_INFORMATION_REQUESTED,
+    ON_VENUE_REVIEWS_REQUESTED,
+    ON_VENUE_REVIEWS_FETCHED
+} from "../actions/venue";
 import {ON_SIGN_OUT} from "../actions/account";
 import {ON_FETCH_REVIEWS_INIT} from "../actions/reviews";
 
@@ -33,7 +38,7 @@ function* fetchVenueReviews(action) {
         const placeId = action.payload;
         const reviews = yield call(VenueService.fetchReviews, placeId);
         yield put ({ type: ON_FETCH_REVIEWS_INIT });
-        yield put({ type: ON_VENUE_SELECTED, reviews });
+        yield put({ type: ON_VENUE_REVIEWS_FETCHED, reviews });
     } catch(e) {
 
         if(e.response && e.response.status === 401) {
