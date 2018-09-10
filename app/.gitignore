@@ -34,9 +34,12 @@ build/
 .gradle
 local.properties
 *.iml
+android/secrets.properties
 
 # iOS
 ios/Pods
+ios/godlydapp/Key.h
+ios/godlydapp/Key.m
 
 # node.js
 #

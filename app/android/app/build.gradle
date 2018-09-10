@@ -72,6 +72,10 @@ import com.android.build.OutputFile
  * ]
  */
 
+def apikeyPropertiesFile = rootProject.file('secrets.properties');
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 project.ext.react = [
     entryFile: "index.js"
 ]
@@ -106,6 +110,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        resValue 'string', 'googleMapsApiKey', apikeyProperties['googleMapsApiKey']
     }
     splits {
         abi {

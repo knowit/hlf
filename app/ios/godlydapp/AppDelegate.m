@@ -10,6 +10,8 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import "Key.m"
+
 @import GoogleMaps;
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *) url
@@ -20,7 +22,7 @@
 }
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyAh4aY8MmtOlCx1iDHYI4Z8c3P5VVgK2IY"];
+  [GMSServices provideAPIKey:googleMapsApiKey];
   
   // For å laste bundlet JS kildekode inn i appen.
   NSURL *jsCodeLocation;
