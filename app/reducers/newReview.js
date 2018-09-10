@@ -3,10 +3,13 @@ import {
     ON_FETCH_REVIEWS_SUCCESS,
     ON_FETCH_PREVIOUS_SUCCESS,
     ON_CREATE_REVIEW_SUCCESS,
-    ON_CREATE_REVIEW_INIT, ON_UPDATE_REVIEW_SUCCESS
+    ON_CREATE_REVIEW_INIT,
+    ON_UPDATE_REVIEW_SUCCESS,
+    ON_CREATE_REVIEW_UNAUTHENTICATED, ON_FETCH_PREVIOUS_REQUESTED,
 } from "../actions/reviews";
 
 import { deserialize } from "../deserializer/ReviewDeserializer";
+import {ON_AUTH0_CANCELLED, ON_LOGIN_SUCCESS} from "../actions/account";
 
 const defaultState = () =>
     properties.reduce((obj, property) => {
@@ -20,8 +23,9 @@ const defaultState = () =>
 export default (
     state = {
         propertyInput: defaultState,
-        hasLoaded: false,
-        isSubmitting: false
+        hasLoaded: true,
+        isSubmitting: false,
+        showLoginScreen: false,
     },
     action
 ) => {
@@ -32,12 +36,15 @@ export default (
 
     switch (action.type) {
 
+        case ON_FETCH_PREVIOUS_REQUESTED:
+            return { ...state, hasLoaded: false};
+
         case ON_FETCH_PREVIOUS_SUCCESS:
             action.payload.forEach(review => {
                 if(review.vurderingsType) data[review.vurderingsType] = deserialize(review);
             });
 
-            return { propertyInput: data, hasLoaded: true, isSubmitting: false };
+            return { propertyInput: data, hasLoaded: true, isSubmitting: false, showLoginScreen: false };
 
         case ON_FETCH_REVIEWS_SUCCESS:
 
@@ -47,11 +54,11 @@ export default (
                 if(review.vurderingsType) data[review.vurderingsType] = deserialize(review);
             }
 
-            return { propertyInput: data, hasLoaded: true, isSubmitting: false };
+            return { propertyInput: data, hasLoaded: true, isSubmitting: false, showLoginScreen: false };
 
         case ON_CREATE_REVIEW_INIT:
 
-            return { ...state, isSubmitting: true };
+            return { ...state, isSubmitting: true, showLoginScreen: false };
 
         case ON_CREATE_REVIEW_SUCCESS:
             vurderingsType = action.payload.vurderingsType;
@@ -63,7 +70,7 @@ export default (
 
             propertyInputs[vurderingsType] = review;
 
-            return { ...state, propertyInput: propertyInputs, isSubmitting: false, hasLoaded: true };
+            return { ...state, propertyInput: propertyInputs, isSubmitting: false, hasLoaded: true, showLoginScreen: false };
 
         case ON_UPDATE_REVIEW_SUCCESS:
             vurderingsType = action.payload.vurderingsType;
@@ -73,7 +80,16 @@ export default (
             };
             propertyInputs[vurderingsType] = review;
             
-            return { ...state, propertyInput: propertyInputs, isSubmitting: false, hasLoaded: true };
+            return { ...state, propertyInput: propertyInputs, isSubmitting: false, hasLoaded: true, showLoginScreen: false };
+
+        case ON_CREATE_REVIEW_UNAUTHENTICATED:
+            return { ...state, showLoginScreen: true };
+
+        case ON_LOGIN_SUCCESS:
+            return { ...state, showLoginScreen: false };
+
+        case ON_AUTH0_CANCELLED:
+            return { ...state, showLoginScreen: false};
 
         default:
             return state;

@@ -7,7 +7,7 @@ import {
     ON_AUTH0_SUCCESS,
     ON_LOGIN_SUCCESS,
     ON_SIGN_OUT,
-    ON_LOGIN_VIEW_REQUESTED,
+    ON_LOGIN_VIEW_REQUESTED, ON_AUTH0_CANCELLED,
 } from "../actions/account";
 
 export default (
@@ -94,6 +94,15 @@ export default (
                 pending: false,
                 user: {},
                 showLoginScreen: true,
+            };
+
+        case ON_AUTH0_CANCELLED:
+            return {
+                isAuthenticated: false,
+                hasCompletedInitialLoginAttempt: true,
+                pending: false,
+                user: {},
+                showLoginScreen: false,
             };
 
         default:
