@@ -1,15 +1,16 @@
 import React, {Component} from "react";
-import {Modal, StyleSheet} from "react-native";
 import properties from "../settings/propertyConfig";
 import {COMPONENT_SPACING} from "../settings/defaultStyles";
 import ViewContainer from "../components/ViewContainer";
 import ReviewProperty from "../components/ReviewProperty";
 import CreateReviewNavigation from "../components/CreateReviewNavigation";
-import { onCreateReview, onFetchPreviousRequested, onUpdateReview } from "../actions/reviews";
+import { onCreateReview, onFetchPreviousRequested, onUpdateReview, onCreateReviewUnauthenticated } from "../actions/reviews";
 import {connect} from "react-redux";
 import Loading from "../components/Loading";
 import {onOpenPropertyInformationModal} from "../actions/propertiesModal";
 import PropertyInformationModal from "../components/PropertyInformationModal";
+import LoginScreen from "./LoginScreen";
+import {onAuth0Success, onAuth0Cancelled } from "../actions/account";
 
 class CreateReview extends Component {
     constructor(props) {
@@ -23,12 +24,15 @@ class CreateReview extends Component {
     }
 
     componentDidMount() {
-        this.props.onFetchPreviousRequested(this.props.selectedVenue.place_id);
+        const { user } = this.props;
+        if(user.isAuthenticated) {
+            this.props.onFetchPreviousRequested(this.props.selectedVenue.venue.place_id);
+        }
     }
 
     render() {
 
-        const {hasLoaded, propertyInput} = this.props.newReview;
+        const { hasLoaded, propertyInput, showLoginScreen } = this.props.newReview;
 
         if (!hasLoaded)
             return <Loading inline={true} style={{marginTop: COMPONENT_SPACING}}/>;
@@ -38,6 +42,15 @@ class CreateReview extends Component {
             item => item.name === currentProperty
         )[0];
         const currentPropertyInput = propertyInput[currentProperty];
+
+        if(showLoginScreen) {
+            return (
+                <LoginScreen
+                    auth0Success={this.props.onAuth0Success}
+                    auth0Cancelled={this.props.onAuth0Cancelled}
+                />
+            );
+        }
 
         return (
             <ViewContainer flex={true}>
@@ -63,8 +76,19 @@ class CreateReview extends Component {
     }
 
     onReviewSubmit(reviewValues) {
+        const {
+            newReview,
+            onUpdateReview,
+            selectedVenue,
+            onCreateReview,
+            user,
+            onCreateReviewUnauthenticated
+        } = this.props;
 
-        const { newReview, onUpdateReview, selectedVenue, onCreateReview } = this.props;
+        if( ! user.isAuthenticated) {
+            onCreateReviewUnauthenticated();
+            return;
+        }
 
         if ( newReview.isSubmitting) return;
 
@@ -75,7 +99,7 @@ class CreateReview extends Component {
             rangering: this.convertReviewIntegerValueToEnum(reviewValues.rangering),
             kommentar: reviewValues.kommentar,
             sted: {
-                placeId: selectedVenue.place_id,
+                placeId: selectedVenue.venue.place_id,
             },
             vurderingsType: currentProperty,
         };
@@ -95,8 +119,6 @@ class CreateReview extends Component {
 }
 
 export default connect(
-    ({ selectedVenue, newReview, propertiesInformation }) => ({ selectedVenue, newReview, propertiesInformation }),
-    { onCreateReview, onFetchPreviousRequested, onOpenPropertyInformationModal, onUpdateReview }
+    ({ selectedVenue, newReview, propertiesInformation, user }) => ({ selectedVenue, newReview, propertiesInformation, user }),
+    { onCreateReview, onFetchPreviousRequested, onOpenPropertyInformationModal, onUpdateReview, onAuth0Success, onCreateReviewUnauthenticated, onAuth0Cancelled }
 )(CreateReview);
-
-const styles = StyleSheet.create({});

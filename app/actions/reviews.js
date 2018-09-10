@@ -4,7 +4,7 @@ export const ON_FETCH_REVIEWS_FAILED = "ON_FETCH_REVIEWS_FAILED";
 export const ON_CREATE_REVIEW = "ON_CREATE_REVIEW";
 export const ON_CREATE_REVIEW_INIT = "ON_CREATE_REVIEW_INIT";
 export const ON_CREATE_REVIEW_SUCCESS = "ON_CREATE_REVIEW_SUCCESS";
-export const ON_FETCH_PREVIOUS_REQUESTED = "ON_FEST_PREVIOUS_REQUESTED";
+export const ON_FETCH_PREVIOUS_REQUESTED = "ON_FETCH_PREVIOUS_REQUESTED";
 export const ON_FETCH_PREVIOUS_INIT = "ON_FETCH_PREVIOUS_INIT";
 export const ON_FETCH_PREVIOUS_SUCCESS = "ON_FETCH_PREVIOUS_SUCCESS";
 export const ON_FETCH_PREVIOUS_FAILED = "ON_FETCH_PREVIOUS_FAILED";
@@ -21,6 +21,7 @@ export const ON_DELETE_REVIEWS_BY_PLACE_ID_FAILED = "ON_DELETE_REVIEWS_BY_PLACE_
 export const ON_UPDATE_REVIEW = "ON_UPDATE_REVIEW_VALUE";
 export const ON_UPDATE_REVIEW_SUCCESS = "ON_UPDATE_REVIEW_SUCCESS";
 export const ON_UPDATE_REVIEW_FAILED = "ON_UPDATE_REVIEW_FAILED";
+export const ON_CREATE_REVIEW_UNAUTHENTICATED = "ON_CREATE_REVIEW_UNAUTHENTICATED";
 
 export function onCreateReview(reviewBody) {
     return {
@@ -74,5 +75,11 @@ export function onUpdateReview(review) {
     return {
         type: ON_UPDATE_REVIEW,
         payload: review,
+    }
+}
+
+export function onCreateReviewUnauthenticated() {
+    return {
+        type: ON_CREATE_REVIEW_UNAUTHENTICATED,
     }
 }

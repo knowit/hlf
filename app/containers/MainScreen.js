@@ -33,6 +33,9 @@ class MainScreen extends Component {
 
     render() {
         const {navigate} = this.props.navigation;
+
+        console.log(this.props.selectedVenue);
+
         return (
             <View style={styles.overallViewContainer}>
                 <Map
@@ -40,9 +43,9 @@ class MainScreen extends Component {
                     onVenueSelect={this.props.onVenueInformationRequested}
                     deselectVenue={this.props.onVenueDeselected}
                 />
-                {this.props.selectedVenue ? (
+                {this.props.selectedVenue.venue ? (
                     <VenueMapOverlay
-                        selectedVenue={this.props.selectedVenue}
+                        selectedVenue={this.props.selectedVenue.venue}
                         showDetails={() => navigate("Details")}
                     />
                 ) : null}

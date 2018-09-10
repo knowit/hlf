@@ -51,6 +51,8 @@ function* fetchMyPreviousReviewsByPlaceId(action) {
         yield put({ type: ON_FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
 
+        console.log(e);
+
         if(e.response && e.response.status === 401) {
             yield put({ type: ON_SIGN_OUT });
         } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
@@ -70,6 +72,8 @@ function* createReview(action) {
         yield put({ type: ON_CREATE_REVIEW_SUCCESS, payload: review });
         yield put({ type: ON_VENUE_REVIEWS_REQUESTED, payload: reviewBody.sted.placeId});
     } catch (e) {
+
+        console.log("error creating review: ", e);
 
         if(e.response && e.response.status === 401) {
             yield put({ type: ON_SIGN_OUT });

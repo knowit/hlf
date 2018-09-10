@@ -19,8 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private String apiAudience;
     @Value(value = "${com.auth0.issuer}")
     private String issuer;
-
-
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         JwtWebSecurityConfigurer
@@ -28,6 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .configure(http)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/healthcheck").permitAll()
+                .antMatchers(HttpMethod.GET, "/steder/info/place/{placeId}").permitAll()
+                .antMatchers(HttpMethod.GET, "/steder/place/{placeId}/totalvurdering/{google}").permitAll()
+                .antMatchers(HttpMethod.GET, "/vurderinger/bruker").permitAll()
+                .antMatchers(HttpMethod.GET, "/vurderinger/all/place/{placeId}").permitAll()
+                .antMatchers(HttpMethod.GET, "/vurderinger/place/{placeId}").permitAll()
+                .antMatchers(HttpMethod.GET, "/vurderinger/place/{placeId}/bruker").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
                 .logout().permitAll();

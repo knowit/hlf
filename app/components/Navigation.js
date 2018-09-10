@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import { createStackNavigator, createDrawerNavigator } from "react-navigation";
 import MainScreen from "../containers/MainScreen";
 import { default as VenueDetails } from "../containers/VenueDetails";
-import Profile from "../containers/Profile";
+import SidebarNavigation from "../containers/SidebarNavigation";
 import { connect } from "react-redux";
 import Loading from "./Loading";
-import { onAuth0Success, onAccessTokenInit, onSignOut } from "../actions/account";
+import {
+    onAuth0Success,
+    onAccessTokenInit,
+    onLoginViewRequested,
+    onSignOut,
+    onAuth0Cancelled
+} from "../actions/account";
 
 import LoginScreen from "../containers/LoginScreen";
 
@@ -15,7 +21,7 @@ class Navigation extends Component {
     }
     render() {
         const {
-            isAuthenticated,
+            showLoginScreen,
             hasCompletedInitialLoginAttempt,
             pending,
         } = this.props;
@@ -24,14 +30,17 @@ class Navigation extends Component {
             return <Loading />;
         }
 
-        if (!isAuthenticated) {
-            return <LoginScreen auth0Success={this.props.onAuth0Success} />;
+        if (showLoginScreen) {
+            return <LoginScreen
+                        auth0Success={this.props.onAuth0Success}
+                        auth0Cancelled={this.props.onAuth0Cancelled}
+            />;
         }
 
         const Stack = createStackNavigator(
             {
                 MainScreen: { screen: MainScreen },
-                Details: { screen: VenueDetails }
+                Details: { screen: VenueDetails },
             },
             {
                 headerMode: "none"
@@ -44,7 +53,11 @@ class Navigation extends Component {
             },
             {
                 contentComponent: props => (
-                    <Profile {...props} onSignOut={this.props.onSignOut} />
+                    <SidebarNavigation
+                        {...props}
+                        onLoginButtonClicked={this.props.onLoginViewRequested}
+                        onSignOut={this.props.onSignOut}
+                    />
                 )
             }
         );
@@ -54,5 +67,5 @@ class Navigation extends Component {
 
 export default connect(
     ({ user }) => ({ ...user }),
-    { onAccessTokenInit, onAuth0Success, onSignOut }
+    { onAccessTokenInit, onAuth0Success, onLoginViewRequested, onSignOut, onAuth0Cancelled }
 )(Navigation);
