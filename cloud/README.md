@@ -10,7 +10,7 @@ The compute engine is built on an image created by Packer, based on Google's Con
 
 ## Setup
 ### Authorization
-Follow the setup guide in the [root README](../).
+Follow the steps in the [root README](../), under **Setup** &gt; **Google Cloud Service Account**.
 
 ### Downloads
 A couple of programs and packages are needed to deploy the API.

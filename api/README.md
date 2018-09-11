@@ -1,10 +1,9 @@
 # Godlydpatruljen - API
 
 ## Setup
-All basic setup is explained in the [root README](../README.md).
+Follow the steps in the [root README](../), under **Setup** &gt; **Google Cloud Service Account**.
 
 ## Build Docker image
-
 The final artifact of this build process is a Docker image, configured to start a .jar-file containing the API when a Docker container is launched from it. Only one command is needed to get this image:  
 `python build_docker_image.py`
 
