@@ -1,8 +1,9 @@
+import argparse
 import base64
 import docker
 import json
 import os
-from sys import argv, exit, stderr
+from sys import exit, stderr
 import googleapiclient.discovery
 from google.cloud import storage
 
@@ -55,7 +56,10 @@ def decrypt_secret_text(secret_text):
     key_long_name = '{}/cryptoKeys/{}'.format(keyring_long_name, KEY_NAME)
 
     # Get keyring
-    keyring_request = kms_client.projects().locations().keyRings().list(parent=resource_parent)
+    keyring_request = kms_client.projects()\
+        .locations()\
+        .keyRings()\
+        .list(parent=resource_parent)
     keyring_response = keyring_request.execute()
     keyring = None
     if 'keyRings' in keyring_response and keyring_response['keyRings']:
@@ -63,7 +67,11 @@ def decrypt_secret_text(secret_text):
             if kR['name'] == keyring_long_name:
                 keyring = kR
     if keyring is None:
-        print('No keyring of name "{}" found.\n(Long name: "{}")'.format(KEYRING_NAME, keyring_long_name), file=stderr)
+        print(
+            'No keyring of name "{}" found.\n(Long name: "{}")'
+            .format(KEYRING_NAME, keyring_long_name),
+            file=stderr
+        )
         exit(-1)
 
     # Decrypt secrets
@@ -118,6 +126,15 @@ def build_docker_image(plaintext_extra_args=None):
     docker_client.images.build(**build_args_dict)
 
 
+def _get_argument_parser():
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument(
+        '--gcs-build-args',
+        action='store_true'
+    )
+    return argparser
+
+
 def run(with_extra_build_args=False):
     if with_extra_build_args:
         secret_text = get_secret_text()
@@ -128,9 +145,9 @@ def run(with_extra_build_args=False):
 
 
 if __name__ == '__main__':
+    argparser = _get_argument_parser()
+    args = argparser.parse_args()
+
     # Only build EITHER with OR without extra build arguments (plaintext),
     # using secrets from Google Cloud.
-
-    with_gcs_build_args = len(argv) > 1 and '--gcs-build-args' in argv[1:]
-    
-    run(with_gcs_build_args)
+    run(args.gcs_build_args)

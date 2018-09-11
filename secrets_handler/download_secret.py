@@ -2,7 +2,6 @@ import argparse
 import gc_cryption
 import gc_storage
 import gc_path
-import sys
 
 
 def download_secret(secret_name,
@@ -29,14 +28,8 @@ def download_secret(secret_name,
     )
 
     if kwargs['out']:
-        try:
-            file_path = gc_path.solve_file_path(secret_name, kwargs['out'])
-            with open(file_path, 'wb') as plaintext_file:
-                plaintext_file.write(plaintext)
-        except IOError as ioe:
-            print(ioe, file=sys.stderr)
-            print()
-            print(plaintext)
+        file_path = gc_path.solve_file_path(secret_name, kwargs['out'])
+        gc_path.save_to_file(file_path, plaintext, create_dir=True)
     else:
         print(plaintext)
 
