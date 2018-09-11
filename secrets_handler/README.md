@@ -1,6 +1,6 @@
 # Google Cloud Storage - Secrets
 
-This 'mini package' consists of two (three) Python scripts to up- and download secrets to and from a GCS bucket.
+This 'mini package' consists of two Python scripts to up- and download secrets to and from a GCS bucket, as well as files and functions to help with this process.
 
 **The environment variable GOOGLE_APPLICATION_CREDENTIALS must be set, and the connected service account must have read/write bucket permissions.**
 
@@ -58,3 +58,18 @@ If the `--out` flag is set, the decrypted secret will be saved to the supplied `
     - -&gt; `/foo/bar/baz.biz`
 - `baz.biz.encrypted` and `--out /foo/bar/faa.fee`
     - -&gt; `/foo/bar/faa.fee`
+
+
+## Other files and functions
+
+`gc_constants`  
+Constants to be used throughout the package.
+
+`gc_cryption`  
+Contains functions to encrypt and decrypt files, and to handle keyrings and cryptokeys.
+
+`gc_path`  
+Contains functions to handle the `.encryption` extension, as well as solving file paths in a consistent manner.
+
+`gc_storage`  
+`get_bucket()` connects to GC Storage and retrieves a bucket, which can be used to fetch and store files (blobs).

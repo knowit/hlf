@@ -10,10 +10,7 @@ The compute engine is built on an image created by Packer, based on Google's Con
 
 ## Setup
 ### Authorization
-It is recommended that a GCP service account is created with the required permissions, and that a key (`.json`-file) is created and downloaded for said service account.  
-It is possible to create service accounts with `Owner` status.
-
-After such a key has been downloaded, set the environment variable `GOOGLE_APPLICATION_CREDENTIALS` to the key's path. This will allow `gcloud` commands to access the proper resources.
+Follow the setup guide in the [root README](../).
 
 ### Downloads
 A couple of programs and packages are needed to deploy the API.
@@ -23,7 +20,7 @@ A couple of programs and packages are needed to deploy the API.
 
 * **[Packer][packer]**  
   Builds an image of a Virtual Machine based on specifications from _packer.json_.  
-  Packer is run with the command `packer build -var gcpcreds=$GOOGLE_APPLICATION_CREDENTIALS packer.json`, which will (at the end of a long list) output an image ID.
+  Packer is run with the command `python cloud.py build-packer`, which will (at the end of a long list) output an image ID.
 
 * **[Terraform][terraform]**  
   Configures the virtual infrastructure needed, including starting a VM from the Packer-built image.  
@@ -34,17 +31,56 @@ A couple of programs and packages are needed to deploy the API.
 * **[Google Cloud SDK][gcsdk]**  
   Google's tool for connecting to GCP.
 
+### Docker environment variables
+When building a server image with Packer, an `.env` file must be present. This file will be saved to the image during building, and is used by Docker Compose when starting a server container.
+
+First, this file must be downloaded to your project structure:
+
+1. Find the
+    - project name
+    - bucket name
+    - keyring name
+    - cryptokey name
+1. Change current directory:  
+   `cd hlf/secrets_handler`
+1. Download `.env` file:  
+   `python download_secret.py .env <project name> <bucket name> <keyring> <cryptokey> --out ../secrets/.env`
+
+### Project variables
+Finally, there are some variables that must be set. As these are not shared between modules, and are not globally needed for e.g. `gcloud`, they are not stored as environment variables.
+
+Create a file named `gcp.json` inside `hlf/secrets`:
+```json
+{
+    "user": "",
+    "ssh_user": "",
+    "project": "",
+    "image_name": "",
+    "image_tag": "",
+    "instance_name": "",
+    "zone": ""
+}
+```
+For each field, fill in the appropriate value for your project. This file will be read and used when pushing Docker images to the Google Cloud repository.
+
 ## Deployment
 
 Docker images used to host the API is preferably stored in the cloud using Google's Container Registry.  
 Google's own documentation for this pushing to this register can be found [here](https://cloud.google.com/container-registry/docs/pushing-and-pulling).
 
-1. Build a Packer image.
+1. Build a Docker image by following the [API guide](../api).
+1. Build a Packer image with  
+   `python cloud.py build-packer`.
 1. Spin up the infrastructure with Terraform.
-1. Build the Docker image by following the guide in _/hlf/api/doc.md_.
-1. Push the latest Docker image to GCP by running `python push_docker_image.py`.
-1. Make the server start the Docker container by running `gcloud compute ssh godlyd@server-hlf-dev --command="sudo docker-compose up -d"`.  
-   The API should be up and running (with `/healthcheck` returing 200 OK) after 30-60 seconds.
+    - `cd hlf/cloud/environment/dev`
+    - `terraform init`
+    - `terraform plan`
+    - `terraform apply`
+1. Push the latest Docker image to GCP by running  
+   `python cloud.py push-docker`.
+1. Make the server start the Docker container by running  
+   `python cloud.py start-server`.  
+    - The API should be up and running (with `/healthcheck` returing 200 OK) after 30-60 seconds.
 
 ## Security
 ### SSL Certificates

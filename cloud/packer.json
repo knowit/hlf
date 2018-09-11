@@ -34,7 +34,7 @@
     },
     {
       "type": "file",
-      "source": "../api/.env",
+      "source": "../secrets/.env",
       "destination": "/tmp/.env"
     },
     {

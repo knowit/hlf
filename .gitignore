@@ -22,6 +22,7 @@ __pycache__/
 # Security
 cloud/packer_files/packer_vars.json
 api/.env
+secrets/
 
 
 # misc
