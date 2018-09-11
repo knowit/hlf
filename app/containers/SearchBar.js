@@ -5,6 +5,7 @@ import {
     StyleSheet,
     View,
     TouchableHighlight,
+    TouchableOpacity,
     Platform
 } from "react-native";
 import _ from "lodash";
@@ -12,7 +13,6 @@ import axios from "axios";
 import colors, {
     COMPONENT_SPACING,
     BORDER_RADIUS,
-    sizes
 } from "../settings/defaultStyles";
 import {API_KEY} from "../settings/credentials";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -22,9 +22,15 @@ import SlimText from "../components/SlimText";
 export default class SearchBar extends Component {
     constructor(props) {
         super(props);
-        this.state = {searchPrompt: "", results: []};
+        this.state = {
+            searchInputStatus: 'untouched',
+            searchPrompt: "",
+            results: [],
+        };
 
         this.onInputChange = this.onInputChange.bind(this);
+        this.clearText = this.clearText.bind(this);
+
         this.handleSeach = _.debounce(this.handleSearch, 1000);
     }
 
@@ -61,6 +67,7 @@ export default class SearchBar extends Component {
                     underlineColorAndroid={colors.transparentColor}
                     onFocus={() => this.props.deselectVenue()}
                 />
+                {this.renderClearButton()}
             </View>
         );
     }
@@ -70,7 +77,9 @@ export default class SearchBar extends Component {
             <TouchableHighlight
                 key={item.place_id}
                 onPress={() => {
-                    this.props.onVenueSelect(item.place_id);
+                    const { onVenueSelect } = this.props;
+                    onVenueSelect(item.place_id);
+                    this.clearText();
                     this.input.blur();
                     this.setState({searchPrompt: ""});
                 }}
@@ -89,9 +98,31 @@ export default class SearchBar extends Component {
         );
     }
 
+    renderClearButton() {
+        if(this.state.searchInputStatus == 'touched') {
+            return (
+              <TouchableOpacity onPress={this.clearText}>
+                  <SlimText style={styles.clearButton}>X</SlimText>
+              </TouchableOpacity>
+            );
+        }
+    }
+
     onInputChange(prompt) {
-        this.setState({searchPrompt: prompt});
+        this.setState({
+            searchInputStatus: 'touched',
+            searchPrompt: prompt,
+        });
+
         this.handleSearch();
+    }
+
+    clearText() {
+        this.setState({
+            searchInputStatus: 'untouched',
+            searchPrompt: '',
+            results: [],
+        });
     }
 
     handleSearch() {
@@ -123,6 +154,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         alignItems: "center"
     },
+
     iconWrap: {
         width: 60,
         top: 0,
@@ -133,10 +165,12 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         borderRightColor: colors.divider
     },
+
     icon: {
         fontSize: 24,
         color: "white"
     },
+
     searchInput: {
         marginLeft: COMPONENT_SPACING / 3 + 60,
         marginRight: COMPONENT_SPACING,
@@ -145,10 +179,19 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined
     },
+
     resultText: {
         color: colors.primaryTextColor,
         fontSize: 18,
         maxHeight: 60,
         marginLeft: COMPONENT_SPACING / 3 + 60
+    },
+
+    clearButton: {
+        marginRight: COMPONENT_SPACING,
+        color: colors.primaryTextColor,
+        fontSize: 24,
+        fontWeight: "bold",
+        fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined
     }
 });
