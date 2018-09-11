@@ -17,5 +17,7 @@ function convertToIntegerValue(value) {
             return null;
         case "OPP":
             return 1;
+        default:
+            return null;
     }
 }

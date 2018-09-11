@@ -15,7 +15,7 @@ const defaultState = () =>
     properties.reduce((obj, property) => {
         obj[property.name] = {
             comment: "",
-            value: undefined
+            value: null
         };
         return obj;
     }, {});
@@ -40,7 +40,11 @@ export default (
             return { ...state, hasLoaded: false};
 
         case ON_FETCH_PREVIOUS_SUCCESS:
+
+            console.log("action.payload: ", action.payload);
+
             action.payload.forEach(review => {
+                console.log("review: ", review);
                 if(review.vurderingsType) data[review.vurderingsType] = deserialize(review);
             });
 

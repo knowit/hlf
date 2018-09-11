@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     flex: 1,
-    height: 55
+    height: 55,
+    padding: 15
   },
   innerElement: {
     marginHorizontal: 7
