@@ -38,10 +38,7 @@ public class BrukerController {
 
     @GetMapping("/login")
     public Bruker loginBruker(@RequestHeader("Authorization")String auth) {
-        logger.info("inside loginBruker 1/2");
-        Bruker bruker = brukerService.updateBruker(auth);
-        logger.info("inside loginBruker 2/2");
-        return bruker;
+        return brukerService.updateBruker(auth);
     }
 
 }

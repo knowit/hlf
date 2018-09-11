@@ -1,4 +1,4 @@
-import authenticated from './authenticated';
+import http from './http';
 import axios from "axios";
 import {API_KEY} from "../settings/credentials";
 import _ from "lodash";
@@ -23,7 +23,7 @@ export default {
     },
 
     async fetchReviews(placeId) {
-        const response = await authenticated.get(`/steder/place/${placeId}/totalvurdering/0`);
+        const response = await http.get(`/steder/place/${placeId}/totalvurdering/0`);
         return response.data;
     },
 

@@ -1,7 +1,8 @@
 import {
     ON_ACCOUNT_INFORMATION_REQUESTED,
     ON_LOGIN_SUCCESS,
-    ON_ACCOUNT_INFORMATION_FAILED, ON_SIGN_OUT
+    ON_ACCOUNT_INFORMATION_FAILED,
+    ON_SIGN_OUT,
 } from "../actions/account";
 
 import { call, put, takeEvery } from 'redux-saga/effects';

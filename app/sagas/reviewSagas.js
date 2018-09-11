@@ -23,7 +23,7 @@ import {
 } from "../actions/reviews";
 
 import {
-    ON_VENUE_INFORMATION_REQUESTED
+    ON_VENUE_REVIEWS_REQUESTED
 } from '../actions/venue';
 
 import {
@@ -51,6 +51,8 @@ function* fetchMyPreviousReviewsByPlaceId(action) {
         yield put({ type: ON_FETCH_PREVIOUS_SUCCESS, payload: response })
     } catch(e) {
 
+        console.log(e);
+
         if(e.response && e.response.status === 401) {
             yield put({ type: ON_SIGN_OUT });
         } else if((e.code && e.code === 'ECONNABORTED') || (e.response && e.response === 408)) {
@@ -68,8 +70,10 @@ function* createReview(action) {
         const reviewBody = action.payload;
         const review = yield call(ReviewService.createReview, reviewBody);
         yield put({ type: ON_CREATE_REVIEW_SUCCESS, payload: review });
-        yield put({ type: ON_VENUE_INFORMATION_REQUESTED, payload: reviewBody.sted.placeId});
+        yield put({ type: ON_VENUE_REVIEWS_REQUESTED, payload: reviewBody.sted.placeId});
     } catch (e) {
+
+        console.log("error creating review: ", e);
 
         if(e.response && e.response.status === 401) {
             yield put({ type: ON_SIGN_OUT });
@@ -123,6 +127,7 @@ function* updateReview(action) {
         const review = action.payload;
         const updated = yield call(ReviewService.updateReview, review);
         yield put({ type: ON_UPDATE_REVIEW_SUCCESS, payload: updated.data });
+        yield put({ type: ON_VENUE_REVIEWS_REQUESTED, payload: review.sted.placeId});
     } catch(e) {
 
         if(e.response && e.response.status === 401) {

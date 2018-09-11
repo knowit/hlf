@@ -1,4 +1,5 @@
 import authenticated from './authenticated';
+import http from './http';
 import VenueService from './VenueService';
 
 const END_POINT = "/vurderinger/";
@@ -14,7 +15,7 @@ export default {
         const placeId = payload.placeId;
         const date = payload.date;
         const { number, size } = payload.pageable;
-        const response = await authenticated.get(END_POINT + `place/${placeId}?page=${number}&size=${size}`, {'Dato': date});
+        const response = await http.get(END_POINT + `place/${placeId}?page=${number}&size=${size}`, {'Dato': date});
         const reviews = response.data.content;
         const places = {};
         const registrators = {};
