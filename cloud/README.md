@@ -52,26 +52,6 @@ To download the secrets, follow the steps below:
    `python download_secret.py <file name> <project name> <bucket name> <keyring> <cryptokey> --out ../secrets`  
    where `<file name>` should be substituted for `.env` and `gcp.json`, and the rest of the argument should match the names from point 1.
 
-
-### Project variables
-Luckily for us there are some variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud`, they are not stored as environment variables.
-
-Create a file named `gcp.json` inside `hlf/secrets`:
-```json
-{
-    "user": "",
-    "ssh_user": "",
-    "project": "",
-    "image_name": "",
-    "image_tag": "",
-    "instance_name": "",
-    "zone": "",
-    "api_ip": "",
-    "api_network": ""
-}
-```
-For each field, fill in the appropriate value for your project. This file will be read and used when (amongst other things) pushing Docker images to the Google Cloud repository.
-
 ### Docker Compose (yml)
 The server needs a file called `docker-compose.yml` to be able to start the API container. A template file called `docker-compose.yml.pytemplate` is used as a baseline, and is combined with a few variables from `gcp.json`.
 
