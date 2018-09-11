@@ -24,6 +24,25 @@ The following steps assumes that such a service account already exists, and that
     - **Note**: No matter where you save your key file, please give it a name on the format `<name of service account>@<name of project>.json`. Other scripts may depend on this naming format.
 1. Create a permanent environment variable called `GOOGLE_APPLICATION_CREDENTIALS` and set its value to be the full path of your JSON service account key.
 
+### Python
+Python is used for a good many scripts and commands in this project, and is required for everything to work properly.
+
+1. Download and install [Python][python]. The scripts were written and tested with Python 3.6.6, so that's the recommended version.
+1. Upgrade [pip][pip] to the latest version:  
+   `python -m pip install --upgrade pip`
+1. Download [virtualenv][virtualenv] via `pip`:  
+   `pip install virtualenv`
+1. Make sure your current directory is `hlf`, and create a new virtual environment for Python:  
+   `virtualenv env`
+    - For more information about this environment, and how to (de)activate it for your system, visit the [virtualenv user guide][virtualenv-guide]
+1. Activate your new environment
+1. Install the required packages:  
+   `pip install -r requirements.txt`
+    - If, for some reason, pip isn't installing the packages in the correct location:
+        1. Check (and triple-check) that your environment is activated
+        1. Install the requirements with the prefix `python -m` instead:  
+           `python -m pip install -r requirements.txt`
+
 
 ## Deployment
 The pipeline is as follows:
@@ -38,4 +57,8 @@ The pipeline is as follows:
 1. Follow the steps in [app](app) to build the mobile application to Android and/or iOS
 
 
-[gcp]:      https://console.cloud.google.com
+[gcp]:              https://console.cloud.google.com/
+[pip]:              https://pypi.org/project/pip/
+[python]:           https://www.python.org/downloads/
+[virtualenv]:       https://virtualenv.pypa.io/en/stable/installation/
+[virtualenv-guide]: https://virtualenv.pypa.io/en/stable/userguide/

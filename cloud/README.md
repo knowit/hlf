@@ -19,22 +19,27 @@ A couple of programs and packages are needed to deploy the API.
   Used to build an image of the container which our API will run from. Docker will be called as neccessary from other scripts.
 
 * **[Packer][packer]**  
-  Builds an image of a Virtual Machine based on specifications from _packer.json_.  
+  Builds an image of a Virtual Machine based on specifications from `packer.json`.  
   Packer is run with the command `python cloud.py build-packer`, which will (at the end of a long list) output an image ID.
 
 * **[Terraform][terraform]**  
   Configures the virtual infrastructure needed, including starting a VM from the Packer-built image.  
-  The Terraform's root folder is _environment/dev/_.  
-  Update the `name` field in _environment/dev/main.tf_ to match the latest image ID.  
+  The Terraform's root folder is `environment/dev/`.  
+  Update the `name` field in `environment/dev/main.tf` to match the latest image ID.  
   Terraform is run with the command `terraform apply`.
 
 * **[Google Cloud SDK][gcsdk]**  
   Google's tool for connecting to GCP.
 
-### Docker environment variables
+### Download secrets
+
+**Docker environment variables**  
 When building a server image with Packer, an `.env` file must be present. This file will be saved to the image during building, and is used by Docker Compose when starting a server container.
 
-First, this file must be downloaded to your project structure:
+**Project variables**  
+Luckily for us there are some variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud`, they are not stored as environment variables.
+
+To download the secrets, follow the steps below:
 
 1. Find the
     - project name
@@ -43,8 +48,10 @@ First, this file must be downloaded to your project structure:
     - cryptokey name
 1. Change current directory:  
    `cd hlf/secrets_handler`
-1. Download `.env` file:  
-   `python download_secret.py .env <project name> <bucket name> <keyring> <cryptokey> --out ../secrets/.env`
+1. Download the `.env` and `gcp.json` files by calling:  
+   `python download_secret.py <file name> <project name> <bucket name> <keyring> <cryptokey> --out ../secrets`  
+   where `<file name>` should be substituted for `.env` and `gcp.json`, and the rest of the argument should match the names from point 1.
+
 
 ### Project variables
 Luckily for us there are some variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud`, they are not stored as environment variables.

@@ -13,12 +13,13 @@ def upload_secret(secret_path,
                   key_name,
                   *args, **kwargs
                   ):
-    file_name = ntpath.basename(secret_path)
+    full_path = gc_path.solve_file_path(secret_path)
+    file_name = ntpath.basename(full_path)
     destination_file_name = 'secrets/{}'.format(
         gc_path.set_extension(file_name)
     )
     ciphertext = gc_cryption.encrypt_secret(
-        secret_path,
+        full_path,
         project_name,
         keyring_name,
         key_name
@@ -35,7 +36,8 @@ def upload_secret(secret_path,
                 project_name,
                 bucket_name
             ),
-            '  >>  Use the \'--overwrite\' flag if you want to overwrite this file.',
+            '  >>  Use the \'--overwrite\' flag' +
+            ' if you want to overwrite this file.',
             sep='\n',
             file=sys.stderr
         )
