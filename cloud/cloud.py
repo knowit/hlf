@@ -100,7 +100,7 @@ def start_server():
     for i in range(1, max_attempts + 1):
         print('Attempt {}/{}\nWaiting...'.format(i, max_attempts))
         completed_process = subprocess.run(
-            gcloud_command.split(' '),
+            gcloud_command,
             shell=True
         )
         if completed_process.returncode != 0:

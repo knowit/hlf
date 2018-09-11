@@ -27,10 +27,13 @@ The following steps assumes that such a service account already exists, and that
 
 ## Deployment
 The pipeline is as follows:
-1. Follow the steps in [api](api) to build the server application
+1. Follow the steps in [api](api) to
+    1. Build the server application as a `.jar`
+    1. Build a Docker image
 1. Follow the steps in [cloud](cloud) to
-    1. Build and push a Docker image
-    1. Build a server image, and start a server instance
+    1. Push the Docker image
+    1. Build a server image
+    1. Setup the infrastructure with Terraform, and start a server instance
     1. Start the server application
 1. Follow the steps in [app](app) to build the mobile application to Android and/or iOS
 
