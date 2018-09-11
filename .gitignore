@@ -21,6 +21,7 @@ __pycache__/
 
 # Security
 cloud/packer_files/packer_vars.json
+cloud/packer_files/docker-compose.yml
 api/.env
 secrets/
 

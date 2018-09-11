@@ -47,7 +47,7 @@ First, this file must be downloaded to your project structure:
    `python download_secret.py .env <project name> <bucket name> <keyring> <cryptokey> --out ../secrets/.env`
 
 ### Project variables
-Finally, there are some variables that must be set. As these are not shared between modules, and are not globally needed for e.g. `gcloud`, they are not stored as environment variables.
+Luckily for us there are some variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud`, they are not stored as environment variables.
 
 Create a file named `gcp.json` inside `hlf/secrets`:
 ```json
@@ -58,16 +58,25 @@ Create a file named `gcp.json` inside `hlf/secrets`:
     "image_name": "",
     "image_tag": "",
     "instance_name": "",
-    "zone": ""
+    "zone": "",
+    "api_ip": "",
+    "api_network": ""
 }
 ```
-For each field, fill in the appropriate value for your project. This file will be read and used when pushing Docker images to the Google Cloud repository.
+For each field, fill in the appropriate value for your project. This file will be read and used when (amongst other things) pushing Docker images to the Google Cloud repository.
+
+### Docker Compose (yml)
+The server needs a file called `docker-compose.yml` to be able to start the API container. A template file called `docker-compose.yml.pytemplate` is used as a baseline, and is combined with a few variables from `gcp.json`.
+
+Run this command to generate the complete `.yml` file:  
+`python cloud.py compose-yml`
 
 ## Deployment
 
 Docker images used to host the API is preferably stored in the cloud using Google's Container Registry.  
 Google's own documentation for this pushing to this register can be found [here](https://cloud.google.com/container-registry/docs/pushing-and-pulling).
 
+1. Download and generate all necessary secrets.
 1. Build a Docker image by following the [API guide](../api).
 1. Build a Packer image with  
    `python cloud.py build-packer`.

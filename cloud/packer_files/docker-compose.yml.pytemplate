@@ -1,0 +1,16 @@
+version: '3.5'
+services:
+  api:
+    image: {tag}:latest
+    env_file:
+      - ./.env
+    networks:
+      godlydnett:
+        ipv4_address: {ip}
+networks:
+  godlydnett:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: {network}
