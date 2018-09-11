@@ -77,7 +77,9 @@ export default class SearchBar extends Component {
             <TouchableHighlight
                 key={item.place_id}
                 onPress={() => {
-                    this.props.onVenueSelect(item.place_id);
+                    const { onVenueSelect } = this.props;
+                    onVenueSelect(item.place_id);
+                    this.clearText();
                     this.input.blur();
                     this.setState({searchPrompt: ""});
                 }}
