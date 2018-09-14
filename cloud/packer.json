@@ -29,7 +29,7 @@
     },
     {
       "type": "file",
-      "source": "../api/docker-compose.yml",
+      "source": "packer_files/docker-compose.yml",
       "destination": "/tmp/docker-compose.yml"
     },
     {

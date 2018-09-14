@@ -1,12 +1,11 @@
 import errno
 from gc_constants import _EXTENSION
-import ntpath
 import os
 import sys
 
 
 def has_extension(file_name):
-    return ntpath.splitext(file_name)[1] == _EXTENSION
+    return os.path.splitext(file_name)[1] == _EXTENSION
 
 
 def set_extension(file_name):
@@ -18,18 +17,28 @@ def set_extension(file_name):
 
 def remove_extension(file_name):
     if has_extension(file_name):
-        return ntpath.splitext(file_name)[0]
+        return os.path.splitext(file_name)[0]
     else:
         return file_name
 
 
-def solve_file_path(secret_name, out):
-    if ntpath.isdir(out):
+def solve_file_path(secret_name, out=None):
+    out = os.path.abspath(os.path.realpath(out))\
+        if out is not None\
+        else None
+
+    if out and os.path.isdir(out):
         file_name = remove_extension(secret_name)
-        full_path = ntpath.join(out, file_name)
+        full_path = os.path.join(out, file_name)
+
+    elif out:
+        full_path = remove_extension(out)
+
+    elif os.path.isfile(secret_name):
+        full_path = secret_name
 
     else:
-        full_path = remove_extension(out)
+        full_path = os.path.abspath(os.path.realpath(secret_name))
 
     return full_path
 
@@ -48,9 +57,9 @@ def save_to_file(file_path, content, create_dir=False, repeated=False):
         print(ioe, file=sys.stderr)
         if ioe.errno == errno.ENOENT and create_dir and not repeated:
             # errno.ENOENT -> No such file or directory
-            folder = ntpath.dirname(file_path)
+            folder = os.path.dirname(file_path)
             print(
-                'Creating folder {}'.format(ntpath.dirname(file_path)),
+                'Creating folder {}'.format(os.path.dirname(file_path)),
                 file=sys.stderr
             )
             os.makedirs(folder)

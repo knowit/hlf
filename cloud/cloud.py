@@ -11,6 +11,12 @@ from time import sleep
 __PROJECT_ROOT = os.path.dirname(os.path.dirname(
     os.path.abspath(os.path.realpath(__file__))
 ))
+__DOCKER_COMPOSE_FILE = os.path.join(
+    __PROJECT_ROOT,
+    'cloud',
+    'packer_files',
+    'docker-compose.yml'
+)
 __SECRET_FOLDER = os.path.join(
     __PROJECT_ROOT,
     'secrets'
@@ -123,6 +129,22 @@ def start_server():
     os.system(gcloud_command)
 
 
+####################################################
+# Create a configuration file for 'docker-compose' #
+####################################################
+def compose_yml():
+    with open(__DOCKER_COMPOSE_FILE + '.pytemplate', 'r') as template_file:
+        with open(__DOCKER_COMPOSE_FILE, 'w') as compose_file:
+            compose_template = template_file.read()
+            compose_file.write(
+                compose_template.format(
+                    tag=__VARS['image_tag'],
+                    ip=__VARS['api_ip'],
+                    network=__VARS['api_network']
+                )
+            )
+
+
 ####################
 # Helper functions #
 ####################
@@ -184,7 +206,8 @@ if __name__ == '__main__':
     command_function_mapping = {
         'build-packer': build_packer,
         'push-docker': push_docker,
-        'start-server': start_server
+        'start-server': start_server,
+        'compose-yml': compose_yml
     }
 
     # Parse and validate arguments
