@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, StyleSheet, Platform} from "react-native";
+import {View, StyleSheet} from "react-native";
 import {connect} from "react-redux";
 
 import SearchBar from "../containers/SearchBar";
@@ -15,16 +15,16 @@ class MainScreen extends Component {
 
     componentDidUpdate(prevProps) {
         if (
-            !prevProps.selectedVenue ||
-            (this.props.selectedVenue &&
-                prevProps.selectedVenue.name !== this.props.selectedVenue.name)
+            this.props.selectedVenue.venue && !prevProps.selectedVenue.venue ||
+            (this.props.selectedVenue.venue &&
+                prevProps.selectedVenue.venue.name !== this.props.selectedVenue.venue.name)
         ) {
             this.notifyMapOnChange();
         }
     }
 
     notifyMapOnChange() {
-        const {location} = this.props.selectedVenue.geometry;
+        const {location} = this.props.selectedVenue.venue.geometry;
         this.map.animateTo({
             latitude: location.lat,
             longitude: location.lng
@@ -33,8 +33,6 @@ class MainScreen extends Component {
 
     render() {
         const {navigate} = this.props.navigation;
-
-        console.log(this.props.selectedVenue);
 
         return (
             <View style={styles.overallViewContainer}>

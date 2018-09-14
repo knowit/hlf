@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   commentInput: {
     fontSize: 20,
     flex: 1,
-    padding: 0,
+    padding: COMPONENT_SPACING,
     color: colors.primaryTextColor,
     textAlignVertical: "top",
     fontFamily: Platform.OS === "android" ? "sans-serif-light" : undefined

@@ -16,7 +16,7 @@ const PropertyTitle = ({ property, size, style }) => {
     >
       {React.cloneElement(property.icon, {
         color: colors.primaryTextColor,
-        size: size * 1.2
+        size: property.name === 'Informasjon' ? size * 1.1 : size * 1.2
       })}
       <SlimText
         style={{
