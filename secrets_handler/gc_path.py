@@ -23,6 +23,10 @@ def remove_extension(file_name):
 
 
 def solve_file_path(secret_name, out=None):
+    out = os.path.abspath(os.path.realpath(out))\
+        if out is not None\
+        else None
+
     if out and os.path.isdir(out):
         file_name = remove_extension(secret_name)
         full_path = os.path.join(out, file_name)

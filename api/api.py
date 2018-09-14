@@ -71,7 +71,7 @@ if __name__ == '__main__':
     command_function_mapping = {
         'build-docker': build_docker,
         'build-maven': build_maven,
-        'build-both': build_both
+        'build': build_both
     }
 
     argparser = _get_argument_parser(list(command_function_mapping))
