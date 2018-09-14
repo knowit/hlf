@@ -9,7 +9,7 @@ The compute engine is built on an image created by Packer, based on Google's Con
 
 ## Setup
 ### Authorization
-Follow the steps in the [root README](../), under **Setup** &gt; **Google Cloud Service Account**.
+Follow the steps in the [root README](../README.md), under **Setup** &gt; **Google Cloud Service Account**.
 
 ### Downloads
 A couple of extra programs and packages are needed to deploy the API.
@@ -34,7 +34,7 @@ When building a server image with Packer, an `.env` file must be present. This f
 **Project variables**  
 Luckily for us there are even more variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud` they are not stored as environment variables. This file's name is `gcp.json`.
 
-To download the secrets, follow the steps in the [root README](../), under **Secrets**.
+To download the secrets, follow the steps in the [secrets_handler README](../secrets_handler/README.md).
 
 ### Docker Compose (yml)
 The server needs a file called `docker-compose.yml` to be able to start the API container. A template file called `docker-compose.yml.pytemplate` is used as a baseline, and is combined with a few variables from `gcp.json`.

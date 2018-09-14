@@ -1,63 +1,42 @@
 # Google Cloud Storage - Secrets
 
-This 'mini package' consists of two Python scripts to up- and download secrets to and from a GCS bucket, as well as files and functions to help with this process.
+Secrets are encrypted and stored in a bucket on Google Cloud Platform. The uploading and downloading of secrets are done in a relatively simple matter: by using either the `upload_secret.py` or `download_secret.py` script found in this folder.
 
 **The environment variable GOOGLE_APPLICATION_CREDENTIALS must be set, and the connected service account must have read/write bucket permissions.**
 
-## Upload secrets
-Script name: `upload_secret.py`
+Before up- or downloading secrets, you need the
+- project name,
+- bucket name,
+- keyring name and
+- cryptokey name
 
-Positional arguments:
+## Uploading
+1. In your terminal, change current directory:  
+   `cd hlf/secrets_handler`
+1. If `<path>` is the full local path to your secret file, and the rest or the arguments matches those you should have found already, then  
+`python upload_secret.py <path> <project name> <bucket name> <keyring> <cryptokey>`  
+   will encrypt your file and upload it to a `/secrets` folder in your specified bucket.
 
-1. Path to file
-   - Must be full path to file on local system
-1. Project name
-1. Bucket name
-1. Name of keyring
-1. Name of cryptokey
+**Note:**
+- The uploaded secret automatically sets an extra extension on the file name: `.encrypted`.
+- If an encrypted secret already exists in the bucket (named `<file name>.encrypted`) then the uploading will fail unless the optional flag `--overwrite` is set.
 
-Optional argument:
+## Downloading
+1. In your terminal, change current directory:  
+   `cd hlf/secrets_handler`
+1. If `<file name>` is the name of your secret file, and the rest or the arguments matches those you should have found already, then  
+`python download_secret.py <file name> <project name> <bucket name> <keyring> <cryptokey> --out ../secrets`  
+   will download and decrypt your file, and save it as `hlf/secrets/<file name>`.
 
-- Overwrite existing file in bucket
-
-### How to run:  
-`cd` into the `secrets_handler` folder.  
-`python upload_secret.py <path> <project name> <bucket name> <keyring> <cryptokey> [--overwrite]`
-
-The script will encrypt the file with the given key and upload it to the bucket. If the full file path is `/foo/bar/baz.biz`, then the uploaded file will be named `/secrets/bar.biz.encrypted`.  
-If the `--overwrite` flag is set any file in the bucket with the same name will be overwritten.
-
-
-## Download secrets
-Script name: `download_secret.py`
-
-Positional agruments:
-
-1. Name of file
-    - Filename _only_
-    - Assumes `.encrypted` extension. If file name doesn't end with `.encryption` the script will append it to the filename before download and decryption. 
-1. Project name
-1. Bucket name
-1. Name of keyring
-1. Name of cryptokey
-
-Optional argument:
-
-- Download to file
-
-### How to run:  
-`cd` into the `secrets_handler` folder.  
-`python download_secret.py <file name> <project name> <bucket name> <keyring> <cryptokey> [--out <file path>]`
-
-The script will download the secret, decrypt it with the given key and print the result to standard output.  
-If the `--out` flag is set, the decrypted secret will be saved to the supplied `<path>`.
-
-- If `<file name>` is `baz.biz.encrypted` and flag is `--out /foo/bar`:
-    - -&gt; `/foo/bar/baz.biz`
-- `baz.biz` and `--out /foo/bar`:
-    - -&gt; `/foo/bar/baz.biz`
-- `baz.biz.encrypted` and `--out /foo/bar/faa.fee`
-    - -&gt; `/foo/bar/faa.fee`
+**Note:**
+- The script assumes that the files are stored in the bucket with an `.encrypted` extension.
+    - Both a `<file name>` of `foo.txt` and `foo.txt.encrypted` will make the script search for a secret named `foo.txt.encrypted`.
+    - If no such secret is found, then the script will fail, i.e. the scipt _can not_ download and decrypt a file unless it is stored in the bucket with an `.encryption` extension. (This will always be done automatically when encrypting and uploading with `upload_secret.py`)
+    - The saved file will _not_ have the `.encrypted` extension (for obvious reasons).
+- The `--out <path>` flag tells the script where to save the decrypted file locally. `<path>` can be absolute or relative.
+    - If `<path>` is a directory then the secret will saved as `<path>/<file name>`.
+    - If `<path>` is a full file path, then that will be the name of the file, regardless of the value of `<file name>`.
+    - If `--out <path>` is _not_ set, then the decrypted contents of the secret will be sent to the standard output.
 
 
 ## Other files and functions

@@ -6,7 +6,7 @@
 * All files and folders assume `hlf/api` as root, unless otherwise specified.
 
 ## Setup
-Follow the setup steps in the [root README](../).
+Follow the setup steps in the [root README](../README.md).
 
 ## Build Docker image
 The final artifact of this build process is a Docker image, configured to start a `.jar` file containing the API when a Docker container is launched from it. Only one command is needed to get this image:  
