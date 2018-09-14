@@ -3,8 +3,7 @@
 Backend for the project is hosted on Google Cloud Platform (GCP) using a compute engine, sql-server, virtual network, and load balancing. 
 The compute engine is built on an image created by Packer, based on Google's Container-Optimized OS, enabling easy deployment of docker images. The overall structure of the cloud solution is built using infrastructure as code (IaC) with Terraform.
 
-**NOTE:**  
-* This README assumes that the state of the api is **development**.
+**Note:**  
 * All commands are run with `hlf/cloud` as the current working directory, unless otherwise specified.
 * All files and folders assume `hlf/cloud` as root, unless otherwise specified.
 
@@ -15,26 +14,25 @@ Follow the steps in the [root README](../), under **Setup** &gt; **Google Cloud 
 ### Downloads
 A couple of extra programs and packages are needed to deploy the API.
 
-* **[Packer][packer]**  
+- **[Packer][packer]**  
   Builds an image of a Virtual Machine based on specifications from `packer.json`.  
   Packer is run with the command `python cloud.py build-packer`, which will (at the end of a long list) output an image ID.
 
-* **[Terraform][terraform]**  
-  Configures the virtual infrastructure needed, including starting a VM from the Packer-built image.  
+- **[Terraform][terraform]**  
   The Terraform's root folder is `environment/dev/`.  
-  Update the `name` field in `environment/dev/main.tf` to match the latest image ID.  
+  Configures the virtual infrastructure needed, including starting a VM from the Packer-built image. (Remember to update the `name` field in `environment/dev/main.tf` to match the latest image ID.)  
   Terraform is run with the command `terraform apply`.
 
-* **[Google Cloud SDK][gcsdk]**  
+- **[Google Cloud SDK][gcsdk]**  
   Google's tool for connecting to GCP.
 
 ### Download secrets
 
 **Docker environment variables**  
-When building a server image with Packer, an `.env` file must be present. This file will be saved to the image during building, and is used by Docker Compose when starting a server container.
+When building a server image with Packer, an `.env` file must be present. This file will be saved to the image during building, and is used by Docker Compose to set relevant environment variables when starting a server container.
 
 **Project variables**  
-Luckily for us there are some variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud`, they are not stored as environment variables. This file's name is `gcp.json`.
+Luckily for us there are even more variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud` they are not stored as environment variables. This file's name is `gcp.json`.
 
 To download the secrets, follow the steps in the [root README](../), under **Secrets**.
 

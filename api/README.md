@@ -1,5 +1,10 @@
 # Godlydpatruljen - API
 
+## General
+**Note:**  
+* All commands are run with `hlf/api` as the current working directory, unless otherwise specified.
+* All files and folders assume `hlf/api` as root, unless otherwise specified.
+
 ## Setup
 Follow the setup steps in the [root README](../).
 

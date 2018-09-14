@@ -8,6 +8,8 @@ Three main components, or projects:
 
 In addition there is a module called [secrets_handler](/secrets_handler) which is used for en-/decryption and up-/downloading of secrets.
 
+**Note:** This README, and all READMEs for all components, assume that the state of this project is **development**.
+
 ## Setup
 The setup for each component is described in separate READMEs, found under the components' root. Nevertheless, there are a few steps which are considered "general", so we will go through them here.
 
