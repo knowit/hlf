@@ -1,13 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import properties from "../settings/propertyConfig";
-import colors from "../settings/defaultStyles";
+import colors, {COMPONENT_SPACING} from "../settings/defaultStyles";
 import PropertyReviewIcon from "./PropertyReviewIcon";
 import PropertyTitle from "./PropertyTitle";
 import SlimText from "./SlimText";
 import propTypes from "prop-types";
 
-const FONT_SIZE = 20;
+const FONT_SIZE = 18;
 const PropertyOverview = ({ reviewSummary }) => {
   return (
     <View>
@@ -40,10 +40,11 @@ const valueBar = (positive, negative) => {
   );
   const isPositive = positivePercentage >= 50;
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={{ flexDirection: "row"}}>
       <PropertyReviewIcon
         positive={isPositive}
         size={FONT_SIZE}
+        style={{ paddingLeft: 30 }}
         hidden={!isPositive}
       />
       <View style={styles.barWrap}>
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   },
 
   barWrap: {
-    width: 120,
+    width: 100,
     height: "85%",
     marginHorizontal: 10
   },
@@ -119,5 +120,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     fontSize: 15,
     color: colors.primaryTextColor
+  },
+  propertyReviewIcon: {
   }
 });
