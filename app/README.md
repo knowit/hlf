@@ -1,7 +1,7 @@
 # Godlydpatruljen - Mobile App
 Mobile application made with [React Native][react-native].
 
-## Perequisites
+## Prerequisites
 This project is _not_ using Expo, which means that all SDKs must be downloaded and installed locally. React Native's [getting started guide][react-native-getting-started] could be of help regarding setting up your project. When reading the guide, click on **Building Projects with Native Code** and choose **Development OS** and **Target OS** to get more detailed instructions.
 
 Also, install [NodeJS][nodejs] with [NPM][npm]. NPM should be included when installing NodeJS.
