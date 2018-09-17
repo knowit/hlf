@@ -65,7 +65,8 @@ Google's own documentation for this pushing to this register can be found [here]
 ## Security
 ### SSL Certificates
 [Certbot][certbot] is a tool for automatic creation, verification and renewal of SSL Certificates, through the Certificate Authority _**Let’s Encrypt**_. This first command tells Certbot to create a certificate and private key. An e-mail address is required.
-```
+
+```bash
 sudo certbot certonly \
 --manual \
 --agree-tos \
@@ -76,7 +77,8 @@ sudo certbot certonly \
 ```
 
 This second command creates a Google Cloud Certificate Resource by uploading the certificate and key to our GCP project. This enables us to use the certificate for Google's load balancer service, which all traffic to and from the API must pass through.
-```
+
+```bash
 sudo gcloud compute ssl-certificates \
 create godlyd-cert \
 --certificate=/etc/letsencrypt/live/dev.api.godlypatruljen.no/fullchain.pem \

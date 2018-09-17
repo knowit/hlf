@@ -29,9 +29,16 @@ __GCP_JSON_FILE = os.path.join(
     __SECRET_FOLDER,
     'gcp.json'
 )
+__AUTH_JSON_FILE = os.path.join(
+    __SECRET_FOLDER,
+    'auth.json'
+)
 
-with open(__GCP_JSON_FILE, 'r') as json_file:
-    __VARS = json.load(json_file)
+with open(__GCP_JSON_FILE, 'r') as gcp_json_file:
+    __GCP_VARS = json.load(gcp_json_file)
+
+with open(__AUTH_JSON_FILE, 'r') as auth_json_file:
+    __AUTH_VARS = json.load(auth_json_file)
 
 
 ##############################
@@ -58,26 +65,26 @@ def build_packer():
 #############################
 def push_docker():
     image_id = os.popen(
-        'docker images -q {}'.format(__VARS['image_name'])
+        'docker images -q {}'.format(__GCP_VARS['image_name'])
     ).read().replace('\n', '')
 
     commands = [
         'gcloud auth activate-service-account {} --key-file {}'.format(
-            __VARS['user'], os.environ['GOOGLE_APPLICATION_CREDENTIALS']
+            __GCP_VARS['user'], os.environ['GOOGLE_APPLICATION_CREDENTIALS']
         ),
 
         'gcloud config set project {}'.format(
-            __VARS['project']
+            __GCP_VARS['project']
         ),
 
         'gcloud auth configure-docker',
 
         'docker tag {} {}'.format(
-            image_id, __VARS['image_tag']
+            image_id, __GCP_VARS['image_tag']
         ),
 
         'docker push {}'.format(
-            __VARS['image_tag']
+            __GCP_VARS['image_tag']
         )
     ]
 
@@ -91,14 +98,14 @@ def push_docker():
 def start_server():
     docker_command = 'sudo docker-compose up -d'
     gcloud_command = 'gcloud compute ssh {}@{} --command="{}"'.format(
-        __VARS['ssh_user'],
-        __VARS['instance_name'],
+        __GCP_VARS['ssh_user'],
+        __GCP_VARS['instance_name'],
         docker_command
     )
 
     print(
         'Attempting to ssh into {} and start the Docker container'
-        .format(__VARS['instance_name'])
+        .format(__GCP_VARS['instance_name'])
     )
 
     max_attempts = 3
@@ -138,11 +145,41 @@ def compose_yml():
             compose_template = template_file.read()
             compose_file.write(
                 compose_template.format(
-                    tag=__VARS['image_tag'],
-                    ip=__VARS['api_ip'],
-                    network=__VARS['api_network']
+                    tag=__GCP_VARS['image_tag'],
+                    ip=__GCP_VARS['api_ip'],
+                    network=__GCP_VARS['api_network']
                 )
             )
+
+
+##############################################
+# Create an '.env' file for 'docker-compose' #
+##############################################
+def set_env():
+    keys = [
+        "postgres_db", "datasource_user", "datasource_password",
+        "auth0_domain", "auth0_issuer", "auth0_token_url",
+        "auth0_audience", "auth0_client_id", "auth0_client_secret",
+        "auth0_management_audience", "auth0_management_client_id",
+        "auth0_management_client_secret", "google_maps_api_key"
+    ]
+    with open(__DOCKER_ENV_FILE, 'w') as env_file:
+        env_lines = [
+            "{}={}".format(
+                key.upper(),
+                __AUTH_VARS[key]
+            )
+            for key in keys
+        ]
+        env_file.writelines(env_lines)
+
+
+############################################
+# Set both the '.yml' and the '.env' files #
+############################################
+def set_both():
+    compose_yml()
+    set_env()
 
 
 ####################
@@ -207,7 +244,9 @@ if __name__ == '__main__':
         'build-packer': build_packer,
         'push-docker': push_docker,
         'start-server': start_server,
-        'compose-yml': compose_yml
+        'compose-yml': compose_yml,
+        'set-env': set_env,
+        'set-both': set_both
     }
 
     # Parse and validate arguments

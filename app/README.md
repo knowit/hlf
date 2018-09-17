@@ -1,103 +1,82 @@
-# Godlydpatruljen
-Mobilapplikasjonen utviklet med React Native. 
+# Godlydpatruljen - Mobile App
+Mobile application made with [React Native][react-native].
 
-## Forutsetninger 
-Prosjektet bygger på Native kode (ikke Expo), hvilket betyr at SDK-er må lastes ned på utviklings-PC.
-[Den offisielle dokumentasjonen](https://facebook.github.io/react-native/docs/getting-started) til React Native kan være behjelpelig med å komme i gang med dette. Velg __Building Projects with Native Code__. Sett så __Development OS__ og __Target OS__ for videre instruksjoner.
+## Perequisites
+This project is _not_ using Expo, which means that all SDKs must be downloaded and installed locally. React Native's [getting started guide][react-native-getting-started] could be of help regarding setting up your project. When reading the guide, click on **Building Projects with Native Code** and choose **Development OS** and **Target OS** to get more detailed instructions.
 
-## Installasjon 
-``` 
-git clone https://github.com/knowit/hlf.git
-cd hlf/app
-npm install 
-Opprett secrets ( se neste punkt ) 
-```
+Also, install [NodeJS][nodejs] with [NPM][npm]. NPM should be included when installing NodeJS.
 
-## Secrets
+## Setup
+1. Change your current working directory to the app folder:  
+`cd hlf/app`
 
-### Android kode:
+2. Install dependencies from NPM  
+`npm install`
 
-__android/secrets.properties__
-```properties
-googleMapsApiKey="google maps api key"
-```
+3. Follow the steps in the [secrets handler README](../secrets_handler/README.md) to download `auth.json` (it should be saved in the `secrets` folder).
 
-### iOS kode: 
+4. Use the Python script `app.py` to create credentials:  
+`python app.py set-all-credentials`
+    - This will create four files with the appropriate credentials:
+        - `android/secrets.properties`
+        - `ios/godlydapp/Key.m`
+        - `settings/authConfig.js`
+        - `credentials.js`
+    - To only set one file at the time, the argument `set-all-credentials` can be changed to one of the following:
+        - `set-properties`
+        - `set-key`
+        - `set-auth-config`
+        - `set-credentials-js`
 
-ios/godlydapp/Key.h og ios/godlydapp/Key.m
-
-__Key.h__
-```objective-c
-@interface Key
-extern NSString *googleMapsApiKey;
-@end
-``` 
-__Key.m__
-```objective-c
-NSString *googleMapsApiKey = @"google maps api key";
-``` 
-
-### React-Native kode: 
-
-Prosjektet er avhengig av to secrets filer for å kjøre; settings/authConfig.js & app/credentials.js
-__authConfig.js__
-```javascript
-module.exports = {
-  domain: [SETT INN AUTH0 DOMENE],
-  clientId: [SETT INN AUTH0 CLIENT ID],
-  audience: [SETT INN AUTH0 AUDIENCE],
-  scope: [SETT INN AUTH0 SCOPE]
-};
-``` 
-
-__credentials.js__
-```javascript
-export const API_KEY = [google maps api key ]
-```
-Google Maps api key hentes fra Google Cloud Console
-
-## Kjør i utviklingsmiljø
-#### Android:
-```
+## Run in development environment
+```bash
+# Android
 react-native run-android
-For logging:
-react-native log-android
-```
-#### IOS 
-```
+
+# iOS
 react-native run-ios
-For logging:
+
+# To run with logging, use
+react-native log-android
+# or
 react-native log-ios
 ```
 
-## Bygg release versjon
-#### Android
-```
-cd android
-./gradlew assembleRelease
-```
-.apk (to ulike versjoner for ARM og x86) vil legge seg i app/android/app/build/outputs/apk/release
+## Build app
+### Android
+1. Change to `android` folder:  
+`cd android`
 
-#### iOS
+1. Build with [Gradle][gradle]:  
+`./gradlew assembleRelease`
 
-1. Logg inn på Apple Utvikler Konto og sørg for at du har satt riktig app som kontekst. 
-2. Pass på at XCode er logget inn med samme utvikler konto. 
-3. Åpne /hlf/app/ios/godlydapp.xcodeworkspace i XCod
-4. I XCode sin meny trykk på "godlydapp" for å få opp informasjon om prosjektet. Pass på at Signing Team er satt til "Hlf Hørselshemmedes Landsforbund". 
+The artifacts will be two `.apk` files, one for ARM and one for x86, which will be saved in `hlf/app/android/app/build/outputs/apk/release`.
 
-5. Generer Sertifikater med Xcode: 
-  * Xcode Preferences > Account > Manage Certificates (Generer både Development og Production/Distribution Sertifikater) 
-  * Gå tilbake til nettleser der du var logget inn på Apple Utvikler konto. 
-  * Velg "Certificates, IDs & Profiles" fra menyen til venstre. 
-  * Se under "Certificates -> Development / Production" om dine sertifikater finnes der. 
+### iOS
+1. Log in to your [Apple Developer Account][apple-dev].
+    - Double-check your app context.
+    - Make sure that Xcode is logged in with the same account.
 
-6. Gå tilbake til Xcode og velg at bygging av app mot en generisk ios enhet. Trykk så på Product > Archive
-7. Etter at applikasjonen har blitt bygget kan man laste den opp til App Store Connect ved å trykke på den blå knappen. 
-8. Applikajsonen vil etterhvert da havne på https://appstoreconnect.apple.com/
+1. Open `/hlf/app/ios/godlydapp.xcodeworkspace` in Xcode.
 
-## Todos
-* Se issues
-* Lage tester 
-* Brukertesting m/ påfølgende arbeid
-* Generell forbedring av kode og style
-* Teste og bygge til IOS (krever Mac med Xcode + Iphone, og eventuelt en utviklerkonto)
+1. Within Xcode, click on _**godlydapp**_ to view project information. Make sure that **Signing Team** is set to _"Hlf Hørselshemmedes Landsforbund"_.
+
+1. Generate certificates with Xcode:
+    - **Xcode Preferences** &gt; **Account** &gt; **Manage Certificates**
+        - Generate certificates for _"Development"_ **and** _"Production / Distribution"_.
+        - Open your web browser where you logged in to you Apple Developer Account.
+        - In the left-hand menu, choose **Certificates, IDs &amp; Profiles**.
+        - Your certificates should be stored under **Certificates** &gt; **Development / Production**
+
+1. Build the app for a generic iOS device.
+
+1. When building is complete, the application should be visible under **Product** &gt; **Archive**. It can now be uploaded to [**App Store Connect**][app-store-connect] (blue button), and will after a while be available at ASC.
+
+
+[apple-dev]:                    https://developer.apple.com/account/
+[app-store-connect]:            https://appstoreconnect.apple.com/
+[gradle]:                       https://gradle.org/
+[nodejs]:                       https://nodejs.org/en/
+[npm]:                          https://www.npmjs.com/
+[react-native]:                 https://facebook.github.io/react-native/
+[react-native-getting-started]: https://facebook.github.io/react-native/docs/getting-started
