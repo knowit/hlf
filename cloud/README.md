@@ -30,10 +30,10 @@ A couple of extra programs and packages are needed to deploy the API.
 
 Two files are required: `gcp.json` and `auth.json`. For instructions on how to download secrets, follow the steps in the [secrets_handler README](../secrets_handler/README.md).
 
-**Docker environment variables**
+**Docker environment variables**  
 When building a server image with Packer, an `.env` file must be present. This file will be saved to the image during building, and is used by Docker Compose to set relevant environment variables when starting a server container.
 
-**Docker Compose (yml)**
+**Docker Compose (yml)**  
 The server needs a file called `docker-compose.yml` to be able to start the API container. A template file called `docker-compose.yml.pytemplate` is used as a baseline, and is combined with a few variables from `gcp.json`.
 
 To generate these to files and put them in the `packer_files` folder, run this command:  
