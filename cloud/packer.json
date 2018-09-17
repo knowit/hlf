@@ -34,7 +34,7 @@
     },
     {
       "type": "file",
-      "source": "../secrets/.env",
+      "source": "packer_files/.env",
       "destination": "/tmp/.env"
     },
     {

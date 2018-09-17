@@ -11,19 +11,22 @@ from time import sleep
 __PROJECT_ROOT = os.path.dirname(os.path.dirname(
     os.path.abspath(os.path.realpath(__file__))
 ))
-__DOCKER_COMPOSE_FILE = os.path.join(
+__PACKER_FILES_FOLDER = os.path.join(
     __PROJECT_ROOT,
     'cloud',
-    'packer_files',
+    'packer_files'
+)
+__DOCKER_COMPOSE_FILE = os.path.join(
+    __PACKER_FILES_FOLDER,
     'docker-compose.yml'
+)
+__DOCKER_ENV_FILE = os.path.join(
+    __PACKER_FILES_FOLDER,
+    '.env'
 )
 __SECRET_FOLDER = os.path.join(
     __PROJECT_ROOT,
     'secrets'
-)
-__DOCKER_ENV_FILE = os.path.join(
-    __SECRET_FOLDER,
-    '.env'
 )
 __GCP_JSON_FILE = os.path.join(
     __SECRET_FOLDER,
@@ -177,7 +180,7 @@ def set_env():
 ############################################
 # Set both the '.yml' and the '.env' files #
 ############################################
-def set_both():
+def generate_both():
     compose_yml()
     set_env()
 
@@ -246,7 +249,7 @@ if __name__ == '__main__':
         'start-server': start_server,
         'compose-yml': compose_yml,
         'set-env': set_env,
-        'set-both': set_both
+        'generate-both': generate_both
     }
 
     # Parse and validate arguments

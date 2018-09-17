@@ -40,6 +40,7 @@ NSString *googleMapsApiKey = @"google maps api key";
 ### React-Native kode: 
 
 Prosjektet er avhengig av to secrets filer for å kjøre; settings/authConfig.js & app/credentials.js
+
 __authConfig.js__
 ```javascript
 module.exports = {

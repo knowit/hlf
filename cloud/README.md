@@ -28,19 +28,21 @@ A couple of extra programs and packages are needed to deploy the API.
 
 ### Download secrets
 
-**Docker environment variables**  
+Two files are required: `gcp.json` and `auth.json`. For instructions on how to download secrets, follow the steps in the [secrets_handler README](../secrets_handler/README.md).
+
+**Docker environment variables**
 When building a server image with Packer, an `.env` file must be present. This file will be saved to the image during building, and is used by Docker Compose to set relevant environment variables when starting a server container.
 
-**Project variables**  
-Luckily for us there are even more variables that must be set! As these are not shared between modules, and are not globally needed for e.g. `gcloud` they are not stored as environment variables. This file's name is `gcp.json`.
-
-To download the secrets, follow the steps in the [secrets_handler README](../secrets_handler/README.md).
-
-### Docker Compose (yml)
+**Docker Compose (yml)**
 The server needs a file called `docker-compose.yml` to be able to start the API container. A template file called `docker-compose.yml.pytemplate` is used as a baseline, and is combined with a few variables from `gcp.json`.
 
-Run this command to generate the complete `.yml` file:  
-`python cloud.py compose-yml`
+To generate these to files and put them in the `packer_files` folder, run this command:  
+`python cloud.py generate-both`
+
+If only one of the files are to be generated, run  
+`python cloud.py compose-yml` or  
+`python cloud.py set-env`,  
+depending on whether you want the `.yml` or `.env` file.
 
 ## Deployment
 
