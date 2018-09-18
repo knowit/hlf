@@ -11,10 +11,21 @@ import ReviewList from "../components/ReviewList";
 import Profile from "../components/Profile";
 import LogoutButton from "../components/LogoutButton";
 import LoginButton from "../components/LoginButton";
+import Auth from '../auth/Auth';
+import { onSignOut } from '../actions/account';
 
 class SidebarNavigation extends Component {
+
+    login = () => Auth.login();
+    logout = () => {
+        this.props.onSignOut();
+        console.log("this.props:", this.props);
+        this.props.navigation.closeDrawer();
+    };
+
     render() {
-        const { user, onSignOut, onLoginButtonClicked } = this.props;
+
+        const { user } = this.props;
 
         if(user.isAuthenticated) {
             return (
@@ -30,7 +41,7 @@ class SidebarNavigation extends Component {
                         style={{padding: 0}}
                     />
                     <HorizontalRuler/>
-                    <LogoutButton onSignOut={ onSignOut }/>
+                    <LogoutButton onSignOut={ this.logout }/>
                 </View>
             );
         }
@@ -44,7 +55,7 @@ class SidebarNavigation extends Component {
                     style={{padding: 0}}
                 />
                 <HorizontalRuler/>
-                <LoginButton onLoginButtonClicked={ onLoginButtonClicked }/>
+                <LoginButton onLoginButtonClicked={ this.login } />
             </View>
         );
     }
@@ -57,4 +68,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(({user}) => ({user}))(SidebarNavigation);
+export default connect(({user}) => ({user}),{ onSignOut })(SidebarNavigation);
