@@ -12,11 +12,6 @@ import Auth from "../auth/Auth";
 
 export default class RequestAuthenticationModal extends Modal {
 
-    constructor(props) {
-        super(props);
-        this.onConfirm = this.onConfirm.bind(this);
-    }
-
     render() {
         const { visible, onModalClose } = this.props;
 
@@ -40,7 +35,7 @@ export default class RequestAuthenticationModal extends Modal {
                                 <Text>{cancelText}</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={Auth.login()}>
+                        <TouchableOpacity onPress={Auth.login}>
                             <View style={styles.button}>
                                 <Text>{confirmText}</Text>
                             </View>
