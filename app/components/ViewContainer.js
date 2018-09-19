@@ -14,6 +14,7 @@ const ViewContainer = ({
   keyboardAware,
 }) => {
   const Component = scrollable ? keyboardAware ? KeyboardAwareScrollView : ScrollView : View;
+
   return (
     <Component
       style={[
