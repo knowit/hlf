@@ -39,7 +39,6 @@ android/godlydapp-release-key.keystore
 
 # iOS
 ios/Pods
-ios/godlydapp/Key.h
 ios/godlydapp/Key.m
 
 # node.js

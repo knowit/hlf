@@ -1,8 +1,6 @@
-import {Modal, Platform, StyleSheet, Text, TouchableHighlight, View, Button } from "react-native";
+import {Modal, Platform, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import React from "react";
 import {colors} from "../settings/defaultStyles";
-import ConfirmButton from "./ConfirmButton";
-import CancelButton from "./CancelButton";
 
 export default class ReviewDeletionModal extends Modal {
 
@@ -14,6 +12,9 @@ export default class ReviewDeletionModal extends Modal {
     render() {
         const { modalVisible, title } = this.props;
         const deletionText = "Vil du slette denne vurderingen?";
+        const confirmText = "Slett";
+        const cancelText = "Avbryt";
+
         return (
             <Modal
                 animationType="slide"
@@ -34,12 +35,17 @@ export default class ReviewDeletionModal extends Modal {
                                 { deletionText }
                             </Text>
                             <View style={styles.buttonGroup}>
-                                <CancelButton
-                                    title="Avbryt"
-                                    onPress={this._onCancel} />
-                                <ConfirmButton
-                                    title="Slett"
-                                    onPress={this._onConfirm} />
+                                <TouchableOpacity onPress={this._onCancel}>
+                                    <View style={styles.button}>
+                                        <Text>{cancelText}</Text>
+                                    </View>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={this._onConfirm}>
+                                    <View style={styles.button}>
+                                        <Text>{confirmText}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -53,13 +59,10 @@ export default class ReviewDeletionModal extends Modal {
 const styles = StyleSheet.create({
 
     modalOuter: {
-      marginTop: 22,
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 30,
-      width: "100%",
     },
 
     modalInner: {
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
 
     modalTitle: {
         color: colors.primaryTextColor,
-        fontSize: 30,
+        fontSize: 20,
     },
 
     modalBody: {
@@ -90,9 +93,18 @@ const styles = StyleSheet.create({
       justifyContent: "space-between"
     },
 
+    button: {
+        padding: 8,
+        backgroundColor: 'lightblue',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)'
+    },
+
     deletionText: {
       color: colors.primaryTextColor,
-      fontSize: 20
+      fontSize: 15
     },
 
     closeButton: {
