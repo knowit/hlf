@@ -1,3 +1,3 @@
 _ENCODING = 'ascii'
 _EXTENSION = '.encrypted'
-_LOCATION_ID = 'global'
+_DEFAULT_CRYPTO_LOCATION = 'europe-west3'

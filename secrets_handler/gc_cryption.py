@@ -1,5 +1,5 @@
 import base64
-from gc_constants import _ENCODING, _LOCATION_ID
+from gc_constants import _ENCODING, _DEFAULT_CRYPTO_LOCATION
 import gc_path
 import googleapiclient.discovery
 import sys
@@ -73,13 +73,13 @@ def encrypt_secret(secret_path,
     crypto_keys = get_crypto_keys(
         project_name,
         keyring_name,
-        _LOCATION_ID
+        _DEFAULT_CRYPTO_LOCATION
     )
     key_long_name = get_key_long_name(
         project_name,
         keyring_name,
         key_name,
-        _LOCATION_ID
+        _DEFAULT_CRYPTO_LOCATION
     )
 
     plaintext = gc_path.get_file_text(secret_path)
@@ -106,13 +106,13 @@ def decrypt_secret(ciphertext,
     crypto_keys = get_crypto_keys(
         project_name,
         keyring_name,
-        _LOCATION_ID
+        _DEFAULT_CRYPTO_LOCATION
     )
     key_long_name = get_key_long_name(
         project_name,
         keyring_name,
         key_name,
-        _LOCATION_ID
+        _DEFAULT_CRYPTO_LOCATION
     )
 
     decryption_request = crypto_keys.decrypt(

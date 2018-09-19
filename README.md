@@ -19,15 +19,55 @@ Download and install [Docker Community Edition][docker-ce]. The API is deployed 
 ### Google Cloud Service Account
 One of the reccommended ways to gain access to the GC project and automated tools like `gcloud` is by using what's called a _service account_. This is a non-personal account where access and permissions can be set just as with any normal user account.
 
-The following steps assumes that such a service account already exists, and that it has the necessary permissions for the project.
+It is recommended to use a service account to authenticate CLI tools, even for local development.
 
+This project depends on _two_ service accounts: one with **Owner** permissions to use during development, and one with restricted permissions for automated use.
+
+#### Something, something permissions
+
+The (restricted) service account needs a certain set of permissions to work properly:
+
+- **Project permission**
+    - _cloudkms.keyRings.list_
+
+- **Bucket permissions**  
+  (The [artifact bucket / registry][docker-registry] where Docker images are pushed to.)
+    - [Manually set][gcloud-set-acl] the service account as _Storage Admin_ for the bucket.
+
+- **Crypto Key permissions**
+    - _cloudkms.cryptoKeyVersions.get_
+    - _cloudkms.cryptoKeyVersions.list_
+    - _cloudkms.cryptoKeyVersions.useToDecrypt_
+    - _cloudkms.cryptoKeys.get_
+    - _cloudkms.cryptoKeys.list_
+    - _cloudkms.keyRings.get_
+    - _cloudkms.keyRings.list_
+    - _resourcemanager.projects.get_
+
+**Note:**  
+Individual permissions can't be set in GCloud, but must be set indirectly via a role. It is recommended to create a new role to list key rings, and another for the usage of crypto keys.
+
+[This link][gcloud-kms-iam] provides some help with setting and removing roles via the CLI.
+
+#### Creating service accounts
 1. Log in to [Google Cloud Platform][gcp].
 1. Via the top-left triple-dash menu, open **IAM &amp; admin** &gt; **Service accounts**.
-1. Find the desired service account, click on the triple-dot menu on its far right, and click on **Create key**.
+1. Click **Create Service Account** in the top bar.
+    1. Create a name and an ID for the account.  
+      **Note:** The ID is what will be used for identifying the account, while "Name" is just a convenience tag.
+    1. Set a role for the account. This role will have "Project" as scope.  
+      Use "Owner" for the development account.  
+      Use the custom role with the _cloudkms.keyRings.list_ permission for the automated account.
+1. Set permissions for the automated service account according to the steps above.
+
+#### Authenticate with a service account
+1. Log in to [Google Cloud Platform][gcp].
+1. Via the top-left triple-dash menu, open **IAM &amp; admin** &gt; **Service accounts**.
+1. Find the service account with "Owner" permissions, click on the triple-dot menu on its far right, and click on **Create key**.
 1. Select **JSON** and click **Create**.
 1. Download the JSON file to a desired location on your local hard drive.
-    - **Note**: No matter where you save your key file, please give it a name on the format `<name of service account>@<name of project>.json`. Other scripts may depend on this naming format.
 1. Create a permanent environment variable called `GOOGLE_APPLICATION_CREDENTIALS` and set its value to be the full path of your JSON service account key.
+1. Now create and download a key for the automated service account, and save the file as `hlf/secrets/credentials.json`.
 
 ### Python
 Python is used for a good many scripts and commands in this project, and is required for everything to work properly.
@@ -65,7 +105,10 @@ The pipeline is as follows:
 
 
 [docker-ce]:        https://store.docker.com/search?type=edition&offering=community
+[docker-registry]:  https://cloud.google.com/container-registry/docs/access-control#granting_users_and_other_projects_access_to_a_registry
 [gcp]:              https://console.cloud.google.com/
+[gcloud-set-acl]:   https://cloud.google.com/storage/docs/access-control/create-manage-lists#set-an-acl
+[gcloud-kms-iam]:   https://cloud.google.com/kms/docs/iam#kms-add-member-to-cryptokey-policy-cli
 [pip]:              https://pypi.org/project/pip/
 [python]:           https://www.python.org/downloads/
 [virtualenv]:       https://virtualenv.pypa.io/en/stable/installation/
