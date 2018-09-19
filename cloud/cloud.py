@@ -48,15 +48,8 @@ with open(__AUTH_JSON_FILE, 'r') as auth_json_file:
 # Wrapper for 'packer build' #
 ##############################
 def build_packer():
-    (
-        gcpgreds_location,
-        gcpcreds_filename
-    ) = _split_file_path_and_name(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-
     packer_run_command = ' '.join([
         'packer build',
-        '-var gcpcreds_location={}'.format(gcpgreds_location),
-        '-var gcpcreds_filename={}'.format(gcpcreds_filename),
         'packer.json'
     ])
 
@@ -72,6 +65,7 @@ def push_docker():
     ).read().replace('\n', '')
 
     commands = [
+        # Use local credentials to authenticate
         'gcloud auth activate-service-account {} --key-file {}'.format(
             __GCP_VARS['user'], os.environ['GOOGLE_APPLICATION_CREDENTIALS']
         ),
@@ -222,7 +216,7 @@ def _check_for_secret_files():
 #############################
 # Create an argument parser #
 #############################
-def _get_argument_parser(command_coices):
+def _get_main_argument_parser(command_coices):
     argparser = argparse.ArgumentParser()
 
     argparser.add_argument(
@@ -237,8 +231,13 @@ def _get_argument_parser(command_coices):
 # Main #
 ########
 if __name__ == '__main__':
+    file_not_found_error_template = \
+        '  [ERROR] : File "{}" not found in folder "{}".'
+
     if not os.path.exists(__DOCKER_ENV_FILE):
-        print(__DOCKER_ENV_FILE)
+        print(file_not_found_error_template.format(
+            __DOCKER_ENV_FILE, __PACKER_FILES_FOLDER
+        ))
         sys.exit(1)
 
     # Keys are arguments which can be used when calling 'python cloud.py <arg>'
@@ -253,7 +252,7 @@ if __name__ == '__main__':
     }
 
     # Parse and validate arguments
-    argparser = _get_argument_parser(list(command_function_mapping))
+    argparser = _get_main_argument_parser(list(command_function_mapping))
     args = argparser.parse_args()
 
     # Run appropriate function

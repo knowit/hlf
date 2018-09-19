@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 cat >> ~/.bashrc <<EOF
-export GCPCREDS_FILENAME=$GCPCREDS_FILENAME
+export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/credentials.json
 EOF

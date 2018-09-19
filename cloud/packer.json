@@ -1,9 +1,4 @@
 {
-  "variables": {
-    "gcpcreds_location": null,
-    "gcpcreds_filename": null
-  },
-
   "builders": [
     {
       "type": "googlecompute",
@@ -17,10 +12,7 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "packer_files/write_to_bashrc.sh",
-      "environment_vars": [
-        "GCPCREDS_FILENAME={{user `gcpcreds_filename`}}"
-      ]
+      "script": "packer_files/write_to_bashrc.sh"
     },
     {
       "type": "file",
@@ -39,17 +31,14 @@
     },
     {
       "type": "file",
-      "source": "{{user `gcpcreds_location`}}/{{user `gcpcreds_filename`}}",
-      "destination": "/tmp/{{user `gcpcreds_filename`}}"
+      "source": "../secrets/credentials.json",
+      "destination": "/tmp/credentials.json"
     },
     {
       "type": "shell",
       "scripts": [
         "packer_files/install_packages.sh",
         "packer_files/configure_packages.sh"
-      ],
-      "environment_vars": [
-        "GCPCREDS_FILENAME={{user `gcpcreds_filename`}}"
       ]
     }
   ]
