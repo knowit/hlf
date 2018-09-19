@@ -1,68 +1,50 @@
 
 import {
     Modal,
-    Platform,
     StyleSheet,
-    Text, TouchableHighlight,
+    Text, TouchableOpacity,
     View,
+    Dimensions
 } from "react-native";
 import React from "react";
 import {colors} from "../settings/defaultStyles";
-import ConfirmButton from "./ConfirmButton";
-import CancelButton from "./CancelButton";
 import Auth from "../auth/Auth";
 
 export default class RequestAuthenticationModal extends Modal {
 
     constructor(props) {
         super(props);
-
         this.onConfirm = this.onConfirm.bind(this);
-    }
-
-    onConfirm() {
-        const {onModalClose} = this.props;
-        onModalClose();
-        Auth.login();
     }
 
     render() {
         const { visible, onModalClose } = this.props;
 
-        const title = "Innlogging";
-        const text = "For å utføre ønsket handling kreves det at du er innlogget i appen. Trykk fortsett for å logge inn eller for å opprette en ny brukerkonto.";
+        const text = "Logg inn for å vurdere";
         const cancelText = "Avbryt";
-        const confirmText = "Fortsett";
+        const confirmText = "Logg inn";
+        const { height } = Dimensions.get('window');
+        const oneThirdOfScreenHeight = height / 3;
 
         return (
             <Modal
                 animationType="slide"
-                transparent={false}
-                style={{ flex: 1}}
+                transparent={true}
                 onRequestClose={onModalClose}
                 visible={visible}>
-                <View style={ styles.modalInner }>
-                    <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>
-                            { title }
-                        </Text>
-                        <TouchableHighlight
-                            onPress={onModalClose}>
-                            <Text style={styles.closeButton}>X</Text>
-                        </TouchableHighlight>
-                    </View>
-                    <View style={styles.modalBody}>
-                        <Text style={styles.bodyText}>
-                            { text }
-                        </Text>
-                        <View style={styles.buttonGroup}>
-                            <CancelButton
-                                title={cancelText}
-                                onPress={onModalClose} />
-                            <ConfirmButton
-                                title={confirmText}
-                                onPress={this.onConfirm} />
-                        </View>
+                <View style={[styles.modal, { marginTop: oneThirdOfScreenHeight }]}>
+                    <Text style={styles.bodyText}>{text}</Text>
+                    <View style={styles.buttonGroup}>
+                        <TouchableOpacity onPress={onModalClose}>
+                            <View style={styles.button}>
+                                <Text>{cancelText}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={Auth.login()}>
+                            <View style={styles.button}>
+                                <Text>{confirmText}</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
@@ -73,48 +55,36 @@ export default class RequestAuthenticationModal extends Modal {
 
 const styles = StyleSheet.create({
 
-    modalInner: {
-        flex: 1,
-        backgroundColor: colors.secondaryBackgroundColor,
+    modal: {
+      backgroundColor: colors.secondaryBackgroundColor,
+      padding: 22,
+      borderRadius: 10,
+      borderColor: 'rgba(0, 0, 0, 0.1)',
+      alignSelf: 'center',
+      width: '75%',
+      maxWidth: '75%',
     },
 
-    modalHeader: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        margin: 25,
-        padding: 20,
-    },
-
-    modalTitle: {
-        color: colors.primaryTextColor,
-        fontSize: 30,
-    },
-
-    modalBody: {
-        flexDirection: "column",
-        justifyContent: "space-between",
-        padding: 20
+    button: {
+        padding: 8,
+        backgroundColor: 'lightblue',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)'
     },
 
     buttonGroup: {
-      marginBottom: 25,
-      padding: 80,
-      flexDirection: "row",
-      justifyContent: "space-between"
+      padding: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
 
     bodyText: {
+      padding: 12,
+      justifyContent: 'center',
+      alignItems: 'center',
       color: colors.primaryTextColor,
-      fontSize: 20
+      fontSize: 15,
     },
-
-    closeButton: {
-        fontSize: 30,
-        justifyContent: "flex-end",
-        alignContent: "flex-end",
-        fontFamily:
-            Platform.OS === "android" ? "sans-serif-light" : undefined,
-        color: colors.primaryTextColor,
-    }
-
 });

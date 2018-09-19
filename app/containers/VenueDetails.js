@@ -6,7 +6,7 @@ import VenueMenu from "../components/VenueMenu";
 import ViewContainer from "../components/ViewContainer";
 import { connect } from "react-redux";
 import {onVenueScreenChange} from "../actions/venue";
-import RequestAuthenticationModal2 from '../components/RequestAuthenticationModal2';
+import RequestAuthenticationModal from '../components/RequestAuthenticationModal';
 
 export const REVIEW_SCREEN = "Anmeldelser";
 export const NEW_REVIEW_SCREEN = "Din vurdering";
@@ -56,7 +56,7 @@ class VenueDetails extends Component {
 
                 {currentScreen === REVIEW_SCREEN ? <VenueReviews selectedVenue={venue}/> : <CreateReview selectedVenue={venue}/>}
 
-                <RequestAuthenticationModal2
+                <RequestAuthenticationModal
                     visible={this.state.modalVisible}
                     onModalClose={() => {
                         this.setState({modalVisible: false});
