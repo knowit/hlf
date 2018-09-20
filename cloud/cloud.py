@@ -37,21 +37,41 @@ __AUTH_JSON_FILE = os.path.join(
     'auth.json'
 )
 
+__LOCAL_FOLDER = '/var/local'
+
 with open(__GCP_JSON_FILE, 'r') as gcp_json_file:
     __GCP_VARS = json.load(gcp_json_file)
 
 with open(__AUTH_JSON_FILE, 'r') as auth_json_file:
     __AUTH_VARS = json.load(auth_json_file)
 
+with open(
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'], 'r'
+) as credentials_json_file:
+    __CREDENTIALS_VARS = json.load(credentials_json_file)
+
 
 ##############################
 # Wrapper for 'packer build' #
 ##############################
 def build_packer():
-    packer_run_command = ' '.join([
-        'packer build',
-        'packer.json'
-    ])
+    packer_vars = {
+        'contact_email': __GCP_VARS['contact_email'],
+        'api_domain': __GCP_VARS['api_domain'],
+        'https_proxy': __GCP_VARS['https_proxy'],
+        'docker_image_tag': __GCP_VARS['image_tag'],
+        'local_folder': __LOCAL_FOLDER
+    }
+
+    packer_run_command = ' '.join(
+        ['packer build'] +
+        [
+            '-var "{}={}"'.format(key, value)
+            for key, value
+            in packer_vars.items()
+        ] +
+        ['packer.json']
+    )
 
     os.system(packer_run_command)
 
@@ -67,7 +87,8 @@ def push_docker():
     commands = [
         # Use local credentials to authenticate
         'gcloud auth activate-service-account {} --key-file {}'.format(
-            __GCP_VARS['user'], os.environ['GOOGLE_APPLICATION_CREDENTIALS']
+            __CREDENTIALS_VARS['client_email'],
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS']
         ),
 
         'gcloud config set project {}'.format(
@@ -93,7 +114,8 @@ def push_docker():
 # Wrapper for 'docker-compose up' #
 ###################################
 def start_server():
-    docker_command = 'sudo docker-compose up -d'
+    docker_command = 'sudo docker-compose up -d -f {}/docker-compose.yml'\
+        .format(__LOCAL_FOLDER)
     gcloud_command = 'gcloud compute ssh {}@{} --command="{}"'.format(
         __GCP_VARS['ssh_user'],
         __GCP_VARS['instance_name'],
@@ -144,7 +166,8 @@ def compose_yml():
                 compose_template.format(
                     tag=__GCP_VARS['image_tag'],
                     ip=__GCP_VARS['api_ip'],
-                    network=__GCP_VARS['api_network']
+                    network=__GCP_VARS['api_network'],
+                    local_folder=__LOCAL_FOLDER
                 )
             )
 
@@ -197,16 +220,21 @@ def _get_docker_env_vars():
 
 def _check_for_secret_files():
     files_not_found = []
+    files_to_check = [
+        __DOCKER_ENV_FILE,
+        __GCP_JSON_FILE,
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS']
+    ]
 
-    if not os.path.exists(__DOCKER_ENV_FILE):
-        files_not_found.append(__DOCKER_ENV_FILE)
-    if not os.path.exists(__GCP_JSON_FILE):
-        files_not_found.append(__GCP_JSON_FILE)
+    for file_ in files_to_check:
+        if not os.path.exists(file_):
+            files_not_found.append(file_)
 
     for file_ in files_not_found:
         print(
             '  [ERROR] : Couldn\'t find "{}".'
-            .format(file_)
+            .format(file_),
+            file=sys.stderr
         )
 
     if files_not_found:
@@ -231,14 +259,7 @@ def _get_main_argument_parser(command_coices):
 # Main #
 ########
 if __name__ == '__main__':
-    file_not_found_error_template = \
-        '  [ERROR] : File "{}" not found in folder "{}".'
-
-    if not os.path.exists(__DOCKER_ENV_FILE):
-        print(file_not_found_error_template.format(
-            __DOCKER_ENV_FILE, __PACKER_FILES_FOLDER
-        ))
-        sys.exit(1)
+    _check_for_secret_files()
 
     # Keys are arguments which can be used when calling 'python cloud.py <arg>'
     # Values are function-objects which will be called based on argument

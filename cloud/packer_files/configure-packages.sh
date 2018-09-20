@@ -2,13 +2,13 @@
 
 # Move files uploaded by Packer
 sudo mv /tmp/nginx.conf /etc/nginx/
-sudo mv /tmp/docker-compose.yml ~/
-sudo mv /tmp/.env ~/
-sudo mkdir ~/.gc
-sudo mv /tmp/credentials.json ~/.gc/
+sudo mv /tmp/docker-compose.yml $LOCAL_FOLDER/
+sudo mv /tmp/.env $LOCAL_FOLDER/
+sudo mkdir $LOCAL_FOLDER/.gc
+sudo mv /tmp/credentials.json $LOCAL_FOLDER/.gc/
 
 # Create folder for ACME Challenges
-sudo mkdir -p /var/www/letsencrypt/.well-known/acme-challenge
+sudo mkdir -p $ACME_CHALLENGE
 
 # Authenticate Docker
 sudo gcloud auth configure-docker
@@ -22,11 +22,11 @@ fi
 touch /tmp/$DOCKERCONF
 sudo cat > /tmp/$DOCKERCONF <<EOF
 [Service]
-Environment="GOOGLE_APPLICATION_CREDENTIALS=~/.gc/credentials.json"
+Environment="GOOGLE_APPLICATION_CREDENTIALS=$LOCAL_FOLDER/.gc/credentials.json"
 EOF
 sudo mv /tmp/$DOCKERCONF $DOCKERDIR/$DOCKERCONF
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 
 # Pull Docker image
-sudo docker pull eu.gcr.io/godlydpatruljen/server-hlf-dev
+sudo docker pull $DOCKER_IMAGE_TAG

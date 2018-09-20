@@ -75,7 +75,9 @@ sudo certbot certonly \
 --manual-public-ip-logging-ok \
 --no-eff-email \
 --email <your email address> \
---domain dev.api.godlypatruljen.no
+--domain dev.api.godlypatruljen.no \
+--manual-auth-hook=$CERTBOT_HOOKS/certbot-authenticator.sh \
+--manual-cleanup-hook=$CERTBOT_HOOKS/certbot-cleanup.sh
 ```
 
 This second command creates a Google Cloud Certificate Resource by uploading the certificate and key to our GCP project. This enables us to use the certificate for Google's load balancer service, which all traffic to and from the API must pass through.

@@ -3,7 +3,7 @@ services:
   api:
     image: {tag}:latest
     env_file:
-      - ./.env
+      - {local_folder}/.env
     networks:
       godlydnett:
         ipv4_address: {ip}

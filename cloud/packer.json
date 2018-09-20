@@ -1,9 +1,19 @@
 {
+  "variables": {
+    "ssh_user": null,
+    "contact_email": null,
+    "api_domain": null,
+    "https_proxy": null,
+    "docker_image_tag": null,
+    "local_folder": null,
+    "acme_challenge": "/var/www/letsencrypt/.well-known/acme-challenge"
+  },
+
   "builders": [
     {
       "type": "googlecompute",
       "source_image_family": "ubuntu-1604-lts",
-      "ssh_username": "godlyd",
+      "ssh_username": "{{user `ssh_user`}}",
       "project_id": "godlydpatruljen",
       "zone": "europe-west3-a"
     }
@@ -12,33 +22,58 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "packer_files/write_to_bashrc.sh"
+      "script": "packer_files/write-to-bashrc.sh"
+    },
+    {
+      "type": "shell",
+      "script": "packer_files/create-certbot-scripts.sh",
+      "environment_vars": [
+        "GODLYD_DOMAIN={{user `api_domain`}}",
+        "HTTPS_PROXY_NAME={{user `https_proxy`}}",
+        "ACME_CHALLENGE={{user `acme_challenge`}}",
+        "CERTIFICATE_OUTPUT=/etc/letsencrypt/live",
+        "CERTIFICATE_CONTACT_EMAIL={{user `contact_email`}}",
+        "LOCAL_FOLDER={{user `local_folder`}}"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "packer_files/certification-cronjob.sh",
+      "environment_vars": [
+        "LOCAL_FOLDER={{user `local_folder`}}",
+        "USER_={{user `ssh_user`}}"
+      ]
     },
     {
       "type": "file",
       "source": "packer_files/nginx.conf",
-      "destination": "/tmp/nginx.conf"
+      "destination": "/tmp/"
     },
     {
       "type": "file",
       "source": "packer_files/docker-compose.yml",
-      "destination": "/tmp/docker-compose.yml"
+      "destination": "/tmp/"
     },
     {
       "type": "file",
       "source": "packer_files/.env",
-      "destination": "/tmp/.env"
+      "destination": "/tmp/"
     },
     {
       "type": "file",
       "source": "../secrets/credentials.json",
-      "destination": "/tmp/credentials.json"
+      "destination": "/tmp/"
     },
     {
       "type": "shell",
       "scripts": [
-        "packer_files/install_packages.sh",
-        "packer_files/configure_packages.sh"
+        "packer_files/install-packages.sh",
+        "packer_files/configure-packages.sh"
+      ],
+      "environment_vars": [
+        "ACME_CHALLENGE={{user `acme_challenge`}}",
+        "DOCKER_IMAGE_TAG={{user `docker_image_tag`}}",
+        "LOCAL_FOLDER={{user `local_folder`}}"
       ]
     }
   ]
