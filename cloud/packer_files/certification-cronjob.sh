@@ -7,7 +7,7 @@ CERT_SCRIPT=$LOCAL_FOLDER/run-certification.sh
 
 # Create a cronjob to renew SSL Certificates for Load Balancer monthly
 sudo cat > $TEMP_FILE <<EOF
-0 3 1 * * $USER_ $CERT_SCRIPT
+0 * * * * $USER_ $CERT_SCRIPT
 EOF
 
 sudo mv $TEMP_FILE $CRON_FILE
