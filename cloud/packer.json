@@ -41,7 +41,7 @@
       "script": "packer_files/certification-cronjob.sh",
       "environment_vars": [
         "LOCAL_FOLDER={{user `local_folder`}}",
-        "USER_={{user `ssh_user`}}"
+        "CERTIFICATE_CONTACT_EMAIL={{user `contact_email`}}"
       ]
     },
     {

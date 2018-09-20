@@ -47,6 +47,6 @@ sudo mv /tmp/run-certification.sh $LOCAL_FOLDER/
 sudo mv /tmp/authenticator.sh $CERTBOT_HOOKS/
 sudo mv /tmp/cleanup.sh $CERTBOT_HOOKS/
 
-sudo chmod 755 /tmp/run-certification.sh
-sudo chmod 755 /tmp/authenticator.sh
-sudo chmod 755 /tmp/cleanup.sh
+sudo chmod 755 $LOCAL_FOLDER/run-certification.sh
+sudo chmod 755 $CERTBOT_HOOKS/authenticator.sh
+sudo chmod 755 $CERTBOT_HOOKS/cleanup.sh

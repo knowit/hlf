@@ -115,7 +115,7 @@ def push_docker():
 # Wrapper for 'docker-compose up' #
 ###################################
 def start_server():
-    docker_command = 'sudo docker-compose up -d -f {}/docker-compose.yml'\
+    docker_command = 'sudo docker-compose -f {}/docker-compose.yml up -d'\
         .format(__LOCAL_FOLDER)
     gcloud_command = 'gcloud compute ssh {}@{} --command="{}"'.format(
         __GCP_VARS['ssh_user'],
