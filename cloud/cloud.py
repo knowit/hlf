@@ -56,6 +56,7 @@ with open(
 ##############################
 def build_packer():
     packer_vars = {
+        'ssh_user': __GCP_VARS['ssh_user'],
         'contact_email': __GCP_VARS['contact_email'],
         'api_domain': __GCP_VARS['api_domain'],
         'https_proxy': __GCP_VARS['https_proxy'],
