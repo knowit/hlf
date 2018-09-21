@@ -7,7 +7,7 @@ terraform {
 
 #### DATA SOURCES ####
 data "google_compute_image" "server_image" {
-  name = "packer-1537451530"
+  name = "packer-1537536702"
   project = "godlydpatruljen"
 }
 
