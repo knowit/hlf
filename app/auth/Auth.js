@@ -10,7 +10,6 @@ import {
 export default class Auth {
     static async login() {
         const auth0 = new Auth0(authConfig);
-        console.log("inside auth/login.");
 
         try {
             const credentials = await auth0
@@ -20,7 +19,6 @@ export default class Auth {
                     audience: authConfig.audience
                 });
 
-            console.log("got credentials: ", credentials);
             store.dispatch(onAuth0Success(credentials));
             return true;
         } catch(err) {
