@@ -5,9 +5,6 @@ import auth0 from './auth0';
 export default {
 
     async setTokens(credentials) {
-
-        console.log("access_token: ", credentials.accessToken);
-
         return await AsyncStorage.multiSet([
             ["access_token", credentials.accessToken],
             ["id_token", credentials.idToken],

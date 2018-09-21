@@ -29,7 +29,9 @@ export default class Map extends Component {
                 zoomEnabled={true}
                 zoomControlEnabled={true}
                 scrollEnabled={true}
-                cacheEnabled={false}
+                cacheEnabled={true}
+                loadingEnabled={true}
+                moveOnMarkerPress={true}
                 showsUserLocation={true}
                 showsMyLocationButton={true}
                 showsCompass={true}

@@ -36,9 +36,6 @@ export default (state = {
 
         case ON_VENUE_REVIEWS_FETCHED:
 
-            console.log("state.venue: ", state.venue);
-            console.log("action.reviews: ", action.reviews);
-
             const updatedVenue = state.venue;
 
             if(updatedVenue) {
