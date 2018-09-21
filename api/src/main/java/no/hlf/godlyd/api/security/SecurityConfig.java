@@ -35,9 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/vurderinger/place/{placeId}/bruker").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
-                .logout().permitAll()
-                .and().csrf().disable();
-
+                .logout().permitAll();
+        
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
     }
 }
