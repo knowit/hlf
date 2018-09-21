@@ -41,10 +41,7 @@ export default (
 
         case ON_FETCH_PREVIOUS_SUCCESS:
 
-            console.log("action.payload: ", action.payload);
-
             action.payload.forEach(review => {
-                console.log("review: ", review);
                 if(review.vurderingsType) data[review.vurderingsType] = deserialize(review);
             });
 
