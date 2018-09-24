@@ -38,8 +38,12 @@ __AUTH_JSON_FILE = os.path.join(
     'auth.json'
 )
 
+# Folder on server in which to store scripts and (some) configs
 __LOCAL_FOLDER = '/var/local'
 
+#################################################################
+# Open JSON formatted secrets and import as Python Dictionaries #
+#################################################################
 with open(__GCP_JSON_FILE, 'r') as gcp_json_file:
     __GCP_VARS = json.load(gcp_json_file)
 
@@ -56,6 +60,7 @@ with open(
 # Wrapper for 'packer build' #
 ##############################
 def build_packer():
+    # Get key/value pairs needed for 'packer build'
     packer_vars = {
         'ssh_user': __GCP_VARS['ssh_user'],
         'contact_email': __GCP_VARS['contact_email'],
@@ -65,6 +70,7 @@ def build_packer():
         'local_folder': __LOCAL_FOLDER
     }
 
+    # Prepare build command
     packer_run_command = ' '.join(
         ['packer build'] +
         [
@@ -75,6 +81,7 @@ def build_packer():
         ['packer.json']
     )
 
+    # Build
     os.system(packer_run_command)
 
 
@@ -82,6 +89,7 @@ def build_packer():
 # Wrapper for 'docker push' #
 #############################
 def push_docker():
+    # Get correct image ID from local Docker daemon
     image_id = os.popen(
         'docker images -q {}'.format(__GCP_VARS['image_name'])
     ).read().replace('\n', '')
@@ -109,15 +117,35 @@ def push_docker():
     ]
 
     for command in commands:
-        os.system(command)
+        # Execute command
+        completed_process = subprocess.run(
+            command,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        # Validate the execution, and exit if errors are found
+        if completed_process.returncode != 0:
+            print(
+                '[ERROR]',
+                'Command "{}" returned a non-zero exit code.'.format(command),
+                'Exiting...',
+                sep='\n',
+                file=sys.stderr
+            )
+            sys.exit(1)
 
 
 ###################################
 # Wrapper for 'docker-compose up' #
 ###################################
-def start_server():
+def start_api():
+    # Prepare command for docker-compose
     docker_command = 'sudo docker-compose -f {}/docker-compose.yml up -d'\
         .format(__LOCAL_FOLDER)
+
+    # Prepare command for gcloud
+    # to relay the docker command to server instance
     gcloud_command = 'gcloud compute ssh {}@{} --command="{}"'.format(
         __GCP_VARS['ssh_user'],
         __GCP_VARS['instance_name'],
@@ -129,7 +157,8 @@ def start_server():
         .format(__GCP_VARS['instance_name'])
     )
 
-    max_attempts = 3
+    # Try N times to start the API
+    max_attempts = 3  # N
     wait_length = 3  # seconds
     for i in range(1, max_attempts + 1):
         print('Attempt {}/{}\nWaiting...'.format(i, max_attempts))
@@ -137,6 +166,7 @@ def start_server():
             gcloud_command,
             shell=True
         )
+        # Assume that SSH connection error is the only possible error
         if completed_process.returncode != 0:
             if i < max_attempts:
                 print(
@@ -154,30 +184,34 @@ def start_server():
             print('Command executed successfully!')
             break
 
-    os.system(gcloud_command)
-
-    url_string = 'http://{}/healthcheck'.format(__GCP_VARS['api_domain'])
+    # Prepare healthcheck URL
+    healthcheck_url = 'http://{}/healthcheck'.format(__GCP_VARS['api_domain'])
+    # 6 * 10 = 60 seconds
+    # API should start in ~40 seconds
     max_attempts = 6
     wait_length = 10  # seconds
     print('Waiting for API to start...')
-    print('Trying to reach {}'.format(url_string))
+    print('Trying to reach {}'.format(healthcheck_url))
     for i in range(1, max_attempts + 1):
         print('Attempt {}/{}'.format(
             i, max_attempts
         ))
         try:
-            response = requests.get(url_string, timeout=wait_length)
+            response = requests.get(healthcheck_url, timeout=wait_length)
             if response.status_code == 200:
-                print('{} returned "200 OK"'.format(url_string))
+                print('{} returned "200 OK"'.format(healthcheck_url))
                 sys.exit(0)  # Everything is fine
             else:
+                # Most likely 502
+                # i.e. the instance is running,
+                # but the API has not started yet
                 print(
                     '{} returned status code {}'.format(
-                        url_string,
+                        healthcheck_url,
                         response.status_code
                     )
                 )
-                print('Waiting {} seconds...'.format(wait_length))
+                print('Waiting {} seconds...'.format(wait_length)) 
                 sleep(wait_length)
         except requests.exceptions.ReadTimeout as e:
             print(
@@ -187,7 +221,7 @@ def start_server():
 
     # Should exit before this point
     print(
-        'Could not get a "200 OK" from {}'.format(url_string),
+        'Could not get a "200 OK" from {}'.format(healthcheck_url),
         file=sys.stderr
     )
     print(
@@ -217,6 +251,7 @@ def compose_yml():
 # Create an '.env' file for 'docker-compose' #
 ##############################################
 def set_env():
+    # These keys should represent almost all keys in 'auth.json'
     keys = [
         "postgres_ip",
         "postgres_db", "datasource_user", "datasource_password",
@@ -252,12 +287,6 @@ def _split_file_path_and_name(full_path):
     file_path = os.path.dirname(full_path)
     file_name = os.path.basename(full_path)
     return file_path, file_name
-
-
-def _get_docker_env_vars():
-    with open(os.path.join(__DOCKER_ENV_FILE), 'rb') as env_file:
-        docker_env_vars = env_file.read()
-    return docker_env_vars
 
 
 def _check_for_secret_files():
@@ -308,7 +337,7 @@ if __name__ == '__main__':
     command_function_mapping = {
         'build-packer': build_packer,
         'push-docker': push_docker,
-        'start-server': start_server,
+        'start-api': start_api,
         'compose-yml': compose_yml,
         'set-env': set_env,
         'generate-both': generate_both
