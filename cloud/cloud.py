@@ -186,7 +186,7 @@ def set_env():
     ]
     with open(__DOCKER_ENV_FILE, 'w') as env_file:
         env_lines = [
-            "{}={}".format(
+            "{}={}\n".format(
                 key.upper(),
                 __AUTH_VARS[key]
             )
