@@ -211,7 +211,7 @@ def start_api():
                         response.status_code
                     )
                 )
-                print('Waiting {} seconds...'.format(wait_length)) 
+                print('Waiting {} seconds...'.format(wait_length))
                 sleep(wait_length)
         except requests.exceptions.ReadTimeout as e:
             print(
