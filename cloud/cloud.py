@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import requests
 import subprocess
 import sys
 from time import sleep
@@ -154,6 +155,45 @@ def start_server():
             break
 
     os.system(gcloud_command)
+
+    url_string = 'http://{}/healthcheck'.format(__GCP_VARS['api_domain'])
+    max_attempts = 6
+    wait_length = 10  # seconds
+    print('Waiting for API to start...')
+    print('Trying to reach {}'.format(url_string))
+    for i in range(1, max_attempts + 1):
+        print('Attempt {}/{}'.format(
+            i, max_attempts
+        ))
+        try:
+            response = requests.get(url_string, timeout=wait_length)
+            if response.status_code == 200:
+                print('{} returned "200 OK"'.format(url_string))
+                sys.exit(0)  # Everything is fine
+            else:
+                print(
+                    '{} returned status code {}'.format(
+                        url_string,
+                        response.status_code
+                    )
+                )
+                print('Waiting {} seconds...'.format(wait_length))
+                sleep(wait_length)
+        except requests.exceptions.ReadTimeout as e:
+            print(
+                'Timeout after {} seconds.\n'.format(wait_length),
+                file=sys.stderr
+            )
+
+    # Should exit before this point
+    print(
+        'Could not get a "200 OK" from {}'.format(url_string),
+        file=sys.stderr
+    )
+    print(
+        'Perhaps you should manually check your server?',
+        file=sys.stderr
+    )
 
 
 ####################################################
