@@ -178,6 +178,7 @@ def compose_yml():
 ##############################################
 def set_env():
     keys = [
+        "postgres_ip",
         "postgres_db", "datasource_user", "datasource_password",
         "auth0_domain", "auth0_issuer", "auth0_token_url",
         "auth0_audience", "auth0_client_id", "auth0_client_secret",
