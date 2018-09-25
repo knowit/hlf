@@ -43,11 +43,10 @@ public class Auth0ClientImpl implements Auth0Client {
 
     /**
      *
-     * @param authorization Header from the user accessing the API. 'Bearer xxx-yyy-zzz'
+     * @param accessToken Header from the user accessing the API. 'xxx-yyy-zzz'
      * @return Auth0User
      */
-    public Auth0User getUserProfile(String authorization) {
-        String accessToken = retrieveAccessToken(authorization);
+    public Auth0User getUserProfile(String accessToken) {
         logger.info("Inside Auth0Client.getUserProfile(" + accessToken + ")");
         DecodedJWT jwt = JWT.decode(accessToken);
         String auth0UserId = jwt.getSubject();
@@ -109,13 +108,6 @@ public class Auth0ClientImpl implements Auth0Client {
         }
 
         throw new RuntimeException("Could not fetch access token from authorization server.");
-    }
-
-    /**
-     * Assumes authorization is a Bearer token. 'Bearer xxx-yyy-zzz"
-     */
-    private String retrieveAccessToken(String authorization) {
-        return authorization.substring(7);
     }
 
 }

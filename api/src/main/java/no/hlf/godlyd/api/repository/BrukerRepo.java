@@ -5,11 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BrukerRepo extends CrudRepository<Bruker, Integer> {
 
-    Bruker findByAuth0UserId(String auth0UserId);
+    Optional<Bruker> findByAuth0UserId(String auth0UserId);
 
     List<Bruker> findAll();
 }

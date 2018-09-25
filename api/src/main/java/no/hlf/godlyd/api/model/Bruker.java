@@ -26,6 +26,9 @@ public class Bruker implements Serializable {
     @OneToMany(mappedBy = "registrator")
     private List<Vurdering> vurderinger;
 
+    @OneToMany(mappedBy = "bruker")
+    private List<AccessToken> accessTokens;
+
     // Getters og setters
     public Integer getId() { return id; }
 
@@ -53,6 +56,15 @@ public class Bruker implements Serializable {
 
     public void setImageUrl(String imageUrl){
         this.imageUrl = imageUrl;
+    }
+
+    @JsonIgnore
+    public List<AccessToken> getAccessTokens() {
+        return accessTokens;
+    }
+
+    public void setAccessTokens(List<AccessToken> accessTokens) {
+        this.accessTokens = accessTokens;
     }
 
     @JsonIgnore

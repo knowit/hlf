@@ -25,11 +25,6 @@ public class VurderingController {
 
     private static final Logger logger = LoggerFactory.getLogger(VurderingController.class);
 
-    @GetMapping()
-    public Map<String, List<Vurdering>> getAllVurderinger(){
-        return vurderingService.getAllVurderinger();
-    }
-
     @GetMapping("/{id}")
     public Vurdering getVurderingById(@PathVariable(value = "id") Integer id){
         return vurderingService.getVurderingFromId(id);
