@@ -1,16 +1,12 @@
 package no.hlf.godlyd.api.services.implementations;
 
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import no.hlf.godlyd.api.dto.Auth0User;
 import no.hlf.godlyd.api.exception.ResourceNotFoundException;
-import no.hlf.godlyd.api.model.AccessToken;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.repository.BrukerRepo;
 import no.hlf.godlyd.api.services.AccessTokenService;
 import no.hlf.godlyd.api.services.Auth0Client;
 import no.hlf.godlyd.api.services.BrukerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +25,6 @@ public class BrukerServiceImpl implements BrukerService {
     @Autowired
     AccessTokenService accessTokenService;
 
-    private static final Logger logger = LoggerFactory.getLogger(BrukerServiceImpl.class);
-
     public Bruker getBrukerFromId(Integer id){
         return brukerRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bruker", "id", id));
     }
@@ -48,15 +42,21 @@ public class BrukerServiceImpl implements BrukerService {
     }
 
     public Bruker getBrukerFromAuthToken(String authorization) {
-        logger.info("FETCHING BRUKER...");
         String accessToken = retrieveAccessToken(authorization);
         // Find user from cached authorization orElse fetch user information from auth0
         Optional<Bruker> optionalBruker = accessTokenService.findBrukerByAccessToken(accessToken);
         return optionalBruker.orElseGet(() -> getBrukerFromAuth0(accessToken));
     }
 
+    /**
+     *
+     * Method to fetch user information from Auth0 and save both the user information plus the accessToken in the
+     * database.
+     *
+     * @param accessToken A jwt token
+     * @return Bruker
+     */
     private Bruker getBrukerFromAuth0(String accessToken) {
-        logger.info("FETCHING BRUKER FROM AUTH0");
         Auth0User auth0User = auth0Service.getUserProfile(accessToken);
         Optional<Bruker> optionalBruker = getBrukerFromAuth0UserId(auth0User.getUserId());
         Bruker bruker = optionalBruker.orElseGet(Bruker::new);
@@ -65,13 +65,7 @@ public class BrukerServiceImpl implements BrukerService {
         bruker.setImageUrl(auth0User.getPicture());
         bruker.setAuth0UserId(auth0User.getUserId());
         bruker = brukerRepo.save(bruker);
-
-        try {
-            accessTokenService.setToken(bruker, accessToken);
-        } catch(JWTDecodeException e) {
-            logger.info("catched JWTDecodedException: " + e.getMessage());
-        }
-
+        accessTokenService.save(bruker, accessToken);
         return bruker;
     }
 
@@ -81,7 +75,4 @@ public class BrukerServiceImpl implements BrukerService {
     private String retrieveAccessToken(String authorization) {
         return authorization.substring(7);
     }
-
-
-
 }

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface AccessTokenService {
     Optional<Bruker> findBrukerByAccessToken(String token);
-    AccessToken setToken(Bruker bruker, String authorization);
+    AccessToken save(Bruker bruker, String authorization);
 }

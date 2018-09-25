@@ -23,33 +23,17 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     private static final Logger logger = LoggerFactory.getLogger(AccessTokenServiceImpl.class);
 
     public Optional<Bruker> findBrukerByAccessToken(String token) {
-        logger.info("Inside findBrkerByAccessToken: " + token);
         Optional<AccessToken> accessToken = accessTokenRepo.findFirstByToken(token);
         return accessToken.map(AccessToken::getBruker);
     }
 
-    public AccessToken setToken(Bruker bruker, String authorization) throws JWTDecodeException {
-        logger.info("Inside setToken with authorization: " + authorization);
+    public AccessToken save(Bruker bruker, String authorization) throws JWTDecodeException {
         DecodedJWT jwt = JWT.decode(authorization);
         AccessToken token = new AccessToken();
         token.setToken(jwt.getToken());
         token.setExpiresAt(jwt.getExpiresAt());
         token.setTokenType(jwt.getType());
-
-        logger.info("jwt.getToken: " + token.getToken());
-        logger.info("jwt.getExpiresAt: " + token.getExpiresAt());
-        logger.info("jwt.getType: ", token.getTokenType());
-        logger.info("authorization: " + authorization);
-
-        logger.info("jwt.getSubject: " + jwt.getSubject());
-        logger.info("bruker.getAuth0UserId: " + bruker.getAuth0UserId());
-
-        if(jwt.getSubject().equals(bruker.getAuth0UserId())) {
-            logger.info("jwt.getSubject().equals(bruker.getAuth0UserId());");
-            token.setBruker(bruker);
-            return accessTokenRepo.save(token);
-        }
-
-        throw new JWTDecodeException("bleh");
+        token.setBruker(bruker);
+        return accessTokenRepo.save(token);
     }
 }
