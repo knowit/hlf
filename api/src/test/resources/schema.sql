@@ -38,6 +38,29 @@ CREATE TABLE vurdering(
     foreign key(registrator) references bruker(id)
 );
 
+DROP TABLE IF EXISTS access_token;
+
+CREATE TABLE access_token(
+  id integer NOT NULL AUTO_INCREMENT,
+  token text,
+  expires_at date NOT NULL,
+  bruker integer,
+  token_type character varying(15),
+  primary key(id),
+  foreign key (bruker) references bruker(id)
+);
+
+DROP TABLE IF EXISTS management_api_tokens;
+
+CREATE TABLE management_tokens(
+  id integer NOT NULL AUTO_INCREMENT,
+  access_token text,
+  scope text,
+  expires_at bigint,
+  token_type character varying(15),
+  primary key(id),
+);
+
 --
 -- PostgreSQL database dump complete
 --

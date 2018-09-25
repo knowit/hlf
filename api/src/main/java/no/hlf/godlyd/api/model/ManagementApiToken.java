@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "management_api_tokens")
+@Table(name = "management_tokens")
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class ManagementApiToken {
 
@@ -64,11 +64,6 @@ public class ManagementApiToken {
 
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
-    }
-
-    public boolean hasExpired() {
-        long currentTimeStap = System.currentTimeMillis() / 1000;
-        return expiresAt < currentTimeStap;
     }
 
     @Override
