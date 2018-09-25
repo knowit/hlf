@@ -5,17 +5,10 @@ import no.hlf.godlyd.api.model.Sted;
 import java.util.List;
 
 public interface StedService {
-
     List<Sted> getAllSteder();
-
     boolean existsByPlaceId(String placeId);
-
     Sted getStedFromId(Integer id);
-
     Sted getStedFromPlaceId(String placeId);
-
     Sted updateSted(Sted s);
-
     Sted opprettSted(Sted s);
-
 }

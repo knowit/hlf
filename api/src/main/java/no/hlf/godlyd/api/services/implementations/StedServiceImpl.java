@@ -4,8 +4,6 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Sted;
 import no.hlf.godlyd.api.repository.StedRepo;
 import no.hlf.godlyd.api.services.StedService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +15,6 @@ public class StedServiceImpl implements StedService {
     @Autowired
     private StedRepo stedRepo;
 
-    private static final Logger logger = LoggerFactory.getLogger(StedServiceImpl.class);
-
-    // Methods:
     @Override
     public List<Sted> getAllSteder() {
         return (List<Sted>) stedRepo.findAll();

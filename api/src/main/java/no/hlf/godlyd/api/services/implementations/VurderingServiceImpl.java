@@ -34,12 +34,6 @@ public class VurderingServiceImpl implements VurderingService {
     private static final Logger logger = LoggerFactory.getLogger(VurderingServiceImpl.class);
 
     @Override
-    public Map<String, List<Vurdering>> getAllVurderinger() {
-        List<Vurdering> alleVurderinger= (List<Vurdering>)vurderingRepo.findAll();
-        return sorterVurderinger(alleVurderinger);
-    }
-
-    @Override
     public List<Vurdering> getAllVurderingerByPlaceId(String placeId) {
         return vurderingRepo.findByStedPlaceId(placeId);
     }
@@ -62,13 +56,13 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public Page<Vurdering> getVurderingerByBruker(String authorization, Pageable pageable) throws ResourceNotFoundException {
-        Integer brukerId = brukerService.updateBruker(authorization).getId();
+        Integer brukerId = brukerService.getBrukerFromAuthToken(authorization).getId();
         return vurderingRepo.findByRegistratorId(brukerId, pageable);
     }
 
     @Override
     public List<Vurdering> getVurderingerByPlaceIdAndBruker(String placeId, String authorization) throws ResourceNotFoundException {
-        Integer brukerId = brukerService.updateBruker(authorization).getId();
+        Integer brukerId = brukerService.getBrukerFromAuthToken(authorization).getId();
         logger.info("placeId: " + placeId  + ", brukerId: " + brukerId);
         return vurderingRepo.findByStedPlaceIdAndRegistratorId(placeId, brukerId);
     }
@@ -78,7 +72,7 @@ public class VurderingServiceImpl implements VurderingService {
 
         logger.info("createVurdering: " + vurdering.toString());
 
-        Bruker bruker = brukerService.updateBruker(authorization);
+        Bruker bruker = brukerService.getBrukerFromAuthToken(authorization);
         vurdering.setRegistrator(bruker);
         VurderingsType vurderingsType = vurdering.getVurderingsType();
 
@@ -104,7 +98,7 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public Vurdering updateVurdering(Integer id, Vurdering endring, String authorization){
-        Integer brukerId = brukerService.updateBruker(authorization).getId();
+        Integer brukerId = brukerService.getBrukerFromAuthToken(authorization).getId();
         Vurdering vurdering = getVurderingFromId(id);
         if(vurdering.getRegistrator().getId().equals(brukerId)){
             vurdering.setRangering(endring.getRangering());
@@ -125,7 +119,7 @@ public class VurderingServiceImpl implements VurderingService {
 
     @Override
     public Vurdering deleteVurdering(Integer id, String authorization) {
-        Integer brukerid = brukerService.updateBruker(authorization).getId();
+        Integer brukerid = brukerService.getBrukerFromAuthToken(authorization).getId();
         Vurdering vurdering = vurderingRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vurdering", "id", id));
 
@@ -138,7 +132,7 @@ public class VurderingServiceImpl implements VurderingService {
     }
 
     public List<Vurdering> deleteVurderingerByPlaceIdAndRegistrator(String placeId, String authorization) {
-        Integer brukerid = brukerService.updateBruker(authorization).getId();
+        Integer brukerid = brukerService.getBrukerFromAuthToken(authorization).getId();
         List<Vurdering> vurderinger = vurderingRepo.findByStedPlaceIdAndRegistratorId(placeId, brukerid);
         vurderinger.forEach(vurderingRepo::delete);
         return vurderinger;
