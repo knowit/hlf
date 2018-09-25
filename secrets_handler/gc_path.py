@@ -55,7 +55,7 @@ def solve_file_path(secret_name, out=None):
         if out is not None \
         else None
 
-    if end_with_sep:
+    if end_with_sep and not os.path.isdir(out):
         os.makedirs(out)
 
     if out and os.path.isdir(out):
