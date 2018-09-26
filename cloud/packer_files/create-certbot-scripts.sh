@@ -5,7 +5,7 @@ CERTBOT_HOOKS=$LOCAL_FOLDER/.certbot-hooks
 sudo cat > /tmp/run-certification.sh <<EOF
 #!/usr/bin/env bash
 
-CERT_NAME=godlyd-cert-\$(date +%s)
+CERT_NAME=godlyd-cert-$ENV-\$(date +%s)
 
 # Generate certificate
 sudo certbot certonly \\

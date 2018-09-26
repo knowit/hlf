@@ -1,5 +1,4 @@
 #### VARIABLES ####
-variable "database_username" {}
 
 #### RESOURCES ####
 resource "google_sql_database_instance" "database" {
@@ -20,8 +19,8 @@ resource "google_sql_database_instance" "database" {
 
 resource "google_sql_user" "user" {
   instance = "${google_sql_database_instance.database.name}"
-  name = "${var.database_username}"
-  password = "hlf123" //"${data.google_kms_secret.sql_user_password.plaintext}"
+  name = "${data.google_kms_secret.db_username.plaintext}"
+  password = "${data.google_kms_secret.db_password.plaintext}"
 }
 
 resource "google_sql_database" "godlyd-database" {

@@ -1,10 +1,19 @@
 #### VARIABLES ####
-variable "server_image" {}
 variable "server_machine_type" {}
 variable "gce_container_config" {}
+variable "service_account" {}
 
+#### DATA ####
+data "google_compute_image" "server_image" {
+  family = "godlydpatruljen-${var.env}"
+  project = "${var.project}"
+}
 
 #### RESOURCES ####
+resource "google_compute_address" "hlf-static-ip-address" {
+  name = "static-ip-address-${var.env}"
+}
+
 resource "google_compute_instance_group" "server_group" {
   name = "godlyd-server-group-${var.env}"
   zone = "${var.zone}"
@@ -20,7 +29,8 @@ resource "google_compute_instance" "server" {
 
   boot_disk {
     initialize_params {
-      image = "${var.server_image}"
+      # image = "${var.server_image}"
+      image = "${data.google_compute_image.server_image.self_link}"
     }
   }
 
@@ -35,11 +45,7 @@ resource "google_compute_instance" "server" {
   }
 
   service_account {
-    email  = "terraform@godlydpatruljen.iam.gserviceaccount.com"
+    email  = "${var.service_account}"
     scopes = ["userinfo-email", "compute-rw", "storage-rw", "logging-write", "monitoring-write"]
   }
-}
-
-resource "google_compute_address" "hlf-static-ip-address" {
-  name = "static-ip-address-${var.env}"
 }
