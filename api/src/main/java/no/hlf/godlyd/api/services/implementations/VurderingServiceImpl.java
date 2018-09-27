@@ -100,7 +100,7 @@ public class VurderingServiceImpl implements VurderingService {
     public Vurdering updateVurdering(Integer id, Vurdering endring, String authorization){
         Integer brukerId = brukerService.getBrukerFromAuthToken(authorization).getId();
         Vurdering vurdering = getVurderingFromId(id);
-        if(vurdering.getRegistrator().getId().equals(brukerId)){
+        if(vurdering.getRegistrator().isPresent() && vurdering.getRegistrator().get().getId().equals(brukerId)){
             vurdering.setRangering(endring.getRangering());
             vurdering.setKommentar(endring.getKommentar());
             vurdering.setRangering(endring.getRangering());
@@ -123,7 +123,7 @@ public class VurderingServiceImpl implements VurderingService {
         Vurdering vurdering = vurderingRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vurdering", "id", id));
 
-        if(vurdering.getRegistrator().getId().equals(brukerid)) {
+        if(vurdering.getRegistrator().isPresent() && vurdering.getRegistrator().get().getId().equals(brukerid)) {
             vurderingRepo.delete(vurdering);
             return vurdering;
         }

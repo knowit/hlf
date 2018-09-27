@@ -22,6 +22,7 @@ __pycache__/
 # Security
 cloud/packer_files/packer_vars.json
 cloud/packer_files/docker-compose.yml
+cloud/packer_files/.env
 api/.env
 secrets/
 
@@ -43,6 +44,7 @@ app/settings/credentials.js
 app/credentials.js
 lydpatruljen.csr
 lydpatruljen.key
+terraform@godlydpatruljen.json
 
 app/app.json
 

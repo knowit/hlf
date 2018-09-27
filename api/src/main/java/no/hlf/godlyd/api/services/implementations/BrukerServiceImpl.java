@@ -48,6 +48,18 @@ public class BrukerServiceImpl implements BrukerService {
         return optionalBruker.orElseGet(() -> getBrukerFromAuth0(accessToken));
     }
 
+    public boolean deleteMyAccount(String authorization) {
+        Bruker bruker = getBrukerFromAuthToken(authorization);
+        if(auth0Service.deleteMyAccount(bruker.getAuth0UserId())) {
+            bruker.getVurderinger().forEach(vurdering -> vurdering.setRegistrator(null));
+            bruker.setVurderinger(null);
+            brukerRepo.delete(bruker);
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      *
      * Method to fetch user information from Auth0 and save both the user information plus the accessToken in the

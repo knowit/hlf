@@ -36,4 +36,24 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         token.setBruker(bruker);
         return accessTokenRepo.save(token);
     }
+
+    @Override
+    public void deleteAccessToken(String authorization) {
+        Optional<AccessToken> accessToken = accessTokenRepo.findFirstByToken(retrieveAccessToken(authorization));
+        if (! accessToken.isPresent()) return;
+
+        logger.info("after access token");
+
+        Bruker bruker = accessToken.get().getBruker();
+        bruker.getAccessTokens().remove(accessToken.get());
+        accessToken.get().setBruker(null);
+        accessTokenRepo.delete(accessToken.get());
+    }
+
+    /**
+     * Assumes authorization is a Bearer token. 'Bearer xxx-yyy-zzz"
+     */
+    private String retrieveAccessToken(String authorization) {
+        return authorization.substring(7);
+    }
 }

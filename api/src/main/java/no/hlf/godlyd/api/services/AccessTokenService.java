@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface AccessTokenService {
     Optional<Bruker> findBrukerByAccessToken(String token);
     AccessToken save(Bruker bruker, String authorization);
+    void deleteAccessToken(String authorization);
 }
