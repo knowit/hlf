@@ -27,6 +27,10 @@ __DOCKER_ENV_FILE = os.path.join(
     __PACKER_FILES_FOLDER,
     __DOCKER_ENV_NAME
 )
+__NGINX_CONF_FILE = os.path.join(
+    __PACKER_FILES_FOLDER,
+    'nginx.conf'
+)
 __SECRETS_JSON_FILE = os.path.join(
     __PROJECT_ROOT,
     'secrets',
@@ -35,6 +39,9 @@ __SECRETS_JSON_FILE = os.path.join(
 
 # Folder on server in which to store scripts and (some) configs
 __LOCAL_FOLDER = '/var/local'
+
+#
+__PYTEMP_EXT = '.pytemplate'
 
 #################################################################
 # Open JSON formatted secrets and import as Python Dictionaries #
@@ -71,7 +78,7 @@ def build_packer():
     )
 
     # Rewrite .yml and .env, just in case
-    generate_both()
+    generate_all()
 
     # Build
     os.system(packer_run_command)
@@ -229,7 +236,7 @@ def start_api():
 # Create a configuration file for 'docker-compose' #
 ####################################################
 def compose_yml():
-    with open(__DOCKER_COMPOSE_FILE + '.pytemplate', 'r') as template_file:
+    with open(__DOCKER_COMPOSE_FILE + __PYTEMP_EXT, 'r') as template_file:
         with open(__DOCKER_COMPOSE_FILE, 'w') as compose_file:
             compose_template = template_file.read()
             compose_file.write(
@@ -269,12 +276,28 @@ def set_env():
         env_file.writelines(env_lines)
 
 
+#################################
+# Create '.conf' file for Nginx #
+#################################
+def conf_nginx():
+    with open(__NGINX_CONF_FILE + __PYTEMP_EXT, 'r') as template_file:
+        with open(__NGINX_CONF_FILE, 'w') as nginx_conf_file:
+            conf_template = template_file.read()
+            nginx_conf_file.write(
+                conf_template.format(
+                    api_domain=__SECRETS['api_domain'],
+                    api_ip=__SECRETS['api_ip']
+                )
+            )
+
+
 ############################################
 # Set both the '.yml' and the '.env' files #
 ############################################
-def generate_both():
+def generate_all():
     compose_yml()
     set_env()
+    conf_nginx()
 
 
 #####################################
@@ -442,7 +465,8 @@ if __name__ == '__main__':
         'start-api': start_api,
         'compose-yml': compose_yml,
         'set-env': set_env,
-        'generate-both': generate_both,
+        'conf-nginx': conf_nginx,
+        'generate-all': generate_all,
         'list-certificates': get_latest_certificate_name
     }
 
@@ -450,7 +474,7 @@ if __name__ == '__main__':
     argparser = _get_main_argument_parser(list(command_function_mapping))
     args = argparser.parse_args()
 
-    if args.command not in ['compose-yml', 'set-env', 'generate-both']:
+    if args.command not in ['compose-yml', 'set-env', 'generate-all']:
         _check_for_secret_files()
     _set_env(args.dev)
     _load_secrets()

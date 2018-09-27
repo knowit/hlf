@@ -6,6 +6,7 @@ variable "crypto_key" { default = "secret_key"}
 
 #### BACKEND ####
 terraform {
+  required_version = ">= 0.11.8"
   backend "gcs" {
     bucket = "eu.artifacts.godlydpatruljen.appspot.com"
     prefix = "terraform/state/prod"

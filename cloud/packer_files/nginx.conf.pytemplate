@@ -1,24 +1,24 @@
 worker_processes  1;
 
-events {
+events {{
     worker_connections  1024;
-}
+}}
 
 error_log /var/log/nginx/error.log warn;
 
-http {
+http {{
     include             mime.types;
     default_type        application/octet-stream;
 
     sendfile            on;
     keepalive_timeout   65;
 
-    server {
+    server {{
         listen              80;
         listen              [::]:80;
-        server_name         dev.api.godlydpatruljen.no;
+        server_name         {api_domain};
 
-        set $api_ip         111.22.33.44;
+        set $api_ip         {api_ip};
         set $api_port       8080;
 
         ##########################################################
@@ -29,38 +29,38 @@ http {
         #
         set $redirect_to_https 0;
 
-        if ($http_x_forwarded_proto != 'https') {
+        if ($http_x_forwarded_proto != 'https') {{
             set $redirect_to_https 1;
-        }
+        }}
 
-        if ($request_uri = '/healthcheck') {
+        if ($request_uri = '/healthcheck') {{
             set $redirect_to_https 0;
-        }
+        }}
 
-        if ($request_uri ~ '/\.well-known/acme-challenge/(.*)') {
+        if ($request_uri ~ '/\.well-known/acme-challenge/(.*)') {{
             set $redirect_to_https 0;
-        }
+        }}
 
-        if ($redirect_to_https = 1) {
+        if ($redirect_to_https = 1) {{
             return 301 https://$host$request_uri;
-        }
+        }}
         #
         ##########################################################
 
         # Serve static files for Let's Encrypt ACME Challenge #
-        location ^~ /.well-known/acme-challenge/ {
+        location ^~ /.well-known/acme-challenge/ {{
             default_type "text/plain";
             root         /var/www/letsencrypt;
-        }
+        }}
 
         # Pass /docs to /swagger-ui.html
-        location /docs {
+        location /docs {{
             return 301 https://$host/swagger-ui.html;
-        }
+        }}
 
         # Pass everything else over to the API
-        location / {
+        location / {{
             proxy_pass http://$api_ip:$api_port;
-        }
-    }
-}
+        }}
+    }}
+}}
