@@ -2,7 +2,7 @@ import {Modal, Platform, StyleSheet, Text, View, TouchableOpacity} from "react-n
 import React from "react";
 import {colors} from "../settings/defaultStyles";
 
-export default class ReviewDeletionModal extends Modal {
+export default class AccountDeletionModal extends Modal {
 
     _onCancel = () => {
         this.props.onHideModal(false)
@@ -10,8 +10,9 @@ export default class ReviewDeletionModal extends Modal {
     _onConfirm = () => this.props.onHideModal(true);
 
     render() {
-        const { modalVisible, title } = this.props;
-        const deletionText = "Vil du slette denne vurderingen?";
+        const { modalVisible } = this.props;
+        const title = "Slette konto";
+        const deletionText = "Bekreft sletting av kontoen din";
         const confirmText = "Slett";
         const cancelText = "Avbryt";
 

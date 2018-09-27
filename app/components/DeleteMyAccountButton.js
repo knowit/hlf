@@ -1,19 +1,20 @@
+
 import {StyleSheet, TouchableHighlight, View} from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import colors, {COMPONENT_SPACING} from "../settings/defaultStyles";
 import SlimText from "./SlimText";
 import React, {Component} from "react";
 
-export default class LoginButton extends Component {
+export default class DeleteMyAccountButton extends Component {
     render() {
         return (
             <TouchableHighlight
                 style={styles.signIn}
-                onPress={() => this.props.onLoginButtonClicked() }
+                onPress={() => this.props.onClick() }
             >
                 <View style={{flexDirection: "row", alignItems: "center"}}>
                     <MaterialCommunityIcons
-                        name="login"
+                        name="delete"
                         size={24}
                         color={colors.primaryTextColor}
                     />
@@ -24,7 +25,7 @@ export default class LoginButton extends Component {
                             marginLeft: 15
                         }}
                     >
-                        Logg Inn
+                        Slett min konto
                     </SlimText>
                 </View>
             </TouchableHighlight>

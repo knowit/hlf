@@ -8,6 +8,11 @@ export const ON_LOGIN_SUCCESS = "ON_LOGIN_SUCCESS";
 export const ON_SIGN_OUT = "ON_SIGN_OUT";
 export const ON_LOGIN_VIEW_REQUESTED = "ON_LOGIN_VIEW_REQUESTED";
 export const ON_AUTH0_CANCELLED = "ON_AUTH0_CANCELLED";
+export const ON_ACCOUNT_DELETION_INIT = "ON_ACCOUNT_DELETION_INIT";
+export const ON_ACCOUNT_DELETION_SUCCESS = "ON_ACCOUNT_DELETION_SUCCESS";
+export const ON_SHOW_ACCOUNT_DELETION_MODAL = "ON_SHOW_ACCOUNT_DELETION_MODAL";
+export const ON_HIDE_ACCOUNT_DELETION_MODAL = "ON_HIDE_ACCOUNT_DELETION_MODAL";
+export const ON_ACCOUNT_DELETION_FAILED = "ON_ACCOUNT_DELETION_FAILED";
 
 export function onAuth0Success(credentials) {
     return {
@@ -37,5 +42,35 @@ export function onLoginViewRequested() {
 export function onAuth0Cancelled() {
     return {
         type: ON_AUTH0_CANCELLED
+    }
+}
+
+export function onAccountDeletionInit() {
+    return {
+        type: ON_ACCOUNT_DELETION_INIT
+    }
+}
+
+export function onAccountDeletionSuccess() {
+    return {
+        type: ON_ACCOUNT_DELETION_SUCCESS
+    }
+}
+
+export function onAccountDeletionFailed() {
+    return {
+        type: ON_ACCOUNT_DELETION_FAILED
+    }
+}
+
+export function onShowAccountDeletionModal() {
+    return {
+        type: ON_SHOW_ACCOUNT_DELETION_MODAL
+    }
+}
+
+export function onHideAccountDeletionModal() {
+    return {
+        type: ON_HIDE_ACCOUNT_DELETION_MODAL
     }
 }
