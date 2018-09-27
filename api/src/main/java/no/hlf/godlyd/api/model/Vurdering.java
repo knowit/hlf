@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Entity
 @Table(name = "vurdering")
@@ -19,12 +20,12 @@ public class Vurdering implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sted")
     private Sted sted;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "registrator")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "registrator", nullable = true)
     private Bruker registrator;
 
     @Column(nullable = false)
@@ -60,7 +61,7 @@ public class Vurdering implements Serializable {
         this.sted = sted;
     }
 
-    public Bruker getRegistrator() { return registrator; }
+    public Optional<Bruker> getRegistrator() { return Optional.of(registrator); }
 
     public void setRegistrator(Bruker registrator) {
         this.registrator = registrator;

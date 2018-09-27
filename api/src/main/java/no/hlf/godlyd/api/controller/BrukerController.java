@@ -4,6 +4,7 @@ import no.hlf.godlyd.api.exception.ResourceNotFoundException;
 import no.hlf.godlyd.api.model.Bruker;
 import no.hlf.godlyd.api.services.BrukerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,14 +33,15 @@ public class BrukerController {
                 .orElseThrow(() -> new ResourceNotFoundException("Bruker", "auth0Id", auth0Id));
     }
 
-    @GetMapping("/login")
-    public Bruker loginBruker(@RequestHeader("Authorization")String auth) {
-        return brukerService.getBrukerFromAuthToken(auth);
-    }
-
     @GetMapping("/fetch-updated-user-information")
     public Bruker fetchUserInformationFromAuth0(@RequestHeader("Authorization") String auth) {
         return brukerService.getBrukerFromAuthToken(auth);
+    }
+
+    @DeleteMapping("/min-konto")
+    public HttpStatus deleteMyAccount(@RequestHeader("Authorization") String auth) {
+        brukerService.deleteMyAccount(auth);
+        return HttpStatus.NO_CONTENT;
     }
 
 }
