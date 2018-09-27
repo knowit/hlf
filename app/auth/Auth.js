@@ -19,6 +19,9 @@ export default class Auth {
                     audience: authConfig.audience
                 });
 
+            console.log("before onAuth0Success");
+            console.log("credentials: ", credentials);
+
             store.dispatch(onAuth0Success(credentials));
             return true;
         } catch(err) {

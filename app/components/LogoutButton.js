@@ -34,6 +34,7 @@ export default class LogoutButton extends Component {
 
 const styles = StyleSheet.create({
     signOut: {
-        padding: COMPONENT_SPACING
+        padding: COMPONENT_SPACING,
+        marginBottom: COMPONENT_SPACING
     }
 });
