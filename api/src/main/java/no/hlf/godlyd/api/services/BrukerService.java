@@ -11,4 +11,5 @@ public interface BrukerService {
     Bruker updateBruker(String authorization);
     Bruker getBrukerFromAuthToken(String authorization);
     List<Bruker> getAllBrukere();
+    boolean deleteMyAccount(String authorization);
 }

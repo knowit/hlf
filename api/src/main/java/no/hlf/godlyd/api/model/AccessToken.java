@@ -21,7 +21,7 @@ public class AccessToken {
     @Column(name = "expires_at")
     private Date expiresAt;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bruker")
     private Bruker bruker;
 

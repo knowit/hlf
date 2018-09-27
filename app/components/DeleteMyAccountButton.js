@@ -1,19 +1,20 @@
+
 import {StyleSheet, TouchableHighlight, View} from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import colors, {COMPONENT_SPACING} from "../settings/defaultStyles";
 import SlimText from "./SlimText";
 import React, {Component} from "react";
 
-export default class LogoutButton extends Component {
+export default class DeleteMyAccountButton extends Component {
     render() {
         return (
             <TouchableHighlight
-                style={styles.signOut}
-                onPress={() => this.props.onSignOut()}
+                style={styles.signIn}
+                onPress={() => this.props.onClick() }
             >
                 <View style={{flexDirection: "row", alignItems: "center"}}>
                     <MaterialCommunityIcons
-                        name="logout"
+                        name="delete"
                         size={24}
                         color={colors.primaryTextColor}
                     />
@@ -24,7 +25,7 @@ export default class LogoutButton extends Component {
                             marginLeft: 15
                         }}
                     >
-                        Logg ut
+                        Slett min konto
                     </SlimText>
                 </View>
             </TouchableHighlight>
@@ -33,8 +34,7 @@ export default class LogoutButton extends Component {
 }
 
 const styles = StyleSheet.create({
-    signOut: {
-        padding: COMPONENT_SPACING,
-        marginBottom: COMPONENT_SPACING
+    signIn: {
+        padding: COMPONENT_SPACING
     }
 });

@@ -7,7 +7,11 @@ import {
     ON_AUTH0_SUCCESS,
     ON_LOGIN_SUCCESS,
     ON_SIGN_OUT,
-    ON_LOGIN_VIEW_REQUESTED, ON_AUTH0_CANCELLED,
+    ON_LOGIN_VIEW_REQUESTED,
+    ON_AUTH0_CANCELLED,
+    ON_SHOW_ACCOUNT_DELETION_MODAL,
+    ON_HIDE_ACCOUNT_DELETION_MODAL,
+    ON_ACCOUNT_DELETION_SUCCESS
 } from "../actions/account";
 
 export default (
@@ -17,6 +21,7 @@ export default (
         user: {},
         pending: true,
         error: '',
+        showAccountDeletionModal: false
     },
     action
 ) => {
@@ -28,6 +33,7 @@ export default (
                 hasCompletedInitialLoginAttempt: true,
                 user: {},
                 pending: true,
+                showAccountDeletionModal: false
             };
 
         case ON_ACCOUNT_INFORMATION_FAILED:
@@ -36,6 +42,7 @@ export default (
                 hasCompletedInitialLoginAttempt: true,
                 error: action.payload,
                 pending: false,
+                showAccountDeletionModal: false
             };
 
         case ON_ACCESS_TOKEN_INIT:
@@ -44,6 +51,7 @@ export default (
                 hasCompletedInitialLoginAttempt: false,
                 token: null,
                 pending: true,
+                showAccountDeletionModal: false
             };
 
         case ON_ACCESS_TOKEN_SUCCESS:
@@ -53,6 +61,7 @@ export default (
                 token: action.payload,
                 user: {},
                 pending: true,
+                showAccountDeletionModal: false
             };
 
         case ON_ACCESS_TOKEN_FAILED:
@@ -61,6 +70,7 @@ export default (
                 hasCompletedInitialLoginAttempt: true,
                 error: action.payload,
                 pending: false,
+                showAccountDeletionModal: false
             };
 
         case ON_AUTH0_SUCCESS:
@@ -69,6 +79,7 @@ export default (
                 hasCompletedInitialLoginAttempt: true,
                 credentials: action.payload,
                 pending: true,
+                showAccountDeletionModal: false
             };
 
         case ON_LOGIN_SUCCESS:
@@ -76,7 +87,8 @@ export default (
                 isAuthenticated: true,
                 hasCompletedInitialLoginAttempt: true,
                 user: action.payload,
-                pending: false
+                pending: false,
+                showAccountDeletionModal: false
             };
 
         case ON_SIGN_OUT:
@@ -84,7 +96,8 @@ export default (
                 isAuthenticated: false,
                 hasCompletedInitialLoginAttempt: true,
                 pending: false,
-                user: {}
+                user: {},
+                showAccountDeletionModal: false
             };
 
         case ON_LOGIN_VIEW_REQUESTED:
@@ -94,6 +107,7 @@ export default (
                 pending: false,
                 user: {},
                 showLoginScreen: true,
+                showAccountDeletionModal: false,
             };
 
         case ON_AUTH0_CANCELLED:
@@ -103,6 +117,29 @@ export default (
                 pending: false,
                 user: {},
                 showLoginScreen: false,
+                showAccountDeletionModal: false,
+            };
+
+        case ON_ACCOUNT_DELETION_SUCCESS:
+
+            return {
+                ...state,
+                isAuthenticated: false,
+                hasCompletedInitialLoginAttempt: true,
+                pending: false,
+                user: {},
+                showLoginScreen: false,
+                showAccountDeletionModal: false,
+            };
+
+        case ON_SHOW_ACCOUNT_DELETION_MODAL:
+            return {
+                ...state, showAccountDeletionModal: true
+            };
+
+        case ON_HIDE_ACCOUNT_DELETION_MODAL:
+            return {
+                ...state, showAccountDeletionModal: false
             };
 
         default:
