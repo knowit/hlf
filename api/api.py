@@ -11,25 +11,28 @@ __API_FOLDER = os.path.join(
     __PROJECT_ROOT_FOLDER,
     'api'
 )
-__GCP_JSON_FILE = os.path.join(
+__SECRETS_JSON_FILE = os.path.join(
     __PROJECT_ROOT_FOLDER,
     'secrets',
-    'gcp.json'
+    'secrets.json'
 )
-
-with open(__GCP_JSON_FILE, 'r') as json_file:
-    __VARS = json.load(json_file)
+__ENV = None
+__SECRETS = None
 
 
 #############################
 # Wrapper for 'mvn install' #
 #############################
 def build_maven():
+    # spring_flag = '-Dspring.profiles.active=dev'\
+    #     if __ENV == 'dev'\
+    #     else ''
+
     # Build .jar-file of the API
     maven_install_command = ' '.join([
         'mvn install dockerfile:build',
         '-Dmaven.test.skip=true',
-        # '-Dspring.profiles.active=dev'
+        # spring_flag
     ])
     os.system(maven_install_command)
 
@@ -43,7 +46,7 @@ def build_docker():
     # Set standard build arguments for this project
     build_args = {
         'path': __API_FOLDER,
-        'tag': __VARS['image_tag'],
+        'tag': __SECRETS['image_tag'],
         'nocache': True
     }
     # Build Docker image
@@ -56,6 +59,9 @@ def build_both():
     build_docker()
 
 
+####################
+# Helper functions #
+####################
 def _get_argument_parser(command_coices):
     argparser = argparse.ArgumentParser()
 
@@ -63,10 +69,28 @@ def _get_argument_parser(command_coices):
         'command',
         choices=command_coices
     )
+    argparser.add_argument(
+        '--dev',
+        action='store_true'
+    )
 
     return argparser
 
 
+def _set_env(is_dev):
+    global __ENV
+    __ENV = 'dev' if is_dev else 'prod'
+
+
+def _load_secrets():
+    global __SECRETS
+    with open(__SECRETS_JSON_FILE, 'r') as json_file:
+        __SECRETS = json.load(json_file)[__ENV]
+
+
+########
+# Main #
+########
 if __name__ == '__main__':
     command_function_mapping = {
         'build-docker': build_docker,
@@ -76,5 +100,8 @@ if __name__ == '__main__':
 
     argparser = _get_argument_parser(list(command_function_mapping))
     args = argparser.parse_args()
+
+    _set_env(args.dev)
+    _load_secrets()
 
     command_function_mapping[args.command]()

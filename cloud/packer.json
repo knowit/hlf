@@ -6,6 +6,7 @@
     "https_proxy": null,
     "docker_image_tag": null,
     "local_folder": null,
+    "env": null,
     "acme_challenge": "/var/www/letsencrypt/.well-known/acme-challenge"
   },
 
@@ -15,7 +16,9 @@
       "source_image_family": "ubuntu-1604-lts",
       "ssh_username": "{{user `ssh_user`}}",
       "project_id": "godlydpatruljen",
-      "zone": "europe-west3-a"
+      "zone": "europe-west3-a",
+      "image_name": "packer-{{user `env`}}-{{timestamp}}",
+      "image_family": "godlydpatruljen-{{user `env`}}"
     }
   ],
 
@@ -33,7 +36,8 @@
         "ACME_CHALLENGE={{user `acme_challenge`}}",
         "CERTIFICATE_OUTPUT=/etc/letsencrypt/live",
         "CERTIFICATE_CONTACT_EMAIL={{user `contact_email`}}",
-        "LOCAL_FOLDER={{user `local_folder`}}"
+        "LOCAL_FOLDER={{user `local_folder`}}",
+        "ENV={{user `env`}}"
       ]
     },
     {
@@ -56,12 +60,12 @@
     },
     {
       "type": "file",
-      "source": "packer_files/.env",
+      "source": "packer_files/godlyd_api.env",
       "destination": "/tmp/"
     },
     {
       "type": "file",
-      "source": "../secrets/credentials.json",
+      "source": "../secrets/credentials-{{user `env`}}.json",
       "destination": "/tmp/"
     },
     {
@@ -73,7 +77,8 @@
       "environment_vars": [
         "ACME_CHALLENGE={{user `acme_challenge`}}",
         "DOCKER_IMAGE_TAG={{user `docker_image_tag`}}",
-        "LOCAL_FOLDER={{user `local_folder`}}"
+        "LOCAL_FOLDER={{user `local_folder`}}",
+        "ENV={{user `env`}}"
       ]
     }
   ]

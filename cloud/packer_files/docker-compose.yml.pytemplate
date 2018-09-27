@@ -3,12 +3,12 @@ services:
   api:
     image: {tag}:latest
     env_file:
-      - {local_folder}/.env
+      - {env_file_path}
     networks:
-      godlydnett:
+      godlydnett-{env}:
         ipv4_address: {ip}
 networks:
-  godlydnett:
+  godlydnett-{env}:
     driver: bridge
     ipam:
       driver: default

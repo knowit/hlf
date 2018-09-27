@@ -1,10 +1,11 @@
 #### VARIABLES ####
 variable "env" {}
-variable "region" { default = "europe-west3" }
-variable "zone" { default = "europe-west3-a" }
+variable "project" {}
+variable "region" {}
+variable "zone" {}
 
 #### RESOURCES ####
 provider "google" {
-  project     = "godlydpatruljen"
+  project     = "${var.project}"
   region      = "${var.region}"
 }

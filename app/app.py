@@ -33,14 +33,15 @@ __CREDENTIALS_JS_FILE = os.path.join(
     __APP_FOLDER,
     'credentials.js'
 )
-__AUTH_JSON_FILE = os.path.join(
+__SECRETS_JSON_FILE = os.path.join(
     __PROJECT_ROOT,
     'secrets',
-    'auth.json'
+    'secrets.json'
 )
+__SECRETS = None
 
-with open(__AUTH_JSON_FILE, 'r') as auth_json_file:
-    __AUTH_VARS = json.load(auth_json_file)
+with open(__SECRETS_JSON_FILE, 'r') as auth_json_file:
+    __SECRETS = json.load(auth_json_file)
 
 
 ######################################################
@@ -51,7 +52,7 @@ def set_properties():
     with open(__PROPERTIES_FILE, 'w') as properties_file:
         properties_file.write(
             'googleMapsApiKey="{}"\n'.format(
-                __AUTH_VARS['google_maps_api_key']
+                __SECRETS['google_maps_api_key']
             )
         )
 
@@ -60,7 +61,7 @@ def set_key():
     with open(__KEY_FILE, 'w') as key_file:
         key_file.write(
             'NSString *googleMapsApiKey = @"{}";\n'.format(
-                __AUTH_VARS['google_maps_api_key']
+                __SECRETS['google_maps_api_key']
             )
         )
 
@@ -68,10 +69,10 @@ def set_key():
 def set_auth_config():
     config_template_lines = [
         'const authConfig = {',
-        '  domain: "{}",'.format(__AUTH_VARS['auth0_domain']),
-        '  clientId: "{}",'.format(__AUTH_VARS['auth0_client_id']),
-        '  audience: "{}",'.format(__AUTH_VARS['auth0_audience']),
-        '  scope: "{}"'.format(__AUTH_VARS['auth0_scope']),
+        '  domain: "{}",'.format(__SECRETS['auth0_domain']),
+        '  clientId: "{}",'.format(__SECRETS['auth0_client_id']),
+        '  audience: "{}",'.format(__SECRETS['auth0_audience']),
+        '  scope: "{}"'.format(__SECRETS['auth0_scope']),
         '};',
         '\nexport default authConfig;'
     ]
@@ -83,7 +84,7 @@ def set_credentials_js():
     with open(__CREDENTIALS_JS_FILE, 'w') as credential_js_file:
         credential_js_file.write(
             'export const API_KEY = "{}"'.format(
-                __AUTH_VARS['google_maps_api_key']
+                __SECRETS['google_maps_api_key']
             )
         )
 
@@ -95,16 +96,29 @@ def set_all_credentials():
     set_credentials_js()
 
 
-#############################
-# Create an argument parser #
-#############################
+####################
+# Helper functions #
+####################
 def _get_argument_parser(commands):
     argparser = argparse.ArgumentParser()
+
     argparser.add_argument(
         'command',
         choices=commands
     )
+    argparser.add_argument(
+        '--dev',
+        action='store_true'
+    )
+
     return argparser
+
+
+def _load_secrets(is_dev):
+    global __SECRETS
+    secrets_env = 'dev' if is_dev else 'prod'
+    with open(__SECRETS_JSON_FILE, 'r') as json_file:
+        __SECRETS = json.load(json_file)[secrets_env]
 
 
 ########
@@ -121,5 +135,7 @@ if __name__ == '__main__':
 
     argparser = _get_argument_parser(list(command_function_mapping))
     args = argparser.parse_args()
+
+    _load_secrets(args.dev)
 
     command_function_mapping[args.command]()

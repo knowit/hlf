@@ -1,5 +1,5 @@
 #### VARIABLES ####
-variable "vpc_network_allowed_ports" {type = "list"}
+variable "vpc_network_allowed_ports" { type = "list" }
 
 
 #### RESOURCES ####
