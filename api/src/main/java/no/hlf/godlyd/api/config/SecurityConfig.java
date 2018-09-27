@@ -17,6 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value(value = "${com.auth0.apiAudience}")
     private String apiAudience;
+
     @Value(value = "${com.auth0.issuer}")
     private String issuer;
     
@@ -33,6 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/vurderinger/all/place/{placeId}").permitAll()
                 .antMatchers(HttpMethod.GET, "/vurderinger/place/{placeId}").permitAll()
                 .antMatchers(HttpMethod.GET, "/vurderinger/place/{placeId}/bruker").permitAll()
+                .antMatchers(HttpMethod.POST, "/session").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/session").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/brukere/min-konto").authenticated()
                 .antMatchers(HttpMethod.GET, "/v2/api-docs").permitAll()
                 .antMatchers(HttpMethod.GET, "/swagger-ui.html**").permitAll()
                 .antMatchers(HttpMethod.GET, "/webjars/**").permitAll()

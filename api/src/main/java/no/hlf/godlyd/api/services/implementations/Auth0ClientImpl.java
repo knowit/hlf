@@ -43,6 +43,9 @@ public class Auth0ClientImpl implements Auth0Client {
      * @return Auth0User
      */
     public Auth0User getUserProfile(String accessToken) {
+
+        // Todo: Check that JWT has not expired
+
         DecodedJWT jwt = JWT.decode(accessToken);
         String auth0UserId = jwt.getSubject();
 
@@ -55,7 +58,24 @@ public class Auth0ClientImpl implements Auth0Client {
         headers.set("Authorization", "Bearer " + managementApiToken.getAccessToken());
         HttpEntity<String> http = new HttpEntity<>(headers);
         ResponseEntity<Auth0User> response = restTemplate.exchange(resourceUrl, HttpMethod.GET, http, Auth0User.class);
+
+        // Todo check that response.getBody is not null
+
         return response.getBody();
+    }
+
+    public boolean deleteMyAccount(String auth0UserId) {
+
+        String resourceUrl = managementAudience + "users/" + auth0UserId;
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        ManagementApiToken managementApiToken = managementTokenService
+                .getLatestValidToken().orElseGet(() -> managementTokenService.setToken(getManagementAPIToken()));
+
+        headers.set("Authorization", "Bearer " + managementApiToken.getAccessToken());
+        HttpEntity<String> http = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(resourceUrl, HttpMethod.DELETE, http, String.class);
+        return response.getStatusCode().value() == 204;
     }
 
     /**

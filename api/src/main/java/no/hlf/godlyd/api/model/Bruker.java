@@ -23,10 +23,10 @@ public class Bruker implements Serializable {
 
     private String imageUrl;
 
-    @OneToMany(mappedBy = "registrator")
+    @OneToMany(mappedBy = "registrator", cascade = CascadeType.DETACH)
     private List<Vurdering> vurderinger;
 
-    @OneToMany(mappedBy = "bruker")
+    @OneToMany(mappedBy = "bruker", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<AccessToken> accessTokens;
 
     // Getters og setters
