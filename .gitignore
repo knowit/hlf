@@ -1,9 +1,6 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 .issues.txt.swp
 issues.txt
-# expo
-app/.expo/
-
 
 # IntelliJ
 .idea/
@@ -13,46 +10,17 @@ app/.expo/
 # dependencies
 app/node_modules
 
-
 # Python
 venv/
 env/
 __pycache__/
 
-# Security
-cloud/packer_files/packer_vars.json
-cloud/packer_files/docker-compose.yml
-cloud/packer_files/.env
-api/.env
-secrets/
-
-
 # misc
 tmp/
 
-app/.env.local
-app/.env.development.local
-app/.env.test.local
-app/.env.production.local
-
-app/npm-debug.log*
-app/yarn-debug.log*
-app/yarn-error.log/*
-app/package-lock.json
-
-app/settings/credentials.js
-app/credentials.js
 lydpatruljen.csr
 lydpatruljen.key
-terraform@godlydpatruljen.json
-
-app/app.json
+*@godlydpatruljen.json
 
 .vscode
-
-
-# Terraform
-**/.terraform/*
-*.tfstate
-*.tfstate.*
-
+*.log

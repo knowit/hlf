@@ -8,7 +8,10 @@ Three main components, or projects:
 
 In addition there is a module called [secrets_handler](/secrets_handler) which is used for en-/decryption and up-/downloading of secrets.
 
-**Note:** This README, and all READMEs for all components, assume that the state of this project is **development**.
+**Note:**
+* This README, and all READMEs for all components, assume that the state of this project is **production**.
+* When using Python scripts for the different components (`api.py`, `app.py` or `cloud.py`) for development, end all commands with the `--dev` flag.  
+  Example: `python cloud.py start-api --dev`
 
 ## Setup
 The setup for each component is described in separate READMEs, found under the components' root. Nevertheless, there are a few steps which are considered "general", so we will go through them here.
@@ -89,7 +92,9 @@ Python is used for a good many scripts and commands in this project, and is requ
            `python -m pip install -r requirements.txt`
 
 ## Secrets
-Secrets are encrypted and stored in a bucket on Google Cloud Platform. The uploading and downloading of secrets are done in a similar matter: by using either the `upload_secret.py` or `download_secret.py` script found in the [secrets_handler](secrets_handler) folder.
+Secrets are encrypted and stored in a bucket on Google Cloud Platform. The uploading and downloading of secrets are done in a similar matter: by using either the `upload_secret.py` or `download_secret.py` script found in the [secrets_handler](secrets_handler) folder. (Usage is documented in the [Secrets README](/secrets_handler/README.md).)
+
+The most important file to download is the one called `secrets.json`. 
 
 ## Deployment
 The pipeline is as follows:

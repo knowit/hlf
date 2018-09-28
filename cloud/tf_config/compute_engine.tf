@@ -1,7 +1,7 @@
 #### VARIABLES ####
-variable "server_machine_type" {}
-variable "gce_container_config" {}
-variable "service_account" {}
+variable "server_machine_type" { default = "n1-standard-1" }
+variable "gce_container_config" { default = "" }
+variable "service_account" { default = "terraform@godlydpatruljen.iam.gserviceaccount.com" }
 
 #### DATA ####
 data "google_compute_image" "server_image" {

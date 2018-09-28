@@ -4,8 +4,8 @@ Backend for the project is hosted on Google Cloud Platform (GCP) using a compute
 The compute engine is built on an image created by Packer, based on Google's Container-Optimized OS, enabling easy deployment of docker images. The overall structure of the cloud solution is built using infrastructure as code (IaC) with Terraform.
 
 **Note:**  
-* All commands are run with `hlf/cloud` as the current working directory, unless otherwise specified.
-* All files and folders assume `hlf/cloud` as root, unless otherwise specified.
+* All files, folders and scripts assume `hlf/cloud` as root, unless otherwise specified.
+* When using `cloud.py` for development, end all commands with the `--dev` flag.
 
 ## Setup
 ### Authorization
@@ -28,21 +28,27 @@ A couple of extra programs and packages are needed to deploy the API.
 
 ### Download secrets
 
-Two files are required: `gcp.json` and `auth.json`. For instructions on how to download secrets, follow the steps in the [secrets_handler README](../secrets_handler/README.md).
+One file is required: `secrets.json`. For instructions on how to download secrets, follow the steps in the [secrets_handler README](../secrets_handler/README.md).
+
+This JSON file contains build information needed for development and production.
 
 **Docker environment variables**  
 When building a server image with Packer, an `.env` file must be present. This file will be saved to the image during building, and is used by Docker Compose to set relevant environment variables when starting a server container.
 
 **Docker Compose (yml)**  
-The server needs a file called `docker-compose.yml` to be able to start the API container. A template file called `docker-compose.yml.pytemplate` is used as a baseline, and is combined with a few variables from `gcp.json`.
+The server needs a file called `docker-compose.yml` to be able to start the API container. A template file called `docker-compose.yml.pytemplate` is used as a baseline, and is combined with a few variables from `secrets.json`.
+
+**Nginx (conf)**  
+Nginx is used between the load balancer and the API, and is primarily used to redirect HTTP traffic to HTTPS. The configuration file for Nginx needs to be injected with the correct IP and domain, and is generated from `nginx.conf.pytemplate`.
 
 To generate these to files and put them in the `packer_files` folder, run this command:  
-`python cloud.py generate-both`
+`python cloud.py generate-all`
 
 If only one of the files are to be generated, run  
-`python cloud.py compose-yml` or  
-`python cloud.py set-env`,  
-depending on whether you want the `.yml` or `.env` file.
+`python cloud.py compose-yml`,  
+`python cloud.py conf-nginx` or  
+`python cloud.py set-env`  
+depending on whether you want the `.conf`, `.env` or `.yml` file.
 
 ## Deployment
 
@@ -54,7 +60,8 @@ Google's own documentation for this pushing to this register can be found [here]
 1. Build a Packer image with  
    `python cloud.py build-packer`.
 1. Spin up the infrastructure with Terraform.
-    - `cd hlf/cloud/environment/dev`
+    - `cd hlf/cloud/environment/<env>`
+        - `<env>` is the folder containing environment configuration, e.g. `prod` or `dev`
     - `terraform init`
     - `terraform plan`
     - `terraform apply`
