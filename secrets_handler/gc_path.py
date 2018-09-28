@@ -49,11 +49,11 @@ def solve_file_path(secret_name, out=None):
     # TODO: This function does too much
     # Need to split it into smaller, more manageable functions
 
-    end_with_sep = out.endswith(os.path.sep)
+    end_with_sep = None
 
-    out = os.path.abspath(os.path.realpath(out)) \
-        if out is not None \
-        else None
+    if out is not None:
+        end_with_sep = out.endswith(os.path.sep)
+        out = os.path.abspath(os.path.realpath(out))
 
     if end_with_sep and not os.path.isdir(out):
         os.makedirs(out)
