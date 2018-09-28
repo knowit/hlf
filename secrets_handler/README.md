@@ -13,8 +13,8 @@ Before up- or downloading secrets, you need the
 ## Uploading
 1. In your terminal, change current directory:  
    `cd hlf/secrets_handler`
-1. If `<path>` is the full local path to your secret file, and the rest or the arguments matches those you should have found already, then  
-`python upload_secret.py <path> <project name> <bucket name> <keyring> <cryptokey>`  
+1. If `<path>` is the full local path (absolute or relative) to your secret file, and the rest or the arguments matches those you should have found already, then  
+`python upload_secret.py <path> <project> <bucket> <keyring> <cryptokey>`  
    will encrypt your file and upload it to a `/secrets` folder in your specified bucket.
 
 **Note:**
@@ -34,7 +34,7 @@ Before up- or downloading secrets, you need the
     - If no such secret is found, then the script will fail, i.e. the scipt _can not_ download and decrypt a file unless it is stored in the bucket with an `.encryption` extension. (This will always be done automatically when encrypting and uploading with `upload_secret.py`)
     - The saved file will _not_ have the `.encrypted` extension (for obvious reasons).
 - The `--out <path>` flag tells the script where to save the decrypted file locally. `<path>` can be absolute or relative.
-    - If `<path>` is a directory then the secret will saved as `<path>/<file name>`.
+    - If `<path>` is a directory (**must** be ending with `/`) then the secret will saved as `<path>/<file name>`.
     - If `<path>` is a full file path, then that will be the name of the file, regardless of the value of `<file name>`.
     - If `--out <path>` is _not_ set, then the decrypted contents of the secret will be sent to the standard output.
 

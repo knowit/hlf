@@ -2,8 +2,8 @@
 
 ## General
 **Note:**  
-* All commands are run with `hlf/api` as the current working directory, unless otherwise specified.
-* All files and folders assume `hlf/api` as root, unless otherwise specified.
+* All files, folders and scripts assume `hlf/api` as root, unless otherwise specified.
+* When using `api.py` for development, end all commands with the `--dev` flag.
 
 ## Setup
 Follow the setup steps in the [root README](../README.md).
