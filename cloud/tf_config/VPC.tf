@@ -1,5 +1,8 @@
 #### VARIABLES ####
-variable "vpc_network_allowed_ports" { type = "list" }
+variable "vpc_network_allowed_ports" {
+  type = "list"
+  default = ["80", "22", "443", "4000"]
+}
 
 
 #### RESOURCES ####

@@ -1,6 +1,5 @@
 #### VARIABLES ####
-variable "health_check_path" {}
-# variable "load_balancer_static_ip" {}
+variable "health_check_path" { default = "/healthcheck" }
 variable "ssl_certificate" {}
 
 #### RESOURCES ####
