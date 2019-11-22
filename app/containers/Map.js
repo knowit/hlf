@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import MapView, {Marker} from "react-native-maps";
-import {Geolocation} from "react-native";
+import React, { Component } from "react";
+import MapView, { Marker } from "react-native-maps";
+import { Geolocation } from "react-native";
 import colors from "../settings/defaultStyles";
 
 export default class Map extends Component {
@@ -13,7 +13,7 @@ export default class Map extends Component {
     }
 
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition(({coords}) =>
+        navigator.geolocation.getCurrentPosition(({ coords }) =>
             this.map.animateToCoordinate(coords)
         );
     }
@@ -47,6 +47,7 @@ export default class Map extends Component {
                 }}
                 onPress={e => {
                     this.props.deselectVenue();
+                    this.removeMarkers();
                 }}
                 onPoiClick={e => {
                     this.props.onVenueSelect(e.nativeEvent.placeId);
@@ -67,6 +68,10 @@ export default class Map extends Component {
 
     animateTo(coordinates) {
         this.map.animateToCoordinate(coordinates);
-        this.setState({markers: [coordinates]});
+        this.setState({ markers: [coordinates] });
+    }
+
+    removeMarkers() {
+        this.setState({ markers: [] });
     }
 }
