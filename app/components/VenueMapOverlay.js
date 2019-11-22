@@ -8,7 +8,7 @@ import VenueContactInfo from "./VenueContactInfo";
 
 export default ({ selectedVenue, showDetails }) => {
   return (
-    <ViewContainer opaque={true}>
+    <ViewContainer style={{ position: "absolute", bottom: 0, width: "100%" }} opaque={true}>
       <View style={{ flexDirection: "row", marginBottom: COMPONENT_SPACING }}>
         <VenueContactInfo
           name={selectedVenue.name}
