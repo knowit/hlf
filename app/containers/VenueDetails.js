@@ -61,6 +61,7 @@ class VenueDetails extends Component {
                     onModalClose={() => {
                         this.setState({modalVisible: false});
                     }}
+                    onRequestClose={() => {}}
                 />
             </ViewContainer>
     );
